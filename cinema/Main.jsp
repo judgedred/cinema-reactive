@@ -1,5 +1,4 @@
-﻿<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" language="java" %>
-<%@ page import="dao.*" %>
+﻿<%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="domain.*" %>
 <%@ page import="java.util.*" %>
 
@@ -22,30 +21,17 @@
 	<p><h2>Сегодня в кино</h2></p>
 		
 	<%	
+		List<Filmshow> ls = (List<Filmshow>)session.getAttribute("filmshowList");
+	 	for(Iterator<Filmshow> i = ls.iterator(); i.hasNext(); )
+		{
+			Filmshow f = i.next(); 
+	%>
+			<p><%=f%></p>
+	<%	
+		} 
+	%>
+	<p><a href="AddFilmshow">Добавить сеанс</a>
+	<p><a href="DeleteFilmshow">Удалить сеанс</a>
 		
-	 	try												
-		{												
-	 													
-	 		FilmshowDao filmshowDao = (FilmshowDao)session.getAttribute("filmshowDao");		
-	 		List<Filmshow> ls = filmshowDao.getFilmshowAll();					
-	 		for(Iterator<Filmshow> i = ls.iterator(); i.hasNext(); )				
-	 		{											
-	 			Filmshow f = i.next();								
-	 			out.println("<p>" + f + "</p>");						
-	 		} 											
-		}												
-		catch(Exception e)										
-		{												
-		 	e.printStackTrace(); 									
-		}
-		out.close();
-		
-		
-	%>												
-		
-		
-	
-
-
 </body>
 </html>
