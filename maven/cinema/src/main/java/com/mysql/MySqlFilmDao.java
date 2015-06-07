@@ -222,9 +222,9 @@ public class MySqlFilmDao implements FilmDao
 	@Override
 	public Film getFilmById(int id) throws DaoException
 	{
-		Film film = new Film();
 		try
 		{
+			Film film = new Film();
 			pstmtGetById = getPstmtGetById();
 			pstmtGetById.setInt(1, id);
 			rs = pstmtGetById.executeQuery();
@@ -233,13 +233,17 @@ public class MySqlFilmDao implements FilmDao
 				film.setFilmId(rs.getInt(1));
 				film.setFilmName(rs.getString(2));
 				film.setDescription(rs.getString(3));
+				return film;
+			}
+			else
+			{	
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return film;
 	}
 
 	@Override
