@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="test.MySqlFilmDaoTest" time="1.276" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="test.MySqlHallDaoTest" time="0.146" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="c:\Program Files\Java\jdk1.8.0_40\jre\bin"/>
@@ -63,9 +63,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="test.MySqlFilmDaoTest" name="testGetFilmAll" time="1.008"/>
-  <testcase classname="test.MySqlFilmDaoTest" name="testGetFilmById" time="0.015"/>
-  <testcase classname="test.MySqlFilmDaoTest" name="testCreate" time="0.145"/>
-  <testcase classname="test.MySqlFilmDaoTest" name="testDelete" time="0.046"/>
-  <testcase classname="test.MySqlFilmDaoTest" name="testUpdate" time="0.062"/>
+  <testcase classname="test.MySqlHallDaoTest" name="testGetHallAll" time="0"/>
+  <testcase classname="test.MySqlHallDaoTest" name="testCreate" time="0.056"/>
+  <testcase classname="test.MySqlHallDaoTest" name="testDelete" time="0.02"/>
+  <testcase classname="test.MySqlHallDaoTest" name="testGetHallById" time="0.043"/>
+  <testcase classname="test.MySqlHallDaoTest" name="testUpdate" time="0.027"/>
 </testsuite>

@@ -158,13 +158,17 @@ public class MySqlTicketDao implements TicketDao
 				MySqlSeatDao seatDao = new MySqlSeatDao();
 				ticket.setSeat(seatDao.getSeatById(rs.getInt(3)));
 				ticket.setPrice(rs.getFloat(4));
+				return ticket;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return ticket;
 	}
 
 	@Override
@@ -219,12 +223,12 @@ public class MySqlTicketDao implements TicketDao
 				ticket.setPrice(rs.getFloat(4));
 				ls.add(ticket);
 			}
+			return ls;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ls;
 	}
 
 	@Override
@@ -244,13 +248,17 @@ public class MySqlTicketDao implements TicketDao
 				MySqlSeatDao seatDao = new MySqlSeatDao();
 				ticket.setSeat(seatDao.getSeatById(rs.getInt(3)));
 				ticket.setPrice(rs.getFloat(4));
+				return ticket;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ticket;
 	}
 
 	@Override

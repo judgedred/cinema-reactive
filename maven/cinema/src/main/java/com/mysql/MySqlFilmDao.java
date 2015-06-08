@@ -154,13 +154,17 @@ public class MySqlFilmDao implements FilmDao
 				film.setFilmId(rs.getInt(1));
 				film.setFilmName(rs.getString(2));
 				film.setDescription(rs.getString(3));
+				return film;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return film;
 	}
 
 	@Override
@@ -211,12 +215,12 @@ public class MySqlFilmDao implements FilmDao
 				film.setDescription(rs.getString(3));
 				ls.add(film);
 			}
+			return ls;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ls;
 	}
 
 	@Override

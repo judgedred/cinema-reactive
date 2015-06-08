@@ -157,13 +157,17 @@ public class MySqlSeatDao implements SeatDao
 				seat.setRowNumber(rs.getInt(3));
 				MySqlHallDao hallDao = new MySqlHallDao();
 				seat.setHall(hallDao.getHallById(rs.getInt(4)));
+				return seat;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return seat;
 	}
 
 	@Override
@@ -217,12 +221,12 @@ public class MySqlSeatDao implements SeatDao
 				seat.setHall(hallDao.getHallById(rs.getInt(4)));
 				ls.add(seat);
 			}
+			return ls;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ls;
 	}
 
 	@Override
@@ -241,13 +245,17 @@ public class MySqlSeatDao implements SeatDao
 				seat.setRowNumber(rs.getInt(3));
 				MySqlHallDao hallDao = new MySqlHallDao();
 				seat.setHall(hallDao.getHallById(rs.getInt(4)));
+				return seat;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return seat;
 	}
 
 	@Override

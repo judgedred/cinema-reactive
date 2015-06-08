@@ -155,13 +155,17 @@ public class MySqlUserDao implements UserDao
 				user.setLogin(rs.getString(2));
 				user.setPassword(rs.getString(3));
 				user.setEmail(rs.getString(4));
+				return user;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return user;
 	}
 
 	@Override
@@ -213,12 +217,12 @@ public class MySqlUserDao implements UserDao
 				user.setEmail(rs.getString(4));
 				userLst.add(user);
 			}
+			return userLst;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return userLst;
 	}
 
 	@Override
@@ -236,13 +240,17 @@ public class MySqlUserDao implements UserDao
 				user.setLogin(rs.getString(2));
 				user.setPassword(rs.getString(3));
 				user.setEmail(rs.getString(4));
+				return user;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return user;
 	}
 
 	@Override

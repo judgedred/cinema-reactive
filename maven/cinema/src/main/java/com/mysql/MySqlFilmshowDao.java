@@ -159,13 +159,17 @@ public class MySqlFilmshowDao implements FilmshowDao
 				filmshow.setDateTime(rs.getTimestamp(3));
 				MySqlHallDao hallDao = new MySqlHallDao();
 				filmshow.setHall(hallDao.getHallById(rs.getInt(4)));
+				return filmshow;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return filmshow;
 	}
 
 	@Override
@@ -221,12 +225,12 @@ public class MySqlFilmshowDao implements FilmshowDao
 				filmshow.setHall(hallDao.getHallById(rs.getInt(4)));
 				ls.add(filmshow);
 			}
+			return ls;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ls;
 	}
 
 	@Override
@@ -246,13 +250,17 @@ public class MySqlFilmshowDao implements FilmshowDao
 				filmshow.setDateTime(rs.getTimestamp(3));
 				MySqlHallDao hallDao = new MySqlHallDao();
 				filmshow.setHall(hallDao.getHallById(rs.getInt(4)));
+				return filmshow;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return filmshow;
 	}
 
 	@Override

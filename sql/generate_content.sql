@@ -1,5 +1,7 @@
 use cinema;
 Insert Into User(login, password, email) Values("admin", "admin", "admin@gmail.com");
+Insert Into User(login, password, email) Values("testUpdate", "testUpdate", "testUpdate@gmail.com");
+Insert Into User(login, password, email) Values("testDelete", "testDelete", "testDelete@gmail.com");
 Insert Into Hall(hall_number, hall_name) Values(1, "Большой зал");
 Insert Into Hall(hall_number, hall_name) Values(2, "Зал повышенной комфортности");
 Insert Into Hall(hall_number, hall_name) Values(3, "Зал 5D");
@@ -11,6 +13,7 @@ Insert Into Film(film_name, description) Values("Восхождение Юпит
 Insert Into Film(film_name, description) Values("Аватар", "Фантастика");
 Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-05-14 18:00", 1);
 Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-05-14 21:00", 1);
+Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-05-14 23:00", 1);
 Insert Into Ticket(filmshow_id, seat_id, price) Values(1, 1, 60000);
 Insert Into Ticket(filmshow_id, seat_id, price) Values(1, 2, 60000);
 Insert Into Ticket(filmshow_id, seat_id, price) Values(1, 3, 60000);

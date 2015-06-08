@@ -156,13 +156,17 @@ public class MySqlReservationDao implements ReservationDao
 				reservation.setUser(userDao.getUserById(rs.getInt(2)));
 				MySqlTicketDao ticketDao = new MySqlTicketDao();
 				reservation.setTicket(ticketDao.getTicketById(rs.getInt(3)));
+				return reservation;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return reservation;
 	}
 
 	@Override
@@ -215,12 +219,12 @@ public class MySqlReservationDao implements ReservationDao
 				reservation.setTicket(ticketDao.getTicketById(rs.getInt(3)));
 				ls.add(reservation);
 			}
+			return ls;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ls;
 	}
 
 	@Override
@@ -239,13 +243,17 @@ public class MySqlReservationDao implements ReservationDao
 				reservation.setUser(userDao.getUserById(rs.getInt(2)));
 				MySqlTicketDao ticketDao = new MySqlTicketDao();
 				reservation.setTicket(ticketDao.getTicketById(rs.getInt(3)));
+				return reservation;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return reservation;
 	}
 
 	@Override

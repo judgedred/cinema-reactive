@@ -154,13 +154,17 @@ public class MySqlHallDao implements HallDao
 				hall.setHallId(rs.getInt(1));
 				hall.setHallNumber(rs.getInt(2));
 				hall.setHallName(rs.getString(3));
+				return hall;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 		 	throw new DaoException(e); 
 		}
-		return hall;
 	}
 
 	@Override
@@ -211,12 +215,12 @@ public class MySqlHallDao implements HallDao
 				hall.setHallName(rs.getString(3));
 				ls.add(hall);
 			}
+			return ls;
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return ls;
 	}
 
 	@Override
@@ -233,13 +237,17 @@ public class MySqlHallDao implements HallDao
 				hall.setHallId(rs.getInt(1));
 				hall.setHallNumber(rs.getInt(2));
 				hall.setHallName(rs.getString(3));
+				return hall;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-		return hall;
 	}
 
 	@Override
