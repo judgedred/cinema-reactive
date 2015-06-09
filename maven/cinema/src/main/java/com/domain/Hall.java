@@ -57,7 +57,7 @@ public class Hall
 			return false;
 		}
 		Hall obj = (Hall)other;
-		if(this.hallId == obj.hallId && this.hallNumber == obj.hallNumber && this.hallName == obj.hallName)
+		if(this.hallId == obj.hallId && this.hallNumber == obj.hallNumber && this.hallName.equals(obj.hallName))
 		{
 			return true;
 		}

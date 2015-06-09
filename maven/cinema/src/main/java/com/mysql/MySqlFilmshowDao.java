@@ -156,7 +156,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 				filmshow.setFilmshowId(rs.getInt(1));
 				MySqlFilmDao filmDao = new MySqlFilmDao();
 				filmshow.setFilm(filmDao.getFilmById(rs.getInt(2)));
-				filmshow.setDateTime(rs.getTimestamp(3));
+				filmshow.setDateTime(new java.util.Date(rs.getTimestamp(3).getTime()));
 				MySqlHallDao hallDao = new MySqlHallDao();
 				filmshow.setHall(hallDao.getHallById(rs.getInt(4)));
 				return filmshow;

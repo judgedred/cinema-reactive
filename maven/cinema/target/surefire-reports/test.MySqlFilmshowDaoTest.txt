@@ -1,13 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: test.MySqlFilmshowDaoTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.649 sec <<< FAILURE!
-testCreate(test.MySqlFilmshowDaoTest)  Time elapsed: 0.171 sec  <<< FAILURE!
-java.lang.AssertionError
-	at org.junit.Assert.fail(Assert.java:86)
-	at org.junit.Assert.assertTrue(Assert.java:41)
-	at org.junit.Assert.assertTrue(Assert.java:52)
-	at test.MySqlFilmshowDaoTest.testCreate(MySqlFilmshowDaoTest.java:45)
+Tests run: 5, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.22 sec <<< FAILURE!
+testCreate(test.MySqlFilmshowDaoTest)  Time elapsed: 0.089 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<Mon Jun 08 21:30:[09] EET 2015> but was:<Mon Jun 08 21:30:[10] EET 2015>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at test.MySqlFilmshowDaoTest.testCreate(MySqlFilmshowDaoTest.java:51)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -38,13 +37,13 @@ java.lang.AssertionError
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
 
-testUpdate(test.MySqlFilmshowDaoTest)  Time elapsed: 0.185 sec  <<< FAILURE!
+testUpdate(test.MySqlFilmshowDaoTest)  Time elapsed: 0.063 sec  <<< FAILURE!
 java.lang.AssertionError: expected: com.domain.Film< ибер Ёкшн> but was: com.domain.Film< ибер Ёкшн>
 	at org.junit.Assert.fail(Assert.java:88)
 	at org.junit.Assert.failNotEquals(Assert.java:834)
 	at org.junit.Assert.assertEquals(Assert.java:118)
 	at org.junit.Assert.assertEquals(Assert.java:144)
-	at test.MySqlFilmshowDaoTest.testUpdate(MySqlFilmshowDaoTest.java:75)
+	at test.MySqlFilmshowDaoTest.testUpdate(MySqlFilmshowDaoTest.java:79)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

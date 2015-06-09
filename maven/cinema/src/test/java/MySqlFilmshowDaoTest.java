@@ -42,9 +42,13 @@ public class MySqlFilmshowDaoTest
 		Film filmResult = filmshowTest.getFilm();
 		Hall hallResult = filmshowTest.getHall();
 		Date dateTimeResult = filmshowTest.getDateTime();	
-		Assert.assertTrue(filmExpected.equals(filmResult));
-		Assert.assertTrue(hallExpected.equals(hallResult));
-		Assert.assertTrue(dateTimeExpected.equals(dateTimeResult));
+		Assert.assertEquals(filmExpected.getFilmId(), filmResult.getFilmId());
+		Assert.assertEquals(filmExpected.getFilmName(), filmResult.getFilmName());
+		Assert.assertEquals(filmExpected.getDescription(), filmResult.getDescription());
+		Assert.assertEquals(hallExpected.getHallId(), hallResult.getHallId());
+		Assert.assertEquals(hallExpected.getHallNumber(), hallResult.getHallNumber());
+		Assert.assertEquals(hallExpected.getHallName(), hallResult.getHallName());
+		Assert.assertEquals(dateTimeExpected.toString(), dateTimeResult.toString());
 	}
 	
 	@Test

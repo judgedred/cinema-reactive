@@ -57,7 +57,7 @@ public class Film
 			return false;
 		}
 		Film obj = (Film)other;
-		if(this.filmId == obj.filmId && this.filmName == obj.filmName && this.description == obj.description)
+		if(this.filmId == obj.filmId && this.filmName.equals(obj.filmName) && this.description.equals(obj.description))
 		{
 			return true;
 		}
