@@ -1,11 +1,10 @@
-package test;
-
 import com.dao.*;
 import com.domain.*;
 import com.mysql.*;
 import java.util.*;
 import org.junit.Test;
 import org.junit.Assert;
+import java.text.SimpleDateFormat;
 
 
 public class MySqlFilmshowDaoTest
@@ -36,19 +35,16 @@ public class MySqlFilmshowDaoTest
 		filmshow.setDateTime(cal.getTime());
 		Film filmExpected = filmshow.getFilm();
 		Hall hallExpected = filmshow.getHall();
-		Date dateTimeExpected = filmshow.getDateTime();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String dateTimeExpected = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(filmshow.getDateTime());
 		Filmshow filmshowTest = filmshowDao.create(filmshow);
 		Assert.assertNotNull(filmshowTest);
 		Film filmResult = filmshowTest.getFilm();
 		Hall hallResult = filmshowTest.getHall();
-		Date dateTimeResult = filmshowTest.getDateTime();	
-		Assert.assertEquals(filmExpected.getFilmId(), filmResult.getFilmId());
-		Assert.assertEquals(filmExpected.getFilmName(), filmResult.getFilmName());
-		Assert.assertEquals(filmExpected.getDescription(), filmResult.getDescription());
-		Assert.assertEquals(hallExpected.getHallId(), hallResult.getHallId());
-		Assert.assertEquals(hallExpected.getHallNumber(), hallResult.getHallNumber());
-		Assert.assertEquals(hallExpected.getHallName(), hallResult.getHallName());
-		Assert.assertEquals(dateTimeExpected.toString(), dateTimeResult.toString());
+		String dateTimeResult = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(filmshowTest.getDateTime());
+		Assert.assertEquals(filmExpected, filmResult);
+		Assert.assertEquals(hallExpected, hallResult);
+		Assert.assertEquals(dateTimeExpected, dateTimeResult);
 	}
 	
 	@Test
@@ -69,13 +65,14 @@ public class MySqlFilmshowDaoTest
 		filmshow.setDateTime(cal.getTime());
 		Film filmExpected = filmshow.getFilm();
 		Hall hallExpected = filmshow.getHall();
-		Date dateTimeExpected = filmshow.getDateTime();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String dateTimeExpected = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(filmshow.getDateTime());
 		filmshowDao.update(filmshow);
 		Filmshow filmshowTest = filmshowDao.getFilmshowById(filmshow.getFilmshowId());
 		Assert.assertNotNull(filmshowTest);
 		Film filmResult = filmshowTest.getFilm();
 		Hall hallResult = filmshowTest.getHall();
-		Date dateTimeResult = filmshowTest.getDateTime();	
+		String dateTimeResult = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(filmshowTest.getDateTime());
 		Assert.assertEquals(filmExpected, filmResult);
 		Assert.assertEquals(hallExpected, hallResult);
 		Assert.assertEquals(dateTimeExpected, dateTimeResult);

@@ -8,6 +8,7 @@ Insert Into Hall(hall_number, hall_name) Values(3, "Зал 5D");
 Insert Into Seat(seat_number, row_number, hall_id) Values(13, 3, 1);
 Insert Into Seat(seat_number, row_number, hall_id) Values(14, 3, 1);
 Insert Into Seat(seat_number, row_number, hall_id) Values(15, 3, 1);
+Insert Into Seat(seat_number, row_number, hall_id) Values(16, 3, 1);
 Insert Into Film(film_name, description) Values("Мстители", "Супергерои против злодея Артрона.");
 Insert Into Film(film_name, description) Values("Восхождение Юпитер", "Фантастика");
 Insert Into Film(film_name, description) Values("Аватар", "Фантастика");

@@ -38,36 +38,39 @@ public class Reservation
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		Reservation that = (Reservation) o;
+
+		if(reservationId != that.reservationId)
 		{
 			return false;
 		}
-		Reservation obj = (Reservation)other;
-		if(this.reservationId == obj.reservationId && this.user.equals(obj.user) && this.ticket.equals(obj.ticket))
+		if(!ticket.equals(that.ticket))
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(!user.equals(that.user))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 23+43*reservationId;
+		return reservationId;
 	}
 
 	@Override

@@ -52,36 +52,43 @@ public class Filmshow
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		Filmshow filmshow = (Filmshow) o;
+
+		if(filmshowId != filmshow.filmshowId)
 		{
 			return false;
 		}
-		Filmshow obj = (Filmshow)other;
-		if(this.filmshowId == obj.filmshowId && this.dateTime.equals(obj.dateTime) && this.film.equals(obj.film) && this.hall.equals(obj.hall))
+		if(!dateTime.equals(filmshow.dateTime))
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(!film.equals(filmshow.film))
+		{
+			return false;
+		}
+		if(!hall.equals(filmshow.hall))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 21+41*filmshowId;
+		return filmshowId;
 	}
 
 	@Override

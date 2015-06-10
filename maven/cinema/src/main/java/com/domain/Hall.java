@@ -38,36 +38,41 @@ public class Hall
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		Hall hall = (Hall) o;
+
+		if(hallId != hall.hallId)
 		{
 			return false;
 		}
-		Hall obj = (Hall)other;
-		if(this.hallId == obj.hallId && this.hallNumber == obj.hallNumber && this.hallName.equals(obj.hallName))
+		if(hallNumber != hall.hallNumber)
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(!hallName.equals(hall.hallName))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 22+42*hallId+hallNumber;
+		int result = hallId;
+		result = 31 * result + hallNumber;
+		return result;
 	}
 
 	@Override

@@ -49,36 +49,43 @@ public class User
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		User user = (User) o;
+
+		if(userId != user.userId)
 		{
 			return false;
 		}
-		User obj = (User)other;
-		if(this.userId == obj.userId && this.login == obj.login && this.password == obj.password && this.email == obj.email)
+		if(!email.equals(user.email))
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(!login.equals(user.login))
+		{
+			return false;
+		}
+		if(!password.equals(user.password))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 26+46*userId;
+		return userId;
 	}
 
 	@Override

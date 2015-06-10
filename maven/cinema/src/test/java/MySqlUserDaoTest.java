@@ -1,5 +1,3 @@
-package test;
-
 import com.dao.*;
 import com.domain.*;
 import com.mysql.*;

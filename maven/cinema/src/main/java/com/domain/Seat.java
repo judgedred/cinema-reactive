@@ -49,36 +49,46 @@ public class Seat
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		Seat seat = (Seat) o;
+
+		if(rowNumber != seat.rowNumber)
 		{
 			return false;
 		}
-		Seat obj = (Seat)other;
-		if(this.seatId == obj.seatId && this.seatNumber == obj.seatNumber && this.rowNumber == obj.rowNumber && this.hall.equals(obj.hall))
+		if(seatId != seat.seatId)
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(seatNumber != seat.seatNumber)
+		{
+			return false;
+		}
+		if(!hall.equals(seat.hall))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 24+44*seatId+seatNumber;
+		int result = seatId;
+		result = 31 * result + seatNumber;
+		result = 31 * result + rowNumber;
+		return result;
 	}
 
 	@Override

@@ -12,7 +12,6 @@ public class Ticket
 	{
 		return ticketId;
 	}
-
 	public void setTicketId(int ticketId)
 	{
 		this.ticketId = ticketId;
@@ -49,36 +48,43 @@ public class Ticket
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		Ticket ticket = (Ticket) o;
+
+		if(Float.compare(ticket.price, price) != 0)
 		{
 			return false;
 		}
-		Ticket obj = (Ticket)other;
-		if(this.ticketId == obj.ticketId && this.price == obj.price && this.filmshow.equals(obj.filmshow) && this.seat.equals(obj.seat))
+		if(ticketId != ticket.ticketId)
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(!filmshow.equals(ticket.filmshow))
+		{
+			return false;
+		}
+		if(!seat.equals(ticket.seat))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 25+45*ticketId;
+		return ticketId;
 	}
 
 	@Override

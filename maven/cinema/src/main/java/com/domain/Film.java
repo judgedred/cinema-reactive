@@ -38,36 +38,41 @@ public class Film
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
-		if(!super.equals(other))
-		{
-			return false;
-		}
-		if(this == other)
+		if(this == o)
 		{
 			return true;
 		}
-		if(other == null)
+		if(o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
-		if(this.getClass() != other.getClass())
+
+		Film film = (Film) o;
+
+		if(filmId != film.filmId)
 		{
 			return false;
 		}
-		Film obj = (Film)other;
-		if(this.filmId == obj.filmId && this.filmName.equals(obj.filmName) && this.description.equals(obj.description))
+		if(!description.equals(film.description))
 		{
-			return true;
+			return false;
 		}
-		return false; 
+		if(!filmName.equals(film.filmName))
+		{
+			return false;
+		}
+
+		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int hashCode()
 	{
-		return 20+40*filmId;
+		int result = filmId;
+		result = 31 * result + filmName.hashCode();
+		return result;
 	}
 
 	@Override
@@ -76,3 +81,5 @@ public class Film
 		return filmName + " " + description;
 	}	
 }
+
+
