@@ -16,14 +16,13 @@ import java.util.List;
  */
 public class MySqlSeatDaoTest
 {
-    private DaoFactory daoFactory;
     private SeatDao seatDao;
     private HallDao hallDao;
 
     @Before
-    public void setUp() throws DaoException
+    public void setup() throws DaoException
     {
-        daoFactory = new MySqlDaoFactory();
+        DaoFactory daoFactory = new MySqlDaoFactory();
         seatDao = daoFactory.getSeatDao();
         hallDao = daoFactory.getHallDao();
     }

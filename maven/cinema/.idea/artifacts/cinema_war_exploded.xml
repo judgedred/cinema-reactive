@@ -12,7 +12,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="D:\java\practice\servlets\maven\cinema\target/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/target/cinema/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="cinema/web/Web" />
     </root>
