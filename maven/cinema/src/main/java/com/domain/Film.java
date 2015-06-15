@@ -1,10 +1,20 @@
 package com.domain;
 
 
+import javax.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "Film")
 public class Film
 {
-	private int filmId;
+    @Id
+    @Column(name = "film_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer filmId;
+    @Column(name = "film_name", length = 64)
 	private String filmName;
+    @Column(name = "description")
 	private String description;
 
 	public int getFilmId()
@@ -51,7 +61,7 @@ public class Film
 
 		Film film = (Film) o;
 
-		if(filmId != film.filmId)
+		if(!Objects.equals(filmId, film.filmId))
 		{
 			return false;
 		}
