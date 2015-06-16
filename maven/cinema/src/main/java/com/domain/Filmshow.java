@@ -1,22 +1,34 @@
 package com.domain;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
-
+@Entity
+@Table(name = "Filmshow")
 public class Filmshow
 {
-	private int filmshowId;
-	private Date dateTime; 
+    @Id
+    @Column(name = "filmshow_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer filmshowId;
+    @Column(name = "date_time")
+    @Temporal(value = TemporalType.TIMESTAMP)
+	private Date dateTime;
+    @ManyToOne
+    @JoinColumn(name = "film_id")
 	private Film film;
+    @ManyToOne
+    @JoinColumn(name = "hall_id")
 	private Hall hall;
 
-	public int getFilmshowId()
+	public Integer getFilmshowId()
 	{
 		return filmshowId;
 	}
 
-	public void setFilmshowId(int filmshowId)
+	public void setFilmshowId(Integer filmshowId)
 	{
 		this.filmshowId = filmshowId;
 	}
@@ -65,7 +77,7 @@ public class Filmshow
 
 		Filmshow filmshow = (Filmshow) o;
 
-		if(filmshowId != filmshow.filmshowId)
+		if(!Objects.equals(filmshowId, filmshow.filmshowId))
 		{
 			return false;
 		}

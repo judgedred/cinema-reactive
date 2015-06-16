@@ -1,23 +1,32 @@
 package com.domain;
 
+import javax.persistence.*;
+import java.util.Objects;
 
+@Entity
+@Table(name = "Hall")
 public class Hall
 {
-	private int hallId;
-	private int hallNumber;
+    @Id
+    @Column(name = "hall_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer hallId;
+    @Column(name = "hall_number")
+	private Integer hallNumber;
+    @Column(name = "hall_name", length = 45)
 	private String hallName;
 
-	public int getHallId()
+	public Integer getHallId()
 	{
 		return hallId;
 	}
 
-	public void setHallId(int hallId)
+	public void setHallId(Integer hallId)
 	{
 		this.hallId = hallId;
 	}
 
-	public int getHallNumber()
+	public Integer getHallNumber()
 	{
 		return hallNumber;
 	}
@@ -51,11 +60,11 @@ public class Hall
 
 		Hall hall = (Hall) o;
 
-		if(hallId != hall.hallId)
+		if(!Objects.equals(hallId, hall.hallId))
 		{
 			return false;
 		}
-		if(hallNumber != hall.hallNumber)
+		if(!Objects.equals(hallNumber, hall.hallNumber))
 		{
 			return false;
 		}

@@ -1,34 +1,45 @@
 package com.domain;
 
+import javax.persistence.*;
+import java.util.Objects;
 
+@Entity
+@Table(name = "Seat")
 public class Seat
 {
-	private int seatId;
-	private int seatNumber;
-	private int rowNumber;
+    @Id
+    @Column(name = "seat_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer seatId;
+    @Column(name = "seat_number")
+	private Integer seatNumber;
+    @Column(name = "row_number")
+	private Integer rowNumber;
+    @ManyToOne                      // TODO cascade = CascadeType.ALL
+    @JoinColumn(name = "hall_id")
 	private Hall hall;
 
-	public int getSeatId()
+	public Integer getSeatId()
 	{
 		return seatId;
 	}
 
-	public void setSeatId(int seatId)
+	public void setSeatId(Integer seatId)
 	{
 		this.seatId = seatId;
 	}
 
-	public int getSeatNumber()
+	public Integer getSeatNumber()
 	{
 		return seatNumber;
 	}
 
-	public void setSeatNumber(int seatNumber)
+	public void setSeatNumber(Integer seatNumber)
 	{
 		this.seatNumber = seatNumber;
 	}
 
-	public int getRowNumber()
+	public Integer getRowNumber()
 	{
 		return rowNumber;
 	}
@@ -62,15 +73,15 @@ public class Seat
 
 		Seat seat = (Seat) o;
 
-		if(rowNumber != seat.rowNumber)
+		if(!Objects.equals(rowNumber, seat.rowNumber))
 		{
 			return false;
 		}
-		if(seatId != seat.seatId)
+		if(!Objects.equals(seatId, seat.seatId))
 		{
 			return false;
 		}
-		if(seatNumber != seat.seatNumber)
+		if(!Objects.equals(seatNumber, seat.seatNumber))
 		{
 			return false;
 		}

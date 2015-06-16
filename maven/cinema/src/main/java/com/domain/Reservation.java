@@ -1,18 +1,29 @@
 package com.domain;
 
+import javax.persistence.*;
+import java.util.Objects;
 
+@Entity
+@Table(name = "Reservation")
 public class Reservation
 {
-	private int reservationId;
+    @Id
+    @Column(name = "reservation_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer reservationId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
 	private User user;
+    @ManyToOne
+    @JoinColumn(name = "ticket_id")
 	private Ticket ticket;
 
-	public int getReservationId()
+	public Integer getReservationId()
 	{
 		return reservationId;
 	}
 	
-	public void setReservationId(int reservationId)
+	public void setReservationId(Integer reservationId)
 	{
 		this.reservationId = reservationId;
 	}
@@ -51,7 +62,7 @@ public class Reservation
 
 		Reservation that = (Reservation) o;
 
-		if(reservationId != that.reservationId)
+		if(!Objects.equals(reservationId, that.reservationId))
 		{
 			return false;
 		}

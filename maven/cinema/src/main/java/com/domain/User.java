@@ -1,19 +1,29 @@
 package com.domain;
 
+import javax.persistence.*;
+import java.util.Objects;
 
+@Entity
+@Table(name = "User")
 public class User
 {
-	private int userId;
+    @Id
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer userId;
+    @Column(name = "login")
 	private String login;
+    @Column(name = "password")
 	private String password;
+    @Column(name = "email")
 	private String email;
 
-	public int getUserId()
+	public Integer getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(int userId)
+	public void setUserId(Integer userId)
 	{
 		this.userId = userId;
 	}
@@ -62,7 +72,7 @@ public class User
 
 		User user = (User) o;
 
-		if(userId != user.userId)
+		if(!Objects.equals(userId, user.userId))
 		{
 			return false;
 		}

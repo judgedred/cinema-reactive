@@ -1,23 +1,34 @@
 package com.domain;
 
+import javax.persistence.*;
+import java.util.Objects;
 
+@Entity
+@Table(name = "Ticket")
 public class Ticket
 {
-	private int ticketId;
-	private float price;
+    @Id
+    @Column(name = "ticket_id")
+	private Integer ticketId;
+    @Column(name = "price")
+	private Float price;
+    @ManyToOne
+    @JoinColumn(name = "filmshow_id")
 	private Filmshow filmshow;
+    @OneToOne
+    @JoinColumn(name = "seat_id")
 	private Seat seat;
 
-	public int getTicketId()
+	public Integer getTicketId()
 	{
 		return ticketId;
 	}
-	public void setTicketId(int ticketId)
+	public void setTicketId(Integer ticketId)
 	{
 		this.ticketId = ticketId;
 	}
 
-	public float getPrice()
+	public Float getPrice()
 	{
 		return price;
 	}
@@ -65,7 +76,7 @@ public class Ticket
 		{
 			return false;
 		}
-		if(ticketId != ticket.ticketId)
+		if(!Objects.equals(ticketId, ticket.ticketId))
 		{
 			return false;
 		}

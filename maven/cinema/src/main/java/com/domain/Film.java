@@ -12,17 +12,17 @@ public class Film
     @Column(name = "film_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer filmId;
-    @Column(name = "film_name", length = 64)
+    @Column(name = "film_name", length = 50)	// TODO add nullable = false
 	private String filmName;
     @Column(name = "description")
 	private String description;
 
-	public int getFilmId()
+	public Integer getFilmId()
 	{
 		return filmId;
 	}
 
-	public void setFilmId(int filmId)
+	public void setFilmId(Integer filmId)
 	{
 		this.filmId = filmId;
 	}
