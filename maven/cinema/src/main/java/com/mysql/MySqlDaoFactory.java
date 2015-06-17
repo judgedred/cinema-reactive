@@ -1,26 +1,20 @@
 package com.mysql;
 
 import com.dao.*;
-import java.sql.DriverManager;
-import java.sql.Connection;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
 
 public class MySqlDaoFactory implements DaoFactory
 {
-	private String driver = "com.mysql.jdbc.Driver";
-	private static String url = "jdbc:mysql://localhost:3306/cinema";
-	private static String user = "admin";
-	private static String pass = "admin";
-
-	public static Connection getConnection() throws DaoException
+	public static SessionFactory createSessionFactory()
 	{
-		try 
-		{
-			return DriverManager.getConnection(url, user, pass);
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+		Configuration configuration = new Configuration();
+		configuration.configure();
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+		return configuration.buildSessionFactory(serviceRegistry);
 	}
 	
 	@Override
@@ -65,15 +59,8 @@ public class MySqlDaoFactory implements DaoFactory
 		return new MySqlReservationDao();
 	}
 
-	public MySqlDaoFactory() throws DaoException
+	public MySqlDaoFactory()
 	{
-		try 
-		{
-			Class.forName(driver);
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+
 	}
 }

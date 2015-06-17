@@ -2,13 +2,15 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
+import org.hibernate.Session;
+
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
 public class MySqlUserDao implements UserDao
 {
-	private Connection connection;
+	private Session session;
 	private PreparedStatement pstmtCreate = null;
 	private PreparedStatement pstmtUpdate = null;
 	private PreparedStatement pstmtDelete = null;
@@ -302,16 +304,9 @@ public class MySqlUserDao implements UserDao
 		
 	}
 
-	MySqlUserDao() throws DaoException
+	MySqlUserDao()
 	{
-		try
-		{
-			connection = MySqlDaoFactory.getConnection();
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+		session = MySqlDaoFactory.createSessionFactory().openSession();
 	}
 }
 
