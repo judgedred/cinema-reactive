@@ -9,7 +9,7 @@ public interface UserDao
 	public void update(User user) throws DaoException;
 	public void delete(User user) throws DaoException;
 	public List<User> getUserAll() throws DaoException;
-	public User getUserById(int id) throws DaoException;
+	public User getUserById(Integer id) throws DaoException;
 	public void close() throws DaoException;
 	public User register(User user) throws DaoException;		//?
 	public void changePassword(User user) throws DaoException; 	//?
