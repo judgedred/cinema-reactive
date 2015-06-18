@@ -316,7 +316,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
-			connection = MySqlDaoFactory.getConnection();
+
 		}
 		catch(Exception e)
 		{

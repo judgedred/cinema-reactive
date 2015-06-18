@@ -303,7 +303,7 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
-			connection = MySqlDaoFactory.getConnection();
+
 		}
 		catch(Exception e)
 		{
