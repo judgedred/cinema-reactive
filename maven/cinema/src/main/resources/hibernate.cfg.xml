@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+        <session-factory>
+            <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+            <property name="connection.url">jdbc:mysql://localhost:3306/cinema</property>
+            <property name="connection.username">admin</property>
+            <property name="connection.password">admin</property>
+            <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+            <property name="show_sql">true</property>
+            <property name="current_session_context_class">thread</property>
+
+
+            <mapping class="com.domain.Film" />
+            <mapping class="com.domain.Filmshow"/>
+            <mapping class="com.domain.Hall"/>
+            <mapping class="com.domain.Reservation"/>
+            <mapping class="com.domain.Seat"/>
+            <mapping class="com.domain.Ticket"/>
+            <mapping class="com.domain.User"/>
+        </session-factory>
+</hibernate-configuration>
