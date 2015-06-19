@@ -310,7 +310,7 @@ public class MySqlTicketDao implements TicketDao
 	{
 		try
 		{
-			connection = MySqlDaoFactory.getConnection();
+
 		}
 		catch(Exception e)
 		{

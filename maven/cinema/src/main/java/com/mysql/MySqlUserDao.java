@@ -3,6 +3,8 @@ package com.mysql;
 import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
+
+import java.math.BigInteger;
 import java.util.List;
 
 
@@ -18,7 +20,7 @@ public class MySqlUserDao implements UserDao
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
-            Integer lastId = ((Integer) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue(); // TODO intValue() to convert to int
+            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue(); // TODO intValue() to convert to int
             return (User) session.load(User.class, lastId);
         }
         catch(Exception e)

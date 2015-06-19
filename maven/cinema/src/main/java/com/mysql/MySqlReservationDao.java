@@ -285,10 +285,7 @@ public class MySqlReservationDao implements ReservationDao
 			{
 				pstmtLastId.close();
 			}
-			if(MySqlUserDao.pstmtGetById != null)
-			{
-				MySqlUserDao.pstmtGetById.close();
-			}
+
 			if(MySqlTicketDao.pstmtGetById != null)
 			{
 				MySqlTicketDao.pstmtGetById.close();
@@ -305,7 +302,7 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
-			connection = MySqlDaoFactory.getConnection();
+
 		}
 		catch(Exception e)
 		{

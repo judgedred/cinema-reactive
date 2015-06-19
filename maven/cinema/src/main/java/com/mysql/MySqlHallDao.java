@@ -291,7 +291,7 @@ public class MySqlHallDao implements HallDao
 	{
 		try
 		{
-			connection = MySqlDaoFactory.getConnection();
+
 		}
 		catch(Exception e)
 		{
