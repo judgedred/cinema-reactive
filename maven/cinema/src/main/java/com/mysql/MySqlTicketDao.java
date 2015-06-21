@@ -290,10 +290,7 @@ public class MySqlTicketDao implements TicketDao
 			{
 				pstmtLastId.close();
 			}
-			if(MySqlFilmshowDao.pstmtGetById != null)
-			{
-				MySqlFilmshowDao.pstmtGetById.close();
-			}
+
 			if(MySqlSeatDao.pstmtGetById != null)
 			{
 				MySqlSeatDao.pstmtGetById.close();

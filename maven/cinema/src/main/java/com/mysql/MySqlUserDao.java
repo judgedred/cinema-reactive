@@ -20,7 +20,7 @@ public class MySqlUserDao implements UserDao
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
-            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue(); // TODO intValue() to convert to int
+            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
             return (User) session.load(User.class, lastId);
         }
         catch(Exception e)
@@ -64,8 +64,7 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-            List<User> userLst = (List<User>) session.createCriteria(User.class).list();
-            return userLst;
+			return (List<User>) session.createCriteria(User.class).list();
 		}
 		catch(Exception e)
 		{
