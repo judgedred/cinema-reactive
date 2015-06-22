@@ -112,6 +112,6 @@ public class MySqlFilmshowDao implements FilmshowDao
 
 	MySqlFilmshowDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
+
 	}
 }
