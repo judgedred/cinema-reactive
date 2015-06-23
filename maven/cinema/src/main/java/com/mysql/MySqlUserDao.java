@@ -49,7 +49,8 @@ public class MySqlUserDao implements UserDao
 		try
 		{
 			em.getTransaction().begin();
-            em.remove(user);
+            User userToBeRemoved = em.getReference(User.class, user.getUserId());
+            em.remove(userToBeRemoved);
             em.getTransaction().commit();
 		}
 		catch(Exception e)

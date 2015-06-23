@@ -9,6 +9,7 @@ public class Ticket
 {
     @Id
     @Column(name = "ticket_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer ticketId;
     @Column(name = "price")
 	private Float price;

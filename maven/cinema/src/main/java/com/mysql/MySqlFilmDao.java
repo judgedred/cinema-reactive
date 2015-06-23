@@ -2,26 +2,25 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import org.hibernate.Session;
-import java.math.BigInteger;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
-
 
 
 public class MySqlFilmDao implements FilmDao
 {
-	private Session session;
+	private EntityManager em;
 
 	@Override
 	public Film create(Film film) throws DaoException
 	{
 		try
 		{
-			session.beginTransaction();
-			session.save(film);
-			session.getTransaction().commit();
-			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			return (Film) session.load(Film.class, lastId);
+			em.getTransaction().begin();
+			em.persist(film);
+			em.getTransaction().commit();
+			em.refresh(film);
+			return film;
 		}
 		catch(Exception e)
 		{
@@ -34,9 +33,9 @@ public class MySqlFilmDao implements FilmDao
 	{
 		try
 		{
-			session.beginTransaction();
-			session.update(film);
-			session.getTransaction().commit();
+			em.getTransaction().begin();
+			em.merge(film);
+			em.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
@@ -49,9 +48,10 @@ public class MySqlFilmDao implements FilmDao
 	{
 		try
 		{
-			session.beginTransaction();
-			session.delete(film);
-			session.getTransaction().commit();
+			em.getTransaction().begin();
+			Film filmToBeRemoved = em.getReference(Film.class, film.getFilmId());
+			em.remove(filmToBeRemoved);
+			em.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
@@ -64,7 +64,9 @@ public class MySqlFilmDao implements FilmDao
 	{
 		try
 		{
-			return (List<Film>) session.createCriteria(Film.class).list();
+			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+			cq.select(cq.from(Film.class));
+			return (List<Film>) em.createQuery(cq).getResultList();
 		}
 		catch(Exception e)
 		{
@@ -77,15 +79,7 @@ public class MySqlFilmDao implements FilmDao
 	{
 		try
 		{
-			Film film = (Film)session.get(Film.class, id);
-			if(film != null)
-			{
-				return film;
-			}
-			else
-			{
-				return null;
-			}
+			return em.find(Film.class, id);
 		}
 		catch(Exception e)
 		{
@@ -98,9 +92,9 @@ public class MySqlFilmDao implements FilmDao
 	{
 		try
 		{
-			if(session != null && session.isOpen())
+			if(em != null && em.isOpen())
 			{
-				session.close();
+				em.close();
 			}
 		}
 		catch(Exception e)
@@ -111,6 +105,6 @@ public class MySqlFilmDao implements FilmDao
 
 	MySqlFilmDao()
 	{
-
+		em = MySqlDaoFactory.createEntityManager();
 	}
 }
