@@ -65,7 +65,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 		try
 		{
 			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-			cq.select(cq.from(Film.class));
+			cq.select(cq.from(Filmshow.class));
 			return (List<Filmshow>) em.createQuery(cq).getResultList();
 		}
 		catch(Exception e)
