@@ -6,15 +6,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 
 public class MySqlDaoFactory implements DaoFactory
 {
-	public static SessionFactory createSessionFactory()
+	public static EntityManager createEntityManager()
 	{
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-		return configuration.buildSessionFactory(serviceRegistry);
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("cinemaManager");
+		return emf.createEntityManager();
 	}
 	
 	@Override

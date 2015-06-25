@@ -2,6 +2,8 @@ package com.web;
 
 import com.dao.*;
 import com.domain.*;
+import com.mysql.MySqlDaoFactory;
+
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -16,10 +18,10 @@ public class Main extends HttpServlet
 		HttpSession session = request.getSession();
 		RequestDispatcher dispatcher = null;
 		try												
-			{												
-	 			FilmshowDao filmshowDao = (FilmshowDao)session.getAttribute("filmshowDao");		
-	 			List<Filmshow> ls = filmshowDao.getFilmshowAll();
-				session.setAttribute("filmshowList", ls);					
+			{
+				FilmshowDao filmshowDao = (FilmshowDao)session.getAttribute("filmshowDao");
+                List<Filmshow> ls = filmshowDao.getFilmshowAll();
+				session.setAttribute("filmshowList", ls);
 			}												
 			catch(Exception e)										
 			{												

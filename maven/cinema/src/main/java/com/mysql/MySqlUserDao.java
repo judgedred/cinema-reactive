@@ -2,26 +2,25 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import org.hibernate.Session;
-
-import java.math.BigInteger;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 
 public class MySqlUserDao implements UserDao
 {
-	private Session session;
+	private EntityManager em;
 
 	@Override
 	public User create(User user) throws DaoException
 	{
         try
         {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue(); // TODO intValue() to convert to int
-            return (User) session.load(User.class, lastId);
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+			em.refresh(user);
+            return user;
         }
         catch(Exception e)
         {
@@ -34,9 +33,9 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-			session.beginTransaction();
-            session.update(user);
-            session.getTransaction().commit();
+			em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
 		}
 		catch(Exception e)
 		{	
@@ -49,9 +48,10 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-			session.beginTransaction();
-            session.delete(user);
-            session.getTransaction().commit();
+			em.getTransaction().begin();
+            User userToBeRemoved = em.getReference(User.class, user.getUserId());
+            em.remove(userToBeRemoved);
+            em.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
@@ -64,8 +64,9 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-            List<User> userLst = (List<User>) session.createCriteria(User.class).list();
-            return userLst;
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(User.class));
+			return (List<User>) em.createQuery(cq).getResultList();
 		}
 		catch(Exception e)
 		{
@@ -78,15 +79,7 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-            User user = (User)session.get(User.class, id);
-			if(user != null)
-			{
-				return user;
-			}
-			else
-			{
-				return null;
-			}
+            return em.find(User.class, id);
 		}
 		catch(Exception e)
 		{
@@ -99,9 +92,9 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-            if(session != null && session.isOpen())
+            if(em != null && em.isOpen())
             {
-                session.close();
+                em.close();
             }
 		}
 		catch(Exception e)
@@ -124,7 +117,7 @@ public class MySqlUserDao implements UserDao
 
 	MySqlUserDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
+		em = MySqlDaoFactory.createEntityManager();
 	}
 }
 
