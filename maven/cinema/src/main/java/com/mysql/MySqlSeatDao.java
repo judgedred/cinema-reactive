@@ -108,6 +108,6 @@ public class MySqlSeatDao implements SeatDao
 
 	MySqlSeatDao() throws DaoException
 	{
-		em = MySqlDaoFactory.createEntityManager();
+//		em = MySqlDaoFactory.createEntityManager();
 	}
 }

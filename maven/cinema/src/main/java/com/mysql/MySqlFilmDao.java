@@ -2,16 +2,22 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
+
 import java.util.List;
 
 
 public class MySqlFilmDao implements FilmDao
 {
+	@PersistenceContext
 	private EntityManager em;
 
 	@Override
+	@Transactional
 	public Film create(Film film) throws DaoException
 	{
 		try
@@ -29,6 +35,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
+    @Transactional
 	public void update(Film film) throws DaoException
 	{
 		try
@@ -44,6 +51,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
+    @Transactional
 	public void delete(Film film) throws DaoException
 	{
 		try
@@ -60,6 +68,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
+    @Transactional
 	public List<Film> getFilmAll() throws DaoException
 	{
 		try
@@ -75,6 +84,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
+    @Transactional
 	public Film getFilmById(int id) throws DaoException
 	{
 		try
@@ -88,6 +98,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
+    @Transactional
 	public void close() throws DaoException
 	{
 		try
@@ -105,6 +116,6 @@ public class MySqlFilmDao implements FilmDao
 
 	MySqlFilmDao()
 	{
-		em = MySqlDaoFactory.createEntityManager();
+//		em = MySqlDaoFactory.createEntityManager();
 	}
 }
