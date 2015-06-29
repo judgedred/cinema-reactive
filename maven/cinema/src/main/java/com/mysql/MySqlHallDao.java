@@ -60,6 +60,7 @@ public class MySqlHallDao implements HallDao
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Hall> getHallAll() throws DaoException
 	{
 		try

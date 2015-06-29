@@ -5,9 +5,7 @@ import com.domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
-import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
 
 
 public class MySqlSeatDao implements SeatDao
@@ -63,6 +61,7 @@ public class MySqlSeatDao implements SeatDao
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Seat> getSeatAll() throws DaoException
 	{
 		try
@@ -108,6 +107,6 @@ public class MySqlSeatDao implements SeatDao
 
 	MySqlSeatDao() throws DaoException
 	{
-//		em = MySqlDaoFactory.createEntityManager();
+		em = MySqlDaoFactory.createEntityManager();
 	}
 }

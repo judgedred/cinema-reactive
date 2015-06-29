@@ -13,11 +13,11 @@ import javax.persistence.Persistence;
 
 public class MySqlDaoFactory implements DaoFactory
 {
-/**	public static EntityManager createEntityManager()
+	public static EntityManager createEntityManager()
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("cinemaManager");
 		return emf.createEntityManager();
-	}		*/
+	}
 	
 	@Override
 	public UserDao getUserDao() throws DaoException

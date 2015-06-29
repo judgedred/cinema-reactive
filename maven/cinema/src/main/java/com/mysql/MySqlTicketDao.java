@@ -61,6 +61,7 @@ public class MySqlTicketDao implements TicketDao
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Ticket> getTicketAll() throws DaoException
 	{
         try
