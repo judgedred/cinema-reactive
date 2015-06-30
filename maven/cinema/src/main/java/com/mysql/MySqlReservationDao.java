@@ -61,6 +61,7 @@ public class MySqlReservationDao implements ReservationDao
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Reservation> getReservationAll() throws DaoException
 	{
 		try

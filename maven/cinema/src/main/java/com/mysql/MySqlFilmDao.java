@@ -2,23 +2,28 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 
 public class MySqlFilmDao implements FilmDao
 {
+    @PersistenceContext
 	private EntityManager em;
 
 	@Override
+    @Transactional
 	public Film create(Film film) throws DaoException
 	{
-		try
+        try
 		{
-			em.getTransaction().begin();
 			em.persist(film);
-			em.getTransaction().commit();
+			em.flush();
 			em.refresh(film);
 			return film;
 		}
@@ -60,6 +65,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Film> getFilmAll() throws DaoException
 	{
 		try
@@ -88,7 +94,7 @@ public class MySqlFilmDao implements FilmDao
 	}
 
 	@Override
-	public void close() throws DaoException
+    public void close() throws DaoException
 	{
 		try
 		{

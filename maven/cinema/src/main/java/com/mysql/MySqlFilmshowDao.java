@@ -60,6 +60,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Filmshow> getFilmshowAll() throws DaoException
 	{
 		try

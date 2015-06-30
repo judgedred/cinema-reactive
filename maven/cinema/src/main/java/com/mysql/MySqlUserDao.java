@@ -60,6 +60,7 @@ public class MySqlUserDao implements UserDao
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<User> getUserAll() throws DaoException
 	{
 		try
