@@ -25,6 +25,7 @@ public class MySqlFilmDao implements FilmDao
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -32,7 +33,7 @@ public class MySqlFilmDao implements FilmDao
 	@Override
 	public void update(Film film) throws DaoException
 	{
-		try
+        try
 		{
 			session.beginTransaction();
 			session.update(film);
@@ -40,6 +41,7 @@ public class MySqlFilmDao implements FilmDao
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -47,7 +49,7 @@ public class MySqlFilmDao implements FilmDao
 	@Override
 	public void delete(Film film) throws DaoException
 	{
-		try
+        try
 		{
 			session.beginTransaction();
 			session.delete(film);
@@ -55,6 +57,7 @@ public class MySqlFilmDao implements FilmDao
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}

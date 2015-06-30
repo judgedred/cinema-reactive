@@ -26,6 +26,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -41,6 +42,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -56,6 +58,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}

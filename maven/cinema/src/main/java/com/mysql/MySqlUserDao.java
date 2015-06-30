@@ -25,6 +25,7 @@ public class MySqlUserDao implements UserDao
         }
         catch(Exception e)
         {
+			session.getTransaction().rollback();
             throw new DaoException(e);
         }
 	}
@@ -39,7 +40,8 @@ public class MySqlUserDao implements UserDao
             session.getTransaction().commit();
 		}
 		catch(Exception e)
-		{	
+		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -55,6 +57,7 @@ public class MySqlUserDao implements UserDao
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
