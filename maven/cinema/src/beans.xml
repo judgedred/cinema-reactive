@@ -45,9 +45,5 @@
         </property>
     </bean>
 
-    <bean id="filmDao" class="com.mysql.MySqlFilmDao">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
 
     </beans>

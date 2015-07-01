@@ -4,15 +4,21 @@ import com.mysql.*;
 import java.util.*;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/beans.xml")
 public class MySqlFilmDaoTest
 {
+    @Autowired
+    private MySqlFilmDao filmDao;
+
 	@Test
 	public void testGetFilmById() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film filmTest = filmDao.getFilmById(1);
 		Assert.assertNotNull(filmTest);
 	}	
@@ -20,8 +26,6 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testCreate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film film = new Film();
 		film.setFilmName("Интерстеллар");
 		film.setDescription("Сквозь пространство и время");
@@ -38,8 +42,6 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testUpdate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film film = new Film();
 		film.setFilmId(2);
 		film.setFilmName("Кибер");
@@ -58,8 +60,6 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film film = new Film();
 		film.setFilmId(3);
 		filmDao.delete(film);
@@ -69,8 +69,6 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testGetFilmAll() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		List<Film> listTest = filmDao.getFilmAll();
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);
