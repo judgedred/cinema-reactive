@@ -1,18 +1,27 @@
 import com.dao.*;
 import com.domain.*;
-import com.mysql.*;
 import java.util.*;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/beans.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class MySqlUserDaoTest
 {
+    @Autowired
+    private UserDao userDao;
+
 	@Test
 	public void testGetUserById() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		UserDao userDao = daoFactory.getUserDao();
 		User userTest = userDao.getUserById(1);
 		Assert.assertNotNull(userTest);
 	}	
@@ -20,8 +29,6 @@ public class MySqlUserDaoTest
 	@Test
 	public void testCreate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		UserDao userDao = daoFactory.getUserDao();
 		User user = new User();
 		user.setLogin("testCreatePassed");
 		user.setPassword("testCreatePassed");
@@ -42,8 +49,6 @@ public class MySqlUserDaoTest
 	@Test
 	public void testUpdate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		UserDao userDao = daoFactory.getUserDao();
 		User user = new User();
 		user.setUserId(2);
 		user.setLogin("testUpdatePassed");
@@ -66,8 +71,6 @@ public class MySqlUserDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		UserDao userDao = daoFactory.getUserDao();
 		User user = new User();
 		user.setUserId(3);
 		userDao.delete(user);
@@ -77,8 +80,6 @@ public class MySqlUserDaoTest
 	@Test
 	public void testGetUserAll() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		UserDao userDao = daoFactory.getUserDao();
 		List<User> listTest = userDao.getUserAll();
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);

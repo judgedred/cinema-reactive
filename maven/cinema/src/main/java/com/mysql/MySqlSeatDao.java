@@ -3,15 +3,17 @@ package com.mysql;
 import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
-
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
-import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
 
-
+@Repository
 public class MySqlSeatDao implements SeatDao
 {
+    @Autowired
+    private SessionFactory sessionFactory;
 	private Session session;
 
 	@Override
@@ -19,11 +21,14 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.save(seat);
-			session.getTransaction().commit();
+			session.flush();
 			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			return (Seat) session.load(Seat.class, lastId);
+			seat = (Seat) session.load(Seat.class, lastId);
+            session.getTransaction().commit();
+            return seat;
 		}
 		catch(Exception e)
 		{
@@ -37,6 +42,7 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.update(seat);
 			session.getTransaction().commit();
@@ -53,6 +59,7 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.delete(seat);
 			session.getTransaction().commit();
@@ -65,10 +72,12 @@ public class MySqlSeatDao implements SeatDao
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Seat> getSeatAll() throws DaoException
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			return (List<Seat>) session.createCriteria(Seat.class).list();
 		}
 		catch(Exception e)
@@ -82,6 +91,8 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
+            session.beginTransaction();
 			Seat seat = (Seat)session.get(Seat.class, id);
 			if(seat != null)
 			{
@@ -114,8 +125,7 @@ public class MySqlSeatDao implements SeatDao
 		}
 	}
 
-	MySqlSeatDao() throws DaoException
+	MySqlSeatDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
 	}
 }

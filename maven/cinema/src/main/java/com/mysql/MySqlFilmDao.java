@@ -5,10 +5,7 @@ import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -28,19 +25,19 @@ public class MySqlFilmDao implements FilmDao
 	{
 		try
 		{
-			sessionFactory.openSession();
-			sessionFactory.getCurrentSession().beginTransaction();
-            sessionFactory.getCurrentSession().save(film);
-            sessionFactory.getCurrentSession().flush();
-			Integer lastId = ((BigInteger) sessionFactory.getCurrentSession().createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-            film = (Film) sessionFactory.getCurrentSession().load(Film.class, lastId);
-            sessionFactory.getCurrentSession().getTransaction().commit();
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+            session.save(film);
+            session.flush();
+			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+            film = (Film) session.load(Film.class, lastId);
+            session.getTransaction().commit();
             return film;
 
 		}
 		catch(Exception e)
 		{
-            sessionFactory.getCurrentSession().getTransaction().rollback();
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -57,7 +54,7 @@ public class MySqlFilmDao implements FilmDao
 		}
 		catch(Exception e)
 		{
-            sessionFactory.getCurrentSession().getTransaction().rollback();
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -74,7 +71,7 @@ public class MySqlFilmDao implements FilmDao
 		}
 		catch(Exception e)
 		{
-            sessionFactory.getCurrentSession().getTransaction().rollback();
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -135,6 +132,6 @@ public class MySqlFilmDao implements FilmDao
 
 	MySqlFilmDao()
 	{
-//		session = MySqlDaoFactory.createSessionFactory().openSession();
+
 	}
 }

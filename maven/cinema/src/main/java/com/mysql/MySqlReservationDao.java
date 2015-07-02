@@ -3,15 +3,18 @@ package com.mysql;
 import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
-
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
-import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
 
 
+@Repository
 public class MySqlReservationDao implements ReservationDao
 {
+    @Autowired
+    private SessionFactory sessionFactory;
 	private Session session;
 
 	@Override
@@ -19,11 +22,14 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.save(reservation);
-			session.getTransaction().commit();
+			session.flush();
 			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			return (Reservation) session.load(Reservation.class, lastId);
+			reservation = (Reservation) session.load(Reservation.class, lastId);
+            session.getTransaction().commit();
+            return reservation;
 		}
 		catch(Exception e)
 		{
@@ -37,7 +43,8 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
-			session.beginTransaction();
+            session = sessionFactory.openSession();
+            session.beginTransaction();
 			session.update(reservation);
 			session.getTransaction().commit();
 		}
@@ -53,6 +60,7 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.delete(reservation);
 			session.getTransaction().commit();
@@ -65,10 +73,12 @@ public class MySqlReservationDao implements ReservationDao
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Reservation> getReservationAll() throws DaoException
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			return (List<Reservation>) session.createCriteria(Reservation.class).list();
 		}
 		catch(Exception e)
@@ -82,6 +92,8 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
+            session.beginTransaction();
 			Reservation reservation = (Reservation)session.get(Reservation.class, id);
 			if(reservation != null)
 			{
@@ -114,8 +126,7 @@ public class MySqlReservationDao implements ReservationDao
 		}
 	}
 
-	MySqlReservationDao() throws DaoException
+	MySqlReservationDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
 	}
 }

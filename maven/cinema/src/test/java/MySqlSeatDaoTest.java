@@ -1,31 +1,30 @@
 import com.dao.DaoException;
-import com.dao.DaoFactory;
 import com.dao.HallDao;
 import com.dao.SeatDao;
 import com.domain.Hall;
 import com.domain.Seat;
-import com.mysql.MySqlDaoFactory;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by Oleg on 10.06.2015.
- */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/beans.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class MySqlSeatDaoTest
 {
+    @Autowired
     private SeatDao seatDao;
-    private HallDao hallDao;
 
-    @Before
-    public void setup() throws DaoException
-    {
-        DaoFactory daoFactory = new MySqlDaoFactory();
-        seatDao = daoFactory.getSeatDao();
-        hallDao = daoFactory.getHallDao();
-    }
+    @Autowired
+    private HallDao hallDao;
 
     @Test
     public void testGetSeatById() throws DaoException

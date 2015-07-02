@@ -1,27 +1,42 @@
 package com.web;
 
 import com.dao.*;
+import com.domain.Hall;
 import com.mysql.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSession;
 
-
+@Controller
 public class SessionListener implements HttpSessionListener
 {
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private FilmshowDao filmshowDao;
+
+    @Autowired
+    private FilmDao filmDao;
+
+    @Autowired
+    private HallDao hallDao;
+
+    @Autowired
+    private ReservationDao reservationDao;
+
+    @Autowired
+    private SeatDao seatDao;
+
+    @Autowired
+    private TicketDao ticketDao;
+
 	@Override
 	public void sessionCreated(HttpSessionEvent event)
 	{
-		try
-		{
-			DaoFactory daoFactory = new MySqlDaoFactory();
-			UserDao userDao = daoFactory.getUserDao();
-			FilmshowDao filmshowDao = daoFactory.getFilmshowDao();
-			FilmDao filmDao = daoFactory.getFilmDao();
-			HallDao hallDao = daoFactory.getHallDao();
-			ReservationDao reservationDao = daoFactory.getReservationDao();
-			SeatDao seatDao = daoFactory.getSeatDao();
-			TicketDao ticketDao = daoFactory.getTicketDao();
 			event.getSession().setAttribute("userDao", userDao);
 			event.getSession().setAttribute("filmshowDao", filmshowDao);
 			event.getSession().setAttribute("filmDao", filmDao);
@@ -29,11 +44,6 @@ public class SessionListener implements HttpSessionListener
 			event.getSession().setAttribute("reservationDao", reservationDao);
 			event.getSession().setAttribute("seatDao", seatDao);
 			event.getSession().setAttribute("ticketDao", ticketDao);
-		} 
-		catch(DaoException d)
-		{
-			d.printStackTrace();
-		}
 	}
 	
 	@Override

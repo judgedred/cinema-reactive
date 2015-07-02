@@ -14,8 +14,7 @@ public class Main extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		HttpSession session = request.getSession();
-		RequestDispatcher dispatcher = null;
-		try												
+		try
 			{												
 	 			FilmshowDao filmshowDao = (FilmshowDao)session.getAttribute("filmshowDao");		
 	 			List<Filmshow> ls = filmshowDao.getFilmshowAll();
@@ -25,7 +24,7 @@ public class Main extends HttpServlet
 			{												
 		 		e.printStackTrace();
 			}
-		dispatcher = request.getRequestDispatcher("Main.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("Main.jsp");
 		dispatcher.forward(request, response);
 	}
 }

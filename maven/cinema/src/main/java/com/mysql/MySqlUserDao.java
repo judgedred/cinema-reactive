@@ -3,13 +3,17 @@ package com.mysql;
 import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
-
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 import java.util.List;
 
-
+@Repository
 public class MySqlUserDao implements UserDao
 {
+    @Autowired
+    private SessionFactory sessionFactory;
 	private Session session;
 
 	@Override
@@ -17,11 +21,14 @@ public class MySqlUserDao implements UserDao
 	{
         try
         {
+            session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(user);
-            session.getTransaction().commit();
+            session.flush();
             Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-            return (User) session.load(User.class, lastId);
+            user = (User) session.load(User.class, lastId);
+            session.getTransaction().commit();
+            return user;
         }
         catch(Exception e)
         {
@@ -35,6 +42,7 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
             session.update(user);
             session.getTransaction().commit();
@@ -51,6 +59,7 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
             session.delete(user);
             session.getTransaction().commit();
@@ -63,10 +72,12 @@ public class MySqlUserDao implements UserDao
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<User> getUserAll() throws DaoException
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			return (List<User>) session.createCriteria(User.class).list();
 		}
 		catch(Exception e)
@@ -80,6 +91,8 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
+            session.beginTransaction();
             User user = (User)session.get(User.class, id);
 			if(user != null)
 			{
@@ -126,7 +139,7 @@ public class MySqlUserDao implements UserDao
 
 	MySqlUserDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
+
 	}
 }
 

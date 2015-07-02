@@ -2,30 +2,31 @@ import com.dao.*;
 import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
-import com.mysql.MySqlDaoFactory;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by Oleg on 11.06.2015.
- */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/beans.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class MySqlTicketDaoTest
 {
+    @Autowired
     private TicketDao ticketDao;
-    private FilmshowDao filmshowDao;
-    private SeatDao seatDao;
 
-    @Before
-    public void setup()throws DaoException
-    {
-        DaoFactory daoFactory = new MySqlDaoFactory();
-        ticketDao = daoFactory.getTicketDao();
-        filmshowDao = daoFactory.getFilmshowDao();
-        seatDao = daoFactory.getSeatDao();
-    }
+    @Autowired
+    private FilmshowDao filmshowDao;
+
+    @Autowired
+    private SeatDao seatDao;
 
     @Test
     public void testGetTicketById() throws DaoException

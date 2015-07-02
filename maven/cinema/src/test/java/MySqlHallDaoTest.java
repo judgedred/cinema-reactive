@@ -4,15 +4,25 @@ import com.mysql.*;
 import java.util.*;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/beans.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class MySqlHallDaoTest
 {
+    @Autowired
+    private MySqlHallDao hallDao;
+
 	@Test
 	public void testGetHallById() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		HallDao hallDao = daoFactory.getHallDao();
 		Hall hallTest = hallDao.getHallById(1);
 		Assert.assertNotNull(hallTest);
 	}	
@@ -20,8 +30,6 @@ public class MySqlHallDaoTest
 	@Test
 	public void testCreate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		HallDao hallDao = daoFactory.getHallDao();
 		Hall hall = new Hall();
 		hall.setHallNumber(4);
 		hall.setHallName("testCreatePassed");
@@ -38,8 +46,6 @@ public class MySqlHallDaoTest
 	@Test
 	public void testUpdate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		HallDao hallDao = daoFactory.getHallDao();
 		Hall hall = new Hall();
 		hall.setHallId(2);
 		hall.setHallNumber(777);
@@ -58,8 +64,6 @@ public class MySqlHallDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		HallDao hallDao = daoFactory.getHallDao();
 		Hall hall = new Hall();
 		hall.setHallId(3);
 		hallDao.delete(hall);
@@ -69,8 +73,6 @@ public class MySqlHallDaoTest
 	@Test
 	public void testGetHallAll() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		HallDao hallDao = daoFactory.getHallDao();
 		List<Hall> listTest = hallDao.getHallAll();
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);

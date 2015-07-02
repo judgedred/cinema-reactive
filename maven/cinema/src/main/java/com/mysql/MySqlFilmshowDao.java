@@ -3,14 +3,17 @@ package com.mysql;
 import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
-
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 import java.util.List;
 
-
-
+@Repository
 public class MySqlFilmshowDao implements FilmshowDao
 {
+    @Autowired
+    private SessionFactory sessionFactory;
 	private Session session;
 
 	@Override
@@ -18,15 +21,18 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.save(filmshow);
-			session.getTransaction().commit();
+			session.flush();
 			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			return (Filmshow) session.load(Filmshow.class, lastId);
+			filmshow = (Filmshow) session.load(Filmshow.class, lastId);
+            session.getTransaction().commit();
+            return filmshow;
 		}
 		catch(Exception e)
 		{
-			session.getTransaction().rollback();
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
 	}
@@ -36,6 +42,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.update(filmshow);
 			session.getTransaction().commit();
@@ -43,7 +50,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 		catch(Exception e)
 		{
             session.getTransaction().rollback();
-			throw new DaoException(e);
+            throw new DaoException(e);
 		}
 	}
 
@@ -52,6 +59,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.delete(filmshow);
 			session.getTransaction().commit();
@@ -59,15 +67,17 @@ public class MySqlFilmshowDao implements FilmshowDao
 		catch(Exception e)
 		{
             session.getTransaction().rollback();
-			throw new DaoException(e);
+            throw new DaoException(e);
 		}
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Filmshow> getFilmshowAll() throws DaoException
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			return (List<Filmshow>) session.createCriteria(Filmshow.class).list();
 		}
 		catch(Exception e)
@@ -81,6 +91,8 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
+            session.beginTransaction();
 			Filmshow filmshow = (Filmshow)session.get(Filmshow.class, id);
 			if(filmshow != null)
 			{
@@ -115,6 +127,6 @@ public class MySqlFilmshowDao implements FilmshowDao
 
 	MySqlFilmshowDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
+
 	}
 }

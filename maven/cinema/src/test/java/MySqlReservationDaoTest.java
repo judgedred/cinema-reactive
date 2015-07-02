@@ -2,30 +2,31 @@ import com.dao.*;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
-import com.mysql.MySqlDaoFactory;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by Oleg on 11.06.2015.
- */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/beans.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class MySqlReservationDaoTest
 {
+    @Autowired
     private TicketDao ticketDao;
-    private UserDao userDao;
-    private ReservationDao reservationDao;
 
-    @Before
-    public void setup() throws DaoException
-    {
-        DaoFactory daoFactory = new MySqlDaoFactory();
-        ticketDao = daoFactory.getTicketDao();
-        userDao = daoFactory.getUserDao();
-        reservationDao = daoFactory.getReservationDao();
-    }
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private ReservationDao reservationDao;
 
     @Test
     public void testGetReservationById() throws DaoException
@@ -33,7 +34,7 @@ public class MySqlReservationDaoTest
         Reservation reservation = new Reservation();
         reservation.setReservationId(1);
         Reservation reservationTest = reservationDao.getReservationById(reservation.getReservationId());
-        Assert.assertNotNull(reservation);
+        Assert.assertNotNull(reservationTest);
     }
 
     @Test

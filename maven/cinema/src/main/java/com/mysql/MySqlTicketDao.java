@@ -3,15 +3,17 @@ package com.mysql;
 import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
-
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
-import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
 
-
+@Repository
 public class MySqlTicketDao implements TicketDao
 {
+    @Autowired
+    private SessionFactory sessionFactory;
 	private Session session;
 
 	@Override
@@ -19,11 +21,14 @@ public class MySqlTicketDao implements TicketDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.save(ticket);
-			session.getTransaction().commit();
+			session.flush();
 			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			return (Ticket) session.load(Ticket.class, lastId);
+			ticket = (Ticket) session.load(Ticket.class, lastId);
+            session.getTransaction().commit();
+            return ticket;
 		}
 		catch(Exception e)
 		{
@@ -37,6 +42,7 @@ public class MySqlTicketDao implements TicketDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.update(ticket);
 			session.getTransaction().commit();
@@ -53,6 +59,7 @@ public class MySqlTicketDao implements TicketDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.delete(ticket);
 			session.getTransaction().commit();
@@ -65,10 +72,12 @@ public class MySqlTicketDao implements TicketDao
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Ticket> getTicketAll() throws DaoException
 	{
 		try
 		{
+            session = sessionFactory.openSession();
 			return (List<Ticket>) session.createCriteria(Ticket.class).list();
 		}
 		catch(Exception e)
@@ -82,6 +91,8 @@ public class MySqlTicketDao implements TicketDao
 	{
 		try
 		{
+            session = sessionFactory.openSession();
+            session.beginTransaction();
 			Ticket ticket = (Ticket)session.get(Ticket.class, id);
 			if(ticket != null)
 			{
@@ -114,8 +125,7 @@ public class MySqlTicketDao implements TicketDao
 		}
 	}
 
-	MySqlTicketDao() throws DaoException
+	MySqlTicketDao()
 	{
-		session = MySqlDaoFactory.createSessionFactory().openSession();
 	}
 }
