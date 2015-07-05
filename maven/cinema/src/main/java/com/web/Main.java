@@ -27,12 +27,12 @@ public class Main extends HttpServlet
         out.println("<body>");
         out.println("<h1>Testing the Servlet</h1>");
 
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 		try
 			{												
 //	 			FilmshowDao filmshowDao = (FilmshowDao)session.getAttribute("filmshowDao");
 	 			List<Filmshow> ls = filmshowDao.getFilmshowAll();
-				session.setAttribute("filmshowList", ls);
+//				session.setAttribute("filmshowList", ls);
 
                 for(Iterator<Filmshow> i = ls.iterator(); i.hasNext(); )
                 {
