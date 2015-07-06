@@ -1,12 +1,7 @@
-﻿<?xml version="1.0" encoding="ISO-8859-1"?>
-
-<!DOCTYPE web-app 
-PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" 
-"httр://java.sun.cоm/j2ee/dtds/web-app_2_2.dtd">
-
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 <!-- Your servlet definitions go here -->
 <servlet>
@@ -70,9 +65,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
 </servlet-mapping>
 
 <listener>
-	<listener-class>
-		org.springframework.web.context.ContextLoaderListener
-	</listener-class>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
 
 <listener>
@@ -82,7 +75,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            file:d:\Oleg\1\java\servlets\maven\cinema\src\beans.xml
+            /WEB-INF/beans.xml
         </param-value>
     </context-param>
 

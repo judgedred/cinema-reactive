@@ -59,7 +59,8 @@ public class Main extends HttpServlet
 	}
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) throws ServletException
+    {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
         super.init(config);
     }
