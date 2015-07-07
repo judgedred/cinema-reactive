@@ -25,37 +25,38 @@ public class Main extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-        response.setContentType("text/html");
+        /*response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<html>");
         out.println("<head><title>Test</title></head>");
         out.println("<body>");
-        out.println("<h1>Testing the Servlet</h1>");
+        out.println("<h1>Testing the Servlet</h1>");*/
 //        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 //        filmshowDao = context.getBean("mySqlFilmshowDao", MySqlFilmshowDao.class);
 
-//		HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		try
 			{												
 //	 			FilmshowDao filmshowDao = (FilmshowDao)session.getAttribute("filmshowDao");
+                session.setAttribute("filmshowDao", filmshowDao);
 	 			List<Filmshow> ls = filmshowDao.getFilmshowAll();
-//				session.setAttribute("filmshowList", ls);
+				session.setAttribute("filmshowList", ls);
 
-                for(Iterator<Filmshow> i = ls.iterator(); i.hasNext(); )
+               /* for(Iterator<Filmshow> i = ls.iterator(); i.hasNext(); )
                 {
                     Filmshow f = i.next();
                     out.println("<h2>inside iterator</h2>" + " " + f);
 
-                }
+                }*/
 			}												
 			catch(Exception e)										
 			{												
 		 		e.printStackTrace();
 			}
-        out.println("</body></html>");
-        out.close();
-//        RequestDispatcher dispatcher = request.getRequestDispatcher("Main.jsp");
-//		dispatcher.forward(request, response);
+       /* out.println("</body></html>");
+        out.close();*/
+        RequestDispatcher dispatcher = request.getRequestDispatcher("Main.jsp");
+		dispatcher.forward(request, response);
 	}
 
     @Override

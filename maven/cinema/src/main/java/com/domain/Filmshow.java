@@ -1,13 +1,14 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Filmshow")
-public class Filmshow
+public class Filmshow implements Serializable
 {
     @Id
     @Column(name = "filmshow_id")

@@ -16,12 +16,12 @@
 
 <servlet-mapping>
 	<servlet-name>Main</servlet-name>
-	<url-pattern>Main</url-pattern>
+	<url-pattern>/Main</url-pattern>
 </servlet-mapping>
 
 <servlet-mapping>
 	<servlet-name>Register</servlet-name>
-	<url-pattern>Register</url-pattern>
+	<url-pattern>/Register</url-pattern>
 </servlet-mapping>
 
 <servlet>
@@ -31,7 +31,7 @@
 
 <servlet-mapping>
 	<servlet-name>UserList</servlet-name>
-	<url-pattern>UserList</url-pattern>
+	<url-pattern>/UserList</url-pattern>
 </servlet-mapping>
 
 <servlet>
@@ -41,7 +41,7 @@
 
 <servlet-mapping>
 	<servlet-name>AddFilmshow</servlet-name>
-	<url-pattern>AddFilmshow</url-pattern>
+	<url-pattern>/AddFilmshow</url-pattern>
 </servlet-mapping>
 
 <servlet>
@@ -51,7 +51,7 @@
 
 <servlet-mapping>
 	<servlet-name>AddFilm</servlet-name>
-	<url-pattern>AddFilm</url-pattern>
+	<url-pattern>/AddFilm</url-pattern>
 </servlet-mapping>
 
 <servlet>
@@ -61,7 +61,7 @@
 
 <servlet-mapping>
 	<servlet-name>DeleteFilmshow</servlet-name>
-	<url-pattern>DeleteFilmshow</url-pattern>
+	<url-pattern>/DeleteFilmshow</url-pattern>
 </servlet-mapping>
 
 <listener>
