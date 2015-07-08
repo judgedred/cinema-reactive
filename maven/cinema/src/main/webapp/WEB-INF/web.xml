@@ -9,59 +9,9 @@
 	<servlet-class>com.web.Main</servlet-class>
 </servlet>
 
-<servlet>
-	<servlet-name>Register</servlet-name>
-	<servlet-class>com.web.Register</servlet-class>
-</servlet>
-
 <servlet-mapping>
 	<servlet-name>Main</servlet-name>
-	<url-pattern>/*</url-pattern>
-</servlet-mapping>
-
-<servlet-mapping>
-	<servlet-name>Register</servlet-name>
-	<url-pattern>/Register</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>UserList</servlet-name>
-	<servlet-class>com.web.UserList</servlet-class>
-</servlet>
-
-<servlet-mapping>
-	<servlet-name>UserList</servlet-name>
-	<url-pattern>/UserList</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>AddFilmshow</servlet-name>
-	<servlet-class>com.web.AddFilmshow</servlet-class>
-</servlet>
-
-<servlet-mapping>
-	<servlet-name>AddFilmshow</servlet-name>
-	<url-pattern>/AddFilmshow</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>AddFilm</servlet-name>
-	<servlet-class>com.web.AddFilm</servlet-class>
-</servlet>
-
-<servlet-mapping>
-	<servlet-name>AddFilm</servlet-name>
-	<url-pattern>/AddFilm</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>DeleteFilmshow</servlet-name>
-	<servlet-class>com.web.DeleteFilmshow</servlet-class>
-</servlet>
-
-<servlet-mapping>
-	<servlet-name>DeleteFilmshow</servlet-name>
-	<url-pattern>/DeleteFilmshow</url-pattern>
+	<url-pattern>/</url-pattern>
 </servlet-mapping>
 
 <listener>
@@ -79,7 +29,7 @@
         </param-value>
     </context-param>
 
-    <!--<filter>
+    <filter>
         <filter-name>charsetFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
@@ -94,7 +44,7 @@
     <filter-mapping>
         <filter-name>charsetFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>-->
+    </filter-mapping>
 
 <!-- <error-page>	-->
 <!--	<location>Trouble.jsp</location>	-->
