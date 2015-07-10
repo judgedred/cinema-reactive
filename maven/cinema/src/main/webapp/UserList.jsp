@@ -10,7 +10,7 @@
 	<p>UserList</p>
 
 	<%
-		List<User> ls = (List<User>)session.getAttribute("UserList");
+		List<User> ls = (List<User>)session.getAttribute("userList");
 		for(Iterator<User> i = ls.iterator(); i.hasNext(); )
 		{
 			User u = i.next();

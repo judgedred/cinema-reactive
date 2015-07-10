@@ -151,17 +151,24 @@ public class Main extends HttpServlet
                 String password = request.getParameter("password");
                 String email = request.getParameter("email");
                 List<User> ls = userDao.getUserAll();
+                for(User u : ls)
+                {
+                    if(u.getLogin().equals(login))
+                    {
+                        String loginNotValid = "Логин занят";
+                        session.setAttribute("loginCheck", loginNotValid);
+                    }
+                    else
+                    {
+                        String loginValid = "Логин свободен";
+                        session.setAttribute("loginCheck", loginValid);
+
+                    }
+                }
                 if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
                 {
-                    for(User u : ls)
-                    {
-                        if(u.getLogin().equals(login))
-                        {
-                            session.setAttribute("loginCheck", u.getLogin());
-                            RequestDispatcher dispatcher = request.getRequestDispatcher("LoginCheck.jsp");
-                            dispatcher.forward(request, response);
-                        }
-                    }
+
+
                     user.setLogin(login);
                     user.setPassword(password);
                     user.setEmail(email);
@@ -183,7 +190,7 @@ public class Main extends HttpServlet
                 session.setAttribute("userDao", userDao);
 
                 List<User> ls = userDao.getUserAll();
-                session.setAttribute("UserList", ls);
+                session.setAttribute("userList", ls);
             }
             catch(Exception e)
             {
