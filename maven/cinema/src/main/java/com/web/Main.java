@@ -150,8 +150,18 @@ public class Main extends HttpServlet
                 String login = request.getParameter("login");
                 String password = request.getParameter("password");
                 String email = request.getParameter("email");
+                List<User> ls = userDao.getUserAll();
                 if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
                 {
+                    for(User u : ls)
+                    {
+                        if(u.getLogin().equals(login))
+                        {
+                            session.setAttribute("loginCheck", u.getLogin());
+                            RequestDispatcher dispatcher = request.getRequestDispatcher("LoginCheck.jsp");
+                            dispatcher.forward(request, response);
+                        }
+                    }
                     user.setLogin(login);
                     user.setPassword(password);
                     user.setEmail(email);
