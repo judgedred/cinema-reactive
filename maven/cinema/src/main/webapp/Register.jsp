@@ -9,7 +9,8 @@
 </head>
 <body>
 	<form action="Register" method="Get">
-		<p>Введите логин<input type="text" name="login" onchange="getLogin();"></p>
+		<p>Введите логин<input type="text" name="login" id="login" onchange="getLogin();"></p>
+        <p><div id="loginCheck" name="loginCheck"></div> </p>
 		<p>Введите пароль<input type="text" name="password"></p>
 		<p>Введите email<input type="text" name="email"></p>
 		<p><input type="submit" value="Зарегистрироваться"></p>
@@ -51,9 +52,9 @@
     function getLogin()
     {
         alert("getLogin works");
-        var login = document.getElementByName("login").value();
+        var login = document.getElementById("login");
         var url = "http://localhost:8080/cinema/Register?login=";
-        request.open("GET", url, true);
+        request.open("GET", url+login, true);
         request.onreadystatechange = updatePage;
         request.send(null);
 
@@ -62,7 +63,7 @@
     function updatePage()
     {
         alert("updatePage works");
-//        if(request.readyState == 4)
+        if(request.readyState == 4)
         {
             if(request.status == 200)
             {

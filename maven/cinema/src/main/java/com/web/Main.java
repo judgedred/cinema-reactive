@@ -155,13 +155,20 @@ public class Main extends HttpServlet
                 {
                     if(u.getLogin().equals(login))
                     {
+                        PrintWriter out = response.getWriter();
                         String loginNotValid = "Логин занят";
+                        out.print("Логин занят");
                         session.setAttribute("loginCheck", loginNotValid);
                     }
                     else
                     {
+                        PrintWriter out = response.getWriter();
                         String loginValid = "Логин свободен";
+                        out.print("Логин свободен");
                         session.setAttribute("loginCheck", loginValid);
+                        response.setContentType("text/plain");
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write(loginValid);
 
                     }
                 }
@@ -179,6 +186,10 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("Работает");
+            response.getWriter().print("Не работает");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
             dispatcher.forward(request, response);
         }
