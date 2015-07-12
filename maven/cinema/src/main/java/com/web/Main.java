@@ -150,32 +150,9 @@ public class Main extends HttpServlet
                 String login = request.getParameter("login");
                 String password = request.getParameter("password");
                 String email = request.getParameter("email");
-                List<User> ls = userDao.getUserAll();
-                for(User u : ls)
-                {
-                    if(u.getLogin().equals(login))
-                    {
-                        PrintWriter out = response.getWriter();
-                        String loginNotValid = "Логин занят";
-                        out.print("Логин занят");
-                        session.setAttribute("loginCheck", loginNotValid);
-                    }
-                    else
-                    {
-                        PrintWriter out = response.getWriter();
-                        String loginValid = "Логин свободен";
-                        out.print("Логин свободен");
-                        session.setAttribute("loginCheck", loginValid);
-                        response.setContentType("text/plain");
-                        response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write(loginValid);
 
-                    }
-                }
                 if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
                 {
-
-
                     user.setLogin(login);
                     user.setPassword(password);
                     user.setEmail(email);
@@ -186,10 +163,6 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            response.setContentType("text/plain");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("Работает");
-            response.getWriter().print("Не работает");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
             dispatcher.forward(request, response);
         }

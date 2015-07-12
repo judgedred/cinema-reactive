@@ -8,23 +8,31 @@
 	<title>Register</title>
 </head>
 <body>
-	<form action="Register" method="Get">
-		<p>Введите логин<input type="text" name="login" id="login" onchange="getLogin();"></p>
-        <p><div id="loginCheck" name="loginCheck"></div> </p>
-		<p>Введите пароль<input type="text" name="password"></p>
-		<p>Введите email<input type="text" name="email"></p>
-		<p><input type="submit" value="Зарегистрироваться"></p>
-	</form>
-	<p><a href="UserList">Список пользователей</a></p>
+<table>
+    <form action="Register" method="Get">
+        <tr>
+            <td>Введите логин <input type="text" name="login" id="login" onchange="getLogin();"></td>
+            <td><div id="loginCheck"></div></td>
+        </tr>
+        <tr>
+            <td>Введите пароль <input type="text" name="password"></td>
+        </tr>
+        <tr>
+            <td>Введите email <input type="text" name="email"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Зарегистрироваться"></td>
+        </tr>
+    </form>
+</table>
+<p><a href="UserList">Список пользователей</a></p>
 </body>
-
 
 <script type="text/javascript">
     var request = false;
     try
     {
         request = new XMLHttpRequest();
-        alert("XMLHttpRequest OK");
     }
     catch(explorer)
     {
@@ -51,24 +59,21 @@
 
     function getLogin()
     {
-        alert("getLogin works");
-        var login = document.getElementById("login");
-        var url = "http://localhost:8080/cinema/Register?login=";
+        var login = document.getElementById("login").value;
+        var url = "http://localhost:8080/cinema/LoginCheck?login=";
         request.open("GET", url+login, true);
         request.onreadystatechange = updatePage;
         request.send(null);
-
     }
 
     function updatePage()
     {
-        alert("updatePage works");
         if(request.readyState == 4)
         {
             if(request.status == 200)
             {
                 var response = request.responseText;
-                alert("Response: " + response);
+                document.getElementById("loginCheck").innerHTML = response;
             }
             else if(request.status == 404)
             {
@@ -78,6 +83,11 @@
             {
                 alert("Error: status code is " + request.status);
             }
+        }
+
+        if(document.getElementById("login") == null || document.getElementById("login").value == "")
+        {
+            document.getElementById("loginCheck").innerHTML = null;
         }
     }
 </script>

@@ -14,6 +14,16 @@
 	<url-pattern>/</url-pattern>
 </servlet-mapping>
 
+    <servlet>
+        <servlet-name>LoginCheck</servlet-name>
+        <servlet-class>com.web.LoginCheck</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginCheck</servlet-name>
+        <url-pattern>/LoginCheck</url-pattern>
+    </servlet-mapping>
+
 <listener>
 	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
