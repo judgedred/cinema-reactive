@@ -1,7 +1,4 @@
 ﻿<%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="com.domain.*" %>
-<%@ page import="java.util.*" %>
-
 
 <html>
 <head>
@@ -10,15 +7,28 @@
     <script type="text/javascript">
         $(document).ready(function()
         {
-            $("#login").change()
+            $("#login").change(function ()
+            {
+                if($("#login") == null || $("#login").val() == "")
+                {
+                    $("#loginCheck").empty();
+                }
+                else
+                {
+                    $.get("LoginCheck?login=" + $("#login").val(), function(data)
+                    {
+                        $("#loginCheck").text(data);
+                    })
+                }
+            })
         })
     </script>
 </head>
 <body>
+<form action="Register" method="Get">
 <table>
-    <form action="Register" method="Get">
         <tr>
-            <td>Введите логин <input type="text" name="login" id="login" onchange="getLogin();"></td>
+            <td>Введите логин <input type="text" name="login" id="login"></td>
             <td><div id="loginCheck"></div></td>
         </tr>
         <tr>
@@ -30,72 +40,8 @@
         <tr>
             <td><input type="submit" value="Зарегистрироваться"></td>
         </tr>
-    </form>
 </table>
+</form>
 <p><a href="UserList">Список пользователей</a></p>
 </body>
-
-<script type="text/javascript">
-    var request = false;
-    try
-    {
-        request = new XMLHttpRequest();
-    }
-    catch(explorer)
-    {
-        try
-        {
-            request = new ActiveXObject("Msxml2.XMLHTTP");
-        }
-        catch(explorer2)
-        {
-            try
-            {
-                request = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            catch(fail)
-            {
-                request = false;
-            }
-        }
-    }
-    if(!request)
-    {
-        alert("Error initializing XMLHttpRequest");
-    }
-
-    function getLogin()
-    {
-        var login = document.getElementById("login").value;
-        var url = "http://localhost:8080/cinema/LoginCheck?login=";
-        request.open("GET", url+login, true);
-        request.onreadystatechange = updatePage;
-        request.send(null);
-    }
-
-    function updatePage()
-    {
-        if(request.readyState == 4)
-        {
-            if(request.status == 200)
-            {
-                var response = request.responseText;
-                document.getElementById("loginCheck").innerHTML = response;
-            }
-            else if(request.status == 404)
-            {
-                alert("Request url does not exist");
-            }
-            else
-            {
-                alert("Error: status code is " + request.status);
-            }
-        }
-
-        if(document.getElementById("login") == null || document.getElementById("login").value == "")
-        {
-            document.getElementById("loginCheck").innerHTML = null;
-        }
-    }
-</script>
 </html>
