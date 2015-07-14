@@ -21,11 +21,23 @@
                     }})
                 }
             })
+            $("#reg").submit(function(event)
+            {
+                $.ajax({url: "LoginCheck?email=" +$("#email").val(), success: function(data)
+                {
+                    if(data != null)
+                    {
+                        alert(data);
+                        event.preventDefault();
+                    }
+                }
+                })
+            })
         })
     </script>
 </head>
 <body>
-<form action="Register" method="Get">
+<form id="reg" action="Register" method="Get">
 <table>
         <tr>
             <td>Введите логин <input type="text" name="login" id="login"></td>
@@ -35,7 +47,7 @@
             <td>Введите пароль <input type="text" name="password"></td>
         </tr>
         <tr>
-            <td>Введите email <input type="text" name="email"></td>
+            <td>Введите email <input type="text" name="email" id="email"></td>
         </tr>
         <tr>
             <td><input type="submit" value="Зарегистрироваться"></td>

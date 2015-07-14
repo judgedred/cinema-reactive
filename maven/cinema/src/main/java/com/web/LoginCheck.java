@@ -33,22 +33,42 @@ public class LoginCheck extends HttpServlet
         {
             session.setAttribute("userDao", userDao);
             String login = request.getParameter("login");
+            String email = request.getParameter("email");
             List<User> ls = userDao.getUserAll();
             Boolean loginFree = true;
+            Boolean emailFree = true;
             for(User u : ls)
             {
-                if(u.getLogin().equals(login))
+                    if(u.getLogin().equals(login))
+                    {
+                        loginFree = false;
+                    }
+
+
+
+                    if(u.getEmail().equals(email))
+                    {
+                        emailFree = false;
+                    }
+
+            }
+            if(login != null)
+            {
+                if(loginFree)
                 {
-                    loginFree = false;
+                    response.getWriter().print("Логин свободен");
+                }
+                else
+                {
+                    response.getWriter().print("Логин занят");
                 }
             }
-            if(loginFree)
+            if(email != null)
             {
-                response.getWriter().print("Логин свободен");
-            }
-            else
-            {
-                response.getWriter().print("Логин занят");
+                if(!emailFree)
+                {
+                    response.getWriter().print("Логин с таким email уже есть");
+                }
             }
         }
         catch(Exception e)
