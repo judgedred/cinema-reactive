@@ -15,10 +15,10 @@
                 }
                 else
                 {
-                    $.get("LoginCheck?login=" + $("#login").val(), function(data)
+                    $.ajax({url: "LoginCheck?login=" + $("#login").val(), success: function(data)
                     {
                         $("#loginCheck").text(data);
-                    })
+                    }})
                 }
             })
         })
