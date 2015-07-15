@@ -23,9 +23,9 @@
             })
             $("#reg").submit(function(event)
             {
-                $.ajax({url: "LoginCheck?email=" +$("#email").val(), success: function(data)
+                $.ajax({url: "LoginCheck?email=" +$("#email").val(), async: false,  success: function(data)
                 {
-                    if(data != null)
+                    if(data != "")
                     {
                         alert(data);
                         event.preventDefault();
