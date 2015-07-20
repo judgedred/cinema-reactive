@@ -46,36 +46,27 @@
     <div class="top">
         <img src="resources/img/logo.jpg" align="left"/>
 
-         <%-- <div style="float: right">
-             <form id="auth" method="Get">
-                 <ul class="navigation">
-                     <li style="float:none">Логин      <input type="text" id="login_auth" size="10"></li>
-                     <li style="float:none">Пароль  <input type="text" id="password_auth" size="10" ></li>
-                     <li><a style="line-height: 15px" href="" title="Home">Вход</a></li>
-                     <li><a style="line-height: 15px" href="" title="About us">Регистрация</a></li>
-                 </ul>
-             </form>
-         </div>	   --%>
+        <div id="auth">
+            <form id="authForm" method="Get">
 
+                <table>
+                    <tr>
+                        <td>Логин</td>
+                        <td><input type="text" id="login_auth" size="10"></td>
+                    </tr>
+                    <tr>
+                        <td>Пароль</td>
+                        <td><input type="text" id="password_auth" size="10" ></td>
+                    </tr>
+                </table>
+                <ul class="navigation">
+                    <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
+                    <li><a style="line-height: 15px" href="" title="About us">Вход</a></li>
+                </ul>
 
-     <form method="post" action="" class="login">
-     <p>
-       <label for="login">Логин:</label>
-       <input type="text" name="login" id="login" value="name@example.com">
-     </p>
-
-     <p>
-       <label for="password">Пароль:</label>
-       <input type="password" name="password" id="password" value="4815162342">
-     </p>
-
-     <p class="login-submit">
-       <button type="submit" class="login-button">Войти</button>
-     </p>
-
-     <p class="forgot-password"><a href="index.html">Забыл пароль?</a></p>
-   </form>
-     </div>
+            </form>
+        </div>
+    </div>
 
      <ul class="navigation">
 

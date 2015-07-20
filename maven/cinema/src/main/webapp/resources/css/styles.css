@@ -76,6 +76,15 @@ body {
 
 }
 
+#authForm td {
+    padding: 0 5px;
+    color: #fff;
+}
+
+#auth {
+    float: right;
+}
+
 .navigation ul {
     display: none;
     position: absolute;
