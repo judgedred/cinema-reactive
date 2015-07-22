@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
-public class LoginCheck extends HttpServlet
+public class ProcessServlet extends HttpServlet
 {
     @Autowired
     private MySqlUserDao userDao;
@@ -26,24 +26,26 @@ public class LoginCheck extends HttpServlet
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
         HttpSession session = request.getSession();
+        String url = request.getServletPath();
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
 
-        try
+        if(url.equals("/RegisterCheck"))
         {
-            session.setAttribute("userDao", userDao);
-            String login = request.getParameter("login");
-            String email = request.getParameter("email");
-            List<User> ls = userDao.getUserAll();
-            Boolean loginFree = true;
-            Boolean emailFree = true;
-            for(User u : ls)
+            try
             {
+                session.setAttribute("userDao", userDao);
+                String login = request.getParameter("login");
+                String email = request.getParameter("email");
+                List<User> ls = userDao.getUserAll();
+                Boolean loginFree = true;
+                Boolean emailFree = true;
+                for(User u : ls)
+                {
                     if(u.getLogin().equals(login))
                     {
                         loginFree = false;
                     }
-
 
 
                     if(u.getEmail().equals(email))
@@ -51,29 +53,36 @@ public class LoginCheck extends HttpServlet
                         emailFree = false;
                     }
 
+                }
+                if(login != null)
+                {
+                    if(loginFree)
+                    {
+                        response.getWriter().print("Логин свободен");
+                    }
+                    else
+                    {
+                        response.getWriter().print("Логин занят");
+                    }
+                }
+                if(email != null)
+                {
+                    if(!emailFree)
+                    {
+                        response.getWriter().print("Логин с таким email уже есть");
+                    }
+                }
             }
-            if(login != null)
+            catch(Exception e)
             {
-                if(loginFree)
-                {
-                    response.getWriter().print("Логин свободен");
-                }
-                else
-                {
-                    response.getWriter().print("Логин занят");
-                }
-            }
-            if(email != null)
-            {
-                if(!emailFree)
-                {
-                    response.getWriter().print("Логин с таким email уже есть");
-                }
+                e.printStackTrace();
             }
         }
-        catch(Exception e)
+
+        if(url.equals("/LoginCheck"))
         {
-            e.printStackTrace();
+
+            response.getWriter().print("User Valid");
         }
     }
 

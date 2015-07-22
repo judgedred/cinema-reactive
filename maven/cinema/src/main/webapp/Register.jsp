@@ -17,7 +17,7 @@
                 }
                 else
                 {
-                    $.ajax({url: "LoginCheck?login=" + $("#login").val(), success: function(data)
+                    $.ajax({url: "ProcessServlet?login=" + $("#login").val(), success: function(data)
                     {
                         $("#loginCheck").text(data);
                     }})
@@ -25,13 +25,21 @@
             })
             $("#reg").submit(function(event)
             {
-                $.ajax({url: "LoginCheck?email=" +$("#email").val(), async: false,  success: function(data)
+                $.ajax({url: "ProcessServlet?email=" +$("#email").val(), async: false,  success: function(data)
                 {
                     if(data != "")
                     {
                         alert(data);
                         event.preventDefault();
                     }
+                }
+                })
+            })
+            $("#login_auth").change(function()
+            {
+                $.ajax({url: "Login?login_auth=" +$ ("#login_auth").val() + "&password_auth=" + $("#password_auth").val(), success: function(data)
+                {
+                    $("#loginCheck").text(data);
                 }
                 })
             })
@@ -47,8 +55,7 @@
         <img src="resources/img/logo.jpg" align="left"/>
 
         <div id="auth">
-            <form id="authForm" method="Get">
-
+            <form id="authForm" act="Login" method="Get">
                 <table>
                     <tr>
                         <td>Логин</td>
@@ -61,9 +68,8 @@
                 </table>
                 <ul class="navigation">
                     <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
-                    <li><a style="line-height: 15px" href="" title="About us">Вход</a></li>
+                    <li><input type="submit" value="Вход"></li>
                 </ul>
-
             </form>
         </div>
     </div>

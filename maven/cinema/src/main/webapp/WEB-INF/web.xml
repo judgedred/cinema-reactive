@@ -15,13 +15,13 @@
 </servlet-mapping>
 
     <servlet>
-        <servlet-name>LoginCheck</servlet-name>
-        <servlet-class>com.web.LoginCheck</servlet-class>
+        <servlet-name>ProcessServlet</servlet-name>
+        <servlet-class>com.web.ProcessServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>LoginCheck</servlet-name>
-        <url-pattern>/LoginCheck</url-pattern>
+        <servlet-name>ProcessServlet</servlet-name>
+        <url-pattern>/ProcessServlet</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -183,6 +183,44 @@ public class Main extends HttpServlet
             RequestDispatcher dispatcher = request.getRequestDispatcher("UserList.jsp");
             dispatcher.forward(request, response);
         }
+
+        if(url.equals("/Login"))
+        {
+            try
+            {
+                session.setAttribute("userDao", userDao);
+                List<User> ls = userDao.getUserAll();
+                Boolean userValid = false;
+                User user = new User();
+                String login = request.getParameter("login_auth");
+                String password = request.getParameter("password_auth");
+
+                if(login != null && !login.isEmpty() && password != null && !password.isEmpty())
+                {
+                    for(User u : ls)
+                    {
+                        if(u.getLogin().equals(login) && u.getPassword().equals(password))
+                        {
+                            userValid = true;
+                        }
+                    }
+                }
+                if(userValid)
+                {
+                    response.getWriter().print("User Valid");
+                }
+                else
+                {
+                    response.getWriter().print("User Not Valid");
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+           /* RequestDispatcher dispatcher = request.getRequestDispatcher("ProcessServlet");
+            dispatcher.forward(request, response);*/
+        }
     }
 
     @Override
