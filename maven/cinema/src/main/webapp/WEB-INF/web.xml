@@ -21,7 +21,7 @@
 
     <servlet-mapping>
         <servlet-name>ProcessServlet</servlet-name>
-        <url-pattern>/ProcessServlet</url-pattern>
+        <url-pattern>/ProcessServlet/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

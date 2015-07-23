@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class ProcessServlet extends HttpServlet
@@ -26,7 +27,7 @@ public class ProcessServlet extends HttpServlet
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
         HttpSession session = request.getSession();
-        String url = request.getServletPath();
+        String url = request.getPathInfo();
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
 
@@ -34,6 +35,8 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
+//                response.getWriter().print("RegisterCheck works");
+
                 session.setAttribute("userDao", userDao);
                 String login = request.getParameter("login");
                 String email = request.getParameter("email");
@@ -82,7 +85,8 @@ public class ProcessServlet extends HttpServlet
         if(url.equals("/LoginCheck"))
         {
 
-            response.getWriter().print("User Valid");
+            response.getWriter().print("LoginCheckWorks");
+
         }
     }
 

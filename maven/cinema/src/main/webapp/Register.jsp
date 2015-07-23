@@ -4,7 +4,6 @@
 <head>
 	<title>Register</title>
     <link rel="stylesheet" href="resources/css/styles.css"/>
-    <link rel="stylesheet" href="resources/css/login.css"/>
     <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function()
@@ -17,7 +16,7 @@
                 }
                 else
                 {
-                    $.ajax({url: "ProcessServlet?login=" + $("#login").val(), success: function(data)
+                    $.ajax({url: "ProcessServlet/RegisterCheck?login=" + $("#login").val(), success: function(data)
                     {
                         $("#loginCheck").text(data);
                     }})
@@ -25,7 +24,7 @@
             })
             $("#reg").submit(function(event)
             {
-                $.ajax({url: "ProcessServlet?email=" +$("#email").val(), async: false,  success: function(data)
+                $.ajax({url: "ProcessServlet/RegisterCheck?email=" +$("#email").val(), async: false,  success: function(data)
                 {
                     if(data != "")
                     {
