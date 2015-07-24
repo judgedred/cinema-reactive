@@ -35,9 +35,8 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-//                response.getWriter().print("RegisterCheck works");
-
                 session.setAttribute("userDao", userDao);
+
                 String login = request.getParameter("login");
                 String email = request.getParameter("email");
                 List<User> ls = userDao.getUserAll();
@@ -84,9 +83,16 @@ public class ProcessServlet extends HttpServlet
 
         if(url.equals("/LoginCheck"))
         {
+            User validUser = (User)session.getAttribute("validUser");
+            if(validUser != null)
+            {
+                response.getWriter().print(validUser.getLogin());
 
-            response.getWriter().print("LoginCheckWorks");
-
+            }
+            else
+            {
+                response.getWriter().print("no session");
+            }
         }
     }
 

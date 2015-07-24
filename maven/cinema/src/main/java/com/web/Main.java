@@ -189,11 +189,11 @@ public class Main extends HttpServlet
             try
             {
                 session.setAttribute("userDao", userDao);
+
                 List<User> ls = userDao.getUserAll();
                 Boolean userValid = false;
-                User user = new User();
-                String login = request.getParameter("login_auth");
-                String password = request.getParameter("password_auth");
+                String login = request.getParameter("login-auth");
+                String password = request.getParameter("password-auth");
 
                 if(login != null && !login.isEmpty() && password != null && !password.isEmpty())
                 {
@@ -201,18 +201,11 @@ public class Main extends HttpServlet
                     {
                         if(u.getLogin().equals(login) && u.getPassword().equals(password))
                         {
-                            userValid = true;
+                            session.setAttribute("validUser", u);
                         }
                     }
                 }
-                if(userValid)
-                {
-                    response.getWriter().print("User Valid!!!");
-                }
-                else
-                {
-                    response.getWriter().print("User Not Valid");
-                }
+                response.sendRedirect(request.getParameter("from"));
             }
             catch(Exception e)
             {

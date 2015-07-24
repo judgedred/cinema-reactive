@@ -12,13 +12,13 @@
             {
                 if($("#login") == null || $("#login").val() == "")
                 {
-                    $("#loginCheck").empty();
+                    $("#login-check").empty();
                 }
                 else
                 {
                     $.ajax({url: "ProcessServlet/RegisterCheck?login=" + $("#login").val(), success: function(data)
                     {
-                        $("#loginCheck").text(data);
+                        $("#login-check").text(data);
                     }})
                 }
             })
@@ -34,13 +34,24 @@
                 }
                 })
             })
-            $("#login_auth").change(function()
+           /* $("#authForm").submit(function()
             {
-                $.ajax({url: "Login?login_auth=" +$ ("#login_auth").val() + "&password_auth=" + $("#password_auth").val(), success: function(data)
+                $.ajax({url: "Login?login_auth=" +$ ("#login_auth").val() + "&password_auth=" + $("#password_auth").val()
+                })
+            })*/
+            /*$("#auth-form").submit(function()
+            {
+                $.ajax({url: "ProcessServlet/LoginCheck", async: false, success: function(data)
                 {
-                    $("#loginCheck").text(data);
+                    $("#login-check").text(data);
                 }
                 })
+           })*/
+            $("#login-check").text("works");
+            $.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
+            {
+                $("#login-check").text(data);
+            }
             })
         })
     </script>
@@ -54,19 +65,20 @@
         <img src="resources/img/logo.jpg" align="left"/>
 
         <div id="auth">
-            <form id="authForm" act="Login" method="Get">
+            <form id="auth-form" action="Login" method="Get">
                 <table>
                     <tr>
                         <td>Логин</td>
-                        <td><input type="text" id="login_auth" size="10"></td>
+                        <td><input type="text" id="login-auth" name="login-auth" size="10"></td>
                     </tr>
                     <tr>
                         <td>Пароль</td>
-                        <td><input type="text" id="password_auth" size="10" ></td>
+                        <td><input type="text" id="password-auth" name="password-auth" size="10" ></td>
                     </tr>
                 </table>
                 <ul class="navigation">
                     <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
+                    <input type="hidden" name="from" value="Register">
                     <li><input type="submit" value="Вход"></li>
                 </ul>
             </form>
@@ -95,10 +107,10 @@
  <table>
          <tr>
              <td>Введите логин <input type="text" name="login" id="login"></td>
-             <td><div id="loginCheck"></div></td>
+             <td><div id="login-check"></div></td>
          </tr>
          <tr>
-             <td>Введите пароль <input type="text" name="password"></td>
+             <td>Введите пароль <input type="text" name="password" id="password"></td>
          </tr>
          <tr>
              <td>Введите email <input type="text" name="email" id="email"></td>
