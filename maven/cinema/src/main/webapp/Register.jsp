@@ -34,21 +34,21 @@
                 }
                 })
             })
-           /* $("#authForm").submit(function()
+            /*$("#authForm").submit(function()
             {
                 $.ajax({url: "Login?login_auth=" +$ ("#login_auth").val() + "&password_auth=" + $("#password_auth").val()
                 })
             })*/
-            /*$("#auth-form").submit(function()
+            $("#auth-form").submit(function()
             {
-                $.ajax({url: "ProcessServlet/LoginCheck", async: false, success: function(data)
+                $.ajax({url: "ProcessServlet/LoginCheck", success: function(data)
                 {
-                    $("#login-check").text(data);
+//                    $("#login-check").text(data);
+                    $("#login-check").text("doesn't work");
                 }
                 })
-           })*/
-            $("#login-check").text("works");
-            $.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
+           })
+           /* $.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
             {
                 $("#login-check").text(data);
             }
@@ -78,7 +78,7 @@
                 </table>
                 <ul class="navigation">
                     <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
-                    <input type="hidden" name="from" value="Register">
+                    <input type="hidden" name="from" value="${pageContext.request.requestURI}">
                     <li><input type="submit" value="Вход"></li>
                 </ul>
             </form>
