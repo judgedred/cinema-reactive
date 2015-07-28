@@ -24,7 +24,7 @@ public class ProcessServlet extends HttpServlet
     private MySqlUserDao userDao;
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
         HttpSession session = request.getSession();
         String url = request.getPathInfo();
@@ -83,15 +83,43 @@ public class ProcessServlet extends HttpServlet
 
         if(url.equals("/LoginCheck"))
         {
-            User validUser = (User)session.getAttribute("validUser");
-            if(validUser != null)
+            try
             {
-                response.getWriter().print(validUser.getLogin());
 
+
+                session.setAttribute("userDao", userDao);
+
+                List<User> ls = userDao.getUserAll();
+                Boolean userValid = false;
+                String login = request.getParameter("login-auth");
+                String password = request.getParameter("password-auth");
+
+                if(login != null && !login.isEmpty() && password != null && !password.isEmpty())
+                {
+                    for(User u : ls)
+                    {
+                        if(u.getLogin().equals(login) && u.getPassword().equals(password))
+                        {
+                            session.setAttribute("validUser", u);
+                        }
+                    }
+                }
+
+                User validUser = (User) session.getAttribute("validUser");
+                if(validUser != null)
+                {
+                    response.getWriter().print(validUser.getLogin());
+
+                }
+                else
+                {
+                    response.getWriter().print("no session");
+                }
+//                response.sendRedirect(request.getParameter("from"));
             }
-            else
+            catch(Exception e)
             {
-                response.getWriter().print("no session");
+                e.printStackTrace();
             }
         }
     }

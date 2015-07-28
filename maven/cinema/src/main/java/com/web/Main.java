@@ -37,7 +37,7 @@ public class Main extends HttpServlet
     private MySqlTicketDao ticketDao;
 
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
         String url = request.getServletPath();
         HttpSession session = request.getSession();

@@ -39,21 +39,32 @@
                 $.ajax({url: "Login?login_auth=" +$ ("#login_auth").val() + "&password_auth=" + $("#password_auth").val()
                 })
             })*/
-            $("#auth-form").submit(function()
+            /*$("#auth-form").submit(function()
             {
                 $.ajax({url: "ProcessServlet/LoginCheck", success: function(data)
                 {
-//                    $("#login-check").text(data);
-                    $("#login-check").text("doesn't work");
+                   $("#login-check").text(data);
+                   $("#login-check").text("doesn't work");
                 }
                 })
-           })
-           /* $.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
+           })*/
+
+            $.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
             {
                 $("#login-check").text(data);
             }
             })
-        })
+       })
+        function authForm()
+        {
+            var msg = $("#auth-form").serialize();
+            $.ajax({url: "ProcessServlet/LoginCheck", type: "Post", data: msg, success: function(data)
+            {
+                $("#login-check").html(data);
+
+            }
+            })
+        }
     </script>
 
 </head>
@@ -65,7 +76,7 @@
         <img src="resources/img/logo.jpg" align="left"/>
 
         <div id="auth">
-            <form id="auth-form" action="Login" method="Get">
+            <form id="auth-form" action="javascript:void(null);" method="Post" onsubmit="authForm()">
                 <table>
                     <tr>
                         <td>Логин</td>
