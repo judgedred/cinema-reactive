@@ -54,6 +54,16 @@
                 $("#login-check").text(data);
             }
             })*/
+            $.ajax({url: "ProcessServlet/LoginCheck", success: function (data)
+            {
+                if(data != null && data != "")
+                {
+                    $("#login-check").text(data);
+//                    $("#auth").text(data);
+                    $("#auth").hide();
+                    $("#authLoggedIn").show();
+                }
+            }})
        })
         function authForm()
         {
@@ -63,10 +73,14 @@
                 if(data != null && data != "")
                 {
                     $("#login-check").text(data);
+//                    $("#auth").text(data);
+                    $("#auth").hide();
+                    $("#authLoggedIn").show();
                 }
                 else
                 {
                     $("#login-check").empty();
+
 
                 }
             }
@@ -77,6 +91,8 @@
             $.ajax({url: "ProcessServlet/Logout", success: function(data)
             {
                 $("#login-check").empty();
+                $("#auth").show();
+                $("#authLoggedIn").hide();
             }
             })
         }
@@ -89,6 +105,13 @@
 
     <div class="top">
         <img src="resources/img/logo.jpg" align="left"/>
+
+        <div id="authLoggedIn" style="display: none">
+            <ul class="navigation">
+
+                <li><a href="javascript: logout()" style="line-height: 15px" href="" title="Home">Выход</a></li>
+            </ul>
+        </div>
 
         <div id="auth">
             <form id="auth-form" action="javascript:void(null);" method="Post" onsubmit="authForm()">
