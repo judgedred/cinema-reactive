@@ -49,19 +49,34 @@
                 })
            })*/
 
-            $.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
+            /*$.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
             {
                 $("#login-check").text(data);
             }
-            })
+            })*/
        })
         function authForm()
         {
             var msg = $("#auth-form").serialize();
             $.ajax({url: "ProcessServlet/LoginCheck", type: "Post", data: msg, success: function(data)
             {
-                $("#login-check").html(data);
+                if(data != null && data != "")
+                {
+                    $("#login-check").text(data);
+                }
+                else
+                {
+                    $("#login-check").empty();
 
+                }
+            }
+            })
+        }
+        function logout()
+        {
+            $.ajax({url: "ProcessServlet/Logout", success: function(data)
+            {
+                $("#login-check").empty();
             }
             })
         }
@@ -91,6 +106,7 @@
                     <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
                     <input type="hidden" name="from" value="${pageContext.request.requestURI}">
                     <li><input type="submit" value="Вход"></li>
+                    <li><a href="javascript: logout()" style="line-height: 15px" href="" title="Home">Выход</a></li>
                 </ul>
             </form>
         </div>

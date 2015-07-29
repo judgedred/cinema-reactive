@@ -111,16 +111,21 @@ public class ProcessServlet extends HttpServlet
                     response.getWriter().print(validUser.getLogin());
 
                 }
-                else
+               /* else
                 {
                     response.getWriter().print("no session");
-                }
+                }*/
 //                response.sendRedirect(request.getParameter("from"));
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
+        }
+
+        if(url.equals("/Logout"))
+        {
+            session.invalidate();
         }
     }
 
