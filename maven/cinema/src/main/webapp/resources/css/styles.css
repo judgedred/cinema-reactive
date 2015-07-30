@@ -55,7 +55,12 @@ body {
 
 .navigation li {
     float: left;
+    color: #fff;
 
+}
+#authLoggedIn li {
+    padding:3px 10px;
+    float: left;
 }
 
 .navigation li:hover {

@@ -10,7 +10,7 @@
         {
             $("#login").change(function ()
             {
-                if($("#login") == null || $("#login").val() == "")
+                if($("#login").val() == "")
                 {
                     $("#login-check").empty();
                 }
@@ -21,7 +21,8 @@
                         $("#login-check").text(data);
                     }})
                 }
-            })
+            });
+
             $("#reg").submit(function(event)
             {
                 $.ajax({url: "ProcessServlet/RegisterCheck?email=" +$("#email").val(), async: false,  success: function(data)
@@ -31,40 +32,25 @@
                         alert(data);
                         event.preventDefault();
                     }
+                    else
+                    {
+                        alert("Вы зарегистрированы");
+                    }
                 }
                 })
-            })
-            /*$("#authForm").submit(function()
-            {
-                $.ajax({url: "Login?login_auth=" +$ ("#login_auth").val() + "&password_auth=" + $("#password_auth").val()
-                })
-            })*/
-            /*$("#auth-form").submit(function()
-            {
-                $.ajax({url: "ProcessServlet/LoginCheck", success: function(data)
-                {
-                   $("#login-check").text(data);
-                   $("#login-check").text("doesn't work");
-                }
-                })
-           })*/
+            });
 
-            /*$.ajax({url: "ProcessServlet/LoginCheck",success: function(data)
-            {
-                $("#login-check").text(data);
-            }
-            })*/
             $.ajax({url: "ProcessServlet/LoginCheck", success: function (data)
             {
-                if(data != null && data != "")
+                if(data != "")
                 {
-                    $("#login-check").text(data);
-//                    $("#auth").text(data);
                     $("#auth").hide();
+                    $("#authLoggedIn").find("ul").prepend("<li>" + data  + "</li>");
                     $("#authLoggedIn").show();
                 }
             }})
-       })
+       });
+
         function authForm()
         {
             var msg = $("#auth-form").serialize();
@@ -72,33 +58,26 @@
             {
                 if(data != null && data != "")
                 {
-                    $("#login-check").text(data);
-//                    $("#auth").text(data);
                     $("#auth").hide();
-                    $("#userInfo").append("<li>" + data + "</li>")
-                    ${"#authLoggedIn"}.show();
-//                    $("#authLoggedIn").show();
-
-
+                    $("#authLoggedIn").find("ul").prepend("<li>" + data  + "</li>");
+                    $("#authLoggedIn").show();
                 }
                 else
                 {
-                    $("#login-check").empty();
-
-
+                    alert("Неверный логин или пароль");
+                    location.reload();
                 }
             }
-            })
+            });
         }
         function logout()
         {
-            $.ajax({url: "ProcessServlet/Logout", success: function(data)
+            $.ajax({url: "ProcessServlet/Logout", success: function()
             {
-                $("#login-check").empty();
                 $("#auth").show();
                 $("#authLoggedIn").hide();
             }
-            })
+            });
         }
     </script>
 
@@ -111,8 +90,9 @@
         <img src="resources/img/logo.jpg" align="left"/>
 
         <div id="authLoggedIn" style="display: none">
-            <ul class="navigation" id="userInfo">
-                <li><a href="javascript: logout()" style="line-height: 15px"  href="" title="Выйти">Выход</a></li>
+            <ul class="navigation">
+                <li><a href="javascript: logout()" style="line-height: 15px; padding: 6px 0"  href="" title="брони">список билетов</a></li>
+                <p><li><a href="javascript: logout()" style="line-height: 15px; padding: 0 60px"  href="" title="Выйти">Выход</a></li></p>
             </ul>
         </div>
 
@@ -120,19 +100,19 @@
             <form id="auth-form" action="javascript:void(null);" method="Post" onsubmit="authForm()">
                 <table>
                     <tr>
-                        <td>Логин</td>
+                        <%--<td>Логин</td>--%>
+                        <td><label for="login-auth">Логин</label></td>
                         <td><input type="text" id="login-auth" name="login-auth" size="10"></td>
                     </tr>
                     <tr>
-                        <td>Пароль</td>
+                        <td><label for="password-auth">Пароль</label></td>
                         <td><input type="text" id="password-auth" name="password-auth" size="10" ></td>
                     </tr>
                 </table>
                 <ul class="navigation">
                     <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
-                    <input type="hidden" name="from" value="${pageContext.request.requestURI}">
+                    <%--<input type="hidden" name="from" value="${pageContext.request.requestURI}">--%>
                     <li><input type="submit" value="Вход"></li>
-                    <%--<li><a href="javascript: logout()" style="line-height: 15px" title="Home">Выход</a></li>--%>
                 </ul>
             </form>
         </div>
@@ -159,14 +139,14 @@
  <form id="reg" action="Register" method="Get">
  <table>
          <tr>
-             <td>Введите логин <input type="text" name="login" id="login"></td>
+             <td><label for="login">Введите логин </label><input type="text" name="login" id="login"></td>
              <td><div id="login-check"></div></td>
          </tr>
          <tr>
-             <td>Введите пароль <input type="text" name="password" id="password"></td>
+             <td><label for="password">Введите пароль </label><input type="text" name="password" id="password"></td>
          </tr>
          <tr>
-             <td>Введите email <input type="text" name="email" id="email"></td>
+             <td><label for="email">Введите email </label><input type="text" name="email" id="email"></td>
          </tr>
          <tr>
              <td><input type="submit" value="Зарегистрироваться"></td>
