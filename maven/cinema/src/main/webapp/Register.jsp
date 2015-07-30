@@ -75,7 +75,11 @@
                     $("#login-check").text(data);
 //                    $("#auth").text(data);
                     $("#auth").hide();
-                    $("#authLoggedIn").show();
+                    $("#userInfo").append("<li>" + data + "</li>")
+                    ${"#authLoggedIn"}.show();
+//                    $("#authLoggedIn").show();
+
+
                 }
                 else
                 {
@@ -107,9 +111,8 @@
         <img src="resources/img/logo.jpg" align="left"/>
 
         <div id="authLoggedIn" style="display: none">
-            <ul class="navigation">
-
-                <li><a href="javascript: logout()" style="line-height: 15px" href="" title="Home">Выход</a></li>
+            <ul class="navigation" id="userInfo">
+                <li><a href="javascript: logout()" style="line-height: 15px"  href="" title="Выйти">Выход</a></li>
             </ul>
         </div>
 
@@ -129,7 +132,7 @@
                     <li><a style="line-height: 15px" href="" title="Home">Регистрация</a></li>
                     <input type="hidden" name="from" value="${pageContext.request.requestURI}">
                     <li><input type="submit" value="Вход"></li>
-                    <li><a href="javascript: logout()" style="line-height: 15px" href="" title="Home">Выход</a></li>
+                    <%--<li><a href="javascript: logout()" style="line-height: 15px" title="Home">Выход</a></li>--%>
                 </ul>
             </form>
         </div>
