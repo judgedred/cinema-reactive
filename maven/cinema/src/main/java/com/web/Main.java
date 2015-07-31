@@ -147,9 +147,9 @@ public class Main extends HttpServlet
                 session.setAttribute("userDao", userDao);
 
                 User user = new User();
-                String login = request.getParameter("login");
-                String password = request.getParameter("password");
-                String email = request.getParameter("email");
+                String login = request.getParameter("login-reg");
+                String password = request.getParameter("password-reg");
+                String email = request.getParameter("email-reg");
 
                 if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
                 {

@@ -37,8 +37,8 @@ public class ProcessServlet extends HttpServlet
             {
                 session.setAttribute("userDao", userDao);
 
-                String login = request.getParameter("login");
-                String email = request.getParameter("email");
+                String login = request.getParameter("login-reg");
+                String email = request.getParameter("email-reg");
                 List<User> ls = userDao.getUserAll();
                 Boolean loginFree = true;
                 Boolean emailFree = true;

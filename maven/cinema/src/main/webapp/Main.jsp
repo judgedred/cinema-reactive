@@ -6,9 +6,15 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Main</title>
+    <link rel="stylesheet" href="resources/css/styles.css"/>
+    <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="resources/js/auth.js"></script>
 </head>
 <body>
-	<table border=1 align=center>
+
+<div class="wrapper">
+<jsp:include page="top.jsp"/>
+	<%--<table border=1 align=center>
 		<tr>
 		<td>Новости</td>
 		<td>Сеансы</td>
@@ -17,7 +23,8 @@
 		<td>О кинотеатре</td>
 		<td><a href="Register.jsp">Зарегистрироваться</a></td>
 		</tr>
-	</table>
+	</table>--%>
+
 	<p><h2>Сегодня в кино</h2></p>
 		
 	<%	
@@ -30,8 +37,11 @@
 	<%	
 		} 
 	%>
-	<p><a href="AddFilmshow">Добавить сеанс</a>
-	<p><a href="DeleteFilmshow">Удалить сеанс</a>
-		
+	<p><a href="AddFilmshow">Добавить сеанс</a></p>
+	<p>><a href="DeleteFilmshow">Удалить сеанс</a> </p>
+
+    <jsp:include page="footer.jsp"/>
+
+   </div>
 </body>
 </html>
