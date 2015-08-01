@@ -2,6 +2,7 @@ package com.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @Entity
@@ -103,6 +104,7 @@ public class Ticket implements Serializable
 	@Override
 	public String toString()
 	{
-		return filmshow.getFilm().getFilmName() + " " + filmshow.getDateTime() + " " + seat.getSeatNumber() + " " + seat.getRowNumber() + " " + price;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");
+        return filmshow.getFilm().getFilmName() + " " + dateFormat.format(filmshow.getDateTime()) + " " + seat.getSeatNumber() + " " + seat.getRowNumber() + " " + String.format("%d",price.intValue());
 	}
 }

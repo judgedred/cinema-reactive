@@ -195,7 +195,7 @@ public class Main extends HttpServlet
                 {
                     for(Ticket t : ticketLs)
                     {
-                        if(t.getFilmshow() == filmshow)
+                        if(t.getFilmshow().equals(filmshow))
                         {
                             filteredLs.add(t);
                         }
