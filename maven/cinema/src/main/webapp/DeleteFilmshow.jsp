@@ -10,16 +10,15 @@
 <body>
 	<p>Удалить сеанс</p>
 	<form action="DeleteFilmshow" method="Get">
-		<p><select name="filmshowSelect">
+		<p><select name="filmshow-select">
 			<option selected disabled>Выберите сеанс</option>
 			<%
 				List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
-				for(Iterator<Filmshow> i = filmshowLst.iterator(); i.hasNext(); )
+				for(Filmshow f: filmshowLst)
 				{
-					Filmshow f = i.next();
 			%>
-					<option value=<%=f.getFilmshowId()%>><%=f%></option>
-			<%
+			<option value=<%=f.getFilmshowId()%>><%=f%></option>
+            <%
 				}
 			%>
 		</p></select>

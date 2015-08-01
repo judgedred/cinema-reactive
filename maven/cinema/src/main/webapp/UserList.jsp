@@ -11,11 +11,10 @@
 
 	<%
 		List<User> ls = (List<User>)session.getAttribute("userList");
-		for(Iterator<User> i = ls.iterator(); i.hasNext(); )
+		for(User u : ls)
 		{
-			User u = i.next();
 	%>
-			<p><%=u%></p>
+	<p><%=u%></p>
 	<%
 		}
 	%>

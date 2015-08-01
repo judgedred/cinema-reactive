@@ -38,7 +38,9 @@
 		} 
 	%>
 	<p><a href="AddFilmshow">Добавить сеанс</a></p>
-	<p>><a href="DeleteFilmshow">Удалить сеанс</a> </p>
+	<p><a href="DeleteFilmshow">Удалить сеанс</a> </p>
+	<p><a href="AddTicket">Выпуск билетов</a> </p>
+
 
     <jsp:include page="footer.jsp"/>
 

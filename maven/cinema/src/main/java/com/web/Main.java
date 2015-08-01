@@ -123,13 +123,15 @@ public class Main extends HttpServlet
             {
                 session.setAttribute("filmshowDao", filmshowDao);
 
-                int filmshowId = Integer.parseInt(request.getParameter("filmshowSelect"));
+                List<Filmshow> ls = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", ls);
+                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 if(filmshow != null)
                 {
                     filmshowDao.delete(filmshow);
                 }
-                List<Filmshow> ls = filmshowDao.getFilmshowAll();
+                ls = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", ls);
             }
             catch(Exception e)
@@ -138,6 +140,76 @@ public class Main extends HttpServlet
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("DeleteFilmshow.jsp");
             dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/AddTicket"))
+        {
+            try
+            {
+                session.setAttribute("filmshowDao", filmshowDao);
+                session.setAttribute("seatDao", seatDao);
+
+                List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", filmshowLs);
+                List<Seat> seatLs = seatDao.getSeatAll();
+                session.setAttribute("seatList", seatLs);
+                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                Float price = Float.parseFloat(request.getParameter("ticket-add-price"));
+                int seatId = Integer.parseInt(request.getParameter("seat-select"));
+                Seat seat = seatDao.getSeatById(seatId);
+                if(filmshow != null && price != null && seat != null)
+                {
+                    Ticket ticket = new Ticket();
+                    ticket.setFilmshow(filmshow);
+                    ticket.setPrice(price);
+                    ticket.setSeat(seat);
+                    ticketDao.create(ticket);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("AddTicket.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/TicketList"))
+        {
+            try
+            {
+                session.setAttribute("filmshowDao", filmshowDao);
+                session.setAttribute("ticketDao", ticketDao);
+
+                List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
+                if(filmshowLs != null)
+                {
+                    session.setAttribute("filmshowList", filmshowLs);
+                }
+                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
+                List<Ticket> filteredLs = new LinkedList<Ticket>();
+                if(filmshow != null && ticketLs != null)                // TODO http://zeroturnaround.com/rebellabs/java-8-explained-applying-lambdas-to-java-collections/
+                {
+                    for(Ticket t : ticketLs)
+                    {
+                        if(t.getFilmshow() == filmshow)
+                        {
+                            filteredLs.add(t);
+                        }
+                    }
+                    session.setAttribute("ticketList", filteredLs);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("TicketList.jsp");
+            dispatcher.forward(request, response);
+
         }
 
         if(url.equals("/Register"))
