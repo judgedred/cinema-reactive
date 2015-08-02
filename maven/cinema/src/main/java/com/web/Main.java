@@ -256,7 +256,7 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/Login"))
+       /* if(url.equals("/Login"))
         {
             try
             {
@@ -282,9 +282,15 @@ public class Main extends HttpServlet
             catch(Exception e)
             {
                 e.printStackTrace();
-            }
+            }*/
            /* RequestDispatcher dispatcher = request.getRequestDispatcher("ProcessServlet");
             dispatcher.forward(request, response);*/
+ //       }
+
+        if(url.equals("/Admin"))
+        {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Admin.jsp");
+            dispatcher.forward(request, response);
         }
     }
 

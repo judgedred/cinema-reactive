@@ -85,12 +85,9 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-
-
                 session.setAttribute("userDao", userDao);
 
                 List<User> ls = userDao.getUserAll();
-                Boolean userValid = false;
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
 
@@ -111,11 +108,6 @@ public class ProcessServlet extends HttpServlet
                     response.getWriter().print(validUser.getLogin());
 
                 }
-               /* else
-                {
-                    response.getWriter().print("no session");
-                }*/
-//                response.sendRedirect(request.getParameter("from"));
             }
             catch(Exception e)
             {
