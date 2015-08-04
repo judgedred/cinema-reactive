@@ -292,6 +292,49 @@ public class Main extends HttpServlet
             RequestDispatcher dispatcher = request.getRequestDispatcher("Admin.jsp");
             dispatcher.forward(request, response);
         }
+
+        if(url.equals("/Admin/Login"))
+        {
+            boolean userValid = false;
+            try
+            {
+                session.setAttribute("userDao", userDao);
+
+
+                List<User> ls = userDao.getUserAll();
+                String login = request.getParameter("login-auth");
+                String password = request.getParameter("password-auth");
+
+                if(login.equals("admin") && password.equals("admin"))
+                {
+
+                    for(User u : ls)
+                    {
+                        if(u.getLogin().equals(login) && u.getPassword().equals(password))
+                        {
+//                            userValid = true;
+
+
+                            RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
+                            dispatcher.forward(request, response);
+                        }
+                    }
+                }
+                else
+                {
+                    response.getWriter().print("Access denied");
+                }
+                /*if(userValid)
+                {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("AdminMain.jsp");
+                    dispatcher.forward(request, response);
+                }*/
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
