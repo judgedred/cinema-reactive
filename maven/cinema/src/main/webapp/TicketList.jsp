@@ -5,13 +5,11 @@
 <html>
 <head>
     <title>TicketList</title>
-    <link rel="stylesheet" href="resources/css/styles.css"/>
-    <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript" src="resources/js/auth.js"></script>
+    <link rel="stylesheet" href="/cinema/resources/css/styles.css"/>
 </head>
 <body>
 <div class="wrapper">
-    <jsp:include page="top.jsp"/>
+    <jsp:include page="admin_menu.jsp"/>
 <p>TicketList</p>
 <form action="TicketList" method="Get" id="ticket-list">
     <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">

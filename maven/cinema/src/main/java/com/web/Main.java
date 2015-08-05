@@ -59,7 +59,7 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/AddFilm"))
+        if(url.equals("/Admin/AddFilm"))
         {
             try
             {
@@ -78,11 +78,11 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("AddFilm.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddFilm.jsp");
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/AddFilmshow"))
+        if(url.equals("/Admin/AddFilmshow"))
         {
             try
             {
@@ -113,11 +113,11 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("AddFilmshow.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddFilmshow.jsp");
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/DeleteFilmshow"))
+        if(url.equals("/Admin/DeleteFilmshow"))
         {
             try
             {
@@ -138,11 +138,11 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("DeleteFilmshow.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteFilmshow.jsp");
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/AddTicket"))
+        if(url.equals("/Admin/AddTicket"))
         {
             try
             {
@@ -171,11 +171,11 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("AddTicket.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicket.jsp");
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/TicketList"))
+        if(url.equals("/Admin/TicketList"))
         {
             try
             {
@@ -207,7 +207,7 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("TicketList.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/TicketList.jsp");
             dispatcher.forward(request, response);
 
         }
@@ -239,7 +239,7 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/UserList"))
+        if(url.equals("/Admin/UserList"))
         {
             try
             {
@@ -252,7 +252,7 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("UserList.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/UserList.jsp");
             dispatcher.forward(request, response);
         }
 

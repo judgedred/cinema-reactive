@@ -6,8 +6,13 @@
 <html>
 <head>
     <title>AddTicket</title>
+    <link rel="stylesheet" href="/cinema/resources/css/styles.css"/>
 </head>
 <body>
+<div class="wrapper">
+
+    <jsp:include page="admin_menu.jsp"/>
+
 <p>Выпустить билеты</p>
 <form action="AddTicket" method="Get" id="ticket-add">
   <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
@@ -38,5 +43,6 @@
   <p><input type="submit" value="Выпустить билеты"></p>
 </form>
 <p><a href="TicketList">Список билетов</a></p>
+    </div>
 </body>
 </html>

@@ -6,8 +6,12 @@
 <html>
 <head>
 	<title>Add Filmshow</title>
+    <link rel="stylesheet" href="/cinema/resources/css/styles.css"/>
 </head>
 <body>
+<div class="wrapper">
+    <jsp:include page="admin_menu.jsp"/>
+
 	<p>Добавление сеанса</p>
 	<form action="AddFilmshow" method="Get">
 		<p><select name="filmSelect">
@@ -39,6 +43,6 @@
 		<p>Выберите дату<input type="datetime" name="dateTime"></p>
 		<p><input type="submit" value="Добавить"></p>
 	</form>
-		
+</div>
 </body>
 </html>
