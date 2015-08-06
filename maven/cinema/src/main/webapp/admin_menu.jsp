@@ -11,6 +11,13 @@
         </ul>
     </li>
     <li><a href="AddFilm" title="Films">Фильмы</a></li>
+    <li><a href="SeatList" title="Seats">Места</a>
+    <ul>
+        <li><a href="AddSeat" title="Add">Добавить</a></li>
+        <li><a href="DeleteSeat" title="Delete">Удалить</a></li>
+    </ul>
+    </li>
+    <li><a href="AddFilm" title="Halls">Залы</a></li>
     <li><a href="" title="Contact">Пользователи</a></li>
 
     <div class="clear"></div>

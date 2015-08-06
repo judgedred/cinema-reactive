@@ -158,7 +158,7 @@ public class Main extends HttpServlet
                 Float price = Float.parseFloat(request.getParameter("ticket-add-price"));
                 int seatId = Integer.parseInt(request.getParameter("seat-select"));
                 Seat seat = seatDao.getSeatById(seatId);
-                if(filmshow != null && price != null && seat != null)
+                if(filmshow != null && price != 0 && seat != null)
                 {
                     Ticket ticket = new Ticket();
                     ticket.setFilmshow(filmshow);
@@ -210,6 +210,78 @@ public class Main extends HttpServlet
             RequestDispatcher dispatcher = request.getRequestDispatcher("/TicketList.jsp");
             dispatcher.forward(request, response);
 
+        }
+
+        if(url.equals("/Admin/AddSeat"))
+        {
+            try
+            {
+                session.setAttribute("hallDao", hallDao);
+                session.setAttribute("seatDao", seatDao);
+
+                List<Hall> hallLs = hallDao.getHallAll();
+                session.setAttribute("hallList", hallLs);
+                int hallId = Integer.parseInt(request.getParameter("hall-select"));
+                Hall hall = hallDao.getHallById(hallId);
+                int rowNumber = Integer.parseInt(request.getParameter("seat-add-row"));
+                int seatNumber = Integer.parseInt(request.getParameter("seat-add-number"));
+                if(hall != null && rowNumber != 0 && seatNumber != 0)
+                {
+                    Seat seat = new Seat();
+                    seat.setHall(hall);
+                    seat.setRowNumber(rowNumber);
+                    seat.setSeatNumber(seatNumber);
+                    seatDao.create(seat);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddSeat.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/DeleteSeat"))
+        {
+            try
+            {
+                session.setAttribute("seatDao", seatDao);
+
+                List<Seat> seatLs = seatDao.getSeatAll();
+                session.setAttribute("seatList", seatLs);
+                int seatId = Integer.parseInt(request.getParameter("seat-select"));
+                Seat seat = seatDao.getSeatById(seatId);
+                if(seat != null)
+                {
+                    seatDao.delete(seat);
+                }
+                seatLs = seatDao.getSeatAll();
+                session.setAttribute("filmshowList", seatLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteSeat.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/SeatList"))
+        {
+            try
+            {
+                session.setAttribute("seatDao", seatDao);
+
+                List<Seat> seatls = seatDao.getSeatAll();
+                session.setAttribute("seatList", seatls);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/SeatList.jsp");
+            dispatcher.forward(request, response);
         }
 
         if(url.equals("/Register"))
