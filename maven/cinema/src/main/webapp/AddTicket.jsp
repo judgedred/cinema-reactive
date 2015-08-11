@@ -42,7 +42,7 @@
     </select></p>
   <p><input type="submit" value="Выпустить билеты"></p>
 </form>
-<p><a href="TicketList">Список билетов</a></p>
+
     </div>
 </body>
 </html>

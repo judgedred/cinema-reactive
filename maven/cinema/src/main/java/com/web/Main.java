@@ -82,6 +82,48 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
+        if(url.equals("/Admin/DeleteFilm"))
+        {
+            try
+            {
+                session.setAttribute("filmDao", filmDao);
+
+                List<Film> filmLs = filmDao.getFilmAll();
+                session.setAttribute("filmList", filmLs);
+                int filmId = Integer.parseInt(request.getParameter("film-select"));
+                Film film = filmDao.getFilmById(filmId);
+                if(film != null)
+                {
+                    filmDao.delete(film);
+                }
+                filmLs = filmDao.getFilmAll();
+                session.setAttribute("filmList", filmLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteFilm.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/FilmList"))
+        {
+            try
+            {
+                session.setAttribute("filmDao", filmDao);
+                List<Film> filmLs = filmDao.getFilmAll();
+                session.setAttribute("filmList", filmLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/FilmList.jsp");
+            dispatcher.forward(request, response);
+        }
+
         if(url.equals("/Admin/AddFilmshow"))
         {
             try
@@ -142,6 +184,23 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
+        if(url.equals("/Admin/FilmshowList"))
+        {
+            try
+            {
+                session.setAttribute("filmshowDao", filmshowDao);
+                List<Filmshow> ls = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", ls);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/FilmshowList.jsp");
+            dispatcher.forward(request, response);
+        }
+
         if(url.equals("/Admin/AddTicket"))
         {
             try
@@ -175,6 +234,31 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
+        if(url.equals("/Admin/DeleteTicket"))
+        {
+            try
+            {
+                session.setAttribute("ticketDao", ticketDao);
+
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
+                session.setAttribute("ticketList", ticketLs);
+                int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                Ticket ticket = ticketDao.getTicketById(ticketId);
+                if(ticket != null)
+                {
+                    ticketDao.delete(ticket);
+                }
+                ticketLs = ticketDao.getTicketAll();
+                session.setAttribute("ticketList", ticketLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteTicket.jsp");
+            dispatcher.forward(request, response);
+        }
+
         if(url.equals("/Admin/TicketList"))
         {
             try
@@ -200,7 +284,7 @@ public class Main extends HttpServlet
                             filteredLs.add(t);
                         }
                     }
-                    session.setAttribute("ticketList", filteredLs);
+                    session.setAttribute("filteredTicketList", filteredLs);
                 }
             }
             catch(Exception e)
@@ -284,6 +368,72 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
+        if(url.equals("/Admin/AddHall"))
+        {
+            try
+            {
+                session.setAttribute("hallDao", hallDao);
+
+                int hallNumber = Integer.parseInt(request.getParameter("hall-add-number"));
+                String hallName = request.getParameter("hall-add-name");
+                if(hallNumber != 0 && hallName != null)
+                {
+                    Hall hall = new Hall();
+                    hall.setHallNumber(hallNumber);
+                    hall.setHallName(hallName);
+                    hallDao.create(hall);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddHall.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/DeleteHall"))
+        {
+            try
+            {
+                session.setAttribute("hallDao", hallDao);
+
+                List<Hall> hallLs = hallDao.getHallAll();
+                session.setAttribute("hallList", hallLs);
+                int hallId = Integer.parseInt(request.getParameter("hall-select"));
+                Hall hall = hallDao.getHallById(hallId);
+                if(hall != null)
+                {
+                    hallDao.delete(hall);
+                }
+                hallLs = hallDao.getHallAll();
+                session.setAttribute("hallList", hallLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteHall.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/HallList"))
+        {
+            try
+            {
+                session.setAttribute("hallDao", hallDao);
+
+                List<Hall> hallls = hallDao.getHallAll();
+                session.setAttribute("hallList", hallls);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/HallList.jsp");
+            dispatcher.forward(request, response);
+        }
+
         if(url.equals("/Register"))
         {
             try
@@ -308,6 +458,58 @@ public class Main extends HttpServlet
                 e.printStackTrace();
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/AddUser"))
+        {
+            try
+            {
+                session.setAttribute("userDao", userDao);
+
+                User user = new User();
+                String login = request.getParameter("user-add-login");
+                String password = request.getParameter("user-add-password");
+                String email = request.getParameter("user-add-email");
+
+                if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
+                {
+                    user.setLogin(login);
+                    user.setPassword(password);
+                    user.setEmail(email);
+                    userDao.create(user);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddUser.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/DeleteUser"))
+        {
+            try
+            {
+                session.setAttribute("userDao", userDao);
+
+                List<User> userLs = userDao.getUserAll();
+                session.setAttribute("userList", userLs);
+                int userId = Integer.parseInt(request.getParameter("user-select"));
+                User user = userDao.getUserById(userId);
+                if(user != null)
+                {
+                    userDao.delete(user);
+                }
+                userLs = userDao.getUserAll();
+                session.setAttribute("userList", userLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteUser.jsp");
             dispatcher.forward(request, response);
         }
 

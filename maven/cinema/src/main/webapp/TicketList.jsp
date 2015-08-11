@@ -27,7 +27,7 @@
     <p><input type="submit" value="Показать"></p>
 </form>
 <%
-  List<Ticket> ls = (List<Ticket>)session.getAttribute("ticketList");
+  List<Ticket> ls = (List<Ticket>)session.getAttribute("filteredTicketList");
   if(ls != null)
   {
   for(Ticket t : ls)
@@ -38,6 +38,6 @@
   }
   }
 %>
-    </div>>
+    </div>
 </body>
 </html>
