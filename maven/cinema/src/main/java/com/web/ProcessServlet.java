@@ -1,6 +1,10 @@
 package com.web;
 
+import com.domain.Filmshow;
+import com.domain.Seat;
 import com.domain.User;
+import com.mysql.MySqlFilmshowDao;
+import com.mysql.MySqlSeatDao;
 import com.mysql.MySqlUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +27,12 @@ public class ProcessServlet extends HttpServlet
 {
     @Autowired
     private MySqlUserDao userDao;
+
+    @Autowired
+    private MySqlSeatDao seatDao;
+
+    @Autowired
+    private MySqlFilmshowDao filmshowDao;
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
@@ -118,6 +129,31 @@ public class ProcessServlet extends HttpServlet
         if(url.equals("/Logout"))
         {
             session.invalidate();
+        }
+
+        if(url.equals("/SeatsFilter"))
+        {
+            try
+            {
+                session.setAttribute("seatDao", seatDao);
+
+                List<Seat> seatLs = seatDao.getSeatAll();
+                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                List<Seat> filteredLs = new LinkedList<Seat>();
+                for(Seat s : seatLs)
+                {
+                    if(s.getHall() == filmshow.getHall())
+                    {
+                        filteredLs.add(s);
+                    }
+                }
+                session.setAttribute("filteredSeatList", filteredLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 

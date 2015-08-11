@@ -7,6 +7,18 @@
 <head>
     <title>AddTicket</title>
     <link rel="stylesheet" href="/cinema/resources/css/styles.css"/>
+    <script type="text/javascript" src="/cinema/resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#filmshow-select").change(function(){
+                $.ajax({
+                    url: "ProcessServlet/SeatsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function() {
+                        $("#seat-select").reload();
+                    }
+                })
+            })
+        });
+    </script>
 </head>
 <body>
 <div class="wrapper">
@@ -19,6 +31,7 @@
     <option selected disabled>Выберите сеанс</option>
       <%
 				List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
+
 				for(Filmshow f: filmshowLst)
 				{
 			%>
@@ -31,13 +44,16 @@
     <p><label for="seat-select">Место </label><select name="seat-select" id="seat-select">
         <option selected disabled>Выберите место</option>
             <%
-				List<Seat> seatLst = (List<Seat>)session.getAttribute("seatList");
+				List<Seat> seatLst = (List<Seat>)session.getAttribute("filteredSeatList");   //TODO http://bytes.com/topic/javascript/answers/855963-javascript-refresh-select-box-without-refreshing-page
+                if(seatLst != null)
+                {
 				for(Seat s: seatLst)
 				{
 			%>
         <option value=<%=s.getSeatId()%>><%=s%></option>
             <%
 				}
+                }
 			%>
     </select></p>
   <p><input type="submit" value="Выпустить билеты"></p>
