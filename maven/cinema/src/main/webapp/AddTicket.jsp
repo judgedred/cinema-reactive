@@ -6,16 +6,28 @@
 <html>
 <head>
     <title>AddTicket</title>
-    <link rel="stylesheet" href="/cinema/resources/css/styles.css"/>
-    <script type="text/javascript" src="/cinema/resources/js/jquery-2.1.4.js"></script>
+    <link rel="stylesheet" href="../resources/css/styles.css"/>
+    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#filmshow-select").change(function(){
                 $.ajax({
-                    url: "ProcessServlet/SeatsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function() {
-                        $("#seat-select").reload();
+                    url: "../ProcessServlet/SeatsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function(data) {
+//                        $("#seat-select").reload();
+                        /*$("#seat-select").selectmenu();
+                        $("#seat-select").selectmenu("refresh", true);*/
+                        location.reload();
+//                        $("#seat-div").reload();
+
                     }
                 })
+            });
+            $.ajax({
+                url: "../ProcessServlet/SeatsFilter?filmshow-select=0", success: function(data) {
+                    $("#filmshow-select").val(data);
+                    alert(data);
+                }
             })
         });
     </script>
@@ -41,10 +53,11 @@
 			%>
   </select></p>
     <p><label for="ticket-add-price">Введите цену </label><input type="text" name="ticket-add-price" id="ticket-add-price"></p>
+    <div id="seat-div">
     <p><label for="seat-select">Место </label><select name="seat-select" id="seat-select">
         <option selected disabled>Выберите место</option>
             <%
-				List<Seat> seatLst = (List<Seat>)session.getAttribute("filteredSeatList");   //TODO http://bytes.com/topic/javascript/answers/855963-javascript-refresh-select-box-without-refreshing-page
+				List<Seat> seatLst = (List<Seat>)session.getAttribute("filteredSeatList");
                 if(seatLst != null)
                 {
 				for(Seat s: seatLst)
@@ -57,6 +70,7 @@
 			%>
     </select></p>
   <p><input type="submit" value="Выпустить билеты"></p>
+        </div>
 </form>
 
     </div>

@@ -34,6 +34,8 @@ public class ProcessServlet extends HttpServlet
     @Autowired
     private MySqlFilmshowDao filmshowDao;
 
+    private int filmshowSelected;
+
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
@@ -138,17 +140,32 @@ public class ProcessServlet extends HttpServlet
                 session.setAttribute("seatDao", seatDao);
 
                 List<Seat> seatLs = seatDao.getSeatAll();
+
                 int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                if(filmshowId != 0)
+                {
+                    filmshowSelected = filmshowId;
+                }
+
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 List<Seat> filteredLs = new LinkedList<Seat>();
-                for(Seat s : seatLs)
+                if(filmshow != null)
                 {
-                    if(s.getHall() == filmshow.getHall())
+                    for(Seat s : seatLs)
                     {
-                        filteredLs.add(s);
+                        if(s.getHall().equals(filmshow.getHall()))
+                        {
+                            filteredLs.add(s);
+                        }
                     }
                 }
+                else
+                {
+                    filteredLs = null;
+                }
                 session.setAttribute("filteredSeatList", filteredLs);
+
+                response.getWriter().print(filmshowSelected);
             }
             catch(Exception e)
             {
