@@ -8,27 +8,15 @@
     <title>AddTicket</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#filmshow-select").change(function(){
                 $.ajax({
                     url: "../ProcessServlet/SeatsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function(data) {
-//                        $("#seat-select").reload();
-                        /*$("#seat-select").selectmenu();
-                        $("#seat-select").selectmenu("refresh", true);*/
-                        location.reload();
-//                        $("#seat-div").reload();
-
+                        $("#seat-div").load(document.URL + " #seat-div");
                     }
                 })
             });
-            $.ajax({
-                url: "../ProcessServlet/SeatsFilter?filmshow-select=0", success: function(data) {
-                    $("#filmshow-select").val(data);
-                    alert(data);
-                }
-            })
         });
     </script>
 </head>
@@ -69,8 +57,8 @@
                 }
 			%>
     </select></p>
+    </div>
   <p><input type="submit" value="Выпустить билеты"></p>
-        </div>
 </form>
 
     </div>

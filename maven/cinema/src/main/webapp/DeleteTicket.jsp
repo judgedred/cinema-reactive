@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>Delete Ticket</title>
-    <link rel="stylesheet" href="/cinema/resources/css/styles.css"/>
+    <link rel="stylesheet" href="../resources/css/styles.css"/>
 </head>
 <body>
 <div class="wrapper">
