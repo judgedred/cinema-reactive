@@ -209,14 +209,20 @@ public class Main extends HttpServlet
                 session.setAttribute("seatDao", seatDao);
                 session.setAttribute("ticketDao", ticketDao);
 
+                int filmshowId = 0;
+                float price = 0;
+                int seatId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", filmshowLs);
                 List<Seat> seatLs = seatDao.getSeatAll();
                 session.setAttribute("seatList", seatLs);
-                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                if(request.getParameter("filmshow-select") != null && request.getParameter("ticket-add-price") != null && request.getParameter("seat-select") != null)
+                {
+                    filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                    price = Float.parseFloat(request.getParameter("ticket-add-price"));
+                    seatId = Integer.parseInt(request.getParameter("seat-select"));
+                }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
-                Float price = Float.parseFloat(request.getParameter("ticket-add-price"));
-                int seatId = Integer.parseInt(request.getParameter("seat-select"));
                 Seat seat = seatDao.getSeatById(seatId);
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 if(filmshow != null && price != 0 && seat != null)
@@ -241,10 +247,14 @@ public class Main extends HttpServlet
             try
             {
                 session.setAttribute("ticketDao", ticketDao);
+                int ticketId = 0;
 
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 session.setAttribute("ticketList", ticketLs);
-                int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                if(request.getParameter("ticket-select") != null)
+                {
+                    ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                }
                 Ticket ticket = ticketDao.getTicketById(ticketId);
                 if(ticket != null)
                 {
@@ -268,12 +278,16 @@ public class Main extends HttpServlet
                 session.setAttribute("filmshowDao", filmshowDao);
                 session.setAttribute("ticketDao", ticketDao);
 
+                int filmshowId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
                 if(filmshowLs != null)
                 {
                     session.setAttribute("filmshowList", filmshowLs);
                 }
-                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                if(request.getParameter("filmshow-select") != null)
+                {
+                    filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 List<Ticket> filteredLs = new LinkedList<Ticket>();
@@ -305,12 +319,18 @@ public class Main extends HttpServlet
                 session.setAttribute("hallDao", hallDao);
                 session.setAttribute("seatDao", seatDao);
 
+                int hallId = 0;
+                int rowNumber = 0;
+                int seatNumber = 0;
                 List<Hall> hallLs = hallDao.getHallAll();
                 session.setAttribute("hallList", hallLs);
-                int hallId = Integer.parseInt(request.getParameter("hall-select"));
+                if(request.getParameter("hall-select") != null && request.getParameter("seat-add-row") != null && request.getParameter("seat-add-number") != null)
+                {
+                    hallId = Integer.parseInt(request.getParameter("hall-select"));
+                    rowNumber = Integer.parseInt(request.getParameter("seat-add-row"));
+                    seatNumber = Integer.parseInt(request.getParameter("seat-add-number"));
+                }
                 Hall hall = hallDao.getHallById(hallId);
-                int rowNumber = Integer.parseInt(request.getParameter("seat-add-row"));
-                int seatNumber = Integer.parseInt(request.getParameter("seat-add-number"));
                 if(hall != null && rowNumber != 0 && seatNumber != 0)
                 {
                     Seat seat = new Seat();

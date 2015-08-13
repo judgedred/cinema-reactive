@@ -141,18 +141,36 @@ public class ProcessServlet extends HttpServlet
             try
             {
                 session.setAttribute("seatDao", seatDao);
+                session.setAttribute("ticketDao", ticketDao);
 
+                int filmshowId = 0;
                 List<Seat> seatLs = seatDao.getSeatAll();
-                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
+                boolean seatFree;
+                if(request.getParameter("filmshow-select") != null)
+                {
+                    filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 List<Seat> filteredSeatLs = new LinkedList<Seat>();
                 if(filmshow != null)
                 {
                     for(Seat s : seatLs)
                     {
+                        seatFree = true;
                         if(s.getHall().equals(filmshow.getHall()))
                         {
-                            filteredSeatLs.add(s);
+                            for(Ticket t : ticketLs)
+                            {
+                                if(t.getFilmshow().equals(filmshow) && t.getSeat().equals(s))
+                                {
+                                    seatFree = false;
+                                }
+                            }
+                            if(seatFree)
+                            {
+                                filteredSeatLs.add(s);
+                            }
                         }
                     }
                 }
