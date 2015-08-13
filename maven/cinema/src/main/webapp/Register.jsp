@@ -39,7 +39,7 @@
                             alert(data);
                             event.preventDefault();
                         }
-                        else if ($("#login-reg").val == "" || $("#password-reg").val() == "" || $("#email-reg").val() == "")
+                        else if ($("#login-reg").val() == "" || $("#password-reg").val() == "" || $("#email-reg").val() == "")
                         {
                             alert("Заполните поля");
                             event.preventDefault();

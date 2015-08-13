@@ -2,9 +2,11 @@ package com.web;
 
 import com.domain.Filmshow;
 import com.domain.Seat;
+import com.domain.Ticket;
 import com.domain.User;
 import com.mysql.MySqlFilmshowDao;
 import com.mysql.MySqlSeatDao;
+import com.mysql.MySqlTicketDao;
 import com.mysql.MySqlUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class ProcessServlet extends HttpServlet
 
     @Autowired
     private MySqlFilmshowDao filmshowDao;
+
+    @Autowired
+    private MySqlTicketDao ticketDao;
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
@@ -152,6 +157,34 @@ public class ProcessServlet extends HttpServlet
                     }
                 }
                 session.setAttribute("filteredSeatList", filteredSeatLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/TicketCheck"))
+        {
+            try
+            {
+                session.setAttribute("ticketDao", ticketDao);
+
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
+                int seatId = Integer.parseInt(request.getParameter("seat-select"));
+                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                Boolean seatFree = true;
+                for(Ticket t : ticketLs)
+                {
+                    if(t.getFilmshow().getFilmshowId().equals(filmshowId) && t.getSeat().getSeatId().equals(seatId))
+                    {
+                        seatFree = false;
+                    }
+                }
+                if(!seatFree)
+                {
+                    response.getWriter().print("Такой билет уже есть.");
+                }
             }
             catch(Exception e)
             {

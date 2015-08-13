@@ -207,6 +207,7 @@ public class Main extends HttpServlet
             {
                 session.setAttribute("filmshowDao", filmshowDao);
                 session.setAttribute("seatDao", seatDao);
+                session.setAttribute("ticketDao", ticketDao);
 
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", filmshowLs);
@@ -217,6 +218,7 @@ public class Main extends HttpServlet
                 Float price = Float.parseFloat(request.getParameter("ticket-add-price"));
                 int seatId = Integer.parseInt(request.getParameter("seat-select"));
                 Seat seat = seatDao.getSeatById(seatId);
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
                 if(filmshow != null && price != 0 && seat != null)
                 {
                     Ticket ticket = new Ticket();
