@@ -45,7 +45,7 @@
 
     <jsp:include page="admin_menu.jsp"/>
 
-<p>Выпустить билеты</p>
+<p>Добавить билет</p>
 <form action="AddTicket" method="Get" id="ticket-add">
   <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
     <option selected disabled>Выберите сеанс</option>
@@ -78,7 +78,7 @@
 			%>
     </select></p>
     </div>
-  <p><input type="submit" value="Выпустить билеты"></p>
+  <p><input type="submit" value="Добавить билет"></p>
 </form>
 
     </div>

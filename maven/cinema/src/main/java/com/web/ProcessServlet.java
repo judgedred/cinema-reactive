@@ -165,6 +165,7 @@ public class ProcessServlet extends HttpServlet
                                 if(t.getFilmshow().equals(filmshow) && t.getSeat().equals(s))
                                 {
                                     seatFree = false;
+                                    break;
                                 }
                             }
                             if(seatFree)
@@ -197,6 +198,7 @@ public class ProcessServlet extends HttpServlet
                     if(t.getFilmshow().getFilmshowId().equals(filmshowId) && t.getSeat().getSeatId().equals(seatId))
                     {
                         seatFree = false;
+                        break;
                     }
                 }
                 if(!seatFree)

@@ -10,6 +10,7 @@
         <ul>
             <li><a href="AddTicket" title="Add">Добавить</a></li>
             <li><a href="DeleteTicket" title="Delete">Удалить</a></li>
+            <li><a href="AddTicketAll" title="Add tickets for the show">Выпустить билеты на сеанс</a></li>
         </ul>
     </li>
     <li><a href="FilmList" title="Films">Фильмы</a>

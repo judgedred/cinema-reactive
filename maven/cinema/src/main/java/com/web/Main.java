@@ -224,7 +224,6 @@ public class Main extends HttpServlet
                 }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 Seat seat = seatDao.getSeatById(seatId);
-                List<Ticket> ticketLs = ticketDao.getTicketAll();
                 if(filmshow != null && price != 0 && seat != null)
                 {
                     Ticket ticket = new Ticket();
@@ -239,6 +238,48 @@ public class Main extends HttpServlet
                 e.printStackTrace();
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicket.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/AddTicketAll"))
+        {
+            try
+            {
+                session.setAttribute("filmshowDao", filmshowDao);
+                session.setAttribute("seatDao", seatDao);
+                session.setAttribute("ticketDao", ticketDao);
+
+                int filmshowId = 0;
+                float price = 0;
+                List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", filmshowLs);
+                List<Seat> filteredSeatLs = (List<Seat>)session.getAttribute("filteredSeatList");
+                if(request.getParameter("filmshow-select") != null && request.getParameter("ticket-add-price") != null)
+                {
+                    filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                    price = Float.parseFloat(request.getParameter("ticket-add-price"));
+                }
+                Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                if(filteredSeatLs != null)
+                {
+                    for(Seat s : filteredSeatLs)
+                    {
+                        if(filmshow != null && price != 0)
+                        {
+                            Ticket ticket = new Ticket();
+                            ticket.setFilmshow(filmshow);
+                            ticket.setPrice(price);
+                            ticket.setSeat(s);
+                            ticketDao.create(ticket);
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicketAll.jsp");
             dispatcher.forward(request, response);
         }
 
