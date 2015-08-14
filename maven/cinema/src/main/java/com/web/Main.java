@@ -214,8 +214,6 @@ public class Main extends HttpServlet
                 int seatId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", filmshowLs);
-                List<Seat> seatLs = seatDao.getSeatAll();
-                session.setAttribute("seatList", seatLs);
                 if(request.getParameter("filmshow-select") != null && request.getParameter("ticket-add-price") != null && request.getParameter("seat-select") != null)
                 {
                     filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
@@ -246,7 +244,6 @@ public class Main extends HttpServlet
             try
             {
                 session.setAttribute("filmshowDao", filmshowDao);
-                session.setAttribute("seatDao", seatDao);
                 session.setAttribute("ticketDao", ticketDao);
 
                 int filmshowId = 0;
@@ -288,8 +285,8 @@ public class Main extends HttpServlet
             try
             {
                 session.setAttribute("ticketDao", ticketDao);
-                int ticketId = 0;
 
+                int ticketId = 0;
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 session.setAttribute("ticketList", ticketLs);
                 if(request.getParameter("ticket-select") != null)
@@ -351,6 +348,68 @@ public class Main extends HttpServlet
             RequestDispatcher dispatcher = request.getRequestDispatcher("/TicketList.jsp");
             dispatcher.forward(request, response);
 
+        }
+
+        if(url.equals("/Admin/AddReservation"))
+        {
+            try
+            {
+                session.setAttribute("filmshowDao", filmshowDao);
+                session.setAttribute("userDao", userDao);
+                session.setAttribute("ticketDao", ticketDao);
+
+                int ticketId = 0;
+                List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", filmshowLs);
+                if(request.getParameter("ticket-select") != null)
+                {
+                    ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                }
+                User validUser = (User) session.getAttribute("validUser");
+                Ticket ticket = ticketDao.getTicketById(ticketId);
+                if(validUser != null && ticket != null)
+                {
+                    Reservation reservation = new Reservation();
+                    reservation.setUser(validUser);
+                    reservation.setTicket(ticket);
+                    reservationDao.create(reservation);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddReservation.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/DeleteReservation"))
+        {
+            try
+            {
+                session.setAttribute("reservationDao", reservationDao);
+
+                int reservationId = 0;
+                List<Reservation> reservationLs = reservationDao.getReservationAll();
+                session.setAttribute("reservationList", reservationLs);
+                if(request.getParameter("reservation-select") != null)
+                {
+                    reservationId = Integer.parseInt(request.getParameter("reservation-select"));
+                }
+                Reservation reservation = reservationDao.getReservationById(reservationId);
+                if(reservation != null)
+                {
+                    reservationDao.delete(reservation);
+                }
+                reservationLs = reservationDao.getReservationAll();
+                session.setAttribute("reservationList", reservationLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteReservation.jsp");
+            dispatcher.forward(request, response);
         }
 
         if(url.equals("/Admin/AddSeat"))
