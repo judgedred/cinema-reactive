@@ -1,13 +1,7 @@
 package com.web;
 
-import com.domain.Filmshow;
-import com.domain.Seat;
-import com.domain.Ticket;
-import com.domain.User;
-import com.mysql.MySqlFilmshowDao;
-import com.mysql.MySqlSeatDao;
-import com.mysql.MySqlTicketDao;
-import com.mysql.MySqlUserDao;
+import com.domain.*;
+import com.mysql.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -38,6 +32,9 @@ public class ProcessServlet extends HttpServlet
 
     @Autowired
     private MySqlTicketDao ticketDao;
+
+    @Autowired
+    private MySqlReservationDao reservationDao;
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
@@ -205,6 +202,53 @@ public class ProcessServlet extends HttpServlet
                 {
                     response.getWriter().print("Такой билет уже есть.");
                 }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/TicketsFilter"))
+        {
+            try
+            {
+                session.setAttribute("ticketDao", ticketDao);
+                session.setAttribute("reservationDao", reservationDao);
+
+                int filmshowId = 0;
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
+                List<Reservation> reservationLs = reservationDao.getReservationAll();
+                boolean ticketFree;
+                if(request.getParameter("filmshow-select") != null)
+                {
+                    filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                }
+                Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                List<Ticket> filteredTicketLs = new LinkedList<>();
+                if(filmshow != null)
+                {
+                    for(Ticket t : ticketLs)
+                    {
+                        if(t.getFilmshow().equals(filmshow))
+                        {
+                            ticketFree = true;
+                            for(Reservation r : reservationLs)
+                            {
+                                if(t.equals(r.getTicket()))
+                                {
+                                    ticketFree = false;
+                                    break;
+                                }
+                            }
+                            if(ticketFree)
+                            {
+                                filteredTicketLs.add(t);
+                            }
+                        }
+                    }
+                }
+                session.setAttribute("filteredTicketList", filteredTicketLs);
             }
             catch(Exception e)
             {

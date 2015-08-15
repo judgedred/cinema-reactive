@@ -1,7 +1,7 @@
 <%@ page import="com.domain.Ticket" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.domain.Filmshow" %>
 <%@ page import="com.domain.Reservation" %>
+<%@ page import="com.domain.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,14 +13,14 @@
     <jsp:include page="admin_menu.jsp"/>
     <p>Список броней</p>
     <form action="ReservationList" method="Get" id="reservation-list">
-        <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
-            <option selected disabled>Выберите сеанс</option>
+        <p><label for="user-select">Пользователь </label><select name="user-select" id="user-select">
+            <option selected disabled>Выберите пользователя</option>
             <%
-                List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
-                for(Filmshow f: filmshowLst)
+                List<User> userLst = (List<User>)session.getAttribute("userList");
+                for(User u: userLst)
                 {
             %>
-            <option value=<%=f.getFilmshowId()%>><%=f%></option>
+            <option value=<%=u.getUserId()%>><%=u%></option>
             <%
                 }
             %>

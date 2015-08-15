@@ -88,6 +88,6 @@ public class Reservation implements Serializable
 	@Override
 	public String toString()
 	{
-		return user.getLogin() + " " + ticket.getFilmshow().getFilm().getFilmName();
+		return user.getLogin() + " " + ticket;
 	}
 }

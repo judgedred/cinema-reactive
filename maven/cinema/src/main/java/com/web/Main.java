@@ -347,7 +347,6 @@ public class Main extends HttpServlet
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/TicketList.jsp");
             dispatcher.forward(request, response);
-
         }
 
         if(url.equals("/Admin/AddReservation"))
@@ -409,6 +408,46 @@ public class Main extends HttpServlet
                 e.printStackTrace();
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteReservation.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/Admin/ReservationList"))
+        {
+            try
+            {
+                session.setAttribute("userDao", userDao);
+                session.setAttribute("reservationDao", reservationDao);
+
+                int userId = 0;
+                List<User> userLs = userDao.getUserAll();
+                if(userLs != null)
+                {
+                    session.setAttribute("userList", userLs);
+                }
+                if(request.getParameter("user-select") != null)
+                {
+                    userId = Integer.parseInt(request.getParameter("user-select"));
+                }
+                User user = userDao.getUserById(userId);
+                List<Reservation> reservationLs = reservationDao.getReservationAll();
+                List<Reservation> filteredLs = new LinkedList<>();
+                if(user != null && reservationLs != null)
+                {
+                    for(Reservation r : reservationLs)
+                    {
+                        if(r.getUser().equals(user))
+                        {
+                            filteredLs.add(r);
+                        }
+                    }
+                    session.setAttribute("filteredReservationList", filteredLs);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/ReservationList.jsp");
             dispatcher.forward(request, response);
         }
 

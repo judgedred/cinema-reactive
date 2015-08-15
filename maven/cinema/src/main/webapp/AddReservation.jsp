@@ -18,25 +18,16 @@
                     }
                 })
             });
-            $("#ticket-add").submit(function (event) {
-                $.ajax({
-                    url: "../ProcessServlet/ReservationCheck?ticket-select=" + $("#ticket-select").val(),
-                    async: false,
-                    success: function (data) {
-                        if (data != "") {
-                            alert(data);
-                            event.preventDefault();
-                        }
-                        else if ($("#ticket-select").val() == null)
-                        {
-                            alert("Заполните поля");
-                            event.preventDefault();
-                        }
-                        else {
-                            alert("Билет забронирован");
-                        }
-                    }
-                })
+            $("#reservation-add").submit(function (event) {
+                if($("#filmshow-select").val() == null)
+                {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
+                else
+                {
+                    alert("Билет забронирован");
+                }
             });
         });
     </script>
