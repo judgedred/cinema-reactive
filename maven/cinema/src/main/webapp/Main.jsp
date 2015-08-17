@@ -14,16 +14,6 @@
 
 <div class="wrapper">
 <jsp:include page="top.jsp"/>
-	<%--<table border=1 align=center>
-		<tr>
-		<td>Новости</td>
-		<td>Сеансы</td>
-		<td>5D</td>
-		<td>Фильмы</td>
-		<td>О кинотеатре</td>
-		<td><a href="Register.jsp">Зарегистрироваться</a></td>
-		</tr>
-	</table>--%>
 
 	<p><h2>Сегодня в кино</h2></p>
 		
@@ -33,14 +23,10 @@
 		{
 			Filmshow f = i.next(); 
 	%>
-			<p><%=f%></p>
+			<p><a href="ReserveTicket"><%=f%></a></p>
 	<%	
 		} 
 	%>
-	<p><a href="AddFilmshow">Добавить сеанс</a></p>
-	<p><a href="DeleteFilmshow">Удалить сеанс</a> </p>
-	<p><a href="AddTicket">Выпуск билетов</a> </p>
-
 
     <jsp:include page="footer.jsp"/>
 

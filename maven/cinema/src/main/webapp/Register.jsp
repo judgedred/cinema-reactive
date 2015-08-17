@@ -77,7 +77,6 @@
          </tr>
  </table>
  </form>
- <p><a href="UserList">Список пользователей</a></p>
 
     <jsp:include page="footer.jsp"/>
 
