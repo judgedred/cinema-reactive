@@ -358,18 +358,22 @@ public class Main extends HttpServlet
                 session.setAttribute("ticketDao", ticketDao);
 
                 int ticketId = 0;
+                int userId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
+                List<User> userLs = userDao.getUserAll();
                 session.setAttribute("filmshowList", filmshowLs);
-                if(request.getParameter("ticket-select") != null)
+                session.setAttribute("userList", userLs);
+                if(request.getParameter("ticket-select") != null && request.getParameter("user-select") != null)
                 {
                     ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                    userId = Integer.parseInt(request.getParameter("user-select"));
                 }
-                User validUser = (User) session.getAttribute("validUser");
                 Ticket ticket = ticketDao.getTicketById(ticketId);
-                if(validUser != null && ticket != null)
+                User user = userDao.getUserById(userId);
+                if(user != null && ticket != null)
                 {
                     Reservation reservation = new Reservation();
-                    reservation.setUser(validUser);
+                    reservation.setUser(user);
                     reservation.setTicket(ticket);
                     reservationDao.create(reservation);
                 }
@@ -749,7 +753,7 @@ public class Main extends HttpServlet
                         {
 //                            userValid = true;
 
-
+                            session.setAttribute("adminUser", u);
                             RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
                             dispatcher.forward(request, response);
                         }
