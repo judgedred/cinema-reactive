@@ -774,6 +774,66 @@ public class Main extends HttpServlet
                 e.printStackTrace();
             }
         }
+
+        if(url.equals("/ReserveTicket"))
+        {
+            try
+            {
+                session.setAttribute("userDao", userDao);
+                session.setAttribute("ticketDao", ticketDao);
+                session.setAttribute("reservationDao", reservationDao);
+
+                int ticketId = 0;
+
+                if(request.getParameter("ticket-select") != null)
+                {
+                    ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                }
+                Filmshow filmshow = (Filmshow)session.getAttribute("filmshowReserve");
+                List<Ticket> ticketLs = ticketDao.getTicketAll();
+                List<Reservation> reservationLs = reservationDao.getReservationAll();
+                boolean ticketFree;
+                List<Ticket> filteredTicketLs = new LinkedList<>();
+                if(filmshow != null)
+                {
+                    for(Ticket t : ticketLs)
+                    {
+                        if(t.getFilmshow().equals(filmshow))
+                        {
+                            ticketFree = true;
+                            for(Reservation r : reservationLs)
+                            {
+                                if(t.equals(r.getTicket()))
+                                {
+                                    ticketFree = false;
+                                    break;
+                                }
+                            }
+                            if(ticketFree)
+                            {
+                                filteredTicketLs.add(t);
+                            }
+                        }
+                    }
+                }
+                session.setAttribute("filteredTicketList", filteredTicketLs);
+                Ticket ticket = ticketDao.getTicketById(ticketId);
+                User user = (User)session.getAttribute("validUser");
+                if(user != null && ticket != null)
+                {
+                    Reservation reservation = new Reservation();
+                    reservation.setUser(user);
+                    reservation.setTicket(ticket);
+                    reservationDao.create(reservation);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/ReserveTicket.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     @Override

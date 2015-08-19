@@ -19,13 +19,12 @@
 		
 	<%	
 		List<Filmshow> ls = (List<Filmshow>)session.getAttribute("filmshowList");
-	 	for(Iterator<Filmshow> i = ls.iterator(); i.hasNext(); )
-		{
-			Filmshow f = i.next(); 
-	%>
-			<p><a href="ReserveTicket"><%=f%></a></p>
-	<%	
-		} 
+        for(Filmshow f : ls)
+        {
+    %>
+            <p><a href="ReserveTicket" onclick="<%session.setAttribute("filmshowReserve", f);%>" ><%=f%></a></p>
+    <%
+        }
 	%>
 
     <jsp:include page="footer.jsp"/>
