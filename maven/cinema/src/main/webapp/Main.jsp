@@ -9,26 +9,26 @@
     <link rel="stylesheet" href="resources/css/styles.css"/>
     <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="resources/js/auth.js"></script>
+
 </head>
 <body>
-
 <div class="wrapper">
 <jsp:include page="top.jsp"/>
 
-	<p><h2>Сегодня в кино</h2></p>
+	<h2>Сегодня в кино</h2>
 		
 	<%	
 		List<Filmshow> ls = (List<Filmshow>)session.getAttribute("filmshowList");
         for(Filmshow f : ls)
         {
     %>
-            <p><a href="ReserveTicket" onclick="<%session.setAttribute("filmshowReserve", f);%>" ><%=f%></a></p>
+            <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" ><%=f%></a></p>
     <%
         }
-	%>
+    %>
 
     <jsp:include page="footer.jsp"/>
 
-   </div>
+</div>
 </body>
 </html>

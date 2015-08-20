@@ -1,4 +1,3 @@
-<%@ page import="com.domain.Ticket" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.domain.Reservation" %>
 <%@ page import="com.domain.User" %>

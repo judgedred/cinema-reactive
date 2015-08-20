@@ -40,7 +40,14 @@ public class MySqlFilmDao implements FilmDao
             session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
-	}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
 
 	@Override
 	public void update(Film film) throws DaoException
@@ -57,6 +64,13 @@ public class MySqlFilmDao implements FilmDao
             session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -74,6 +88,13 @@ public class MySqlFilmDao implements FilmDao
             session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -89,6 +110,13 @@ public class MySqlFilmDao implements FilmDao
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -112,6 +140,13 @@ public class MySqlFilmDao implements FilmDao
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -128,6 +163,7 @@ public class MySqlFilmDao implements FilmDao
 		{
 			throw new DaoException(e);
 		}
+
 	}
 
 	MySqlFilmDao()

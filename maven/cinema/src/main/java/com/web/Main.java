@@ -46,7 +46,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
                 List<Filmshow> ls = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", ls);
             }
@@ -63,7 +62,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmDao", filmDao);
                 String filmName = request.getParameter("filmName");
                 String description = request.getParameter("description");
                 Film film = new Film();
@@ -86,8 +84,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmDao", filmDao);
-
                 List<Film> filmLs = filmDao.getFilmAll();
                 session.setAttribute("filmList", filmLs);
                 int filmId = Integer.parseInt(request.getParameter("film-select"));
@@ -111,7 +107,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmDao", filmDao);
                 List<Film> filmLs = filmDao.getFilmAll();
                 session.setAttribute("filmList", filmLs);
             }
@@ -128,10 +123,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
-                session.setAttribute("filmDao", filmDao);
-                session.setAttribute("hallDao", hallDao);
-
                 List<Film> filmList = filmDao.getFilmAll();
                 List<Hall> hallList = hallDao.getHallAll();
                 session.setAttribute("filmList", filmList);
@@ -163,8 +154,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
-
                 List<Filmshow> ls = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", ls);
                 int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
@@ -188,7 +177,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
                 List<Filmshow> ls = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", ls);
             }
@@ -205,10 +193,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
-                session.setAttribute("seatDao", seatDao);
-                session.setAttribute("ticketDao", ticketDao);
-
                 int filmshowId = 0;
                 float price = 0;
                 int seatId = 0;
@@ -243,9 +227,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
-                session.setAttribute("ticketDao", ticketDao);
-
                 int filmshowId = 0;
                 float price = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
@@ -284,8 +265,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("ticketDao", ticketDao);
-
                 int ticketId = 0;
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 session.setAttribute("ticketList", ticketLs);
@@ -313,9 +292,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
-                session.setAttribute("ticketDao", ticketDao);
-
                 int filmshowId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
                 if(filmshowLs != null)
@@ -353,10 +329,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("filmshowDao", filmshowDao);
-                session.setAttribute("userDao", userDao);
-                session.setAttribute("ticketDao", ticketDao);
-
                 int ticketId = 0;
                 int userId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
@@ -390,8 +362,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("reservationDao", reservationDao);
-
                 int reservationId = 0;
                 List<Reservation> reservationLs = reservationDao.getReservationAll();
                 session.setAttribute("reservationList", reservationLs);
@@ -419,9 +389,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-                session.setAttribute("reservationDao", reservationDao);
-
                 int userId = 0;
                 List<User> userLs = userDao.getUserAll();
                 if(userLs != null)
@@ -459,9 +426,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("hallDao", hallDao);
-                session.setAttribute("seatDao", seatDao);
-
                 int hallId = 0;
                 int rowNumber = 0;
                 int seatNumber = 0;
@@ -495,8 +459,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("seatDao", seatDao);
-
                 List<Seat> seatLs = seatDao.getSeatAll();
                 session.setAttribute("seatList", seatLs);
                 int seatId = Integer.parseInt(request.getParameter("seat-select"));
@@ -520,8 +482,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("seatDao", seatDao);
-
                 List<Seat> seatls = seatDao.getSeatAll();
                 session.setAttribute("seatList", seatls);
             }
@@ -537,8 +497,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("hallDao", hallDao);
-
                 int hallNumber = Integer.parseInt(request.getParameter("hall-add-number"));
                 String hallName = request.getParameter("hall-add-name");
                 if(hallNumber != 0 && hallName != null)
@@ -561,8 +519,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("hallDao", hallDao);
-
                 List<Hall> hallLs = hallDao.getHallAll();
                 session.setAttribute("hallList", hallLs);
                 int hallId = Integer.parseInt(request.getParameter("hall-select"));
@@ -586,8 +542,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("hallDao", hallDao);
-
                 List<Hall> hallls = hallDao.getHallAll();
                 session.setAttribute("hallList", hallls);
             }
@@ -603,8 +557,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-
                 User user = new User();
                 String login = request.getParameter("login-reg");
                 String password = request.getParameter("password-reg");
@@ -630,8 +582,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-
                 User user = new User();
                 String login = request.getParameter("user-add-login");
                 String password = request.getParameter("user-add-password");
@@ -657,8 +607,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-
                 List<User> userLs = userDao.getUserAll();
                 session.setAttribute("userList", userLs);
                 int userId = Integer.parseInt(request.getParameter("user-select"));
@@ -682,8 +630,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-
                 List<User> ls = userDao.getUserAll();
                 session.setAttribute("userList", ls);
             }
@@ -734,12 +680,8 @@ public class Main extends HttpServlet
 
         if(url.equals("/Admin/Login"))
         {
-            boolean userValid = false;
             try
             {
-                session.setAttribute("userDao", userDao);
-
-
                 List<User> ls = userDao.getUserAll();
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
@@ -751,8 +693,6 @@ public class Main extends HttpServlet
                     {
                         if(u.getLogin().equals(login) && u.getPassword().equals(password))
                         {
-//                            userValid = true;
-
                             session.setAttribute("adminUser", u);
                             RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
                             dispatcher.forward(request, response);
@@ -763,11 +703,6 @@ public class Main extends HttpServlet
                 {
                     response.getWriter().print("Access denied");
                 }
-                /*if(userValid)
-                {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("AdminMain.jsp");
-                    dispatcher.forward(request, response);
-                }*/
             }
             catch(Exception e)
             {
@@ -779,44 +714,14 @@ public class Main extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-                session.setAttribute("ticketDao", ticketDao);
-                session.setAttribute("reservationDao", reservationDao);
-
                 int ticketId = 0;
+                int filmshowId = 0;
+                Filmshow filmshow;
 
                 if(request.getParameter("ticket-select") != null)
                 {
                     ticketId = Integer.parseInt(request.getParameter("ticket-select"));
                 }
-                Filmshow filmshow = (Filmshow)session.getAttribute("filmshowReserve");
-                List<Ticket> ticketLs = ticketDao.getTicketAll();
-                List<Reservation> reservationLs = reservationDao.getReservationAll();
-                boolean ticketFree;
-                List<Ticket> filteredTicketLs = new LinkedList<>();
-                if(filmshow != null)
-                {
-                    for(Ticket t : ticketLs)
-                    {
-                        if(t.getFilmshow().equals(filmshow))
-                        {
-                            ticketFree = true;
-                            for(Reservation r : reservationLs)
-                            {
-                                if(t.equals(r.getTicket()))
-                                {
-                                    ticketFree = false;
-                                    break;
-                                }
-                            }
-                            if(ticketFree)
-                            {
-                                filteredTicketLs.add(t);
-                            }
-                        }
-                    }
-                }
-                session.setAttribute("filteredTicketList", filteredTicketLs);
                 Ticket ticket = ticketDao.getTicketById(ticketId);
                 User user = (User)session.getAttribute("validUser");
                 if(user != null && ticket != null)
@@ -826,12 +731,78 @@ public class Main extends HttpServlet
                     reservation.setTicket(ticket);
                     reservationDao.create(reservation);
                 }
+
+                if(request.getParameter("filmshow-select") != null)
+                {
+                    filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                }
+
+                if(filmshowId != 0)
+                {
+                    filmshow = filmshowDao.getFilmshowById(filmshowId);
+                    session.setAttribute("filmshowReserve", filmshow);
+                }
+                    List<Ticket> ticketLs = ticketDao.getTicketAll();
+                    List<Reservation> reservationLs = reservationDao.getReservationAll();
+                    boolean ticketFree;
+                    List<Ticket> filteredTicketLs = new LinkedList<>();
+                    filmshow = (Filmshow)session.getAttribute("filmshowReserve");
+                    if(filmshow != null)
+                    {
+                        for(Ticket t : ticketLs)
+                        {
+                            if(t.getFilmshow().equals(filmshow))
+                            {
+                                ticketFree = true;
+                                for(Reservation r : reservationLs)
+                                {
+                                    if(t.equals(r.getTicket()))
+                                    {
+                                        ticketFree = false;
+                                        break;
+                                    }
+                                }
+                                if(ticketFree)
+                                {
+                                    filteredTicketLs.add(t);
+                                }
+                            }
+                        }
+                    }
+                    session.setAttribute("filteredTicketList", filteredTicketLs);
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/ReserveTicket.jsp");
+            dispatcher.forward(request, response);
+        }
+
+        if(url.equals("/ReservationList"))
+        {
+            try
+            {
+                User user = (User)session.getAttribute("validUser");
+                List<Reservation> reservationLs = reservationDao.getReservationAll();
+                List<Reservation> filteredLs = new LinkedList<>();
+                if(user != null && reservationLs != null)
+                {
+                    for(Reservation r : reservationLs)
+                    {
+                        if(r.getUser().equals(user))
+                        {
+                            filteredLs.add(r);
+                        }
+                    }
+                    session.setAttribute("filteredReservationList", filteredLs);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/UserReservationList.jsp");
             dispatcher.forward(request, response);
         }
     }

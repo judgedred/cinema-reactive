@@ -38,6 +38,13 @@ public class MySqlHallDao implements HallDao
             session.getTransaction().rollback();
             throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -54,6 +61,13 @@ public class MySqlHallDao implements HallDao
         {
             session.getTransaction().rollback();
             throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
@@ -72,6 +86,13 @@ public class MySqlHallDao implements HallDao
             session.getTransaction().rollback();
             throw new DaoException(e);
         }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -86,6 +107,13 @@ public class MySqlHallDao implements HallDao
         catch(Exception e)
         {
             throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
@@ -109,6 +137,13 @@ public class MySqlHallDao implements HallDao
         catch(Exception e)
         {
             throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 

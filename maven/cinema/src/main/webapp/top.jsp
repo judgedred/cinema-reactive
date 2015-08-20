@@ -3,7 +3,7 @@
 
     <div id="authLoggedIn" style="display: none">
         <ul class="navigation">
-            <li><a href="javascript: logout()" style="line-height: 15px; padding: 6px 0" title="брони">список билетов</a></li>
+            <li><a href="ReservationList" style="line-height: 15px; padding: 6px 0" title="брони">список билетов</a></li>
             <p><li><a href="javascript: logout()" style="line-height: 15px; padding: 0 60px" title="Выйти">Выход</a></li></p>
         </ul>
     </div>

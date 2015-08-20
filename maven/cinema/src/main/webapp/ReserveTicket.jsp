@@ -61,6 +61,8 @@
         <p><input type="submit" value="Зарезервировать билет"></p>
     </form>
 
+    <jsp:include page="footer.jsp"/>
+
 </div>
 </body>
 </html>

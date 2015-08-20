@@ -35,6 +35,13 @@ public class MySqlUserDao implements UserDao
 			session.getTransaction().rollback();
             throw new DaoException(e);
         }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -52,6 +59,13 @@ public class MySqlUserDao implements UserDao
             session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -69,6 +83,13 @@ public class MySqlUserDao implements UserDao
             session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -84,6 +105,13 @@ public class MySqlUserDao implements UserDao
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -107,6 +135,13 @@ public class MySqlUserDao implements UserDao
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
