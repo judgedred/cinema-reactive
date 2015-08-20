@@ -724,6 +724,7 @@ public class Main extends HttpServlet
                 }
                 Ticket ticket = ticketDao.getTicketById(ticketId);
                 User user = (User)session.getAttribute("validUser");
+
                 if(user != null && ticket != null)
                 {
                     Reservation reservation = new Reservation();

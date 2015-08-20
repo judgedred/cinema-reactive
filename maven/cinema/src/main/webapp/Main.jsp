@@ -9,6 +9,28 @@
     <link rel="stylesheet" href="resources/css/styles.css"/>
     <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="resources/js/auth.js"></script>
+    <script type="text/javascript">
+            function authCheck()
+            {
+                var userValid = true;
+                $.ajax({url: "ProcessServlet/AuthCheck", async: false, success: function(data){
+                    if(data != "")
+                    {
+                        alert(data);
+                        userValid = false;
+                    }
+                }
+                });
+                if(!userValid)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+    </script>
 
 </head>
 <body>
@@ -22,7 +44,7 @@
         for(Filmshow f : ls)
         {
     %>
-            <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" ><%=f%></a></p>
+            <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
     <%
         }
     %>

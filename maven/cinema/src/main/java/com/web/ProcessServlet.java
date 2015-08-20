@@ -48,8 +48,6 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-
                 String login = request.getParameter("login-reg");
                 String email = request.getParameter("email-reg");
                 List<User> ls = userDao.getUserAll();
@@ -98,8 +96,6 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-                session.setAttribute("userDao", userDao);
-
                 List<User> ls = userDao.getUserAll();
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
@@ -137,9 +133,6 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-                session.setAttribute("seatDao", seatDao);
-                session.setAttribute("ticketDao", ticketDao);
-
                 int filmshowId = 0;
                 List<Seat> seatLs = seatDao.getSeatAll();
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
@@ -184,8 +177,6 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-                session.setAttribute("ticketDao", ticketDao);
-
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 int seatId = Integer.parseInt(request.getParameter("seat-select"));
                 int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
@@ -213,9 +204,6 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-                session.setAttribute("ticketDao", ticketDao);
-                session.setAttribute("reservationDao", reservationDao);
-
                 int filmshowId = 0;
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 List<Reservation> reservationLs = reservationDao.getReservationAll();
@@ -249,6 +237,22 @@ public class ProcessServlet extends HttpServlet
                     }
                 }
                 session.setAttribute("filteredTicketList", filteredTicketLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/AuthCheck"))
+        {
+            try
+            {
+                User user = (User)session.getAttribute("validUser");
+                if(user == null)
+                {
+                    response.getWriter().print("Войдите в систему");
+                }
             }
             catch(Exception e)
             {
