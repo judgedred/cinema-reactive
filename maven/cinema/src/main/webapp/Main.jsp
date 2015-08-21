@@ -40,8 +40,8 @@
 	<h2>Сегодня в кино</h2>
 		
 	<%	
-		List<Filmshow> ls = (List<Filmshow>)session.getAttribute("filmshowList");
-        for(Filmshow f : ls)
+		List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
+        for(Filmshow f : filmshowLst)
         {
     %>
             <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>

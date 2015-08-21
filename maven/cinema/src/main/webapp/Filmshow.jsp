@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="org.joda.time.LocalDate" %>
 
 <html>
 <head>
@@ -40,12 +41,19 @@
     <h2>Сеансы</h2>
 
     <%
-        List<Filmshow> ls = (List<Filmshow>)session.getAttribute("filmshowList");
-        for(Filmshow f : ls)
+        Map<LocalDate, List<Filmshow>> filmshowMap = (Map<LocalDate, List<Filmshow>>)session.getAttribute("filmshowMap");
+        for(LocalDate date : filmshowMap.keySet())
+        {
+    %>
+    <p><%=date%></p>
+    <%
+        List<Filmshow> filmshowLst = filmshowMap.get(date);
+        for(Filmshow f : filmshowLst)
         {
     %>
     <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
     <%
+        }
         }
     %>
 

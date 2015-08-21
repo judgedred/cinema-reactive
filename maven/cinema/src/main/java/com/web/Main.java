@@ -2,10 +2,11 @@ package com.web;
 
 import com.domain.*;
 import com.mysql.*;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.*;
@@ -46,8 +47,8 @@ public class Main extends HttpServlet
         {
             try
             {
-                List<Filmshow> ls = filmshowDao.getFilmshowAll();
-                session.setAttribute("filmshowList", ls);
+                List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", filmshowLst);
             }
             catch(Exception e)
             {
@@ -62,8 +63,21 @@ public class Main extends HttpServlet
         {
             try
             {
-                List<Filmshow> ls = filmshowDao.getFilmshowAll();
-                session.setAttribute("filmshowList", ls);
+                Map<LocalDate, List<Filmshow>> filmshowMap = new HashMap<>();
+                List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                for(Filmshow f : filmshowLst)
+                {
+                    Date javaDate = f.getDateTime();
+                    LocalDate date = new LocalDate(javaDate);
+                    List<Filmshow> dateGroupedFilmshow = filmshowMap.get(date);
+                    if(dateGroupedFilmshow == null)
+                    {
+                        dateGroupedFilmshow = new ArrayList<>();
+                        filmshowMap.put(date, dateGroupedFilmshow);
+                    }
+                    dateGroupedFilmshow.add(f);
+                }
+                session.setAttribute("filmshowMap", filmshowMap);
             }
             catch(Exception e)
             {
