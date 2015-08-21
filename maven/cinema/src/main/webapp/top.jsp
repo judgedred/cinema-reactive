@@ -31,7 +31,7 @@
 <ul class="navigation">
 
     <li><a href="" title="News">Новости</a></li>
-    <li><a href="" title="Filmshow">Сеансы</a></li>
+    <li><a href="Filmshow" title="Filmshow">Сеансы</a></li>
     <li><a href="" title="5D">5D</a>
         <ul>
             <li><a href="" title="Websites">Websites</a></li>
