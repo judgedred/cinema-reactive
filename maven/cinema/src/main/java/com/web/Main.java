@@ -49,24 +49,18 @@ public class Main extends HttpServlet
             {
                 /*List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", filmshowLst);*/
-                Map<LocalDate, List<Filmshow>> filmshowMap = new HashMap<>();
                 List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                List<Filmshow> filteredLst = new LinkedList<>();
                 for(Filmshow f : filmshowLst)
                 {
                     Date javaDate = f.getDateTime();
                     LocalDate date = new LocalDate(javaDate);
                     if(date.equals(LocalDate.now()))
                     {
-                        List<Filmshow> dateGroupedFilmshow = filmshowMap.get(date);
-                        if(dateGroupedFilmshow == null)
-                        {
-                            dateGroupedFilmshow = new ArrayList<>();
-                            filmshowMap.put(date, dateGroupedFilmshow);
-                        }
-                        dateGroupedFilmshow.add(f);
+                        filteredLst.add(f);
                     }
                 }
-                session.setAttribute("filmshowToday", filmshowMap);
+                session.setAttribute("filmshowToday", filteredLst);
 
             }
             catch(Exception e)
@@ -178,7 +172,7 @@ public class Main extends HttpServlet
                 session.setAttribute("hallList", hallList);
                 int filmId = Integer.parseInt(request.getParameter("filmSelect"));
                 int hallId = Integer.parseInt(request.getParameter("hallSelect"));
-                Date dateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").parse(request.getParameter("dateTime"));
+                Date dateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").parse(request.getParameter("date-time"));
                 Film film = filmDao.getFilmById(filmId);
                 Hall hall = hallDao.getHallById(hallId);
                 Filmshow filmshow = new Filmshow();

@@ -134,3 +134,7 @@ body {
     -webkit-border-radius: 0 0 5px 5px;
     border-radius: 0 0 5px 5px;
 }
+
+div.ui-datepicker{
+    font-size:12px;
+}

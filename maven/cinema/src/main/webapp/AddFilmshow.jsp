@@ -6,7 +6,17 @@
 <html>
 <head>
 	<title>Add Filmshow</title>
+    <link rel="stylesheet" href="../resources/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="../resources/css/jquery-ui-timepicker-addon.css"/>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
+    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery-ui-1.11.4.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#date-time").datetimepicker({firstDay: 1, showOtherMonths: true, selectOtherMonths: true, dateFormat: "yy-mm-dd"});
+        });
+    </script>
 </head>
 <body>
 <div class="wrapper">
@@ -40,7 +50,7 @@
 				}
 			%>
 		</p></select>
-		<p>Выберите дату<input type="datetime" name="dateTime"></p>
+		<p>Выберите дату<input type="datetime" name="date-time" id="date-time" size="25"></p>
 		<p><input type="submit" value="Добавить"></p>
 	</form>
 </div>
