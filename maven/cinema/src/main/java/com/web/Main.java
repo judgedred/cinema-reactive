@@ -47,8 +47,27 @@ public class Main extends HttpServlet
         {
             try
             {
+                /*List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                session.setAttribute("filmshowList", filmshowLst);*/
+                Map<LocalDate, List<Filmshow>> filmshowMap = new HashMap<>();
                 List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
-                session.setAttribute("filmshowList", filmshowLst);
+                for(Filmshow f : filmshowLst)
+                {
+                    Date javaDate = f.getDateTime();
+                    LocalDate date = new LocalDate(javaDate);
+                    if(date.equals(LocalDate.now()))
+                    {
+                        List<Filmshow> dateGroupedFilmshow = filmshowMap.get(date);
+                        if(dateGroupedFilmshow == null)
+                        {
+                            dateGroupedFilmshow = new ArrayList<>();
+                            filmshowMap.put(date, dateGroupedFilmshow);
+                        }
+                        dateGroupedFilmshow.add(f);
+                    }
+                }
+                session.setAttribute("filmshowToday", filmshowMap);
+
             }
             catch(Exception e)
             {
@@ -63,7 +82,7 @@ public class Main extends HttpServlet
         {
             try
             {
-                Map<LocalDate, List<Filmshow>> filmshowMap = new HashMap<>();
+                Map<LocalDate, List<Filmshow>> filmshowMap = new TreeMap<>();
                 List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
                 for(Filmshow f : filmshowLst)
                 {

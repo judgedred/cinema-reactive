@@ -1,6 +1,9 @@
 ﻿<%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="org.joda.time.LocalDate" %>
+<%@ page import="org.joda.time.format.DateTimeFormatter" %>
+<%@ page import="org.joda.time.format.DateTimeFormat" %>
 
 <html>
 <head>
@@ -38,14 +41,22 @@
 <jsp:include page="top.jsp"/>
 
 	<h2>Сегодня в кино</h2>
-		
-	<%	
-		List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
+
+    <%
+        Map<LocalDate, List<Filmshow>> filmshowMap = (Map<LocalDate, List<Filmshow>>)session.getAttribute("filmshowToday");
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
+        for(LocalDate date : filmshowMap.keySet())
+        {
+    %>
+    <p><%=date.toString(fmt)%></p>
+    <%
+        List<Filmshow> filmshowLst = filmshowMap.get(date);
         for(Filmshow f : filmshowLst)
         {
     %>
             <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
     <%
+        }
         }
     %>
 

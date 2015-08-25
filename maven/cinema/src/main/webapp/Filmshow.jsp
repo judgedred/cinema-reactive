@@ -2,6 +2,8 @@
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="org.joda.time.LocalDate" %>
+<%@ page import="org.joda.time.format.DateTimeFormat" %>
+<%@ page import="org.joda.time.format.DateTimeFormatter" %>
 
 <html>
 <head>
@@ -42,10 +44,11 @@
 
     <%
         Map<LocalDate, List<Filmshow>> filmshowMap = (Map<LocalDate, List<Filmshow>>)session.getAttribute("filmshowMap");
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
         for(LocalDate date : filmshowMap.keySet())
         {
     %>
-    <p><%=date%></p>
+    <p><%=date.toString(fmt)%></p>
     <%
         List<Filmshow> filmshowLst = filmshowMap.get(date);
         for(Filmshow f : filmshowLst)
