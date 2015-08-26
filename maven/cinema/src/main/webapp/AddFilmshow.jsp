@@ -50,7 +50,7 @@
 				}
 			%>
 		</p></select>
-		<p>Выберите дату<input type="datetime" name="date-time" id="date-time" size="25"></p>
+		<p>Выберите дату<input type="text" name="date-time" id="date-time" size="25"></p>
 		<p><input type="submit" value="Добавить"></p>
 	</form>
 </div>

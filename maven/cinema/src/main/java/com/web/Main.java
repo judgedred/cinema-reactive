@@ -172,7 +172,8 @@ public class Main extends HttpServlet
                 session.setAttribute("hallList", hallList);
                 int filmId = Integer.parseInt(request.getParameter("filmSelect"));
                 int hallId = Integer.parseInt(request.getParameter("hallSelect"));
-                Date dateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").parse(request.getParameter("date-time"));
+//                Date dateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").parse(request.getParameter("date-time"));
+                Date dateTime = new SimpleDateFormat("yyyy-MM-ddHH:mm").parse(request.getParameter("date-time"));
                 Film film = filmDao.getFilmById(filmId);
                 Hall hall = hallDao.getHallById(hallId);
                 Filmshow filmshow = new Filmshow();
