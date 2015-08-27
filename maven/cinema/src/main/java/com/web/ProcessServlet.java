@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -99,12 +101,16 @@ public class ProcessServlet extends HttpServlet
                 List<User> ls = userDao.getUserAll();
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                digest.reset();
+                byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                if(login != null && !login.isEmpty() && password != null && !password.isEmpty())
+                if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty())
                 {
                     for(User u : ls)
                     {
-                        if(u.getLogin().equals(login) && u.getPassword().equals(password))
+                        if(u.getLogin().equals(login) && u.getPassword().equals(passwordHash))
                         {
                             session.setAttribute("validUser", u);
                         }

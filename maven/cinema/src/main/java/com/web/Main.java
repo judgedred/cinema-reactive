@@ -7,10 +7,13 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 
 @Controller
@@ -605,11 +608,15 @@ public class Main extends HttpServlet
                 String login = request.getParameter("login-reg");
                 String password = request.getParameter("password-reg");
                 String email = request.getParameter("email-reg");
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                digest.reset();
+                byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
+                if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty() && email != null && !email.isEmpty())
                 {
                     user.setLogin(login);
-                    user.setPassword(password);
+                    user.setPassword(passwordHash);
                     user.setEmail(email);
                     userDao.create(user);
                 }
@@ -630,11 +637,15 @@ public class Main extends HttpServlet
                 String login = request.getParameter("user-add-login");
                 String password = request.getParameter("user-add-password");
                 String email = request.getParameter("user-add-email");
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                digest.reset();
+                byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                if(login != null && !login.isEmpty() && password != null && !password.isEmpty() && email != null && !email.isEmpty())
+                if(login != null && !login.isEmpty() && passwordHash != null && !password.isEmpty() && email != null && !email.isEmpty())
                 {
                     user.setLogin(login);
-                    user.setPassword(password);
+                    user.setPassword(passwordHash);
                     user.setEmail(email);
                     userDao.create(user);
                 }
@@ -729,13 +740,17 @@ public class Main extends HttpServlet
                 List<User> ls = userDao.getUserAll();
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                digest.reset();
+                byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                if(login.equals("admin") && password.equals("admin"))
+                if(login.equals("admin") && passwordHash.equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
                 {
 
                     for(User u : ls)
                     {
-                        if(u.getLogin().equals(login) && u.getPassword().equals(password))
+                        if(u.getLogin().equals(login) && u.getPassword().equals(passwordHash))
                         {
                             session.setAttribute("adminUser", u);
                             RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
