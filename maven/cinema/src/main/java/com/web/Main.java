@@ -750,11 +750,15 @@ public class Main extends HttpServlet
 
                     for(User u : ls)
                     {
-                        if(u.getLogin().equals(login) && u.getPassword().equals(passwordHash))
+                        if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
                         {
                             session.setAttribute("adminUser", u);
                             RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
                             dispatcher.forward(request, response);
+                        }
+                        else
+                        {
+                            response.getWriter().print("Access denied");
                         }
                     }
                 }

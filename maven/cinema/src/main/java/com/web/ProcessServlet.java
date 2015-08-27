@@ -110,7 +110,7 @@ public class ProcessServlet extends HttpServlet
                 {
                     for(User u : ls)
                     {
-                        if(u.getLogin().equals(login) && u.getPassword().equals(passwordHash))
+                        if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
                         {
                             session.setAttribute("validUser", u);
                         }
