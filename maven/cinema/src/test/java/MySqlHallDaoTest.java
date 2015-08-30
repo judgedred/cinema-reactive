@@ -2,6 +2,8 @@ import com.dao.*;
 import com.domain.*;
 import com.mysql.*;
 import java.util.*;
+
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -31,7 +33,7 @@ public class MySqlHallDaoTest
 	public void testCreate() throws DaoException
 	{
 		Hall hall = new Hall();
-		hall.setHallNumber(4);
+		hall.setHallNumber(10);
 		hall.setHallName("testCreatePassed");
 		int numberExpected = hall.getHallNumber();
 		String hallNameExpected = hall.getHallName();
@@ -46,9 +48,12 @@ public class MySqlHallDaoTest
 	@Test
 	public void testUpdate() throws DaoException
 	{
-		Hall hall = new Hall();
-		hall.setHallId(2);
-		hall.setHallNumber(777);
+        Hall hall = new Hall();
+        hall.setHallNumber(10);
+        hall.setHallName("hallForUpdate");
+        Hall hallForUpdate = hallDao.create(hall);
+		hall.setHallId(hallForUpdate.getHallId());
+		hall.setHallNumber(11);
 		hall.setHallName("testUpdatePassed");
 		int numberExpected = hall.getHallNumber();
 		String hallNameExpected = hall.getHallName();
@@ -64,8 +69,11 @@ public class MySqlHallDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		Hall hall = new Hall();
-		hall.setHallId(3);
+        Hall hall = new Hall();
+        hall.setHallNumber(12);
+        hall.setHallName("hallForDelete");
+        Hall hallForDelete = hallDao.create(hall);
+		hall.setHallId(hallForDelete.getHallId());
 		hallDao.delete(hall);
 		Assert.assertNull(hallDao.getHallById(hall.getHallId()));
 	}
@@ -77,4 +85,24 @@ public class MySqlHallDaoTest
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);
 	}
+
+    @After
+    public void cleanUp()
+    {
+        try
+        {
+            List<Hall> lst = hallDao.getHallAll();
+            for(Hall h : lst)
+            {
+                if(h.getHallName().equals("testCreatePassed") || h.getHallName().equals("testUpdatePassed"))
+                {
+                    hallDao.delete(h);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

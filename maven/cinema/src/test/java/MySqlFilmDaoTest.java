@@ -2,6 +2,8 @@ import com.dao.*;
 import com.domain.*;
 import com.mysql.*;
 import java.util.*;
+
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -31,8 +33,8 @@ public class MySqlFilmDaoTest
 	public void testCreate() throws DaoException
 	{
 		Film film = new Film();
-		film.setFilmName("Интерстеллар");
-		film.setDescription("Сквозь пространство и время");
+		film.setFilmName("testCreatePassed");
+		film.setDescription("testCreatePassed");
 		String filmNameExpected = film.getFilmName();
 		String descriptionExpected = film.getDescription();
 		Film filmTest = filmDao.create(film);
@@ -47,13 +49,15 @@ public class MySqlFilmDaoTest
 	public void testUpdate() throws DaoException
 	{
 		Film film = new Film();
-		film.setFilmId(2);
-		film.setFilmName("Кибер");
-		film.setDescription("Экшн");
+        film.setFilmName("filmForUpdate");
+        film.setDescription("filmForUpdate");
+        Film filmForUpdate = filmDao.create(film);
+		film.setFilmName("testUpdatePassed");
+		film.setDescription("testUpdatePassed");
 		String filmNameExpected = film.getFilmName();
 		String descriptionExpected = film.getDescription();
-		filmDao.update(film);
-		Film filmTest = filmDao.getFilmById(film.getFilmId());
+		filmDao.update(filmForUpdate);
+		Film filmTest = filmDao.getFilmById(filmForUpdate.getFilmId());
 		Assert.assertNotNull(filmTest);	
 		String filmNameResult = filmTest.getFilmName();
 		String descriptionResult = filmTest.getDescription();
@@ -64,10 +68,12 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		Film film = new Film();
-		film.setFilmId(3);
-		filmDao.delete(film);
-		Assert.assertNull(filmDao.getFilmById(3));
+        Film film = new Film();
+        film.setFilmName("filmForDelete");
+        film.setDescription("filmForDelete");
+        Film filmForDelete = filmDao.create(film);
+		filmDao.delete(filmForDelete);
+		Assert.assertNull(filmDao.getFilmById(filmForDelete.getFilmId()));
 	}
 
 	@Test
@@ -77,4 +83,24 @@ public class MySqlFilmDaoTest
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);
 	}
+
+    @After
+    public void cleanUp()
+    {
+        try
+        {
+            List<Film> lst = filmDao.getFilmAll();
+            for(Film f : lst)
+            {
+                if(f.getFilmName().equals("testCreatePassed") || f.getFilmName().equals("testUpdatePassed"))
+                {
+                    filmDao.delete(f);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

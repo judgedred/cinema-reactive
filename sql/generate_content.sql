@@ -1,7 +1,7 @@
 use cinema;
 Insert Into User(login, password, email) Values("admin", SHA1("admin"), "admin@gmail.com");
-Insert Into User(login, password, email) Values("testUpdate", SHA1("testUpdate"), "testUpdate@gmail.com");
-Insert Into User(login, password, email) Values("testDelete", SHA1("testDelete"), "testDelete@gmail.com");
+Insert Into User(login, password, email) Values("test", SHA1("test"), "test@gmail.com");
+Insert Into User(login, password, email) Values("test2", SHA1("test2"), "test2@gmail.com");
 Insert Into Hall(hall_number, hall_name) Values(1, "Большой зал");
 Insert Into Hall(hall_number, hall_name) Values(2, "Зал повышенной комфортности");
 Insert Into Hall(hall_number, hall_name) Values(3, "Зал 5D");

@@ -29,16 +29,6 @@ public class MySqlUserDaoTest
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private SessionFactory sessionFactory;
-    private Session session;
-
-    @Before
-    public void setUp()
-    {
-        session = sessionFactory.openSession();
-    }
-
     @Test
 	public void testGetUserById() throws DaoException
 	{
@@ -92,21 +82,19 @@ public class MySqlUserDaoTest
             String passwordHash = DatatypeConverter.printHexBinary(hash);
             user.setPassword(passwordHash);
             user.setEmail("userForUpdate@gmail.com");
-            userDao.create(user);
-            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-            user.setUserId(lastId);
-            user.setLogin("testUpdatePassed");
+            User userForUpdate = userDao.create(user);
+            userForUpdate.setLogin("testUpdatePassed");
             password = "testUpdatePassed";
             digest.reset();
             hash = digest.digest(password.getBytes("UTF-8"));
             passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            user.setEmail("testUpdatePassed@gmail.com");
-            String loginExpected = user.getLogin();
-            String passwordExpected = user.getPassword();
-            String emailExpected = user.getEmail();
-            userDao.update(user);
-            User userTest = userDao.getUserById(user.getUserId());
+            userForUpdate.setPassword(passwordHash);
+            userForUpdate.setEmail("testUpdatePassed@gmail.com");
+            String loginExpected = userForUpdate.getLogin();
+            String passwordExpected = userForUpdate.getPassword();
+            String emailExpected = userForUpdate.getEmail();
+            userDao.update(userForUpdate);
+            User userTest = userDao.getUserById(userForUpdate.getUserId());
             Assert.assertNotNull(userTest);
             String loginResult = userTest.getLogin();
             String passwordResult = userTest.getPassword();
@@ -135,11 +123,9 @@ public class MySqlUserDaoTest
             String passwordHash = DatatypeConverter.printHexBinary(hash);
             user.setPassword(passwordHash);
             user.setEmail("userForDelete@gmail.com");
-            userDao.create(user);
-            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-            user.setUserId(lastId);
-            userDao.delete(user);
-            Assert.assertNull(userDao.getUserById(user.getUserId()));
+            User userForDelete = userDao.create(user);
+            userDao.delete(userForDelete);
+            Assert.assertNull(userDao.getUserById(userForDelete.getUserId()));
         }
         catch(Exception e)
         {
@@ -156,11 +142,22 @@ public class MySqlUserDaoTest
 	}
 
     @After
-    public void close()
+    public void cleanUp()
     {
-        if(session != null && session.isOpen())
+        try
         {
-            session.close();
+            List<User> lst = userDao.getUserAll();
+            for(User u : lst)
+            {
+                if(u.getLogin().equals("testCreatePassed") || u.getLogin().equals("testUpdatePassed"))
+                {
+                    userDao.delete(u);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }
