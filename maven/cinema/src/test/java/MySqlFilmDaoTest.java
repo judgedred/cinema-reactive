@@ -49,15 +49,13 @@ public class MySqlFilmDaoTest
 	public void testUpdate() throws DaoException
 	{
 		Film film = new Film();
-        film.setFilmName("filmForUpdate");
-        film.setDescription("filmForUpdate");
-        Film filmForUpdate = filmDao.create(film);
+		film.setFilmId(4);
 		film.setFilmName("testUpdatePassed");
 		film.setDescription("testUpdatePassed");
 		String filmNameExpected = film.getFilmName();
 		String descriptionExpected = film.getDescription();
-		filmDao.update(filmForUpdate);
-		Film filmTest = filmDao.getFilmById(filmForUpdate.getFilmId());
+		filmDao.update(film);
+		Film filmTest = filmDao.getFilmById(film.getFilmId());
 		Assert.assertNotNull(filmTest);	
 		String filmNameResult = filmTest.getFilmName();
 		String descriptionResult = filmTest.getDescription();
@@ -68,12 +66,10 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-        Film film = new Film();
-        film.setFilmName("filmForDelete");
-        film.setDescription("filmForDelete");
-        Film filmForDelete = filmDao.create(film);
-		filmDao.delete(filmForDelete);
-		Assert.assertNull(filmDao.getFilmById(filmForDelete.getFilmId()));
+		Film film = new Film();
+		film.setFilmId(5);
+		filmDao.delete(film);
+		Assert.assertNull(filmDao.getFilmById(film.getFilmId()));
 	}
 
 	@Test
@@ -85,22 +81,15 @@ public class MySqlFilmDaoTest
 	}
 
     @After
-    public void cleanUp()
+    public void cleanUp() throws DaoException
     {
-        try
+        List<Film> lst = filmDao.getFilmAll();
+        for(Film f : lst)
         {
-            List<Film> lst = filmDao.getFilmAll();
-            for(Film f : lst)
+            if(f.getFilmName().equals("testCreatePassed") || f.getFilmName().equals("testUpdatePassed"))
             {
-                if(f.getFilmName().equals("testCreatePassed") || f.getFilmName().equals("testUpdatePassed"))
-                {
-                    filmDao.delete(f);
-                }
+                filmDao.delete(f);
             }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
         }
     }
 }

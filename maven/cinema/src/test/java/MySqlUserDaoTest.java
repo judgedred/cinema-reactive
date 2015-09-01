@@ -1,14 +1,10 @@
 import com.dao.*;
 import com.domain.*;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.*;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -29,7 +25,7 @@ public class MySqlUserDaoTest
     @Autowired
     private UserDao userDao;
 
-    @Test
+	@Test
 	public void testGetUserById() throws DaoException
 	{
 		User userTest = userDao.getUserById(1);
@@ -74,27 +70,20 @@ public class MySqlUserDaoTest
         try
         {
             User user = new User();
-            user.setLogin("userForUpdate");
-            String password = "userForUpdate";
+            user.setUserId(3);
+            user.setLogin("testUpdatePassed");
+            String password = "testUpdatePassed";
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             digest.reset();
             byte[] hash = digest.digest(password.getBytes("UTF-8"));
             String passwordHash = DatatypeConverter.printHexBinary(hash);
             user.setPassword(passwordHash);
-            user.setEmail("userForUpdate@gmail.com");
-            User userForUpdate = userDao.create(user);
-            userForUpdate.setLogin("testUpdatePassed");
-            password = "testUpdatePassed";
-            digest.reset();
-            hash = digest.digest(password.getBytes("UTF-8"));
-            passwordHash = DatatypeConverter.printHexBinary(hash);
-            userForUpdate.setPassword(passwordHash);
-            userForUpdate.setEmail("testUpdatePassed@gmail.com");
-            String loginExpected = userForUpdate.getLogin();
-            String passwordExpected = userForUpdate.getPassword();
-            String emailExpected = userForUpdate.getEmail();
-            userDao.update(userForUpdate);
-            User userTest = userDao.getUserById(userForUpdate.getUserId());
+            user.setEmail("testUpdatePassed@gmail.com");
+            String loginExpected = user.getLogin();
+            String passwordExpected = user.getPassword();
+            String emailExpected = user.getEmail();
+            userDao.update(user);
+            User userTest = userDao.getUserById(user.getUserId());
             Assert.assertNotNull(userTest);
             String loginResult = userTest.getLogin();
             String passwordResult = userTest.getPassword();
@@ -112,25 +101,10 @@ public class MySqlUserDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-        try
-        {
-            User user = new User();
-            user.setLogin("userForDelete");
-            String password = "userForDelete";
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            String passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            user.setEmail("userForDelete@gmail.com");
-            User userForDelete = userDao.create(user);
-            userDao.delete(userForDelete);
-            Assert.assertNull(userDao.getUserById(userForDelete.getUserId()));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+		User user = new User();
+		user.setUserId(4);
+		userDao.delete(user);
+		Assert.assertNull(userDao.getUserById(user.getUserId()));
 	}
 
 	@Test
@@ -142,22 +116,15 @@ public class MySqlUserDaoTest
 	}
 
     @After
-    public void cleanUp()
+    public void cleanUp() throws DaoException
     {
-        try
+        List<User> lst = userDao.getUserAll();
+        for(User u : lst)
         {
-            List<User> lst = userDao.getUserAll();
-            for(User u : lst)
+            if(u.getLogin().equals("testCreatePassed") || u.getLogin().equals("testUpdatePassed"))
             {
-                if(u.getLogin().equals("testCreatePassed") || u.getLogin().equals("testUpdatePassed"))
-                {
-                    userDao.delete(u);
-                }
+                userDao.delete(u);
             }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
         }
     }
 }

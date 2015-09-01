@@ -33,7 +33,7 @@ public class MySqlHallDaoTest
 	public void testCreate() throws DaoException
 	{
 		Hall hall = new Hall();
-		hall.setHallNumber(10);
+		hall.setHallNumber(4);
 		hall.setHallName("testCreatePassed");
 		int numberExpected = hall.getHallNumber();
 		String hallNameExpected = hall.getHallName();
@@ -48,12 +48,9 @@ public class MySqlHallDaoTest
 	@Test
 	public void testUpdate() throws DaoException
 	{
-        Hall hall = new Hall();
-        hall.setHallNumber(10);
-        hall.setHallName("hallForUpdate");
-        Hall hallForUpdate = hallDao.create(hall);
-		hall.setHallId(hallForUpdate.getHallId());
-		hall.setHallNumber(11);
+		Hall hall = new Hall();
+		hall.setHallId(3);
+		hall.setHallNumber(777);
 		hall.setHallName("testUpdatePassed");
 		int numberExpected = hall.getHallNumber();
 		String hallNameExpected = hall.getHallName();
@@ -69,11 +66,8 @@ public class MySqlHallDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-        Hall hall = new Hall();
-        hall.setHallNumber(12);
-        hall.setHallName("hallForDelete");
-        Hall hallForDelete = hallDao.create(hall);
-		hall.setHallId(hallForDelete.getHallId());
+		Hall hall = new Hall();
+		hall.setHallId(4);
 		hallDao.delete(hall);
 		Assert.assertNull(hallDao.getHallById(hall.getHallId()));
 	}
@@ -87,22 +81,15 @@ public class MySqlHallDaoTest
 	}
 
     @After
-    public void cleanUp()
+    public void cleanUp() throws DaoException
     {
-        try
+        List<Hall> lst = hallDao.getHallAll();
+        for(Hall h : lst)
         {
-            List<Hall> lst = hallDao.getHallAll();
-            for(Hall h : lst)
+            if(h.getHallName().equals("testCreatePassed") || h.getHallName().equals("testUpdatePassed"))
             {
-                if(h.getHallName().equals("testCreatePassed") || h.getHallName().equals("testUpdatePassed"))
-                {
-                    hallDao.delete(h);
-                }
+                hallDao.delete(h);
             }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
         }
     }
 }

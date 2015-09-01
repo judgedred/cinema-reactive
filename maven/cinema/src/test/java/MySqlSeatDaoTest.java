@@ -3,6 +3,7 @@ import com.dao.HallDao;
 import com.dao.SeatDao;
 import com.domain.Hall;
 import com.domain.Seat;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +59,7 @@ public class MySqlSeatDaoTest
     public void testUpdate() throws DaoException
     {
         Seat seat = new Seat();
-        seat.setSeatId(2);
+        seat.setSeatId(27);
         seat.setSeatNumber(555);
         seat.setRowNumber(555);
         Hall hall = hallDao.getHallById(2);
@@ -80,7 +81,7 @@ public class MySqlSeatDaoTest
     public void testDelete() throws DaoException
     {
         Seat seat = new Seat();
-        seat.setSeatId(4);
+        seat.setSeatId(28);
         seatDao.delete(seat);
         Assert.assertNull(seatDao.getSeatById(seat.getSeatId()));
     }
@@ -91,5 +92,18 @@ public class MySqlSeatDaoTest
         List<Seat> listTest = seatDao.getSeatAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
+    }
+
+    @After
+    public void cleanUp() throws DaoException
+    {
+        List<Seat> lst = seatDao.getSeatAll();
+        for(Seat s : lst)
+        {
+            if(s.getSeatNumber().equals(777) || s.getSeatNumber().equals(555))
+            {
+                seatDao.delete(s);
+            }
+        }
     }
 }

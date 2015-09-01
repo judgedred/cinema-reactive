@@ -66,7 +66,7 @@ public class MySqlTicketDaoTest
         Seat seat = seatDao.getSeatById(2);
         ticket.setFilmshow(filmshow);
         ticket.setSeat(seat);
-        ticket.setPrice(777);
+        ticket.setPrice(50000);
         Filmshow filmshowExpected = ticket.getFilmshow();
         Seat seatExpected = ticket.getSeat();
         float priceExpected = ticket.getPrice();
@@ -85,7 +85,7 @@ public class MySqlTicketDaoTest
     public void testDelete() throws DaoException
     {
         Ticket ticket = new Ticket();
-        ticket.setTicketId(4);
+        ticket.setTicketId(6);
         ticketDao.delete(ticket);
         Assert.assertNull(ticketDao.getTicketById(ticket.getTicketId()));
     }
