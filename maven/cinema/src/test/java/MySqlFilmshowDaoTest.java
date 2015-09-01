@@ -15,8 +15,6 @@ import java.text.SimpleDateFormat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-@Transactional
 public class MySqlFilmshowDaoTest
 {
     @Autowired

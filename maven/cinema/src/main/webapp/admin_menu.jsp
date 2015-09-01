@@ -43,5 +43,6 @@
             <li><a href="DeleteReservation" title="Delete">Удалить</a></li>
         </ul>
     </li>
+    <li><a href="Logout" title="Logout">Выход</a></li>
     <div class="clear"></div>
 </ul>

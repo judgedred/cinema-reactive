@@ -15,8 +15,6 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-@Transactional
 public class MySqlTicketDaoTest
 {
     @Autowired

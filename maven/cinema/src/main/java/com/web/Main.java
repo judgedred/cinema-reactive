@@ -5,6 +5,7 @@ import com.mysql.*;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.UsesSunHttpServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -50,8 +51,6 @@ public class Main extends HttpServlet
         {
             try
             {
-                /*List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
-                session.setAttribute("filmshowList", filmshowLst);*/
                 List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
                 List<Filmshow> filteredLst = new LinkedList<>();
                 for(Filmshow f : filmshowLst)
@@ -122,8 +121,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddFilm.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddFilm.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteFilm"))
@@ -175,7 +183,6 @@ public class Main extends HttpServlet
                 session.setAttribute("hallList", hallList);
                 int filmId = Integer.parseInt(request.getParameter("filmSelect"));
                 int hallId = Integer.parseInt(request.getParameter("hallSelect"));
-//                Date dateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").parse(request.getParameter("date-time"));
                 Date dateTime = new SimpleDateFormat("yyyy-MM-ddHH:mm").parse(request.getParameter("date-time"));
                 Film film = filmDao.getFilmById(filmId);
                 Hall hall = hallDao.getHallById(hallId);
@@ -352,7 +359,7 @@ public class Main extends HttpServlet
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
                 List<Ticket> filteredLs = new LinkedList<Ticket>();
-                if(filmshow != null && ticketLs != null)                // TODO http://zeroturnaround.com/rebellabs/java-8-explained-applying-lambdas-to-java-collections/
+                if(filmshow != null && ticketLs != null)
                 {
                     for(Ticket t : ticketLs)
                     {
@@ -692,44 +699,22 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/UserList.jsp");
-            dispatcher.forward(request, response);
-        }
-
-       /* if(url.equals("/Login"))
-        {
-            try
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
             {
-                session.setAttribute("userDao", userDao);
-
-                List<User> ls = userDao.getUserAll();
-                Boolean userValid = false;
-                String login = request.getParameter("login-auth");
-                String password = request.getParameter("password-auth");
-
-                if(login != null && !login.isEmpty() && password != null && !password.isEmpty())
-                {
-                    for(User u : ls)
-                    {
-                        if(u.getLogin().equals(login) && u.getPassword().equals(password))
-                        {
-                            session.setAttribute("validUser", u);
-                        }
-                    }
-                }
-                response.sendRedirect(request.getParameter("from"));
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/UserList.jsp");
+                dispatcher.forward(request, response);
             }
-            catch(Exception e)
+            else
             {
-                e.printStackTrace();
-            }*/
-           /* RequestDispatcher dispatcher = request.getRequestDispatcher("ProcessServlet");
-            dispatcher.forward(request, response);*/
- //       }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
+        }
 
         if(url.equals("/Admin"))
         {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Admin.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Admin.jsp");
             dispatcher.forward(request, response);
         }
 
@@ -740,37 +725,60 @@ public class Main extends HttpServlet
                 List<User> ls = userDao.getUserAll();
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
-                MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                digest.reset();
-                byte[] hash = digest.digest(password.getBytes("UTF-8"));
-                String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                if(login.equals("admin") && passwordHash.equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
+                if(login != null && password != null)
                 {
+                    MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                    digest.reset();
+                    byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                    String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                    for(User u : ls)
+                    if(login.equals("admin") && passwordHash.equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
                     {
-                        if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
+                        for(User u : ls)
                         {
-                            session.setAttribute("adminUser", u);
-                            RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
-                            dispatcher.forward(request, response);
-                        }
-                        else
-                        {
-                            response.getWriter().print("Access denied");
+                            if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
+                            {
+                                session.setAttribute("adminUser", u);
+                                RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
+                                dispatcher.forward(request, response);
+                            }
+                            else
+                            {
+                                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                                dispatcher.forward(request, response);
+                            }
                         }
                     }
+                    else
+                    {
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                        dispatcher.forward(request, response);
+                    }
+                }
+                User admin = (User)session.getAttribute("adminUser");
+                if(admin != null)
+                {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
+                    dispatcher.forward(request, response);
                 }
                 else
                 {
-                    response.getWriter().print("Access denied");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                    dispatcher.forward(request, response);
                 }
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
+        }
+
+        if(url.equals("/Admin/Logout"))
+        {
+            session.invalidate();
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Admin.jsp");
+            dispatcher.forward(request, response);
         }
 
         if(url.equals("/ReserveTicket"))

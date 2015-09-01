@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-@Transactional
 public class MySqlHallDaoTest
 {
     @Autowired

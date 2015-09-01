@@ -32,14 +32,6 @@
 
     <li><a href="" title="News">Новости</a></li>
     <li><a href="Filmshow" title="Filmshow">Сеансы</a></li>
-    <li><a href="" title="5D">5D</a>
-        <ul>
-            <li><a href="" title="Websites">Websites</a></li>
-            <li><a href="" title="Webshops">Webshops</a></li>
-            <li><a href="" title="SEO">SEO</a></li>
-            <li><a href="" title="Responsive webdesign">Responsive webdesign</a></li>
-        </ul>
-    </li>
     <li><a href="" title="Films">Фильмы</a></li>
     <li><a href="" title="Contact">О кинотеатре</a></li>
 
