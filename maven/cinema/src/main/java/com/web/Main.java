@@ -153,8 +153,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteFilm.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteFilm.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/FilmList"))
@@ -168,9 +177,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/FilmList.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/FilmList.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/AddFilmshow"))
@@ -200,8 +217,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddFilmshow.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddFilmshow.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteFilmshow"))
@@ -223,8 +249,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteFilmshow.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteFilmshow.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/FilmshowList"))
@@ -238,9 +273,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/FilmshowList.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/FilmshowList.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/AddTicket"))
@@ -273,8 +316,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicket.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicket.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/AddTicketAll"))
@@ -311,8 +363,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicketAll.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddTicketAll.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteTicket"))
@@ -338,8 +399,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteTicket.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteTicket.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/TicketList"))
@@ -375,8 +445,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/TicketList.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/TicketList.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/AddReservation"))
@@ -408,8 +487,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddReservation.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddReservation.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteReservation"))
@@ -435,8 +523,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteReservation.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteReservation.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/ReservationList"))
@@ -472,8 +569,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/ReservationList.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/ReservationList.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/AddSeat"))
@@ -505,8 +611,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddSeat.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddSeat.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteSeat"))
@@ -528,8 +643,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteSeat.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteSeat.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/SeatList"))
@@ -543,8 +667,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/SeatList.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/SeatList.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/AddHall"))
@@ -565,8 +698,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddHall.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddHall.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteHall"))
@@ -588,8 +730,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteHall.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteHall.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/HallList"))
@@ -603,8 +754,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/HallList.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/HallList.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Register"))
@@ -661,8 +821,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/AddUser.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AddUser.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/DeleteUser"))
@@ -684,8 +853,17 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteUser.jsp");
-            dispatcher.forward(request, response);
+            User admin = (User)session.getAttribute("adminUser");
+            if(admin != null)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DeleteUser.jsp");
+                dispatcher.forward(request, response);
+            }
+            else
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
         if(url.equals("/Admin/UserList"))
