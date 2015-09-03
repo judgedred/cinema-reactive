@@ -31,16 +31,16 @@
             <li><a href="DeleteHall" title="Delete">Удалить</a></li>
         </ul>
     </li>
-    <li><a href="UserList" title="Users">Пользователи</a>
-    <ul>
-        <li><a href="AddUser" title="Add">Добавить</a></li>
-        <li><a href="DeleteUser" title="Delete">Удалить</a></li>
-    </ul>
-    </li>
     <li><a href="ReservationList" title="Reservations">Брони</a>
         <ul>
             <li><a href="AddReservation" title="Add">Добавить</a></li>
             <li><a href="DeleteReservation" title="Delete">Удалить</a></li>
+        </ul>
+    </li>
+    <li><a href="UserList" title="Users">Пользователи</a>
+        <ul>
+            <li><a href="AddUser" title="Add">Добавить</a></li>
+            <li><a href="DeleteUser" title="Delete">Удалить</a></li>
         </ul>
     </li>
     <li><a href="Logout" title="Logout">Выход</a></li>

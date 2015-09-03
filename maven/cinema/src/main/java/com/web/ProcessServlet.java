@@ -186,37 +186,37 @@ public class ProcessServlet extends HttpServlet
         }
 
         if(url.equals("/TicketCheck"))
+    {
+        try
         {
-            try
+            List<Reservation> reservationLst = reservationDao.getReservationAll();
+            if(request.getParameter("ticket-select") != null)
             {
-                List<Reservation> reservationLst = reservationDao.getReservationAll();
-                if(request.getParameter("ticket-select") != null)
+                int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                Ticket ticket = ticketDao.getTicketById(ticketId);
+                boolean ticketFree = true;
+                if(ticket != null)
                 {
-                    int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
-                    Ticket ticket = ticketDao.getTicketById(ticketId);
-                    boolean ticketFree = true;
-                    if(ticket != null)
+                    for(Reservation r : reservationLst)
                     {
-                        for(Reservation r : reservationLst)
+                        if(r.getTicket().equals(ticket))
                         {
-                            if(r.getTicket().equals(ticket))
-                            {
-                                ticketFree = false;
-                                break;
-                            }
+                            ticketFree = false;
+                            break;
                         }
-                        if(!ticketFree)
-                        {
-                            response.getWriter().print("Билет зарезервирован. Сначала удалите бронь.");
-                        }
+                    }
+                    if(!ticketFree)
+                    {
+                        response.getWriter().print("Билет зарезервирован. Сначала удалите бронь.");
                     }
                 }
             }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
         }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
         if(url.equals("/TicketsFilter"))
         {
@@ -365,6 +365,72 @@ public class ProcessServlet extends HttpServlet
                         if(!hallFreeSeat)
                         {
                             response.getWriter().print("В зале имеются места. Сначала удалите места.");
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/SeatCheck"))
+        {
+            try
+            {
+                List<Ticket> ticketLst = ticketDao.getTicketAll();
+                if(request.getParameter("seat-select") != null)
+                {
+                    int seatId = Integer.parseInt(request.getParameter("seat-select"));
+                    Seat seat = seatDao.getSeatById(seatId);
+                    boolean seatFree = true;
+                    if(seat != null)
+                    {
+                        for(Ticket t : ticketLst)
+                        {
+                            if(t.getSeat().equals(seat))
+                            {
+                                seatFree = false;
+                                break;
+                            }
+                        }
+                        if(!seatFree)
+                        {
+                            response.getWriter().print("На место имеется билет. Сначала удалите билет.");
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/UserCheck"))
+        {
+            try
+            {
+                List<Reservation> reservationLst = reservationDao.getReservationAll();
+                if(request.getParameter("user-select") != null)
+                {
+                    int userId = Integer.parseInt(request.getParameter("user-select"));
+                    User user = userDao.getUserById(userId);
+                    boolean userFree = true;
+                    if(user != null)
+                    {
+                        for(Reservation r : reservationLst)
+                        {
+                            if(r.getUser().equals(user))
+                            {
+                                userFree = false;
+                                break;
+                            }
+                        }
+                        if(!userFree)
+                        {
+                            response.getWriter().print("У пользователя есть брони. Сначала удалите бронь.");
                         }
                     }
                 }

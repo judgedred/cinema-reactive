@@ -25,10 +25,6 @@
                     alert("Заполните поля");
                     event.preventDefault();
                 }
-                else
-                {
-                    alert("Билет забронирован");
-                }
             });
         });
     </script>

@@ -103,6 +103,35 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
+        if(url.equals("/Register"))
+        {
+            try
+            {
+                User user = new User();
+                String login = request.getParameter("login-reg");
+                String password = request.getParameter("password-reg");
+                String email = request.getParameter("email-reg");
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                digest.reset();
+                byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                String passwordHash = DatatypeConverter.printHexBinary(hash);
+
+                if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty() && email != null && !email.isEmpty())
+                {
+                    user.setLogin(login);
+                    user.setPassword(passwordHash);
+                    user.setEmail(email);
+                    userDao.create(user);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+            dispatcher.forward(request, response);
+        }
+
         if(url.equals("/Admin/AddFilm"))
         {
             try
@@ -767,35 +796,6 @@ public class Main extends HttpServlet
             }
         }
 
-        if(url.equals("/Register"))
-        {
-            try
-            {
-                User user = new User();
-                String login = request.getParameter("login-reg");
-                String password = request.getParameter("password-reg");
-                String email = request.getParameter("email-reg");
-                MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                digest.reset();
-                byte[] hash = digest.digest(password.getBytes("UTF-8"));
-                String passwordHash = DatatypeConverter.printHexBinary(hash);
-
-                if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty() && email != null && !email.isEmpty())
-                {
-                    user.setLogin(login);
-                    user.setPassword(passwordHash);
-                    user.setEmail(email);
-                    userDao.create(user);
-                }
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
-            dispatcher.forward(request, response);
-        }
-
         if(url.equals("/Admin/AddUser"))
         {
             try
@@ -910,28 +910,18 @@ public class Main extends HttpServlet
                     digest.reset();
                     byte[] hash = digest.digest(password.getBytes("UTF-8"));
                     String passwordHash = DatatypeConverter.printHexBinary(hash);
+                    boolean adminUser = false;
 
-                    if(login.equals("admin") && passwordHash.equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
+                    if(login.equals("admin") && passwordHash.toUpperCase().equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
                     {
                         for(User u : ls)
                         {
                             if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
                             {
                                 session.setAttribute("adminUser", u);
-                                RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMain.jsp");
-                                dispatcher.forward(request, response);
-                            }
-                            else
-                            {
-                                RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
-                                dispatcher.forward(request, response);
+                                break;
                             }
                         }
-                    }
-                    else
-                    {
-                        RequestDispatcher dispatcher = request.getRequestDispatcher("/Forbidden.jsp");
-                        dispatcher.forward(request, response);
                     }
                 }
                 User admin = (User)session.getAttribute("adminUser");
