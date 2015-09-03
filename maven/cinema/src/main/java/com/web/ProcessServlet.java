@@ -38,6 +38,12 @@ public class ProcessServlet extends HttpServlet
     @Autowired
     private MySqlReservationDao reservationDao;
 
+    @Autowired
+    private MySqlFilmDao filmDao;
+
+    @Autowired
+    private MySqlHallDao hallDao;
+
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
@@ -183,21 +189,27 @@ public class ProcessServlet extends HttpServlet
         {
             try
             {
-                List<Ticket> ticketLs = ticketDao.getTicketAll();
-                int seatId = Integer.parseInt(request.getParameter("seat-select"));
-                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
-                Boolean seatFree = true;
-                for(Ticket t : ticketLs)
+                List<Reservation> reservationLst = reservationDao.getReservationAll();
+                if(request.getParameter("ticket-select") != null)
                 {
-                    if(t.getFilmshow().getFilmshowId().equals(filmshowId) && t.getSeat().getSeatId().equals(seatId))
+                    int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                    Ticket ticket = ticketDao.getTicketById(ticketId);
+                    boolean ticketFree = true;
+                    if(ticket != null)
                     {
-                        seatFree = false;
-                        break;
+                        for(Reservation r : reservationLst)
+                        {
+                            if(r.getTicket().equals(ticket))
+                            {
+                                ticketFree = false;
+                                break;
+                            }
+                        }
+                        if(!ticketFree)
+                        {
+                            response.getWriter().print("Билет зарезервирован. Сначала удалите бронь.");
+                        }
                     }
-                }
-                if(!seatFree)
-                {
-                    response.getWriter().print("Такой билет уже есть.");
                 }
             }
             catch(Exception e)
@@ -243,6 +255,119 @@ public class ProcessServlet extends HttpServlet
                     }
                 }
                 session.setAttribute("filteredTicketList", filteredTicketLs);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/FilmCheck"))
+        {
+            try
+            {
+                List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                if(request.getParameter("film-select") != null)
+                {
+                    int filmId = Integer.parseInt(request.getParameter("film-select"));
+                    Film film = filmDao.getFilmById(filmId);
+                    boolean filmFree = true;
+                    if(film != null)
+                    {
+                        for(Filmshow f : filmshowLst)
+                        {
+                            if(f.getFilm().equals(film))
+                            {
+                                filmFree = false;
+                                break;
+                            }
+                        }
+                        if(!filmFree)
+                        {
+                            response.getWriter().print("На фильм создан сеанс. Сначала удалите сеанс.");
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/FilmshowCheck"))
+        {
+            try
+            {
+                List<Ticket> ticketLst = ticketDao.getTicketAll();
+                if(request.getParameter("filmshow-select") != null)
+                {
+                    int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                    Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                    boolean filmshowFree = true;
+                    if(filmshow != null)
+                    {
+                        for(Ticket t : ticketLst)
+                        {
+                            if(t.getFilmshow().equals(filmshow))
+                            {
+                                filmshowFree = false;
+                                break;
+                            }
+                        }
+                        if(!filmshowFree)
+                        {
+                            response.getWriter().print("На сеанс имеются билеты. Сначала удалите билеты.");
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(url.equals("/HallCheck"))
+        {
+            try
+            {
+                List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                List<Seat> seatLst = seatDao.getSeatAll();
+                if(request.getParameter("hall-select") != null)
+                {
+                    int hallId = Integer.parseInt(request.getParameter("hall-select"));
+                    Hall hall = hallDao.getHallById(hallId);
+                    boolean hallFreeFilmshow = true;
+                    boolean hallFreeSeat = true;
+                    if(hall != null)
+                    {
+                        for(Filmshow f : filmshowLst)
+                        {
+                            if(f.getHall().equals(hall))
+                            {
+                                hallFreeFilmshow = false;
+                                break;
+                            }
+                            for(Seat s : seatLst)
+                            {
+                                if(s.getHall().equals(hall))
+                                {
+                                    hallFreeSeat = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if(!hallFreeFilmshow)
+                        {
+                            response.getWriter().print("В зале имеются сеансы. Сначала удалите сеансы.");
+                        }
+                        if(!hallFreeSeat)
+                        {
+                            response.getWriter().print("В зале имеются места. Сначала удалите места.");
+                        }
+                    }
+                }
             }
             catch(Exception e)
             {

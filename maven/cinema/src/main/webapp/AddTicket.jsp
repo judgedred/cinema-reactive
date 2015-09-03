@@ -18,24 +18,15 @@
                 })
             });
             $("#ticket-add").submit(function (event) {
-                $.ajax({
-                    url: "../ProcessServlet/TicketCheck?filmshow-select=" + $("#filmshow-select").val() + "&seat-select=" + $("#seat-select").val(),
-                    async: false,
-                    success: function (data) {
-                        if (data != "") {
-                            alert(data);
-                            event.preventDefault();
-                        }
-                        else if ($("#filmshow-select").val() == null || $("#ticket-add-price").val() == "" || $("#seat-select").val() == null)
-                        {
-                            alert("Заполните поля");
-                            event.preventDefault();
-                        }
-                        else {
-                            alert("Билет добавлен");
-                        }
-                    }
-                })
+                if ($("#filmshow-select").val() == null || $("#ticket-add-price").val() == "" || $("#seat-select").val() == null)
+                {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
+                else
+                {
+                    alert("Билет добавлен");
+                }
             });
         });
     </script>
