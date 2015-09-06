@@ -13,7 +13,7 @@ public class Ticket implements Serializable
 	@GeneratedValue
     @Column(name = "ticket_id")
 	private Integer ticketId;
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
 	private Float price;
     @ManyToOne
     @JoinColumn(name = "filmshow_id")

@@ -144,18 +144,6 @@ public class MySqlUserDao implements UserDao
         }
 	}
 
-    @Override
-	public User register(User user) throws DaoException
-	{
-		return null;
-	}
-
-	@Override
-	public void changePassword(User user) throws DaoException
-	{
-		
-	}
-
 	MySqlUserDao()
 	{
 

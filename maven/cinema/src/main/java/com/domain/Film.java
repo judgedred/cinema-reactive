@@ -13,9 +13,9 @@ public class Film implements Serializable
     @Column(name = "film_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer filmId;
-    @Column(name = "film_name", length = 50)	// TODO add nullable = false
+    @Column(name = "film_name", length = 50, nullable = false)
 	private String filmName;
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
 	private String description;
 
 	public Integer getFilmId()

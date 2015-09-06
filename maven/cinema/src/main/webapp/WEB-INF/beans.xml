@@ -15,7 +15,6 @@
     <context:component-scan base-package="com.mysql" />
     <context:component-scan base-package="com.web" />
 
-
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
@@ -44,7 +43,5 @@
             </props>
         </property>
     </bean>
-
-
 
     </beans>

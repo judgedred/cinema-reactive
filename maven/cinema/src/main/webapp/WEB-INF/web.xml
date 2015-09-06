@@ -63,7 +63,7 @@
         </jsp-property-group>
     </jsp-config>
 
-<!-- <error-page>	-->
-<!--	<location>Trouble.jsp</location>	-->
-<!-- </error-page>	-->
+ <!--<error-page>
+	<location>/Trouble.jsp</location>
+ </error-page>-->
 </web-app>

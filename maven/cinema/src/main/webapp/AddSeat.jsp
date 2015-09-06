@@ -1,6 +1,4 @@
-<%@ page import="com.domain.Filmshow" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.domain.Seat" %>
 <%@ page import="com.domain.Hall" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

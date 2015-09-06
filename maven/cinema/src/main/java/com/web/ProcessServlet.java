@@ -5,7 +5,6 @@ import com.mysql.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+
 
 @Controller
 public class ProcessServlet extends HttpServlet
@@ -68,12 +66,10 @@ public class ProcessServlet extends HttpServlet
                         loginFree = false;
                     }
 
-
                     if(u.getEmail().equals(email))
                     {
                         emailFree = false;
                     }
-
                 }
                 if(login != null)
                 {
@@ -130,7 +126,6 @@ public class ProcessServlet extends HttpServlet
                 if(validUser != null)
                 {
                     response.getWriter().print(validUser.getLogin());
-
                 }
             }
             catch(Exception e)
@@ -157,7 +152,7 @@ public class ProcessServlet extends HttpServlet
                     filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
                 }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
-                List<Seat> filteredSeatLs = new LinkedList<Seat>();
+                List<Seat> filteredSeatLs = new LinkedList<>();
                 if(filmshow != null)
                 {
                     for(Seat s : seatLs)
@@ -189,37 +184,37 @@ public class ProcessServlet extends HttpServlet
         }
 
         if(url.equals("/TicketCheck"))
-    {
-        try
         {
-            List<Reservation> reservationLst = reservationDao.getReservationAll();
-            if(request.getParameter("ticket-select") != null)
+            try
             {
-                int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
-                Ticket ticket = ticketDao.getTicketById(ticketId);
-                boolean ticketFree = true;
-                if(ticket != null)
+                List<Reservation> reservationLst = reservationDao.getReservationAll();
+                if(request.getParameter("ticket-select") != null)
                 {
-                    for(Reservation r : reservationLst)
+                    int ticketId = Integer.parseInt(request.getParameter("ticket-select"));
+                    Ticket ticket = ticketDao.getTicketById(ticketId);
+                    boolean ticketFree = true;
+                    if(ticket != null)
                     {
-                        if(r.getTicket().equals(ticket))
+                        for(Reservation r : reservationLst)
                         {
-                            ticketFree = false;
-                            break;
+                            if(r.getTicket().equals(ticket))
+                            {
+                                ticketFree = false;
+                                break;
+                            }
                         }
-                    }
-                    if(!ticketFree)
-                    {
-                        response.getWriter().print("Билет зарезервирован. Сначала удалите бронь.");
+                        if(!ticketFree)
+                        {
+                            response.getWriter().print("Билет зарезервирован. Сначала удалите бронь.");
+                        }
                     }
                 }
             }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 
         if(url.equals("/TicketsFilter"))
         {

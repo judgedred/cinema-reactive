@@ -2,14 +2,10 @@ package com.web;
 
 import com.domain.*;
 import com.mysql.*;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.UsesSunHttpServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,6 +13,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Controller
 public class Main extends HttpServlet
@@ -64,13 +61,11 @@ public class Main extends HttpServlet
                     }
                 }
                 session.setAttribute("filmshowToday", filteredLst);
-
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
-
             RequestDispatcher dispatcher = request.getRequestDispatcher("Main.jsp");
             dispatcher.forward(request, response);
         }
@@ -99,7 +94,6 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-
             RequestDispatcher dispatcher = request.getRequestDispatcher("Filmshow.jsp");
             dispatcher.forward(request, response);
         }
@@ -291,7 +285,6 @@ public class Main extends HttpServlet
                         filmshowDao.create(filmshow);
                     }
                 }
-
             }
             catch(Exception e)
             {
@@ -521,7 +514,7 @@ public class Main extends HttpServlet
                 }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 List<Ticket> ticketLs = ticketDao.getTicketAll();
-                List<Ticket> filteredLs = new LinkedList<Ticket>();
+                List<Ticket> filteredLs = new LinkedList<>();
                 if(filmshow != null && ticketLs != null)
                 {
                     for(Ticket t : ticketLs)
@@ -661,13 +654,7 @@ public class Main extends HttpServlet
                 List<Reservation> filteredLs = new LinkedList<>();
                 if(user != null && reservationLs != null)
                 {
-                    for(Reservation r : reservationLs)
-                    {
-                        if(r.getUser().equals(user))
-                        {
-                            filteredLs.add(r);
-                        }
-                    }
+                    filteredLs.addAll(reservationLs.stream().filter(r -> r.getUser().equals(user)).collect(Collectors.toList()));
                     session.setAttribute("filteredReservationList", filteredLs);
                 }
             }
@@ -919,7 +906,12 @@ public class Main extends HttpServlet
                     List<User> userLst = userDao.getUserAll();
                     boolean userValid = true;
 
-                    if(login != null && !login.isEmpty() && passwordHash != null && !password.isEmpty() && email != null && !email.isEmpty())
+                    if(login != null
+                            && !login.isEmpty()
+                            && passwordHash != null
+                            && !password.isEmpty()
+                            && email != null
+                            && !email.isEmpty())
                     {
                         user.setLogin(login);
                         user.setPassword(passwordHash);

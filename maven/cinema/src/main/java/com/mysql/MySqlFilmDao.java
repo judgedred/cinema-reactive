@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.math.BigInteger;
 import java.util.List;
 
@@ -31,7 +30,6 @@ public class MySqlFilmDao implements FilmDao
             film = (Film) session.load(Film.class, lastId);
             session.getTransaction().commit();
             return film;
-
 		}
 		catch(Exception e)
 		{
