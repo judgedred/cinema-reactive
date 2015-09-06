@@ -145,23 +145,7 @@ public class MySqlReservationDao implements ReservationDao
         }
 	}
 
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-			if(session != null && session.isOpen())
-			{
-				session.close();
-			}
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	MySqlReservationDao()
+    MySqlReservationDao()
 	{
 	}
 }

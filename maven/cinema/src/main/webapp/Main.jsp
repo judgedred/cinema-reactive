@@ -1,7 +1,6 @@
 ﻿<%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
-<%@ page import="org.joda.time.LocalDate" %>
 <%@ page import="org.joda.time.format.DateTimeFormatter" %>
 <%@ page import="org.joda.time.format.DateTimeFormat" %>
 

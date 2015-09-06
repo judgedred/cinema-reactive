@@ -144,23 +144,7 @@ public class MySqlTicketDao implements TicketDao
         }
 	}
 
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-			if(session != null && session.isOpen())
-			{
-				session.close();
-			}
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	MySqlTicketDao()
+    MySqlTicketDao()
 	{
 	}
 }

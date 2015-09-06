@@ -22,7 +22,6 @@
             </table>
             <ul class="navigation">
                 <li><a href="Register" style="line-height: 15px" href="" title="Register">Регистрация</a></li>
-                <%--<input type="hidden" name="from" value="${pageContext.request.requestURI}">--%>
                 <li><input type="submit" value="Вход"></li>
             </ul>
         </form>

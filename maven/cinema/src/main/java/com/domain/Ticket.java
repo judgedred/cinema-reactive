@@ -105,6 +105,6 @@ public class Ticket implements Serializable
 	public String toString()
 	{
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");
-        return filmshow.getFilm().getFilmName() + " " + dateFormat.format(filmshow.getDateTime()) + " " + seat.getSeatNumber() + " " + seat.getRowNumber() + " " + String.format("%d",price.intValue());
+        return filmshow.getFilm().getFilmName() + " " + dateFormat.format(filmshow.getDateTime()) + " " + seat.getSeatNumber() + " " + "место" + " " + seat.getRowNumber() + " " + "ряд" + " " + String.format("%d",price.intValue());
 	}
 }

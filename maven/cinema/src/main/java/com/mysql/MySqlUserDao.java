@@ -144,23 +144,7 @@ public class MySqlUserDao implements UserDao
         }
 	}
 
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-            if(session != null && session.isOpen())
-            {
-                session.close();
-            }
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	@Override
+    @Override
 	public User register(User user) throws DaoException
 	{
 		return null;

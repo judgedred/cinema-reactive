@@ -107,22 +107,25 @@ public class ProcessServlet extends HttpServlet
                 List<User> ls = userDao.getUserAll();
                 String login = request.getParameter("login-auth");
                 String password = request.getParameter("password-auth");
-                MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                digest.reset();
-                byte[] hash = digest.digest(password.getBytes("UTF-8"));
-                String passwordHash = DatatypeConverter.printHexBinary(hash);
-
-                if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty())
+                if(password != null)
                 {
-                    for(User u : ls)
+                    MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                    digest.reset();
+                    byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                    String passwordHash = DatatypeConverter.printHexBinary(hash);
+
+                    if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty())
                     {
-                        if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
+                        for(User u : ls)
                         {
-                            session.setAttribute("validUser", u);
+                            if(u.getLogin().equals(login) && u.getPassword().toUpperCase().equals(passwordHash))
+                            {
+                                session.setAttribute("validUser", u);
+                                break;
+                            }
                         }
                     }
                 }
-
                 User validUser = (User) session.getAttribute("validUser");
                 if(validUser != null)
                 {

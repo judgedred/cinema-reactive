@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
-import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
 
 @Repository
 public class MySqlHallDao implements HallDao
@@ -147,23 +145,7 @@ public class MySqlHallDao implements HallDao
         }
 	}
 
-	@Override
-	public void close() throws DaoException
-	{
-        try
-        {
-            if(session != null && session.isOpen())
-            {
-                session.close();
-            }
-        }
-        catch(Exception e)
-        {
-            throw new DaoException(e);
-        }
-	}
-
-	MySqlHallDao() throws DaoException
+    MySqlHallDao() throws DaoException
 	{
 
 	}

@@ -106,6 +106,6 @@ public class Seat implements Serializable
 	@Override
 	public String toString()
 	{
-		return seatNumber + " " + rowNumber + " " + hall.getHallName();
+		return seatNumber + " " + "место" + " " + rowNumber + " " + "ряд" + " " + hall.getHallName();
 	}
 }

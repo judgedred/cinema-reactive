@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.UsesSunHttpServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -111,17 +112,38 @@ public class Main extends HttpServlet
                 String login = request.getParameter("login-reg");
                 String password = request.getParameter("password-reg");
                 String email = request.getParameter("email-reg");
-                MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                digest.reset();
-                byte[] hash = digest.digest(password.getBytes("UTF-8"));
-                String passwordHash = DatatypeConverter.printHexBinary(hash);
-
-                if(login != null && !login.isEmpty() && passwordHash != null && !passwordHash.isEmpty() && email != null && !email.isEmpty())
+                if(password != null)
                 {
-                    user.setLogin(login);
-                    user.setPassword(passwordHash);
-                    user.setEmail(email);
-                    userDao.create(user);
+                    MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                    digest.reset();
+                    byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                    String passwordHash = DatatypeConverter.printHexBinary(hash);
+                    List<User> userLst = userDao.getUserAll();
+                    boolean userValid = true;
+
+                    if(login != null
+                            && !login.isEmpty()
+                            && passwordHash != null
+                            && !passwordHash.isEmpty()
+                            && email != null
+                            && !email.isEmpty())
+                    {
+                        user.setLogin(login);
+                        user.setPassword(passwordHash);
+                        user.setEmail(email);
+                        for(User u : userLst)
+                        {
+                            if(u.getLogin().equals(user.getLogin()) || u.getEmail().equals(user.getEmail()))
+                            {
+                                userValid = false;
+                                break;
+                            }
+                        }
+                        if(userValid)
+                        {
+                            userDao.create(user);
+                        }
+                    }
                 }
             }
             catch(Exception e)
@@ -139,11 +161,24 @@ public class Main extends HttpServlet
                 String filmName = request.getParameter("filmName");
                 String description = request.getParameter("description");
                 Film film = new Film();
+                List<Film> filmLst = filmDao.getFilmAll();
+                boolean filmValid = true;
                 if(filmName != null && !filmName.isEmpty() && description != null && !description.isEmpty())
                 {
                     film.setFilmName(filmName);
                     film.setDescription(description);
-                    filmDao.create(film);
+                    for(Film f : filmLst)
+                    {
+                        if(f.getFilmName().equals(film.getFilmName()) && f.getDescription().equals(film.getDescription()))
+                        {
+                            filmValid = false;
+                            break;
+                        }
+                    }
+                    if(filmValid)
+                    {
+                        filmDao.create(film);
+                    }
                 }
             }
             catch(Exception e)
@@ -233,12 +268,28 @@ public class Main extends HttpServlet
                 Film film = filmDao.getFilmById(filmId);
                 Hall hall = hallDao.getHallById(hallId);
                 Filmshow filmshow = new Filmshow();
+                List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                boolean filmshowValid = true;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
                 if(film != null && hall != null && dateTime != null)
                 {
                     filmshow.setFilm(film);
                     filmshow.setHall(hall);
                     filmshow.setDateTime(dateTime);
-                    filmshowDao.create(filmshow);
+                    for(Filmshow f : filmshowLst)
+                    {
+                        if(f.getFilm().equals(filmshow.getFilm())
+                                && f.getHall().equals(filmshow.getHall())
+                                && dateFormat.format(f.getDateTime()).equals(dateFormat.format(filmshow.getDateTime())))
+                        {
+                            filmshowValid = false;
+                            break;
+                        }
+                    }
+                    if(filmshowValid)
+                    {
+                        filmshowDao.create(filmshow);
+                    }
                 }
 
             }
@@ -332,13 +383,26 @@ public class Main extends HttpServlet
                 }
                 Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
                 Seat seat = seatDao.getSeatById(seatId);
+                Ticket ticket = new Ticket();
+                List<Ticket> ticketLst = ticketDao.getTicketAll();
+                boolean ticketValid = true;
                 if(filmshow != null && price != 0 && seat != null)
                 {
-                    Ticket ticket = new Ticket();
                     ticket.setFilmshow(filmshow);
                     ticket.setPrice(price);
                     ticket.setSeat(seat);
-                    ticketDao.create(ticket);
+                    for(Ticket t : ticketLst)
+                    {
+                        if(t.getFilmshow().equals(ticket.getFilmshow()) && t.getSeat().equals(ticket.getSeat()))
+                        {
+                            ticketValid = false;
+                            break;
+                        }
+                    }
+                    if(ticketValid)
+                    {
+                        ticketDao.create(ticket);
+                    }
                 }
             }
             catch(Exception e)
@@ -504,12 +568,25 @@ public class Main extends HttpServlet
                 }
                 Ticket ticket = ticketDao.getTicketById(ticketId);
                 User user = userDao.getUserById(userId);
+                List<Reservation> reservationLst = reservationDao.getReservationAll();
+                boolean reservationValid = true;
                 if(user != null && ticket != null)
                 {
                     Reservation reservation = new Reservation();
                     reservation.setUser(user);
                     reservation.setTicket(ticket);
-                    reservationDao.create(reservation);
+                    for(Reservation r : reservationLst)
+                    {
+                        if(r.getTicket().equals(reservation.getTicket()))
+                        {
+                            reservationValid = false;
+                            break;
+                        }
+                    }
+                    if(reservationValid)
+                    {
+                        reservationDao.create(reservation);
+                    }
                 }
             }
             catch(Exception e)
@@ -627,13 +704,28 @@ public class Main extends HttpServlet
                     seatNumber = Integer.parseInt(request.getParameter("seat-add-number"));
                 }
                 Hall hall = hallDao.getHallById(hallId);
+                List<Seat> seatLst = seatDao.getSeatAll();
+                boolean seatValid = true;
                 if(hall != null && rowNumber != 0 && seatNumber != 0)
                 {
                     Seat seat = new Seat();
                     seat.setHall(hall);
                     seat.setRowNumber(rowNumber);
                     seat.setSeatNumber(seatNumber);
-                    seatDao.create(seat);
+                    for(Seat s : seatLst)
+                    {
+                        if(s.getSeatNumber().equals(seat.getSeatNumber())
+                                && s.getHall().equals(seat.getHall())
+                                && s.getRowNumber().equals(seat.getRowNumber()))
+                        {
+                            seatValid = false;
+                            break;
+                        }
+                    }
+                    if(seatValid)
+                    {
+                        seatDao.create(seat);
+                    }
                 }
             }
             catch(Exception e)
@@ -715,12 +807,26 @@ public class Main extends HttpServlet
             {
                 int hallNumber = Integer.parseInt(request.getParameter("hall-add-number"));
                 String hallName = request.getParameter("hall-add-name");
+                List<Hall> hallLst = hallDao.getHallAll();
+                boolean hallValid = true;
                 if(hallNumber != 0 && hallName != null)
                 {
                     Hall hall = new Hall();
                     hall.setHallNumber(hallNumber);
                     hall.setHallName(hallName);
-                    hallDao.create(hall);
+                    for(Hall h : hallLst)
+                    {
+                        if(h.getHallName().equals(hall.getHallName()) || h.getHallNumber().equals(hall.getHallNumber()))
+                        {
+                            hallValid = false;
+                            break;
+                        }
+                    }
+                    if(hallValid)
+                    {
+                        hallDao.create(hall);
+
+                    }
                 }
             }
             catch(Exception e)
@@ -804,17 +910,32 @@ public class Main extends HttpServlet
                 String login = request.getParameter("user-add-login");
                 String password = request.getParameter("user-add-password");
                 String email = request.getParameter("user-add-email");
-                MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                digest.reset();
-                byte[] hash = digest.digest(password.getBytes("UTF-8"));
-                String passwordHash = DatatypeConverter.printHexBinary(hash);
-
-                if(login != null && !login.isEmpty() && passwordHash != null && !password.isEmpty() && email != null && !email.isEmpty())
+                if(password != null)
                 {
-                    user.setLogin(login);
-                    user.setPassword(passwordHash);
-                    user.setEmail(email);
-                    userDao.create(user);
+                    MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                    digest.reset();
+                    byte[] hash = digest.digest(password.getBytes("UTF-8"));
+                    String passwordHash = DatatypeConverter.printHexBinary(hash);
+                    List<User> userLst = userDao.getUserAll();
+                    boolean userValid = true;
+
+                    if(login != null && !login.isEmpty() && passwordHash != null && !password.isEmpty() && email != null && !email.isEmpty())
+                    {
+                        user.setLogin(login);
+                        user.setPassword(passwordHash);
+                        user.setEmail(email);
+                        for(User u : userLst)
+                        {
+                            if(u.getLogin().equals(user.getLogin()) || u.getEmail().equals(user.getEmail()))
+                            {
+                                userValid = false;
+                            }
+                        }
+                        if(userValid)
+                        {
+                            userDao.create(user);
+                        }
+                    }
                 }
             }
             catch(Exception e)
@@ -910,7 +1031,6 @@ public class Main extends HttpServlet
                     digest.reset();
                     byte[] hash = digest.digest(password.getBytes("UTF-8"));
                     String passwordHash = DatatypeConverter.printHexBinary(hash);
-                    boolean adminUser = false;
 
                     if(login.equals("admin") && passwordHash.toUpperCase().equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
                     {

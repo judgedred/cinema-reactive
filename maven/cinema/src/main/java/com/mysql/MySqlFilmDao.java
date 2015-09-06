@@ -18,8 +18,6 @@ public class MySqlFilmDao implements FilmDao
 	private SessionFactory sessionFactory;
     private Session session;
 
-
-
 	@Override
     public Film create(Film film) throws DaoException
 	{
@@ -149,24 +147,7 @@ public class MySqlFilmDao implements FilmDao
         }
 	}
 
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-			if(session != null && session.isOpen())
-			{
-				session.close();
-			}
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-
-	}
-
-	MySqlFilmDao()
+    MySqlFilmDao()
 	{
 
 	}
