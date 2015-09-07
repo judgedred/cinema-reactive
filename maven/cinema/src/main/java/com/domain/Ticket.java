@@ -12,7 +12,6 @@ public class Ticket implements Serializable
     @Id
 	@GeneratedValue
     @Column(name = "ticket_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer ticketId;
     @Column(name = "price", nullable = false)
 	private Float price;
