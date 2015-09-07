@@ -32,7 +32,7 @@
     <li><a href="News.jsp" title="News">Новости</a></li>
     <li><a href="Filmshow" title="Filmshow">Сеансы</a></li>
     <li><a href="Film" title="Films">Фильмы</a></li>
-    <li><a href="" title="Contact">О кинотеатре</a></li>
+    <li><a href="About.jsp" title="About">О кинотеатре</a></li>
 
     <div class="clear"></div>
 </ul>
