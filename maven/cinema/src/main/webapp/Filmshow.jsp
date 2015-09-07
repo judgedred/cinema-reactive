@@ -39,7 +39,7 @@
 <body>
 <div class="wrapper">
     <jsp:include page="top.jsp"/>
-
+<div class="content">
     <h2>Сеансы</h2>
 
     <%
@@ -60,6 +60,8 @@
         }
     %>
 
+    <p><h3>Чтобы забронировать билет, нажмите на сеанс.</h3></p>
+</div>
     <jsp:include page="footer.jsp"/>
 
 </div>

@@ -1,9 +1,9 @@
+<%@ page import="com.domain.Film" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.domain.Reservation" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>UserReservationList</title>
+    <title>Films</title>
     <link rel="stylesheet" href="resources/css/styles.css"/>
     <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="resources/js/auth.js"></script>
@@ -12,24 +12,18 @@
 <div class="wrapper">
     <jsp:include page="top.jsp"/>
     <div class="content">
-
-    <p>Список броней</p>
-    <%
-        List<Reservation> ls = (List<Reservation>)session.getAttribute("filteredReservationList");
-        if(ls != null)
-        {
-            for(Reservation r : ls)
+        <%
+            List<Film> filmLst = (List<Film>)session.getAttribute("filmList");
+            for(Film f : filmLst)
             {
-    %>
-    <p><%=r%></p>
-    <%
+        %>
+        <p><%=f%></p>
+        <%
             }
-        }
-    %>
-
+        %>
+        <p><h3>В последующем здесь будут отображаться новинки фильмов и их краткое описание.</h3></p>
     </div>
     <jsp:include page="footer.jsp"/>
-
 </div>
 </body>
 </html>

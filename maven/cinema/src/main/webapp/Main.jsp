@@ -37,21 +37,23 @@
 </head>
 <body>
 <div class="wrapper">
-<jsp:include page="top.jsp"/>
 
+    <jsp:include page="top.jsp"/>
+    <div class="content">
 	<h2>Сегодня в кино</h2>
 
-    <%
-        List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowToday");
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
-        for(Filmshow f : filmshowLst)
-        {
-    %>
-            <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
-    <%
-        }
-    %>
-
+            <%
+            List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowToday");
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
+            for(Filmshow f : filmshowLst)
+            {
+        %>
+        <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
+        <%
+            }
+        %>
+        <p><h3>Чтобы забронировать билет, нажмите на сеанс.</h3></p>
+    </div>
     <jsp:include page="footer.jsp"/>
 
 </div>

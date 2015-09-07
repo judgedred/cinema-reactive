@@ -29,9 +29,9 @@
 </div>
 <ul class="navigation">
 
-    <li><a href="" title="News">Новости</a></li>
+    <li><a href="News.jsp" title="News">Новости</a></li>
     <li><a href="Filmshow" title="Filmshow">Сеансы</a></li>
-    <li><a href="" title="Films">Фильмы</a></li>
+    <li><a href="Film" title="Films">Фильмы</a></li>
     <li><a href="" title="Contact">О кинотеатре</a></li>
 
     <div class="clear"></div>

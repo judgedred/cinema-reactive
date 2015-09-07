@@ -59,9 +59,9 @@
 <div class="wrapper">
 
     <jsp:include page="top.jsp"/>
-
- <form id="reg" action="Register" method="Get">
- <table>
+    <div class="content">
+    <form id="reg" action="Register" method="Get">
+    <table>
          <tr>
              <td><label for="login-reg">Введите логин </label><input type="text" name="login-reg" id="login-reg"></td>
              <td><div id="login-reg-check"></div></td>
@@ -75,9 +75,10 @@
          <tr>
              <td><input type="submit" id="reg-submit" value="Зарегистрироваться"></td>
          </tr>
- </table>
- </form>
+    </table>
+    </form>
 
+    </div>
     <jsp:include page="footer.jsp"/>
 
  </div>

@@ -148,6 +148,21 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
+        if(url.equals("/Film"))
+        {
+            try
+            {
+                List<Film> filmLst = filmDao.getFilmAll();
+                session.setAttribute("filmList", filmLst);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Film.jsp");
+            dispatcher.forward(request, response);
+        }
+
         if(url.equals("/Admin/AddFilm"))
         {
             try
