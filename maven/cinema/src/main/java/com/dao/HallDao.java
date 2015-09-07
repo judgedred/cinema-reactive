@@ -10,5 +10,4 @@ public interface HallDao
 	public void delete(Hall hall) throws DaoException;
 	public List<Hall> getHallAll() throws DaoException;
 	public Hall getHallById(int id) throws DaoException;
-	public void close() throws DaoException;
 }

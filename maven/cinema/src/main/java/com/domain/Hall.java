@@ -1,19 +1,20 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Hall")
-public class Hall
+public class Hall implements Serializable
 {
     @Id
     @Column(name = "hall_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer hallId;
-    @Column(name = "hall_number")
+    @Column(name = "hall_number", nullable = false)
 	private Integer hallNumber;
-    @Column(name = "hall_name", length = 45)
+    @Column(name = "hall_name", length = 45, nullable = false)
 	private String hallName;
 
 	public Integer getHallId()

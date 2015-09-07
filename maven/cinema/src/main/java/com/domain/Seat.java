@@ -1,21 +1,22 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Seat")
-public class Seat
+public class Seat implements Serializable
 {
     @Id
     @Column(name = "seat_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer seatId;
-    @Column(name = "seat_number")
+    @Column(name = "seat_number", nullable = false)
 	private Integer seatNumber;
-    @Column(name = "row_number")
+    @Column(name = "row_number", nullable = false)
 	private Integer rowNumber;
-    @ManyToOne                      // TODO cascade = CascadeType.ALL
+    @ManyToOne
     @JoinColumn(name = "hall_id")
 	private Hall hall;
 
@@ -105,6 +106,6 @@ public class Seat
 	@Override
 	public String toString()
 	{
-		return seatNumber + " " + rowNumber + " " + hall.getHallName();
+		return seatNumber + " " + "место" + " " + rowNumber + " " + "ряд" + " " + hall.getHallName();
 	}
 }

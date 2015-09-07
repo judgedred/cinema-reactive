@@ -2,30 +2,27 @@ import com.dao.*;
 import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
-import com.mysql.MySqlDaoFactory;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
-/**
- * Created by Oleg on 11.06.2015.
- */
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
 public class MySqlTicketDaoTest
 {
+    @Autowired
     private TicketDao ticketDao;
-    private FilmshowDao filmshowDao;
-    private SeatDao seatDao;
 
-    @Before
-    public void setup()throws DaoException
-    {
-        DaoFactory daoFactory = new MySqlDaoFactory();
-        ticketDao = daoFactory.getTicketDao();
-        filmshowDao = daoFactory.getFilmshowDao();
-        seatDao = daoFactory.getSeatDao();
-    }
+    @Autowired
+    private FilmshowDao filmshowDao;
+
+    @Autowired
+    private SeatDao seatDao;
 
     @Test
     public void testGetTicketById() throws DaoException
@@ -65,7 +62,7 @@ public class MySqlTicketDaoTest
         Seat seat = seatDao.getSeatById(2);
         ticket.setFilmshow(filmshow);
         ticket.setSeat(seat);
-        ticket.setPrice(777);
+        ticket.setPrice(50000);
         Filmshow filmshowExpected = ticket.getFilmshow();
         Seat seatExpected = ticket.getSeat();
         float priceExpected = ticket.getPrice();
@@ -84,7 +81,7 @@ public class MySqlTicketDaoTest
     public void testDelete() throws DaoException
     {
         Ticket ticket = new Ticket();
-        ticket.setTicketId(4);
+        ticket.setTicketId(6);
         ticketDao.delete(ticket);
         Assert.assertNull(ticketDao.getTicketById(ticket.getTicketId()));
     }

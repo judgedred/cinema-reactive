@@ -1,19 +1,20 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Filmshow")
-public class Filmshow
+public class Filmshow implements Serializable
 {
     @Id
     @Column(name = "filmshow_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer filmshowId;
-    @Column(name = "date_time")
+    @Column(name = "date_time", nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
 	private Date dateTime;
     @ManyToOne

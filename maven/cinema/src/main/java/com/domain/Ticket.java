@@ -1,17 +1,20 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Ticket")
-public class Ticket
+public class Ticket implements Serializable
 {
     @Id
+	@GeneratedValue
     @Column(name = "ticket_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer ticketId;
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
 	private Float price;
     @ManyToOne
     @JoinColumn(name = "filmshow_id")
@@ -102,6 +105,7 @@ public class Ticket
 	@Override
 	public String toString()
 	{
-		return filmshow.getFilm().getFilmName() + " " + filmshow.getDateTime() + " " + seat.getSeatNumber() + " " + seat.getRowNumber() + " " + price;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");
+        return filmshow.getFilm().getFilmName() + " " + dateFormat.format(filmshow.getDateTime()) + " " + seat.getSeatNumber() + " " + "место" + " " + seat.getRowNumber() + " " + "ряд" + " " + String.format("%d",price.intValue());
 	}
 }

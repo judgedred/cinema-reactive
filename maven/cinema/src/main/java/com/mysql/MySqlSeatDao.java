@@ -2,31 +2,46 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.math.BigInteger;
 import java.util.List;
 
-
+@Repository
 public class MySqlSeatDao implements SeatDao
 {
-	private EntityManager em;
+    @Autowired
+    private SessionFactory sessionFactory;
+	private Session session;
 
 	@Override
 	public Seat create(Seat seat) throws DaoException
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.persist(seat);
-			em.getTransaction().commit();
-			em.refresh(seat);
-			return seat;
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(seat);
+			session.flush();
+			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+			seat = (Seat) session.load(Seat.class, lastId);
+            session.getTransaction().commit();
+            return seat;
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -34,14 +49,23 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.merge(seat);
-			em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.update(seat);
+			session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -49,31 +73,45 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-			Seat seatToBeRemoved = em.getReference(Seat.class, seat.getSeatId());
-			em.remove(seatToBeRemoved);
-			em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.delete(seat);
+			session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public List<Seat> getSeatAll() throws DaoException
 	{
 		try
 		{
-			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-			cq.select(cq.from(Seat.class));
-			return (List<Seat>) em.createQuery(cq).getResultList();
+            session = sessionFactory.openSession();
+			return (List<Seat>) session.createCriteria(Seat.class).list();
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -81,32 +119,32 @@ public class MySqlSeatDao implements SeatDao
 	{
 		try
 		{
-			return em.find(Seat.class, id);
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-			if(em != null && em.isOpen())
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+			Seat seat = (Seat)session.get(Seat.class, id);
+			if(seat != null)
 			{
-				em.close();
+				return seat;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
-	MySqlSeatDao() throws DaoException
+    MySqlSeatDao()
 	{
-		em = MySqlDaoFactory.createEntityManager();
 	}
 }

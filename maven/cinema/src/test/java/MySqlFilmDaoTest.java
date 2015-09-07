@@ -2,17 +2,24 @@ import com.dao.*;
 import com.domain.*;
 import com.mysql.*;
 import java.util.*;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
 public class MySqlFilmDaoTest
 {
+    @Autowired
+    private MySqlFilmDao filmDao;
+
 	@Test
 	public void testGetFilmById() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film filmTest = filmDao.getFilmById(1);
 		Assert.assertNotNull(filmTest);
 	}	
@@ -20,11 +27,9 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testCreate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film film = new Film();
-		film.setFilmName("Интерстеллар");
-		film.setDescription("Сквозь пространство и время");
+		film.setFilmName("testCreatePassed");
+		film.setDescription("testCreatePassed");
 		String filmNameExpected = film.getFilmName();
 		String descriptionExpected = film.getDescription();
 		Film filmTest = filmDao.create(film);
@@ -38,12 +43,10 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testUpdate() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film film = new Film();
-		film.setFilmId(2);
-		film.setFilmName("Кибер");
-		film.setDescription("Экшн");
+		film.setFilmId(4);
+		film.setFilmName("testUpdatePassed");
+		film.setDescription("testUpdatePassed");
 		String filmNameExpected = film.getFilmName();
 		String descriptionExpected = film.getDescription();
 		filmDao.update(film);
@@ -58,21 +61,30 @@ public class MySqlFilmDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		Film film = new Film();
-		film.setFilmId(3);
+		film.setFilmId(5);
 		filmDao.delete(film);
-		Assert.assertNull(filmDao.getFilmById(3));
+		Assert.assertNull(filmDao.getFilmById(film.getFilmId()));
 	}
 
 	@Test
 	public void testGetFilmAll() throws DaoException
 	{
-		DaoFactory daoFactory = new MySqlDaoFactory();
-		FilmDao filmDao = daoFactory.getFilmDao();
 		List<Film> listTest = filmDao.getFilmAll();
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);
 	}
+
+    @After
+    public void cleanUp() throws DaoException
+    {
+        List<Film> lst = filmDao.getFilmAll();
+        for(Film f : lst)
+        {
+            if(f.getFilmName().equals("testCreatePassed") || f.getFilmName().equals("testUpdatePassed"))
+            {
+                filmDao.delete(f);
+            }
+        }
+    }
 }

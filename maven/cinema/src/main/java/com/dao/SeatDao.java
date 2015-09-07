@@ -10,5 +10,4 @@ public interface SeatDao
 	public void delete(Seat seat) throws DaoException;
 	public List<Seat> getSeatAll() throws DaoException;
 	public Seat getSeatById(int id) throws DaoException;
-	public void close() throws DaoException;
 }

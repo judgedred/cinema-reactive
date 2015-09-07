@@ -2,30 +2,46 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.math.BigInteger;
 import java.util.List;
 
-
+@Repository
 public class MySqlFilmshowDao implements FilmshowDao
 {
-	private EntityManager em;
+    @Autowired
+    private SessionFactory sessionFactory;
+	private Session session;
 
 	@Override
 	public Filmshow create(Filmshow filmshow) throws DaoException
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.persist(filmshow);
-			em.getTransaction().commit();
-			em.refresh(filmshow);
-			return filmshow;
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(filmshow);
+			session.flush();
+			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+			filmshow = (Filmshow) session.load(Filmshow.class, lastId);
+            session.getTransaction().commit();
+            return filmshow;
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -33,14 +49,23 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.merge(filmshow);
-			em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.update(filmshow);
+			session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
-			throw new DaoException(e);
+            session.getTransaction().rollback();
+            throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -48,31 +73,45 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-			Filmshow filmshowToBeRemoved = em.getReference(Filmshow.class, filmshow.getFilmshowId());
-			em.remove(filmshowToBeRemoved);
-			em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.delete(filmshow);
+			session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
-			throw new DaoException(e);
+            session.getTransaction().rollback();
+            throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public List<Filmshow> getFilmshowAll() throws DaoException
 	{
 		try
 		{
-			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-			cq.select(cq.from(Filmshow.class));
-			return (List<Filmshow>) em.createQuery(cq).getResultList();
+            session = sessionFactory.openSession();
+			return (List<Filmshow>) session.createCriteria(Filmshow.class).list();
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -80,32 +119,33 @@ public class MySqlFilmshowDao implements FilmshowDao
 	{
 		try
 		{
-			return em.find(Filmshow.class, id);
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-			if(em != null && em.isOpen())
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+			Filmshow filmshow = (Filmshow)session.get(Filmshow.class, id);
+			if(filmshow != null)
 			{
-				em.close();
+				return filmshow;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
-	MySqlFilmshowDao()
+    MySqlFilmshowDao()
 	{
-		em = MySqlDaoFactory.createEntityManager();
+
 	}
 }

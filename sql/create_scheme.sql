@@ -46,9 +46,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `cinema`.`User` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `login` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(20) NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
   `email` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`user_id`))
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `login`(`login`),
+  UNIQUE KEY `email`(`email`))
 ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `cinema`.`Ticket` (
   `ticket_id` INT NOT NULL AUTO_INCREMENT,

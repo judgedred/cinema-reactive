@@ -1,11 +1,12 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Reservation")
-public class Reservation
+public class Reservation implements Serializable
 {
     @Id
     @Column(name = "reservation_id")
@@ -87,6 +88,6 @@ public class Reservation
 	@Override
 	public String toString()
 	{
-		return user.getLogin() + " " + ticket.getFilmshow().getFilm().getFilmName();
+		return user.getLogin() + " " + ticket;
 	}
 }

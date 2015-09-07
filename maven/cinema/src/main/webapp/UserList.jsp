@@ -5,20 +5,23 @@
 <html>
 <head>
 	<title>UserList</title>
+    <link rel="stylesheet" href="../resources/css/styles.css"/>
 </head>
 <body>
+<div class="wrapper">
+    <jsp:include page="admin_menu.jsp"/>
+
 	<p>UserList</p>
 
 	<%
-		List<User> ls = (List<User>)session.getAttribute("UserList");
-		for(Iterator<User> i = ls.iterator(); i.hasNext(); )
+		List<User> ls = (List<User>)session.getAttribute("userList");
+		for(User u : ls)
 		{
-			User u = i.next();
 	%>
-			<p><%=u%></p>
+	<p><%=u%></p>
 	<%
 		}
 	%>
-
+</div>
 </body>
 </html>

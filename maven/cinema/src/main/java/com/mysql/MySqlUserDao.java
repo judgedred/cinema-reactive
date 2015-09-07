@@ -2,29 +2,45 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.math.BigInteger;
 import java.util.List;
 
-
+@Repository
 public class MySqlUserDao implements UserDao
 {
-	private EntityManager em;
+    @Autowired
+    private SessionFactory sessionFactory;
+	private Session session;
 
 	@Override
 	public User create(User user) throws DaoException
 	{
         try
         {
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
-			em.refresh(user);
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.save(user);
+            session.flush();
+            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+            user = (User) session.load(User.class, lastId);
+            session.getTransaction().commit();
             return user;
         }
         catch(Exception e)
         {
+			session.getTransaction().rollback();
             throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
@@ -33,14 +49,23 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-            em.merge(user);
-            em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+            session.update(user);
+            session.getTransaction().commit();
 		}
 		catch(Exception e)
-		{	
+		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -48,31 +73,45 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-            User userToBeRemoved = em.getReference(User.class, user.getUserId());
-            em.remove(userToBeRemoved);
-            em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+            session.delete(user);
+            session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
+            session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public List<User> getUserAll() throws DaoException
 	{
 		try
 		{
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(User.class));
-			return (List<User>) em.createQuery(cq).getResultList();
+            session = sessionFactory.openSession();
+			return (List<User>) session.createCriteria(User.class).list();
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -80,45 +119,34 @@ public class MySqlUserDao implements UserDao
 	{
 		try
 		{
-            return em.find(User.class, id);
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            User user = (User)session.get(User.class, id);
+			if(user != null)
+			{
+				return user;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
-	}
-
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-            if(em != null && em.isOpen())
+        finally
+        {
+            if(session != null && session.isOpen())
             {
-                em.close();
+                session.close();
             }
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	@Override
-	public User register(User user) throws DaoException
-	{
-		return null;
-	}
-
-	@Override
-	public void changePassword(User user) throws DaoException
-	{
-		
+        }
 	}
 
 	MySqlUserDao()
 	{
-		em = MySqlDaoFactory.createEntityManager();
+
 	}
 }
 

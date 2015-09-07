@@ -1,31 +1,27 @@
 import com.dao.DaoException;
-import com.dao.DaoFactory;
 import com.dao.HallDao;
 import com.dao.SeatDao;
 import com.domain.Hall;
 import com.domain.Seat;
-import com.mysql.MySqlDaoFactory;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
-/**
- * Created by Oleg on 10.06.2015.
- */
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
 public class MySqlSeatDaoTest
 {
+    @Autowired
     private SeatDao seatDao;
-    private HallDao hallDao;
 
-    @Before
-    public void setup() throws DaoException
-    {
-        DaoFactory daoFactory = new MySqlDaoFactory();
-        seatDao = daoFactory.getSeatDao();
-        hallDao = daoFactory.getHallDao();
-    }
+    @Autowired
+    private HallDao hallDao;
 
     @Test
     public void testGetSeatById() throws DaoException
@@ -59,7 +55,7 @@ public class MySqlSeatDaoTest
     public void testUpdate() throws DaoException
     {
         Seat seat = new Seat();
-        seat.setSeatId(2);
+        seat.setSeatId(27);
         seat.setSeatNumber(555);
         seat.setRowNumber(555);
         Hall hall = hallDao.getHallById(2);
@@ -81,7 +77,7 @@ public class MySqlSeatDaoTest
     public void testDelete() throws DaoException
     {
         Seat seat = new Seat();
-        seat.setSeatId(4);
+        seat.setSeatId(28);
         seatDao.delete(seat);
         Assert.assertNull(seatDao.getSeatById(seat.getSeatId()));
     }
@@ -92,5 +88,18 @@ public class MySqlSeatDaoTest
         List<Seat> listTest = seatDao.getSeatAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
+    }
+
+    @After
+    public void cleanUp() throws DaoException
+    {
+        List<Seat> lst = seatDao.getSeatAll();
+        for(Seat s : lst)
+        {
+            if(s.getSeatNumber().equals(777) || s.getSeatNumber().equals(555))
+            {
+                seatDao.delete(s);
+            }
+        }
     }
 }

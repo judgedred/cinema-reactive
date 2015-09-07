@@ -1,21 +1,22 @@
 package com.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "User")
-public class User
+public class User implements Serializable
 {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
-    @Column(name = "login")
+    @Column(name = "login", nullable = false)
 	private String login;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
 	private String password;
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
 	private String email;
 
 	public Integer getUserId()

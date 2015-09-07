@@ -2,110 +2,150 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.math.BigInteger;
 import java.util.List;
 
-
+@Repository
 public class MySqlHallDao implements HallDao
 {
-	private EntityManager em;
+    @Autowired
+    private SessionFactory sessionFactory;
+	private Session session;
 
 	@Override
 	public Hall create(Hall hall) throws DaoException
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.persist(hall);
-			em.getTransaction().commit();
-			em.refresh(hall);
-			return hall;
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(hall);
+			session.flush();
+			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+			hall = (Hall) session.load(Hall.class, lastId);
+            session.getTransaction().commit();
+            return hall;
 		}
 		catch(Exception e)
 		{
-			throw new DaoException(e);
+            session.getTransaction().rollback();
+            throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
 	public void update(Hall hall) throws DaoException
 	{
-		try
-		{
-			em.getTransaction().begin();
-			em.merge(hall);
-			em.getTransaction().commit();
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+        try
+        {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.update(hall);
+            session.getTransaction().commit();
+        }
+        catch(Exception e)
+        {
+            session.getTransaction().rollback();
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
 	public void delete(Hall hall) throws DaoException
 	{
-		try
-		{
-			em.getTransaction().begin();
-			Hall hallToBeRemoved = em.getReference(Hall.class, hall.getHallId());
-			em.remove(hallToBeRemoved);
-			em.getTransaction().commit();
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+        try
+        {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.delete(hall);
+            session.getTransaction().commit();
+        }
+        catch(Exception e)
+        {
+            session.getTransaction().rollback();
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public List<Hall> getHallAll() throws DaoException
 	{
-		try
-		{
-			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-			cq.select(cq.from(Hall.class));
-			return (List<Hall>) em.createQuery(cq).getResultList();
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+        try
+        {
+            session = sessionFactory.openSession();
+            return (List<Hall>) session.createCriteria(Hall.class).list();
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
 	public Hall getHallById(int id) throws DaoException
 	{
-		try
-		{
-			return em.find(Hall.class, id);
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
+        try
+        {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            Hall hall = (Hall)session.get(Hall.class, id);
+            if(hall != null)
+            {
+                return hall;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
-	@Override
-	public void close() throws DaoException
+    MySqlHallDao() throws DaoException
 	{
-		try
-		{
-			if(em != null && em.isOpen())
-			{
-				em.close();
-			}
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
 
-	MySqlHallDao() throws DaoException
-	{
-		em = MySqlDaoFactory.createEntityManager();
 	}
 }

@@ -2,61 +2,93 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.math.BigInteger;
 import java.util.List;
 
-
+@Repository
 public class MySqlTicketDao implements TicketDao
 {
-	private EntityManager em;
-
+    @Autowired
+    private SessionFactory sessionFactory;
+	private Session session;
 
 	@Override
 	public Ticket create(Ticket ticket) throws DaoException
 	{
-        try
-        {
-            em.getTransaction().begin();
-            em.persist(ticket);
-            em.getTransaction().commit();
-            em.refresh(ticket);
+		try
+		{
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(ticket);
+			session.flush();
+			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+			ticket = (Ticket) session.load(Ticket.class, lastId);
+            session.getTransaction().commit();
             return ticket;
-        }
-        catch(Exception e)
+		}
+		catch(Exception e)
+		{
+			session.getTransaction().rollback();
+			throw new DaoException(e);
+		}
+        finally
         {
-            throw new DaoException(e);
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
 	@Override
 	public void update(Ticket ticket) throws DaoException
 	{
-        try
+		try
+		{
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.update(ticket);
+			session.getTransaction().commit();
+		}
+		catch(Exception e)
+		{
+			session.getTransaction().rollback();
+			throw new DaoException(e);
+		}
+        finally
         {
-            em.getTransaction().begin();
-            em.merge(ticket);
-            em.getTransaction().commit();
-        }
-        catch(Exception e)
-        {
-            throw new DaoException(e);
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
 	@Override
 	public void delete(Ticket ticket) throws DaoException
 	{
-        try
+		try
+		{
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.delete(ticket);
+			session.getTransaction().commit();
+		}
+		catch(Exception e)
+		{
+			session.getTransaction().rollback();
+			throw new DaoException(e);
+		}
+        finally
         {
-            em.getTransaction().begin();
-            Ticket ticketToBeRemoved = em.getReference(Ticket.class, ticket.getTicketId());
-            em.remove(ticketToBeRemoved);
-            em.getTransaction().commit();
-        }
-        catch(Exception e)
-        {
-            throw new DaoException(e);
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
@@ -64,50 +96,55 @@ public class MySqlTicketDao implements TicketDao
     @SuppressWarnings("unchecked")
 	public List<Ticket> getTicketAll() throws DaoException
 	{
-        try
+		try
+		{
+            session = sessionFactory.openSession();
+			return (List<Ticket>) session.createCriteria(Ticket.class).list();
+		}
+		catch(Exception e)
+		{
+			throw new DaoException(e);
+		}
+        finally
         {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Ticket.class));
-            return (List<Ticket>) em.createQuery(cq).getResultList();
-        }
-        catch(Exception e)
-        {
-            throw new DaoException(e);
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
         }
 	}
 
 	@Override
 	public Ticket getTicketById(int id) throws DaoException
 	{
-        try
+		try
+		{
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+			Ticket ticket = (Ticket)session.get(Ticket.class, id);
+			if(ticket != null)
+			{
+				return ticket;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch(Exception e)
+		{
+			throw new DaoException(e);
+		}
+        finally
         {
-            return em.find(Ticket.class, id);
-        }
-        catch(Exception e)
-        {
-            throw new DaoException(e);
-        }
-	}
-
-	@Override
-	public void close() throws DaoException
-	{
-        try
-        {
-            if(em != null && em.isOpen())
+            if(session != null && session.isOpen())
             {
-                em.close();
+                session.close();
             }
         }
-        catch(Exception e)
-        {
-            throw new DaoException(e);
-        }
 	}
 
-	MySqlTicketDao() throws DaoException
+    MySqlTicketDao()
 	{
-		em = MySqlDaoFactory.createEntityManager();
-
 	}
 }

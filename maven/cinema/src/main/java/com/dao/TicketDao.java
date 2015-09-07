@@ -10,5 +10,4 @@ public interface TicketDao
 	public void delete(Ticket ticket) throws DaoException;
 	public List<Ticket> getTicketAll() throws DaoException;
 	public Ticket getTicketById(int id) throws DaoException;
-	public void close() throws DaoException;
 }

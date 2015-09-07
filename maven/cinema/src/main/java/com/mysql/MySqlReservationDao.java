@@ -2,31 +2,47 @@ package com.mysql;
 
 import com.dao.*;
 import com.domain.*;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.math.BigInteger;
 import java.util.List;
 
 
+@Repository
 public class MySqlReservationDao implements ReservationDao
 {
-	private EntityManager em;
-
+    @Autowired
+    private SessionFactory sessionFactory;
+	private Session session;
 
 	@Override
 	public Reservation create(Reservation reservation) throws DaoException
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.persist(reservation);
-			em.getTransaction().commit();
-			em.refresh(reservation);
-			return reservation;
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(reservation);
+			session.flush();
+			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
+			reservation = (Reservation) session.load(Reservation.class, lastId);
+            session.getTransaction().commit();
+            return reservation;
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -34,14 +50,23 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-			em.merge(reservation);
-			em.getTransaction().commit();
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+			session.update(reservation);
+			session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -49,31 +74,45 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
-			em.getTransaction().begin();
-			Reservation reservationToBeRemoved = em.getReference(Reservation.class, reservation.getReservationId());
-			em.remove(reservationToBeRemoved);
-			em.getTransaction().commit();
+            session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.delete(reservation);
+			session.getTransaction().commit();
 		}
 		catch(Exception e)
 		{
+			session.getTransaction().rollback();
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public List<Reservation> getReservationAll() throws DaoException
 	{
 		try
 		{
-			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-			cq.select(cq.from(Reservation.class));
-			return (List<Reservation>) em.createQuery(cq).getResultList();
+            session = sessionFactory.openSession();
+			return (List<Reservation>) session.createCriteria(Reservation.class).list();
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
 	@Override
@@ -81,32 +120,32 @@ public class MySqlReservationDao implements ReservationDao
 	{
 		try
 		{
-			return em.find(Reservation.class, id);
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-	}
-
-	@Override
-	public void close() throws DaoException
-	{
-		try
-		{
-			if(em != null && em.isOpen())
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+			Reservation reservation = (Reservation)session.get(Reservation.class, id);
+			if(reservation != null)
 			{
-				em.close();
+				return reservation;
+			}
+			else
+			{
+				return null;
 			}
 		}
 		catch(Exception e)
 		{
 			throw new DaoException(e);
 		}
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
 	}
 
-	MySqlReservationDao() throws DaoException
+    MySqlReservationDao()
 	{
-		em = MySqlDaoFactory.createEntityManager();
 	}
 }
