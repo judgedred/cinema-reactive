@@ -59,34 +59,37 @@ public class ProcessServlet extends HttpServlet
                 List<User> ls = userDao.getUserAll();
                 Boolean loginFree = true;
                 Boolean emailFree = true;
-                for(User u : ls)
+                if(login != null && !login.isEmpty() || email != null && !email.isEmpty())
                 {
-                    if(u.getLogin().equals(login))
+                    for(User u : ls)
                     {
-                        loginFree = false;
-                    }
+                        if(u.getLogin().equals(login))
+                        {
+                            loginFree = false;
+                        }
 
-                    if(u.getEmail().equals(email))
-                    {
-                        emailFree = false;
+                        if(u.getEmail().equals(email))
+                        {
+                            emailFree = false;
+                        }
                     }
-                }
-                if(login != null)
-                {
-                    if(loginFree)
+                    if(login != null)
                     {
-                        response.getWriter().print("Логин свободен");
+                        if(loginFree)
+                        {
+                            response.getWriter().print("Логин свободен");
+                        }
+                        else
+                        {
+                            response.getWriter().print("Логин занят");
+                        }
                     }
-                    else
+                    if(email != null)
                     {
-                        response.getWriter().print("Логин занят");
-                    }
-                }
-                if(email != null)
-                {
-                    if(!emailFree)
-                    {
-                        response.getWriter().print("Логин с таким email уже есть");
+                        if(!emailFree)
+                        {
+                            response.getWriter().print("Логин с таким email уже есть");
+                        }
                     }
                 }
             }
