@@ -40,6 +40,7 @@ public class Main extends HttpServlet
     private MySqlTicketDao ticketDao;
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
         String url = request.getServletPath();
@@ -213,14 +214,17 @@ public class Main extends HttpServlet
             {
                 List<Film> filmLs = filmDao.getFilmAll();
                 session.setAttribute("filmList", filmLs);
-                int filmId = Integer.parseInt(request.getParameter("film-select"));
-                Film film = filmDao.getFilmById(filmId);
-                if(film != null)
+                if(request.getParameter("film-select") != null)
                 {
-                    filmDao.delete(film);
+                    int filmId = Integer.parseInt(request.getParameter("film-select"));
+                    Film film = filmDao.getFilmById(filmId);
+                    if(film != null)
+                    {
+                        filmDao.delete(film);
+                    }
+                    filmLs = filmDao.getFilmAll();
+                    session.setAttribute("filmList", filmLs);
                 }
-                filmLs = filmDao.getFilmAll();
-                session.setAttribute("filmList", filmLs);
             }
             catch(Exception e)
             {
@@ -271,33 +275,38 @@ public class Main extends HttpServlet
                 List<Hall> hallList = hallDao.getHallAll();
                 session.setAttribute("filmList", filmList);
                 session.setAttribute("hallList", hallList);
-                int filmId = Integer.parseInt(request.getParameter("filmSelect"));
-                int hallId = Integer.parseInt(request.getParameter("hallSelect"));
-                Date dateTime = new SimpleDateFormat("yyyy-MM-ddHH:mm").parse(request.getParameter("date-time"));
-                Film film = filmDao.getFilmById(filmId);
-                Hall hall = hallDao.getHallById(hallId);
-                Filmshow filmshow = new Filmshow();
-                List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
-                boolean filmshowValid = true;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
-                if(film != null && hall != null && dateTime != null)
+                if(request.getParameter("filmSelect") != null
+                        && request.getParameter("hallSelect") != null
+                        && request.getParameter("date-time") != null)
                 {
-                    filmshow.setFilm(film);
-                    filmshow.setHall(hall);
-                    filmshow.setDateTime(dateTime);
-                    for(Filmshow f : filmshowLst)
+                    int filmId = Integer.parseInt(request.getParameter("filmSelect"));
+                    int hallId = Integer.parseInt(request.getParameter("hallSelect"));
+                    Date dateTime = new SimpleDateFormat("yyyy-MM-ddHH:mm").parse(request.getParameter("date-time"));
+                    Film film = filmDao.getFilmById(filmId);
+                    Hall hall = hallDao.getHallById(hallId);
+                    Filmshow filmshow = new Filmshow();
+                    List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+                    boolean filmshowValid = true;
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+                    if(film != null && hall != null && dateTime != null)
                     {
-                        if(f.getFilm().equals(filmshow.getFilm())
-                                && f.getHall().equals(filmshow.getHall())
-                                && dateFormat.format(f.getDateTime()).equals(dateFormat.format(filmshow.getDateTime())))
+                        filmshow.setFilm(film);
+                        filmshow.setHall(hall);
+                        filmshow.setDateTime(dateTime);
+                        for(Filmshow f : filmshowLst)
                         {
-                            filmshowValid = false;
-                            break;
+                            if(f.getFilm().equals(filmshow.getFilm())
+                                    && f.getHall().equals(filmshow.getHall())
+                                    && dateFormat.format(f.getDateTime()).equals(dateFormat.format(filmshow.getDateTime())))
+                            {
+                                filmshowValid = false;
+                                break;
+                            }
                         }
-                    }
-                    if(filmshowValid)
-                    {
-                        filmshowDao.create(filmshow);
+                        if(filmshowValid)
+                        {
+                            filmshowDao.create(filmshow);
+                        }
                     }
                 }
             }
@@ -324,14 +333,17 @@ public class Main extends HttpServlet
             {
                 List<Filmshow> ls = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", ls);
-                int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
-                Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
-                if(filmshow != null)
+                if(request.getParameter("filmshow-select") != null)
                 {
-                    filmshowDao.delete(filmshow);
+                    int filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
+                    Filmshow filmshow = filmshowDao.getFilmshowById(filmshowId);
+                    if(filmshow != null)
+                    {
+                        filmshowDao.delete(filmshow);
+                    }
+                    ls = filmshowDao.getFilmshowAll();
+                    session.setAttribute("filmshowList", ls);
                 }
-                ls = filmshowDao.getFilmshowAll();
-                session.setAttribute("filmshowList", ls);
             }
             catch(Exception e)
             {
@@ -383,7 +395,9 @@ public class Main extends HttpServlet
                 int seatId = 0;
                 List<Filmshow> filmshowLs = filmshowDao.getFilmshowAll();
                 session.setAttribute("filmshowList", filmshowLs);
-                if(request.getParameter("filmshow-select") != null && request.getParameter("ticket-add-price") != null && request.getParameter("seat-select") != null)
+                if(request.getParameter("filmshow-select") != null
+                        && request.getParameter("ticket-add-price") != null
+                        && request.getParameter("seat-select") != null)
                 {
                     filmshowId = Integer.parseInt(request.getParameter("filmshow-select"));
                     price = Float.parseFloat(request.getParameter("ticket-add-price"));
@@ -699,7 +713,9 @@ public class Main extends HttpServlet
                 int seatNumber = 0;
                 List<Hall> hallLs = hallDao.getHallAll();
                 session.setAttribute("hallList", hallLs);
-                if(request.getParameter("hall-select") != null && request.getParameter("seat-add-row") != null && request.getParameter("seat-add-number") != null)
+                if(request.getParameter("hall-select") != null
+                        && request.getParameter("seat-add-row") != null
+                        && request.getParameter("seat-add-number") != null)
                 {
                     hallId = Integer.parseInt(request.getParameter("hall-select"));
                     rowNumber = Integer.parseInt(request.getParameter("seat-add-row"));
@@ -753,14 +769,17 @@ public class Main extends HttpServlet
             {
                 List<Seat> seatLs = seatDao.getSeatAll();
                 session.setAttribute("seatList", seatLs);
-                int seatId = Integer.parseInt(request.getParameter("seat-select"));
-                Seat seat = seatDao.getSeatById(seatId);
-                if(seat != null)
+                if(request.getParameter("seat-select") != null)
                 {
-                    seatDao.delete(seat);
+                    int seatId = Integer.parseInt(request.getParameter("seat-select"));
+                    Seat seat = seatDao.getSeatById(seatId);
+                    if(seat != null)
+                    {
+                        seatDao.delete(seat);
+                    }
+                    seatLs = seatDao.getSeatAll();
+                    session.setAttribute("filmshowList", seatLs);
                 }
-                seatLs = seatDao.getSeatAll();
-                session.setAttribute("filmshowList", seatLs);
             }
             catch(Exception e)
             {
@@ -807,27 +826,30 @@ public class Main extends HttpServlet
         {
             try
             {
-                int hallNumber = Integer.parseInt(request.getParameter("hall-add-number"));
-                String hallName = request.getParameter("hall-add-name");
-                List<Hall> hallLst = hallDao.getHallAll();
-                boolean hallValid = true;
-                if(hallNumber != 0 && hallName != null)
+                if(request.getParameter("hall-add-number") != null)
                 {
-                    Hall hall = new Hall();
-                    hall.setHallNumber(hallNumber);
-                    hall.setHallName(hallName);
-                    for(Hall h : hallLst)
+                    int hallNumber = Integer.parseInt(request.getParameter("hall-add-number"));
+                    String hallName = request.getParameter("hall-add-name");
+                    List<Hall> hallLst = hallDao.getHallAll();
+                    boolean hallValid = true;
+                    if(hallNumber != 0 && hallName != null)
                     {
-                        if(h.getHallName().equals(hall.getHallName()) || h.getHallNumber().equals(hall.getHallNumber()))
+                        Hall hall = new Hall();
+                        hall.setHallNumber(hallNumber);
+                        hall.setHallName(hallName);
+                        for(Hall h : hallLst)
                         {
-                            hallValid = false;
-                            break;
+                            if(h.getHallName().equals(hall.getHallName()) || h.getHallNumber().equals(hall.getHallNumber()))
+                            {
+                                hallValid = false;
+                                break;
+                            }
                         }
-                    }
-                    if(hallValid)
-                    {
-                        hallDao.create(hall);
+                        if(hallValid)
+                        {
+                            hallDao.create(hall);
 
+                        }
                     }
                 }
             }
@@ -854,14 +876,17 @@ public class Main extends HttpServlet
             {
                 List<Hall> hallLs = hallDao.getHallAll();
                 session.setAttribute("hallList", hallLs);
-                int hallId = Integer.parseInt(request.getParameter("hall-select"));
-                Hall hall = hallDao.getHallById(hallId);
-                if(hall != null)
+                if(request.getParameter("hall-select") != null)
                 {
-                    hallDao.delete(hall);
+                    int hallId = Integer.parseInt(request.getParameter("hall-select"));
+                    Hall hall = hallDao.getHallById(hallId);
+                    if(hall != null)
+                    {
+                        hallDao.delete(hall);
+                    }
+                    hallLs = hallDao.getHallAll();
+                    session.setAttribute("hallList", hallLs);
                 }
-                hallLs = hallDao.getHallAll();
-                session.setAttribute("hallList", hallLs);
             }
             catch(Exception e)
             {
@@ -968,14 +993,17 @@ public class Main extends HttpServlet
             {
                 List<User> userLs = userDao.getUserAll();
                 session.setAttribute("userList", userLs);
-                int userId = Integer.parseInt(request.getParameter("user-select"));
-                User user = userDao.getUserById(userId);
-                if(user != null)
+                if(request.getParameter("user-select") != null)
                 {
-                    userDao.delete(user);
+                    int userId = Integer.parseInt(request.getParameter("user-select"));
+                    User user = userDao.getUserById(userId);
+                    if(user != null)
+                    {
+                        userDao.delete(user);
+                    }
+                    userLs = userDao.getUserAll();
+                    session.setAttribute("userList", userLs);
                 }
-                userLs = userDao.getUserAll();
-                session.setAttribute("userList", userLs);
             }
             catch(Exception e)
             {
@@ -1039,7 +1067,7 @@ public class Main extends HttpServlet
                     byte[] hash = digest.digest(password.getBytes("UTF-8"));
                     String passwordHash = DatatypeConverter.printHexBinary(hash);
 
-                    if(login.equals("admin") && passwordHash.toUpperCase().equals("D033E22AE348AEB5660FC2140AEC35850C4DA997"))
+                    if(login.equals("admin"))
                     {
                         for(User u : ls)
                         {
