@@ -29,10 +29,10 @@
 </div>
 <ul class="navigation">
 
-    <li><a href="News.jsp" title="News">Новости</a></li>
+    <li><a href="news.jsp" title="News">Новости</a></li>
     <li><a href="Filmshow" title="Filmshow">Сеансы</a></li>
     <li><a href="Film" title="Films">Фильмы</a></li>
-    <li><a href="About.jsp" title="About">О кинотеатре</a></li>
+    <li><a href="about.jsp" title="About">О кинотеатре</a></li>
 
     <div class="clear"></div>
 </ul>
