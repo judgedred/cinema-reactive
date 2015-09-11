@@ -95,8 +95,7 @@ public class MySqlUserDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		User user = new User();
-		user.setUserId(4);
+		User user = userDao.getUserById(4);
 		userDao.delete(user);
 		Assert.assertNull(userDao.getUserById(user.getUserId()));
 	}

@@ -76,8 +76,7 @@ public class MySqlSeatDaoTest
     @Test
     public void testDelete() throws DaoException
     {
-        Seat seat = new Seat();
-        seat.setSeatId(28);
+        Seat seat = seatDao.getSeatById(28);
         seatDao.delete(seat);
         Assert.assertNull(seatDao.getSeatById(seat.getSeatId()));
     }

@@ -84,8 +84,7 @@ public class MySqlFilmshowDaoTest
     @Test
     public void testDelete() throws DaoException
     {
-        Filmshow filmshow = new Filmshow();
-        filmshow.setFilmshowId(3);
+        Filmshow filmshow = filmshowDao.getFilmshowById(3);
         filmshowDao.delete(filmshow);
         Assert.assertNull(filmshowDao.getFilmshowById(filmshow.getFilmshowId()));
     }
