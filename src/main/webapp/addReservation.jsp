@@ -13,7 +13,7 @@
         $(document).ready(function() {
             $("#filmshow-select").change(function(){
                 $.ajax({
-                    url: "../ProcessServlet/ticketsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function(data) {
+                    url: "../ProcessServlet/ticketsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function() {
                         $("#ticket-div").load(document.URL + " #ticket-div");
                     }
                 })
