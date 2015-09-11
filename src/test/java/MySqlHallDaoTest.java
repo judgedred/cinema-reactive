@@ -62,8 +62,7 @@ public class MySqlHallDaoTest
 	@Test
 	public void testDelete() throws DaoException
 	{
-		Hall hall = new Hall();
-		hall.setHallId(4);
+		Hall hall = hallDao.getHallById(4);
 		hallDao.delete(hall);
 		Assert.assertNull(hallDao.getHallById(hall.getHallId()));
 	}

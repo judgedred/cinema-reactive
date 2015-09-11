@@ -80,8 +80,7 @@ public class MySqlTicketDaoTest
     @Test
     public void testDelete() throws DaoException
     {
-        Ticket ticket = new Ticket();
-        ticket.setTicketId(6);
+        Ticket ticket = ticketDao.getTicketById(6);
         ticketDao.delete(ticket);
         Assert.assertNull(ticketDao.getTicketById(ticket.getTicketId()));
     }
