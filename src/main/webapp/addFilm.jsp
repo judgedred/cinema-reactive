@@ -11,8 +11,10 @@
 
 	<p>Добавить фильм</p>
 	<form action="addFilm" method="Get">
-		<p>Введите название фильма<input type="text" name="filmName"></p>
-		<p>Описание</p><p><textarea rows="3" name="description"></textarea></p>
+		<p><label>Введите название фильма
+            <input type="text" name="filmName">
+        </label></p>
+		<p><label for="description">Описание</label></p><p><textarea rows="3" name="description" id="description"></textarea></p>
 		<p><input type="submit" value="Добавить"></p>
 	</form>
 </div>

@@ -21,7 +21,7 @@
                 </tr>
             </table>
             <ul class="navigation">
-                <li><a href="register" style="line-height: 15px" href="" title="Register">Регистрация</a></li>
+                <li><a href="register" style="line-height: 15px" title="Register">Регистрация</a></li>
                 <li><input type="submit" value="Вход"></li>
             </ul>
         </form>

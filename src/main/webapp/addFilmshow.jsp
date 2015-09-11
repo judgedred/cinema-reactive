@@ -41,12 +41,12 @@
 			<option selected disabled>Выберите зал</option>
 			<% 
 				List<Hall> hallLst = (List<Hall>)session.getAttribute("hallList");
-				for(Iterator<Hall> i = hallLst.iterator(); i.hasNext(); )
+				for(Hall h: hallLst)
 				{
-					Hall h = i.next();
-			%>
-				<option value=<%=h.getHallId()%>><%=h.getHallName()%></option>
-			<%
+					%>
+            <option value=<%=h.getHallId()%>><%=h.getHallName()%>
+            </option>
+                <%
 				}
 			%>
 		</p></select>
