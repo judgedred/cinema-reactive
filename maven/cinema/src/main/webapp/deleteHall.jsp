@@ -1,18 +1,18 @@
-﻿<%@ page contentType="text/html; charset=utf-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.domain.*" %>
 
 
 <html>
 <head>
-	<title>Delete Filmshow</title>
+    <title>Delete Hall</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#filmshow-delete").submit(function (event) {
+            $("#hall-delete").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/FilmshowCheck?filmshow-select=" + $("#filmshow-select").val(),
+                    url: "../ProcessServlet/hallCheck?hall-select=" + $("#hall-select").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -29,22 +29,22 @@
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
 
-	<p>Удалить сеанс</p>
-	<form action="DeleteFilmshow" method="Get" id="filmshow-delete">
-		<p><select name="filmshow-select" id="filmshow-select">
-			<option selected disabled>Выберите сеанс</option>
-			<%
-				List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
-				for(Filmshow f: filmshowLst)
+    <p>Удалить зал</p>
+    <form action="deleteHall" method="Get" id="hall-delete">
+        <p><select name="hall-select" id="hall-select">
+            <option selected disabled>Выберите зал</option>
+                <%
+				List<Hall> hallLs = (List<Hall>)session.getAttribute("hallList");
+				for(Hall h: hallLs)
 				{
 			%>
-			<option value=<%=f.getFilmshowId()%>><%=f%></option>
-            <%
+            <option value=<%=h.getHallId()%>><%=h%></option>
+                <%
 				}
 			%>
-		</p></select>
-		<p><input type="submit" value="Удалить"></p>
-	</form>
+        </p></select>
+        <p><input type="submit" value="Удалить"></p>
+    </form>
 </div>
 </body>
 </html>

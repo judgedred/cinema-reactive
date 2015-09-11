@@ -15,7 +15,7 @@
             function authCheck()
             {
                 var userValid = true;
-                $.ajax({url: "ProcessServlet/AuthCheck", async: false, success: function(data){
+                $.ajax({url: "ProcessServlet/authCheck", async: false, success: function(data){
                     if(data != "")
                     {
                         alert(data);
@@ -48,7 +48,7 @@
             for(Filmshow f : filmshowLst)
             {
         %>
-        <p><a href="ReserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
+        <p><a href="reserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
         <%
             }
         %>

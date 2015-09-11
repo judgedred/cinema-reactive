@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    $.ajax({url: "ProcessServlet/LoginCheck", success: function (data)
+    $.ajax({url: "ProcessServlet/loginCheck", success: function (data)
     {
         if(data != "")
         {
@@ -13,7 +13,7 @@ $(document).ready(function()
 function authForm()
 {
     var msg = $("#auth-form").serialize();
-    $.ajax({url: "ProcessServlet/LoginCheck", type: "Post", data: msg, success: function(data)
+    $.ajax({url: "ProcessServlet/loginCheck", type: "Post", data: msg, success: function(data)
     {
         if(data != null && data != "")
         {
@@ -31,7 +31,7 @@ function authForm()
 }
 function logout()
 {
-    $.ajax({url: "ProcessServlet/Logout", success: function()
+    $.ajax({url: "ProcessServlet/logout", success: function()
     {
         $("#auth").show();
         $("#authLoggedIn").hide();

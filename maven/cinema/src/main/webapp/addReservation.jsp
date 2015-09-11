@@ -13,7 +13,7 @@
         $(document).ready(function() {
             $("#filmshow-select").change(function(){
                 $.ajax({
-                    url: "../ProcessServlet/TicketsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function(data) {
+                    url: "../ProcessServlet/ticketsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function(data) {
                         $("#ticket-div").load(document.URL + " #ticket-div");
                     }
                 })
@@ -34,7 +34,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Забронировать билет</p>
-    <form action="AddReservation" method="Get" id="reservation-add">
+    <form action="addReservation" method="Get" id="reservation-add">
         <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
             <option selected disabled>Выберите сеанс</option>
             <%

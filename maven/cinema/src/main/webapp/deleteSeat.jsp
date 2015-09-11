@@ -5,14 +5,14 @@
 
 <html>
 <head>
-    <title>Delete Ticket</title>
+    <title>Delete Seat</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#ticket-delete").submit(function (event) {
+            $("#seat-delete").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/TicketCheck?ticket-select=" + $("#ticket-select").val(),
+                    url: "../ProcessServlet/seatCheck?seat-select=" + $("#seat-select").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -29,16 +29,16 @@
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
 
-    <p>Удалить билет</p>
-    <form action="DeleteTicket" method="Get" id="ticket-delete">
-        <p><select name="ticket-select" id="ticket-select">
-            <option selected disabled>Выберите билет</option>
+    <p>Удалить место</p>
+    <form action="deleteSeat" method="Get" id="seat-delete">
+        <p><select name="seat-select" id="seat-select">
+            <option selected disabled>Выберите место</option>
                 <%
-				List<Ticket> ticketLs = (List<Ticket>)session.getAttribute("ticketList");
-				for(Ticket t: ticketLs)
+				List<Seat> seatLs = (List<Seat>)session.getAttribute("seatList");
+				for(Seat s: seatLs)
 				{
 			%>
-            <option value=<%=t.getTicketId()%>><%=t%></option>
+            <option value=<%=s.getSeatId()%>><%=s%></option>
                 <%
 				}
 			%>

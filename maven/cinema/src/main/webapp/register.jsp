@@ -14,7 +14,7 @@
                 }
                 else {
                     $.ajax({
-                        url: "ProcessServlet/RegisterCheck?login-reg=" + $("#login-reg").val(), success: function (data) {
+                        url: "ProcessServlet/registerCheck?login-reg=" + $("#login-reg").val(), success: function (data) {
                             $("#login-reg-check").text(data);
                             if(data == "Логин занят")
                             {
@@ -32,7 +32,7 @@
 
             $("#reg").submit(function (event) {
                 $.ajax({
-                    url: "ProcessServlet/RegisterCheck?email-reg=" + $("#email-reg").val(),
+                    url: "ProcessServlet/registerCheck?email-reg=" + $("#email-reg").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -60,7 +60,7 @@
 
     <jsp:include page="top.jsp"/>
     <div class="content">
-    <form id="reg" action="Register" method="Get">
+    <form id="reg" action="register" method="Get">
     <table>
          <tr>
              <td><label for="login-reg">Введите логин </label><input type="text" name="login-reg" id="login-reg"></td>

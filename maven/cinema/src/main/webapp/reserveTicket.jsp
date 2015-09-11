@@ -15,7 +15,7 @@
     <jsp:include page="top.jsp"/>
     <div class="content">
     <p>Забронировать билет</p>
-    <form action="ReserveTicket" method="Get" id="reservation-add">
+    <form action="reserveTicket" method="Get" id="reservation-add">
         <div id="ticket-div">
             <p><label for="ticket-select">Билет </label><select name="ticket-select" id="ticket-select">
                 <option selected disabled>Выберите билет</option>

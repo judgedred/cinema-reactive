@@ -5,14 +5,14 @@
 
 <html>
 <head>
-    <title>Delete Film</title>
+    <title>Delete User</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#film-delete").submit(function (event) {
+            $("#user-delete").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/FilmCheck?film-select=" + $("#film-select").val(),
+                    url: "../ProcessServlet/userCheck?user-select=" + $("#user-select").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -29,16 +29,16 @@
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
 
-    <p>Удалить фильм</p>
-    <form action="DeleteFilm" method="Get" id="film-delete">
-        <p><select name="film-select" id="film-select">
-            <option selected disabled>Выберите фильм</option>
+    <p>Удалить пользователя</p>
+    <form action="deleteUser" method="Get" id="user-delete">
+        <p><select name="user-select" id="user-select">
+            <option selected disabled>Выберите пользователя</option>
                 <%
-				List<Film> filmLs = (List<Film>)session.getAttribute("filmList");
-				for(Film f: filmLs)
+				List<User> userLs = (List<User>)session.getAttribute("userList");
+				for(User u: userLs)
 				{
 			%>
-            <option value=<%=f.getFilmId()%>><%=f%></option>
+            <option value=<%=u.getUserId()%>><%=u%></option>
                 <%
 				}
 			%>

@@ -50,7 +50,7 @@ public class ProcessServlet extends HttpServlet
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
 
-        if(url.equals("/RegisterCheck"))
+        if(url.equals("/registerCheck"))
         {
             try
             {
@@ -99,7 +99,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/LoginCheck"))
+        if(url.equals("/loginCheck"))
         {
             try
             {
@@ -137,12 +137,12 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/Logout"))
+        if(url.equals("/logout"))
         {
             session.invalidate();
         }
 
-        if(url.equals("/SeatsFilter"))
+        if(url.equals("/seatsFilter"))
         {
             try
             {
@@ -186,7 +186,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/TicketCheck"))
+        if(url.equals("/ticketCheck"))
         {
             try
             {
@@ -219,7 +219,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/TicketsFilter"))
+        if(url.equals("/ticketsFilter"))
         {
             try
             {
@@ -263,7 +263,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/FilmCheck"))
+        if(url.equals("/filmCheck"))
         {
             try
             {
@@ -296,7 +296,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/FilmshowCheck"))
+        if(url.equals("/filmshowCheck"))
         {
             try
             {
@@ -329,7 +329,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/HallCheck"))
+        if(url.equals("/hallCheck"))
         {
             try
             {
@@ -376,7 +376,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/SeatCheck"))
+        if(url.equals("/seatCheck"))
         {
             try
             {
@@ -409,7 +409,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/UserCheck"))
+        if(url.equals("/userCheck"))
         {
             try
             {
@@ -442,7 +442,7 @@ public class ProcessServlet extends HttpServlet
             }
         }
 
-        if(url.equals("/AuthCheck"))
+        if(url.equals("/authCheck"))
         {
             try
             {
