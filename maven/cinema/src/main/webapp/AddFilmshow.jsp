@@ -23,7 +23,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Добавление сеанса</p>
-	<form action="AddFilmshow" method="Get">
+	<form action="addFilmshow" method="Get">
 		<p><select name="filmSelect">
 			<option selected disabled>Выберите фильм</option>
 			<% 

@@ -12,7 +12,7 @@
         $(document).ready(function(){
             $("#hall-delete").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/HallCheck?hall-select=" + $("#hall-select").val(),
+                    url: "../ProcessServlet/hallCheck?hall-select=" + $("#hall-select").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -30,7 +30,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Удалить зал</p>
-    <form action="DeleteHall" method="Get" id="hall-delete">
+    <form action="deleteHall" method="Get" id="hall-delete">
         <p><select name="hall-select" id="hall-select">
             <option selected disabled>Выберите зал</option>
                 <%

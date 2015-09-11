@@ -1,48 +1,48 @@
 <ul class="navigation">
 
-    <li><a href="FilmshowList" title="Filmshow">Сеансы</a>
+    <li><a href="filmshowList" title="Filmshow">Сеансы</a>
     <ul>
-        <li><a href="AddFilmshow" title="Add">Добавить</a></li>
-        <li><a href="DeleteFilmshow" title="Delete">Удалить</a></li>
+        <li><a href="addFilmshow" title="Add">Добавить</a></li>
+        <li><a href="deleteFilmshow" title="Delete">Удалить</a></li>
     </ul>
     </li>
-    <li><a href="TicketList" title="Ticket">Билеты</a>
+    <li><a href="ticketList" title="Ticket">Билеты</a>
         <ul>
-            <li><a href="AddTicket" title="Add">Добавить</a></li>
-            <li><a href="DeleteTicket" title="Delete">Удалить</a></li>
-            <li><a href="AddTicketAll" title="Add tickets for the show">Выпустить билеты на сеанс</a></li>
+            <li><a href="addTicket" title="Add">Добавить</a></li>
+            <li><a href="deleteTicket" title="Delete">Удалить</a></li>
+            <li><a href="addTicketAll" title="Add tickets for the show">Выпустить билеты на сеанс</a></li>
         </ul>
     </li>
-    <li><a href="FilmList" title="Films">Фильмы</a>
+    <li><a href="filmList" title="Films">Фильмы</a>
         <ul>
-            <li><a href="AddFilm" title="Add">Добавить</a></li>
-            <li><a href="DeleteFilm" title="Delete">Удалить</a></li>
+            <li><a href="addFilm" title="Add">Добавить</a></li>
+            <li><a href="deleteFilm" title="Delete">Удалить</a></li>
         </ul>
     </li>
-    <li><a href="SeatList" title="Seats">Места</a>
+    <li><a href="seatList" title="Seats">Места</a>
     <ul>
-        <li><a href="AddSeat" title="Add">Добавить</a></li>
-        <li><a href="DeleteSeat" title="Delete">Удалить</a></li>
+        <li><a href="addSeat" title="Add">Добавить</a></li>
+        <li><a href="deleteSeat" title="Delete">Удалить</a></li>
     </ul>
     </li>
-    <li><a href="HallList" title="Halls">Залы</a>
+    <li><a href="hallList" title="Halls">Залы</a>
         <ul>
-            <li><a href="AddHall" title="Add">Добавить</a></li>
-            <li><a href="DeleteHall" title="Delete">Удалить</a></li>
+            <li><a href="addHall" title="Add">Добавить</a></li>
+            <li><a href="deleteHall" title="Delete">Удалить</a></li>
         </ul>
     </li>
-    <li><a href="ReservationList" title="Reservations">Брони</a>
+    <li><a href="reservationList" title="Reservations">Брони</a>
         <ul>
-            <li><a href="AddReservation" title="Add">Добавить</a></li>
-            <li><a href="DeleteReservation" title="Delete">Удалить</a></li>
+            <li><a href="addReservation" title="Add">Добавить</a></li>
+            <li><a href="deleteReservation" title="Delete">Удалить</a></li>
         </ul>
     </li>
-    <li><a href="UserList" title="Users">Пользователи</a>
+    <li><a href="userList" title="Users">Пользователи</a>
         <ul>
-            <li><a href="AddUser" title="Add">Добавить</a></li>
-            <li><a href="DeleteUser" title="Delete">Удалить</a></li>
+            <li><a href="addUser" title="Add">Добавить</a></li>
+            <li><a href="deleteUser" title="Delete">Удалить</a></li>
         </ul>
     </li>
-    <li><a href="Logout" title="Logout">Выход</a></li>
+    <li><a href="logout" title="Logout">Выход</a></li>
     <div class="clear"></div>
 </ul>

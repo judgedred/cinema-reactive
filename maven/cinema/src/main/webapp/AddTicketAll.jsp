@@ -11,7 +11,7 @@
         $(document).ready(function() {
             $("#filmshow-select").change(function(){
                 $.ajax({
-                    url: "../ProcessServlet/SeatsFilter?filmshow-select=" + $("#filmshow-select").val()
+                    url: "../ProcessServlet/seatsFilter?filmshow-select=" + $("#filmshow-select").val()
                 })
             });
             $("#ticket-add").submit(function (event) {
@@ -30,7 +30,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Выпустить билеты</p>
-    <form action="AddTicketAll" method="Get" id="ticket-add">
+    <form action="addTicketAll" method="Get" id="ticket-add">
         <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
             <option selected disabled>Выберите сеанс</option>
             <%

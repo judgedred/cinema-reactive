@@ -12,7 +12,7 @@
         $(document).ready(function(){
             $("#filmshow-delete").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/FilmshowCheck?filmshow-select=" + $("#filmshow-select").val(),
+                    url: "../ProcessServlet/filmshowCheck?filmshow-select=" + $("#filmshow-select").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -30,7 +30,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Удалить сеанс</p>
-	<form action="DeleteFilmshow" method="Get" id="filmshow-delete">
+	<form action="deleteFilmshow" method="Get" id="filmshow-delete">
 		<p><select name="filmshow-select" id="filmshow-select">
 			<option selected disabled>Выберите сеанс</option>
 			<%

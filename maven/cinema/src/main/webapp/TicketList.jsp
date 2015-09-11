@@ -11,7 +11,7 @@
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
 <p>TicketList</p>
-<form action="TicketList" method="Get" id="ticket-list">
+<form action="ticketList" method="Get" id="ticket-list">
     <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
         <option selected disabled>Выберите сеанс</option>
         <%

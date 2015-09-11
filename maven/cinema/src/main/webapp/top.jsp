@@ -1,9 +1,9 @@
 <div class="top">
-    <a href="Main"><img src="resources/img/logo.jpg" align="left"></a>
+    <a href="main"><img src="resources/img/logo.jpg" align="left"></a>
 
     <div id="authLoggedIn" style="display: none">
         <ul class="navigation">
-            <li><a href="ReservationList" style="line-height: 15px; padding: 6px 0" title="брони">список билетов</a></li>
+            <li><a href="reservationList" style="line-height: 15px; padding: 6px 0" title="брони">список билетов</a></li>
             <p><li><a href="javascript: logout()" style="line-height: 15px; padding: 0 60px" title="Выйти">Выход</a></li></p>
         </ul>
     </div>
@@ -21,7 +21,7 @@
                 </tr>
             </table>
             <ul class="navigation">
-                <li><a href="Register" style="line-height: 15px" href="" title="Register">Регистрация</a></li>
+                <li><a href="register" style="line-height: 15px" href="" title="Register">Регистрация</a></li>
                 <li><input type="submit" value="Вход"></li>
             </ul>
         </form>
@@ -30,8 +30,8 @@
 <ul class="navigation">
 
     <li><a href="news.jsp" title="News">Новости</a></li>
-    <li><a href="Filmshow" title="Filmshow">Сеансы</a></li>
-    <li><a href="Film" title="Films">Фильмы</a></li>
+    <li><a href="filmshow" title="Filmshow">Сеансы</a></li>
+    <li><a href="film" title="Films">Фильмы</a></li>
     <li><a href="about.jsp" title="About">О кинотеатре</a></li>
 
     <div class="clear"></div>

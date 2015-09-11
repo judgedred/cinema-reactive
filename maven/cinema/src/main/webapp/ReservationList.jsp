@@ -11,7 +11,7 @@
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
     <p>Список броней</p>
-    <form action="ReservationList" method="Get" id="reservation-list">
+    <form action="reservationList" method="Get" id="reservation-list">
         <p><label for="user-select">Пользователь </label><select name="user-select" id="user-select">
             <option selected disabled>Выберите пользователя</option>
             <%

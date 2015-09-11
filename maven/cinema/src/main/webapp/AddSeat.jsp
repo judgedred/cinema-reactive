@@ -13,7 +13,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Добавить место</p>
-    <form action="AddSeat" method="Get" id="seat-add">
+    <form action="addSeat" method="Get" id="seat-add">
         <p><label for="hall-select">Зал </label><select name="hall-select" id="hall-select">
             <option selected disabled>Выберите зал</option>
             <%

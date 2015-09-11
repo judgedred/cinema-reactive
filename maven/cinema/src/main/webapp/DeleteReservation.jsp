@@ -13,7 +13,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Удалить бронь</p>
-    <form action="DeleteReservation" method="Get">
+    <form action="deleteReservation" method="Get">
         <p><select name="reservation-select">
             <option selected disabled>Выберите бронь</option>
                 <%

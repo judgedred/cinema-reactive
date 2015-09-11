@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<form id="auth-form" action="Admin/Login" method="Post" style="margin: 200px auto">
+<form id="auth-form" action="admin/login" method="Post" style="margin: 200px auto">
     <table align="center">
         <tr>
             <td><label for="login-auth">Логин</label></td>
