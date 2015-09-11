@@ -24,7 +24,7 @@ The service acquire all the functionality you need to order a ticket:
 
 - "About". Basic information of the cinema (adress, phones).
 
-- "Admin panel". By typing ..\Admin you access the login form to the admin panel. It will help you easily maintain the service. Default user is "admin" with the same password. Here you can view, add, delete film shows, tickets, films, seats, halls, reservations, users. The system will not let you to add duplicates or null. When a film show added, you can easily generate the tickets for the show according to the seat list of the hall the film is shown in.
+- "Admin panel". By typing ../cinema/admin you access the login form to the admin panel. It will help you easily maintain the service. Default user is "admin" with the same password. Here you can view, add, delete film shows, tickets, films, seats, halls, reservations, users. The system will not let you to add duplicates or null. When a film show added, you can easily generate the tickets for the show according to the seat list of the hall the film is shown in.
 
 The design can seem a little bit poor, because the main focus was functionality and Java technologies. It is not the final version of the project. Work will go on by improving knowledge in Java and making project more up to date. 
 
