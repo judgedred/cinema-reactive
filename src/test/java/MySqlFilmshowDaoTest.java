@@ -40,7 +40,7 @@ public class MySqlFilmshowDaoTest
         filmshow.setFilm(film);
         filmshow.setHall(hall);
         Calendar cal = Calendar.getInstance();
-        cal.set(2015, Calendar.JUNE, 8, 21, 30);
+        cal.set(2015, Calendar.NOVEMBER, 8, 21, 30);
         filmshow.setDateTime(cal.getTime());
         Film filmExpected = filmshow.getFilm();
         Hall hallExpected = filmshow.getHall();
@@ -65,7 +65,7 @@ public class MySqlFilmshowDaoTest
         filmshow.setFilm(film);
         filmshow.setHall(hall);
         Calendar cal = Calendar.getInstance();
-        cal.set(2015, Calendar.JUNE, 8, 20, 0);
+        cal.set(2015, Calendar.NOVEMBER, 8, 20, 0);
         filmshow.setDateTime(cal.getTime());
         Film filmExpected = filmshow.getFilm();
         Hall hallExpected = filmshow.getHall();
