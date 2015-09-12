@@ -49,6 +49,7 @@ public class ProcessServlet extends HttpServlet
         String url = request.getPathInfo();
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
 
         if(url.equals("/registerCheck"))
         {
