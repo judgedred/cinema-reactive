@@ -10,7 +10,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Добавить фильм</p>
-	<form action="addFilm" method="Get" accept-charset="UTF-8">
+	<form action="addFilm" method="Get">
 		<p><label>Введите название фильма
             <input type="text" name="filmName">
         </label></p>
