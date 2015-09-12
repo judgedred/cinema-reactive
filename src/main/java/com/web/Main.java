@@ -45,7 +45,6 @@ public class Main extends HttpServlet
 	{
         String url = request.getServletPath();
         HttpSession session = request.getSession();
-        request.setCharacterEncoding("UTF-8");
 
         if(url.equals("/main"))
         {
