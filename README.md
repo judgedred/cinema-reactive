@@ -6,7 +6,7 @@ Contents of the project:
 - sql. Contains sql scripts for database create and fill the content.
 Also cinema model view.
 
-- maven\cinema. Contains cinema src files.
+- src. Contains cinema src files.
 
 
 About the project.
