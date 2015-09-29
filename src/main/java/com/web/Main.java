@@ -164,7 +164,7 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/admin/addFilm"))
+        /*if(url.equals("/admin/addFilm"))
         {
             try
             {
@@ -265,9 +265,9 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
-        if(url.equals("/admin/addFilmshow"))
+        /*if(url.equals("/admin/addFilmshow"))
         {
             try
             {
@@ -325,9 +325,9 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
-        if(url.equals("/admin/deleteFilmshow"))
+        /*if(url.equals("/admin/deleteFilmshow"))
         {
             try
             {
@@ -360,9 +360,9 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
-        if(url.equals("/admin/filmshowList"))
+        /*if(url.equals("/admin/filmshowList"))
         {
             try
             {
@@ -384,7 +384,7 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
         if(url.equals("/admin/addTicket"))
         {
@@ -822,7 +822,7 @@ public class Main extends HttpServlet
             }
         }
 
-        if(url.equals("/admin/addHall"))
+        /*if(url.equals("/admin/addHall"))
         {
             try
             {
@@ -927,7 +927,7 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
         if(url.equals("/admin/addUser"))
         {
