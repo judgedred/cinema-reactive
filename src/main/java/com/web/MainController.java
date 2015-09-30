@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
@@ -42,8 +43,8 @@ public class MainController
     @RequestMapping("/admin/login")
     public @ResponseBody ModelAndView adminLogin(@RequestBody User user) throws Exception
     {
-        List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("adminMain");
+        List<User> userList = userService.getUserAll();
         if(user != null && user.getLogin() != null && user.getPassword() != null)
         {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -113,6 +114,27 @@ public class MainController
                     }
                 }
             mav.addObject("filteredTicketList", filteredTicketList);
+        }
+        return mav;
+    }
+
+    @RequestMapping("/reservationList")
+    public @ResponseBody ModelAndView listReservations(HttpSession session) throws Exception
+    {
+        ModelAndView mav = new ModelAndView("userReservationList");
+        User user = (User)session.getAttribute("validUser");
+        List<Reservation> reservationList = reservationService.getReservationAll();
+        List<Reservation> filteredList = new LinkedList<>();
+        if(user != null && reservationList != null)
+        {
+            for(Reservation r : reservationList)
+            {
+                if(r.getUser().equals(user))
+                {
+                    filteredList.add(r);
+                }
+            }
+            mav.addObject("filteredReservationList", filteredList);
         }
         return mav;
     }

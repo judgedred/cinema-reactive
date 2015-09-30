@@ -1174,7 +1174,7 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }*/
 
-        if(url.equals("/reservationList"))
+        /*if(url.equals("/reservationList"))
         {
             try
             {
@@ -1199,7 +1199,7 @@ public class Main extends HttpServlet
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/userReservationList.jsp");
             dispatcher.forward(request, response);
-        }
+        }*/
     }
 
     @Override

@@ -5,9 +5,9 @@
 <html>
 <head>
     <title>ReserveTicket</title>
-    <link rel="stylesheet" href="resources/css/styles.css"/>
-    <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript" src="resources/js/auth.js"></script>
+    <link rel="stylesheet" href="../../resources/css/styles.css"/>
+    <script type="text/javascript" src="../../resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="../../resources/js/auth.js"></script>
 </head>
 <body>
 <div class="wrapper">

@@ -65,7 +65,7 @@ public class SeatController
     }
 
     @RequestMapping("/admin/seatList")
-    public @ResponseBody ModelAndView seatList() throws Exception
+    public @ResponseBody ModelAndView listSeats() throws Exception
     {
         List<Seat> seatList = seatService.getSeatAll();
         return new ModelAndView("seatList", "seatListJson", seatList);

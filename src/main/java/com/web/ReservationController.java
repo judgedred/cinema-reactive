@@ -75,7 +75,7 @@ public class ReservationController
     }
 
     @RequestMapping("/admin/reservationList")
-    public @ResponseBody ModelAndView reservationList(@RequestBody User user) throws Exception
+    public @ResponseBody ModelAndView listReservations(@RequestBody User user) throws Exception
     {
         List<Reservation> reservationList = reservationService.getReservationAll();
         List<User> userList = userService.getUserAll();

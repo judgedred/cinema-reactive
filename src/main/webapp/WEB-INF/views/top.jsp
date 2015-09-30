@@ -1,5 +1,5 @@
 <div class="top">
-    <a href="main"><img src="resources/img/logo.jpg" align="left"></a>
+    <a href="main"><img src="../../resources/img/logo.jpg" align="left"></a>
 
     <div id="authLoggedIn" style="display: none">
         <ul class="navigation">

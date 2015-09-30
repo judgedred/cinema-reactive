@@ -88,7 +88,7 @@ public class TicketController
     }
 
     @RequestMapping("/admin/ticketList")
-    public @ResponseBody ModelAndView ticketList(@RequestBody Filmshow filmshow) throws Exception
+    public @ResponseBody ModelAndView listTickets(@RequestBody Filmshow filmshow) throws Exception
     {
         List<Ticket> ticketList = ticketService.getTicketAll();
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();

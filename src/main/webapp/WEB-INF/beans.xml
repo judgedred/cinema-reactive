@@ -14,7 +14,6 @@
     <context:component-scan base-package="com.dao" />
     <context:component-scan base-package="com.mysql" />
     <context:component-scan base-package="com.service" />
-    <context:component-scan base-package="com.web" />
 
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
@@ -44,5 +43,7 @@
             </props>
         </property>
     </bean>
+
+
 
     </beans>

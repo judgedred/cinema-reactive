@@ -65,7 +65,7 @@ public class UserController
     }
 
     @RequestMapping("/admin/userList")
-    public @ResponseBody ModelAndView userList() throws Exception
+    public @ResponseBody ModelAndView listUsers() throws Exception
     {
         List<User> userList = userService.getUserAll();
         return new ModelAndView("userList", "userListJson", userList);

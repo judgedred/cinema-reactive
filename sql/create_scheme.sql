@@ -1,4 +1,7 @@
+CREATE USER admin@localhost identified BY 'admin';
+GRANT usage ON *.* TO admin@localhost identified BY 'admin';
 CREATE SCHEMA IF NOT EXISTS `cinema` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL privileges ON cinema.* TO admin@localhost;
 CREATE TABLE IF NOT EXISTS `cinema`.`Film` (
   `film_id` INT NOT NULL AUTO_INCREMENT,
   `film_name` VARCHAR(50) NOT NULL,

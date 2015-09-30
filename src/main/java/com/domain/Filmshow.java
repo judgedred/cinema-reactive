@@ -1,5 +1,10 @@
 package com.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.web.JsonDateDeserializer;
+import com.web.JsonDateSerializer;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,6 +21,8 @@ public class Filmshow implements Serializable
 	private Integer filmshowId;
     @Column(name = "date_time", nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
+    @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateTime;
     @ManyToOne
     @JoinColumn(name = "film_id")

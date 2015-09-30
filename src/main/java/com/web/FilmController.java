@@ -61,7 +61,7 @@ public class FilmController
     }
 
     @RequestMapping("/admin/filmList")
-    public @ResponseBody ModelAndView filmList() throws Exception
+    public @ResponseBody ModelAndView listFilms() throws Exception
     {
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("filmList", "filmListJson", filmList);

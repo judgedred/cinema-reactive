@@ -57,7 +57,7 @@ public class HallController
     }
 
     @RequestMapping("/admin/hallList")
-    public @ResponseBody ModelAndView hallList() throws Exception
+    public @ResponseBody ModelAndView listHalls() throws Exception
     {
         List<Hall> hallList = hallService.getHallAll();
         return new ModelAndView("hallList", "hallListJson", hallList);
