@@ -55,7 +55,6 @@ public class FilmshowController
                 filmshowService.create(filmshow);
                 mav.addObject("filmshowJson", filmshow);
             }
-            return mav;
         }
         return mav;
     }

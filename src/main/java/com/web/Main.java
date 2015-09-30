@@ -386,7 +386,7 @@ public class Main extends HttpServlet
             }
         }*/
 
-        if(url.equals("/admin/addTicket"))
+        /*if(url.equals("/admin/addTicket"))
         {
             try
             {
@@ -571,9 +571,9 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
-        if(url.equals("/admin/addReservation"))
+        /*if(url.equals("/admin/addReservation"))
         {
             try
             {
@@ -702,9 +702,9 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
-        if(url.equals("/admin/addSeat"))
+        /*if(url.equals("/admin/addSeat"))
         {
             try
             {
@@ -820,7 +820,7 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
         /*if(url.equals("/admin/addHall"))
         {
@@ -929,7 +929,7 @@ public class Main extends HttpServlet
             }
         }*/
 
-        if(url.equals("/admin/addUser"))
+        /*if(url.equals("/admin/addUser"))
         {
             try
             {
@@ -1044,15 +1044,15 @@ public class Main extends HttpServlet
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 dispatcher.forward(request, response);
             }
-        }
+        }*/
 
-        if(url.equals("/admin"))
+        /*if(url.equals("/admin"))
         {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/admin.jsp");
             dispatcher.forward(request, response);
-        }
+        }*/
 
-        if(url.equals("/admin/login"))
+        /*if(url.equals("/admin/login"))
         {
             try
             {
@@ -1095,16 +1095,16 @@ public class Main extends HttpServlet
             {
                 e.printStackTrace();
             }
-        }
+        }*/
 
-        if(url.equals("/admin/logout"))
+        /*if(url.equals("/admin/logout"))
         {
             session.invalidate();
             RequestDispatcher dispatcher = request.getRequestDispatcher("/admin.jsp");
             dispatcher.forward(request, response);
-        }
+        }*/
 
-        if(url.equals("/reserveTicket"))
+        /*if(url.equals("/reserveTicket"))
         {
             try
             {
@@ -1172,7 +1172,7 @@ public class Main extends HttpServlet
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/reserveTicket.jsp");
             dispatcher.forward(request, response);
-        }
+        }*/
 
         if(url.equals("/reservationList"))
         {
