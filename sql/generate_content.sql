@@ -1,3 +1,4 @@
+
 use cinema;
 Insert Into User(login, password, email) Values("admin", SHA1("admin"), "admin@gmail.com");
 Insert Into User(login, password, email) Values("user", SHA1("user"), "user@gmail.com");
