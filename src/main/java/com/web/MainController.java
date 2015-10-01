@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
@@ -40,8 +43,8 @@ public class MainController
         return new ModelAndView("admin");
     }
 
-    @RequestMapping("/admin/login")
-    public @ResponseBody ModelAndView adminLogin(@RequestBody User user) throws Exception
+    @RequestMapping(value = "/admin/login", produces = "text/plain;charset=UTF-8")
+    public ModelAndView adminLogin(@ModelAttribute User user) throws Exception
     {
         ModelAndView mav = new ModelAndView("adminMain");
         List<User> userList = userService.getUserAll();

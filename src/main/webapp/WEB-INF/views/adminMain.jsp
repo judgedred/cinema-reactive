@@ -4,7 +4,7 @@
 <head>
     <title>Admin Main</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="resources/css/styles.css"/>
+    <link rel="stylesheet" href="../resources/css/styles.css"/>
 </head>
 <body>
 <div class="wrapper">

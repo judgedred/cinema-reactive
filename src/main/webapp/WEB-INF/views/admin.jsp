@@ -4,7 +4,7 @@
     <title>Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript">
+    <%--<script type="text/javascript">
         $(document).ready(function() {
             $("#auth-form").submit(function (event) {
                 event.preventDefault();
@@ -20,12 +20,12 @@
                     success: function(data)
                     {
                         alert(data);
-                        $(".result").html(data);
+//                        $(".result").html(data);
                     }
                 });
             });
         });
-    </script>
+    </script>--%>
 </head>
 <body>
 <div class="result">
