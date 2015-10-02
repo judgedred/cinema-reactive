@@ -1,4 +1,5 @@
-﻿<%@ page contentType="text/html; charset=utf-8" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.domain.*" %>
 
@@ -8,7 +9,7 @@
 	<title>Delete Filmshow</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript">
+    <%--<script type="text/javascript">
         $(document).ready(function(){
             $("#filmshow-delete").submit(function (event) {
                 $.ajax({
@@ -23,7 +24,7 @@
                 })
             });
         });
-    </script>
+    </script>--%>
 </head>
 <body>
 <div class="wrapper">
@@ -31,18 +32,12 @@
 
 	<p>Удалить сеанс</p>
 	<form action="deleteFilmshow" method="Get" id="filmshow-delete">
-		<p><select name="filmshow-select" id="filmshow-select">
+		<p><select name="filmshow" id="filmshow">
 			<option selected disabled>Выберите сеанс</option>
-			<%
-				List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
-				for(Filmshow f: filmshowLst)
-				{
-			%>
-			<option value=<%=f.getFilmshowId()%>><%=f%></option>
-            <%
-				}
-			%>
-		</p></select>
+            <c:forEach items="${filmshowList}" var="filmshow">
+            <option value="${filmshow.filmshowId}">${filmshow}</option>
+            </c:forEach>
+		</select></p>
 		<p><input type="submit" value="Удалить"></p>
 	</form>
 </div>

@@ -1,4 +1,5 @@
-﻿<%@ page contentType="text/html; charset=utf-8" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
 
@@ -14,7 +15,7 @@
     <script type="text/javascript" src="../resources/js/jquery-ui-timepicker-addon.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#date-time").datetimepicker({firstDay: 1, showOtherMonths: true, selectOtherMonths: true, dateFormat: "yy-mm-dd"});
+            $("#date-Time").datetimepicker({firstDay: 1, showOtherMonths: true, selectOtherMonths: true, dateFormat: "yy-mm-dd"});
         });
     </script>
 </head>
@@ -23,8 +24,8 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Добавление сеанса</p>
-	<form action="addFilmshow" method="Get">
-		<p><select name="filmSelect">
+	<form action="addFilmshow" method="Post">
+		<%--<p><select name="filmSelect">
 			<option selected disabled>Выберите фильм</option>
 			<% 
 				List<Film> filmLst = (List<Film>)session.getAttribute("filmList");
@@ -36,10 +37,25 @@
 			<%
 				}
 			%>
-		</p></select>
-		<p><select name="hallSelect">
-			<option selected disabled>Выберите зал</option>
-			<% 
+		</p></select>--%>
+
+                <p><label for="film">Фильм</label>
+                <select id="film" name="film">
+                    <option selected disabled>Выберите фильм</option>
+                    <c:forEach items="${filmList}" var="film">
+                        <option value="${film.filmId}">${film.filmName}</option>
+                    </c:forEach>
+                    </select>
+                </p>
+                <p><label for="hall">Зал</label>
+                <select id="hall" name="hall">
+                    <option selected disabled>Выберите зал</option>
+                    <c:forEach items="${hallList}" var="hall">
+                        <option value="${hall.hallId}">${hall.hallName}</option>
+                    </c:forEach>
+                </select>
+                </p>
+			<%--<%
 				List<Hall> hallLst = (List<Hall>)session.getAttribute("hallList");
 				for(Hall h: hallLst)
 				{
@@ -49,9 +65,11 @@
                 <%
 				}
 			%>
-		</p></select>
-		<p>Выберите дату<input type="text" name="date-time" id="date-time" size="25"></p>
-		<p><input type="submit" value="Добавить"></p>
+		</p></select>--%>
+            <p><label for="date-Time">Дата</label>
+            <input type="text" name="date-Time" id="date-Time" size="25"></p>
+                <p><input type="submit" value="Добавить"></p>
+        <%--<p><input type="text" name="dateTime" id="dateTime" size="25"></p>--%>
 	</form>
 </div>
 </body>

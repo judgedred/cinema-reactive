@@ -8,6 +8,7 @@ import com.service.FilmshowService;
 import com.service.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,14 +27,14 @@ public class FilmshowController
     @Autowired
     private FilmService filmService;
 
-    @RequestMapping(value = "/admin/addFilmshow", method = RequestMethod.POST)
-    public @ResponseBody ModelAndView addFilmshow(@RequestBody Filmshow filmshow) throws Exception
+    @RequestMapping("/admin/addFilmshow")
+    public ModelAndView addFilmshow(@ModelAttribute Filmshow filmshow, BindingResult result) throws Exception
     {
         List<Film> filmList = filmService.getFilmAll();
         List<Hall> hallList = hallService.getHallAll();
         ModelAndView mav = new ModelAndView("addFilmshow");
-        mav.addObject("filmListJson", filmList);
-        mav.addObject("hallListJson", hallList);
+        mav.addObject("filmList", filmList);
+        mav.addObject("hallList", hallList);
         if(filmshow != null && filmshow.getFilm() != null
                 && filmshow.getHall() != null && filmshow.getDateTime() != null)
         {
@@ -53,7 +54,7 @@ public class FilmshowController
             if(filmshowValid)
             {
                 filmshowService.create(filmshow);
-                mav.addObject("filmshowJson", filmshow);
+                mav.addObject("filmshow", filmshow);
             }
         }
         return mav;
@@ -61,22 +62,22 @@ public class FilmshowController
 
 //    @RequestMapping("/admin/updateFilmshow")
 
-    @RequestMapping("/admin/deleteFilmshow/{filmshowId}")
-    public @ResponseBody ModelAndView deleteFilmshow(@PathVariable int filmshowId) throws Exception
+    @RequestMapping("/admin/deleteFilmshow")
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+//        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
         if(filmshow != null)
         {
             filmshowService.delete(filmshow);
         }
-        return new ModelAndView("deleteFilmshow", "filmshowListJson", filmshowList);
+        return new ModelAndView("deleteFilmshow", "filmshowList", filmshowList);
     }
 
     @RequestMapping("/admin/filmshowList")
-    public @ResponseBody ModelAndView listFilmshows() throws Exception
+    public ModelAndView listFilmshows() throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        return new ModelAndView("filmshowList", "filmshowListJson", filmshowList);
+        return new ModelAndView("filmshowList", "filmshowList", filmshowList);
     }
 }

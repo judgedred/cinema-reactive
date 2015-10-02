@@ -1,5 +1,11 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Admin menu</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
 <ul class="navigation">
-
+<body>
     <li><a href="filmshowList" title="Filmshow">Сеансы</a>
     <ul>
         <li><a href="addFilmshow" title="Add">Добавить</a></li>
@@ -46,3 +52,5 @@
     <li><a href="logout" title="Logout">Выход</a></li>
     <div class="clear"></div>
 </ul>
+</body>
+</html>

@@ -43,31 +43,39 @@ public class MainController
         return new ModelAndView("admin");
     }
 
-    @RequestMapping(value = "/admin/login", produces = "text/plain;charset=UTF-8")
+    @RequestMapping("/admin/login")
     public ModelAndView adminLogin(@ModelAttribute User user) throws Exception
     {
         ModelAndView mav = new ModelAndView("adminMain");
         List<User> userList = userService.getUserAll();
+        boolean userValid = false;
         if(user != null && user.getLogin() != null && user.getPassword() != null)
         {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             digest.reset();
             byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
             String passwordHash = DatatypeConverter.printHexBinary(hash);
-            boolean userValid = false;
             if(user.getLogin().equals("admin"))
             {
                 for(User u : userList)
                 {
                     if(u.getLogin().equals(user.getLogin()) && u.getPassword().toUpperCase().equals(passwordHash))
                     {
-                        mav.addObject("adminUserJson", u);
+                        mav.addObject("adminUser", u);
+                        userValid = true;
                         break;
                     }
                 }
             }
         }
-        return mav;
+        if(userValid)
+        {
+            return mav;
+        }
+        else
+        {
+            return new ModelAndView("forbidden");
+        }
     }
 
     @RequestMapping("/admin/logout")
