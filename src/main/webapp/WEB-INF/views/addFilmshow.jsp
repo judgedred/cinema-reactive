@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../resources/js/jquery-ui-timepicker-addon.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#date-Time").datetimepicker({firstDay: 1, showOtherMonths: true, selectOtherMonths: true, dateFormat: "yy-mm-dd"});
+            $("#dateTime").datetimepicker({firstDay: 1, showOtherMonths: true, selectOtherMonths: true, dateFormat: "yy-mm-dd"});
         });
     </script>
 </head>
@@ -66,8 +66,8 @@
 				}
 			%>
 		</p></select>--%>
-            <p><label for="date-Time">Дата</label>
-            <input type="text" name="date-Time" id="date-Time" size="25"></p>
+            <p><label for="dateTime">Дата</label>
+            <input type="text" name="dateTime" id="dateTime" size="25"></p>
                 <p><input type="submit" value="Добавить"></p>
         <%--<p><input type="text" name="dateTime" id="dateTime" size="25"></p>--%>
 	</form>

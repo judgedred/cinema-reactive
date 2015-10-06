@@ -7,12 +7,15 @@ import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -63,7 +66,7 @@ public class FilmshowController
 //    @RequestMapping("/admin/updateFilmshow")
 
     @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow, BindingResult result) throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
 //        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
@@ -79,5 +82,14 @@ public class FilmshowController
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         return new ModelAndView("filmshowList", "filmshowList", filmshowList);
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder)
+    {
+        binder.registerCustomEditor(Date.class,
+                new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), true));
+        binder.registerCustomEditor(Film.class, new FilmEditor());
+        binder.registerCustomEditor(Hall.class, new HallEditor());
     }
 }
