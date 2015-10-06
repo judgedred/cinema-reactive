@@ -1,4 +1,5 @@
 ﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
@@ -24,21 +25,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Добавление сеанса</p>
-	<form action="addFilmshow" method="Post">
-		<%--<p><select name="filmSelect">
-			<option selected disabled>Выберите фильм</option>
-			<% 
-				List<Film> filmLst = (List<Film>)session.getAttribute("filmList");
-				for(Iterator<Film> i = filmLst.iterator(); i.hasNext(); )
-				{
-					Film f = i.next();
-			%>
-				<option value=<%=f.getFilmId()%>><%=f.getFilmName()%></option>
-			<%
-				}
-			%>
-		</p></select>--%>
-
+	<%--<form action="addFilmshow" method="Post">
                 <p><label for="film">Фильм</label>
                 <select id="film" name="film">
                     <option selected disabled>Выберите фильм</option>
@@ -55,22 +42,26 @@
                     </c:forEach>
                 </select>
                 </p>
-			<%--<%
-				List<Hall> hallLst = (List<Hall>)session.getAttribute("hallList");
-				for(Hall h: hallLst)
-				{
-					%>
-            <option value=<%=h.getHallId()%>><%=h.getHallName()%>
-            </option>
-                <%
-				}
-			%>
-		</p></select>--%>
             <p><label for="dateTime">Дата</label>
             <input type="text" name="dateTime" id="dateTime" size="25"></p>
                 <p><input type="submit" value="Добавить"></p>
-        <%--<p><input type="text" name="dateTime" id="dateTime" size="25"></p>--%>
-	</form>
+	</form>--%>
+
+    <form:form action="addFilmshow" modelAttribute="filmshow">
+    <p><form:label path="film">Фильм</form:label>
+        <form:select path="film">
+        <form:option value="Выберите фильм" disabled="false"/>
+        <form:options items="${filmList}" itemLabel="filmName" itemValue="filmId"/>     <%--itemValue="${film}" itemLabel="${film.filmName}"--%>
+        </form:select></p>
+        <form:label path="hall">Зал</form:label>
+        <form:select path="hall">
+            <form:option value="Выберите зал" disabled="false"/>
+            <form:options items="${hallList}" itemLabel="hallName" itemValue="hallId"/>     <%--itemValue="${film}" itemLabel="${film.filmName}"--%>
+        </form:select></p>
+        <p><form:label path="dateTime">Дата</form:label>
+            <form:input path="dateTime" type="text" size="25"/></p>
+        <p><input type="submit" value="Добавить"></p>
+    </form:form>
 </div>
 </body>
 </html>

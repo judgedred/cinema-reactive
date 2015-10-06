@@ -84,12 +84,12 @@ public class FilmshowController
         return new ModelAndView("filmshowList", "filmshowList", filmshowList);
     }
 
-    @InitBinder
+    /*@InitBinder
     public void initBinder(WebDataBinder binder)
     {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), true));
         binder.registerCustomEditor(Film.class, new FilmEditor());
         binder.registerCustomEditor(Hall.class, new HallEditor());
-    }
+    }*/
 }
