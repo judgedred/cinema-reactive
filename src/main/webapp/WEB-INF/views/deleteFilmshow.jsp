@@ -41,16 +41,19 @@
 		</select></p>
 		<p><input type="submit" value="Удалить"></p>
 	</form>--%>
-    <form:form action="deleteFilmshow/${filmshow.filmshowId}" modelAttribute="filmshow">
+    <%--<c:url var="deleteFilmshow" value="deleteFilmshow/${filmshow.filmshowId}"/>--%>
+<c:if test="${!empty filmshowList}">
+    <form:form action="deleteFilmshow" modelAttribute="filmshow">
         <p>
             <form:label path="filmshowId">Сеанс</form:label>
             <form:select path="filmshowId">
                 <form:option value="0" label="Выберите сеанс"/>
-                <form:options items="${filmshowList}" itemValue="filmshowId"/>
+                <form:options items="${filmshowList}" itemValue="filmshowId" />
             </form:select>
         </p>
         <p><input type="submit" value="Удалить"></p>
     </form:form>
+    </c:if>
 </div>
 </body>
 </html>

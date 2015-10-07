@@ -37,9 +37,7 @@ public class FilmshowController
     @Autowired
     private HallEditor hallEditor;
 
-    @Autowired FilmshowEditor filmshowEditor;
-
-    @RequestMapping(value = "/admin/addFilmshow", method = RequestMethod.POST)
+    @RequestMapping("/admin/addFilmshow")
     public ModelAndView addFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
     {
         /*List<Film> filmList = filmService.getFilmAll();
@@ -66,13 +64,18 @@ public class FilmshowController
             if(filmshowValid)
             {
                 filmshowService.create(filmshow);
-//                mav.addObject("filmshow", filmshow);
+                return new ModelAndView(new RedirectView("/cinema/admin/addFilmshow"));
             }
         }
-        return new ModelAndView(new RedirectView("/cinema/admin/addFilmshow"));
+        List<Film> filmList = filmService.getFilmAll();
+        List<Hall> hallList = hallService.getHallAll();
+        ModelAndView mav = new ModelAndView("addFilmshow");
+        mav.addObject("filmList", filmList);
+        mav.addObject("hallList", hallList);
+        return mav;
     }
 
-    @RequestMapping(value = "/admin/addFilmshow", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/admin/addFilmshow", method = RequestMethod.GET)
     public ModelAndView addFilmshowForm() throws Exception
     {
         List<Film> filmList = filmService.getFilmAll();
@@ -82,28 +85,33 @@ public class FilmshowController
         mav.addObject("hallList", hallList);
         mav.addObject("filmshow", new Filmshow());
         return mav;
-    }
+    }*/
 
 //    @RequestMapping("/admin/updateFilmshow")
 
     @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshowForm() throws Exception
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("deleteFilmshow");
+        if(filmshow != null && filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
+        {
+            filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
+            filmshowService.delete(filmshow);
+            return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
+        }
         mav.addObject("filmshowList", filmshowList);
-        mav.addObject("filmshow", new Filmshow());
         return mav;
     }
 
-    @RequestMapping("/admin/deleteFilmshow/{filmshowId}")
+   /* @RequestMapping("/admin/deleteFilmshow/{filmshowId}")
     public ModelAndView deleteFilmshow(@PathVariable int filmshowId) throws Exception
     {
            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
             filmshowService.delete(filmshow);
 
-        return new ModelAndView(new RedirectView("deleteFilmshow"));
-    }
+        return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
+    }*/
 
     @RequestMapping("/admin/filmshowList")
     public ModelAndView listFilmshows() throws Exception
@@ -119,6 +127,5 @@ public class FilmshowController
                 new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), true));
         binder.registerCustomEditor(Film.class, filmEditor);
         binder.registerCustomEditor(Hall.class, hallEditor);
-        binder.registerCustomEditor(Filmshow.class, filmshowEditor);
     }
 }
