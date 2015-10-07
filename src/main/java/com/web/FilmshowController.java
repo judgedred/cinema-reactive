@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,14 +31,22 @@ public class FilmshowController
     @Autowired
     private FilmService filmService;
 
-    @RequestMapping("/admin/addFilmshow")
-    public ModelAndView addFilmshow(@ModelAttribute Filmshow filmshow, BindingResult result) throws Exception
+    @Autowired
+    private FilmEditor filmEditor;
+
+    @Autowired
+    private HallEditor hallEditor;
+
+    @Autowired FilmshowEditor filmshowEditor;
+
+    @RequestMapping(value = "/admin/addFilmshow", method = RequestMethod.POST)
+    public ModelAndView addFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
     {
-        List<Film> filmList = filmService.getFilmAll();
+        /*List<Film> filmList = filmService.getFilmAll();
         List<Hall> hallList = hallService.getHallAll();
         ModelAndView mav = new ModelAndView("addFilmshow");
         mav.addObject("filmList", filmList);
-        mav.addObject("hallList", hallList);
+        mav.addObject("hallList", hallList);*/
         if(filmshow != null && filmshow.getFilm() != null
                 && filmshow.getHall() != null && filmshow.getDateTime() != null)
         {
@@ -57,24 +66,43 @@ public class FilmshowController
             if(filmshowValid)
             {
                 filmshowService.create(filmshow);
-                mav.addObject("filmshow", filmshow);
+//                mav.addObject("filmshow", filmshow);
             }
         }
+        return new ModelAndView(new RedirectView("/cinema/admin/addFilmshow"));
+    }
+
+    @RequestMapping(value = "/admin/addFilmshow", method = RequestMethod.GET)
+    public ModelAndView addFilmshowForm() throws Exception
+    {
+        List<Film> filmList = filmService.getFilmAll();
+        List<Hall> hallList = hallService.getHallAll();
+        ModelAndView mav = new ModelAndView("addFilmshow");
+        mav.addObject("filmList", filmList);
+        mav.addObject("hallList", hallList);
+        mav.addObject("filmshow", new Filmshow());
         return mav;
     }
 
 //    @RequestMapping("/admin/updateFilmshow")
 
     @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow, BindingResult result) throws Exception
+    public ModelAndView deleteFilmshowForm() throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-//        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-        if(filmshow != null)
-        {
+        ModelAndView mav = new ModelAndView("deleteFilmshow");
+        mav.addObject("filmshowList", filmshowList);
+        mav.addObject("filmshow", new Filmshow());
+        return mav;
+    }
+
+    @RequestMapping("/admin/deleteFilmshow/{filmshowId}")
+    public ModelAndView deleteFilmshow(@PathVariable int filmshowId) throws Exception
+    {
+           Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
             filmshowService.delete(filmshow);
-        }
-        return new ModelAndView("deleteFilmshow", "filmshowList", filmshowList);
+
+        return new ModelAndView(new RedirectView("deleteFilmshow"));
     }
 
     @RequestMapping("/admin/filmshowList")
@@ -84,12 +112,13 @@ public class FilmshowController
         return new ModelAndView("filmshowList", "filmshowList", filmshowList);
     }
 
-    /*@InitBinder
+    @InitBinder
     public void initBinder(WebDataBinder binder)
     {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), true));
-        binder.registerCustomEditor(Film.class, new FilmEditor());
-        binder.registerCustomEditor(Hall.class, new HallEditor());
-    }*/
+        binder.registerCustomEditor(Film.class, filmEditor);
+        binder.registerCustomEditor(Hall.class, hallEditor);
+        binder.registerCustomEditor(Filmshow.class, filmshowEditor);
+    }
 }

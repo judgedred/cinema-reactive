@@ -2,23 +2,39 @@ package com.web;
 
 
 import com.domain.Hall;
+import com.service.HallService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.beans.PropertyEditorSupport;
 
+@Component
 public class HallEditor extends PropertyEditorSupport
 {
+    @Autowired
+    private HallService hallService;
+
     @Override
     public void setAsText(String text)
     {
-        Hall h = new Hall();
-        h.setHallId(Integer.parseInt(text));
-        this.setValue(h);
+        try
+        {
+            Hall h = hallService.getHallById(Integer.parseInt(text));
+            /*Hall h = new Hall();
+            h.setHallId(Integer.parseInt(text));*/
+            this.setValue(h);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    @Override
+    /*@Override
     public String getAsText()
     {
         Hall h = (Hall) this.getValue();
         return h.getHallName();
-    }
+    }*/
 }

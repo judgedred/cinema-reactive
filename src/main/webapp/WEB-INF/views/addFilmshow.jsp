@@ -50,12 +50,12 @@
     <form:form action="addFilmshow" modelAttribute="filmshow">
     <p><form:label path="film">Фильм</form:label>
         <form:select path="film">
-        <form:option value="Выберите фильм" disabled="false"/>
+        <form:option value="0" disabled="false" label="Выберите фильм"/>
         <form:options items="${filmList}" itemLabel="filmName" itemValue="filmId"/>     <%--itemValue="${film}" itemLabel="${film.filmName}"--%>
         </form:select></p>
         <form:label path="hall">Зал</form:label>
         <form:select path="hall">
-            <form:option value="Выберите зал" disabled="false"/>
+            <form:option value="0" disabled="false" label="Выберите зал"/>
             <form:options items="${hallList}" itemLabel="hallName" itemValue="hallId"/>     <%--itemValue="${film}" itemLabel="${film.filmName}"--%>
         </form:select></p>
         <p><form:label path="dateTime">Дата</form:label>

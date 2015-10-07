@@ -1,5 +1,6 @@
 ﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=utf-8" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.domain.*" %>
 
@@ -31,7 +32,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Удалить сеанс</p>
-	<form action="deleteFilmshow" method="Get" id="filmshow-delete">
+	<%--<form action="deleteFilmshow" method="Get" id="filmshow-delete">
 		<p><select name="filmshow" id="filmshow">
 			<option selected disabled>Выберите сеанс</option>
             <c:forEach items="${filmshowList}" var="filmshow">
@@ -39,7 +40,17 @@
             </c:forEach>
 		</select></p>
 		<p><input type="submit" value="Удалить"></p>
-	</form>
+	</form>--%>
+    <form:form action="deleteFilmshow/${filmshow.filmshowId}" modelAttribute="filmshow">
+        <p>
+            <form:label path="filmshowId">Сеанс</form:label>
+            <form:select path="filmshowId">
+                <form:option value="0" label="Выберите сеанс"/>
+                <form:options items="${filmshowList}" itemValue="filmshowId"/>
+            </form:select>
+        </p>
+        <p><input type="submit" value="Удалить"></p>
+    </form:form>
 </div>
 </body>
 </html>
