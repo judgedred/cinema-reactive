@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="com.domain.Filmshow" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.domain.Seat" %>
@@ -10,15 +12,15 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#filmshow-select").change(function(){
+            $("#filmshow").change(function(){
                 $.ajax({
-                    url: "../ProcessServlet/seatsFilter?filmshow-select=" + $("#filmshow-select").val(), success: function(data) {
+                    url: "seatsFilter/" + $("#filmshow").val(), success: function(data) {
                         $("#seat-div").load(document.URL + " #seat-div");
                     }
                 })
             });
-            $("#ticket-add").submit(function (event) {
-                if ($("#filmshow-select").val() == null || $("#ticket-add-price").val() == "" || $("#seat-select").val() == null)
+            $("#ticket").submit(function (event) {
+                if ($("#filmshow").val() == null || $("#price").val() == "" || $("#seat").val() == null)
                 {
                     alert("Заполните поля");
                     event.preventDefault();
@@ -33,7 +35,28 @@
     <jsp:include page="admin_menu.jsp"/>
 
 <p>Добавить билет</p>
-<form action="addTicket" method="Get" id="ticket-add">
+
+    <c:if test="${!empty filmshowList || !empty filteredSeatList}">
+        <form:form action="addTicket" modelAttribute="ticket">
+            <p><form:label path="filmshow">Сеанс</form:label>
+                <form:select path="filmshow">
+                    <form:option value="0" label="Выберите сеанс"/>
+                    <form:options items="${filmshowList}" itemValue="filmshowId"/>
+                </form:select></p>
+            <p><form:label path="price">Введите цену</form:label>
+                <form:input path="price" type="text"/></p>
+            <div id="seat-div">
+            <form:label path="seat">Место</form:label>
+            <form:select path="seat">
+                <form:option value="0" label="Выберите место"/>
+                <form:options items="${filteredSeatList}" itemValue="seatId"/>
+            </form:select>
+            </div>
+            <p><input type="submit" value="Добавить"></p>
+        </form:form>
+    </c:if>
+
+<%--<form action="addTicket" method="Get" id="ticket-add">
   <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
     <option selected disabled>Выберите сеанс</option>
       <%
@@ -66,7 +89,7 @@
     </select></p>
     </div>
   <p><input type="submit" value="Добавить билет"></p>
-</form>
+</form>--%>
 
     </div>
 </body>

@@ -11,12 +11,11 @@ import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -76,18 +75,28 @@ public class FilmshowController
     }
 
     @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow, HttpServletResponse response) throws Exception
     {
-        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        ModelAndView mav = new ModelAndView("deleteFilmshow");
-        if(filmshow != null && filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
+        try
         {
-            filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
-            filmshowService.delete(filmshow);
-            return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
+            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+            ModelAndView mav = new ModelAndView("deleteFilmshow");
+            if(filmshow != null && filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
+            {
+                filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
+                filmshowService.delete(filmshow);
+                return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
+            }
+            mav.addObject("filmshowList", filmshowList);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return mav;
         }
-        mav.addObject("filmshowList", filmshowList);
-        return mav;
+        catch(Exception e)
+        {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @RequestMapping("/admin/filmshowList")
