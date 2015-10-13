@@ -1,9 +1,11 @@
 package com.web;
 
 import com.domain.Filmshow;
+import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import com.service.FilmshowService;
+import com.service.ReservationService;
 import com.service.SeatService;
 import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class TicketController
 
     @Autowired
     private SeatService seatService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Autowired
     private TicketEditor ticketEditor;
@@ -129,6 +134,7 @@ public class TicketController
         mav.addObject("ticketList", ticketList);
         mav.addObject("filmshowList", filmshowList);
         mav.addObject("filteredList", filteredList);
+        mav.addObject("ticket", new Ticket());
         return mav;
     }
 
@@ -165,6 +171,24 @@ public class TicketController
         }
         model.addAttribute("filteredSeatList", filteredSeatList);
         return model;
+    }
+
+    @RequestMapping(value = "/admin/ticketCheck/{ticketId}", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String ticketCheck(@PathVariable int ticketId) throws Exception
+    {
+        Ticket ticket = ticketService.getTicketById(ticketId);
+        if(ticket != null)
+        {
+            List<Reservation> reservationList = reservationService.getReservationAll();
+            for(Reservation r : reservationList)
+            {
+                if(r.getTicket().equals(ticket))
+                {
+                    return "Билет зарезервирован. Сначала удалите бронь.";
+                }
+            }
+        }
+        return null;
     }
 
     @InitBinder

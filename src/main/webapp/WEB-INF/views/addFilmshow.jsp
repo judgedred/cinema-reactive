@@ -33,7 +33,7 @@
         </form:select></p>
         <form:label path="hall">Зал</form:label>
         <form:select path="hall">
-            <form:option value="0" disabled="false" label="Выберите зал"/>
+            <form:option value="0" label="Выберите зал"/>
             <form:options items="${hallList}" itemLabel="hallName" itemValue="hallId"/>
         </form:select></p>
         <p><form:label path="dateTime">Дата</form:label>

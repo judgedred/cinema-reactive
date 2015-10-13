@@ -21,20 +21,17 @@
                     <form:option value="0" label="Выберите сеанс"/>
                     <form:options items="${filmshowList}" itemValue="filmshowId"/>
                 </form:select></p>
-            <p><form:label path="price">Введите цену</form:label>
-                <form:input path="price" type="text"/></p>
-            <div id="seat-div">
-                <form:label path="seat">Место</form:label>
-                <form:select path="seat">
-                    <form:option value="0" label="Выберите место"/>
-                    <form:options items="${filteredSeatList}" itemValue="seatId"/>
-                </form:select>
-            </div>
-            <p><input type="submit" value="Добавить"></p>
+            <p><input type="submit" value="Показать"></p>
         </form:form>
     </c:if>
 
-<form action="ticketList" method="Get" id="ticket-list">
+    <c:if test="${!empty filteredList}">
+    <c:forEach items="filteredList" var="ticket">
+        <p>${ticket}</p>
+    </c:forEach>
+    </c:if>
+
+<%--<form action="ticketList" method="Get" id="ticket-list">
     <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
         <option selected disabled>Выберите сеанс</option>
         <%
@@ -60,7 +57,7 @@
 <%
   }
   }
-%>
+%>--%>
     </div>
 </body>
 </html>
