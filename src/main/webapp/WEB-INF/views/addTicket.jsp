@@ -15,6 +15,8 @@
             $("#filmshow").change(function(){
                 $.ajax({
                     url: "seatsFilter/" + $("#filmshow").val(), success: function(data) {
+                        alert("works");
+                        alert(data);
                         $("#seat-div").load(document.URL + " #seat-div");
                     }
                 })
@@ -36,7 +38,7 @@
 
 <p>Добавить билет</p>
 
-    <c:if test="${!empty filmshowList || !empty filteredSeatList}">
+    <c:if test="${!empty filmshowList}">
         <form:form action="addTicket" modelAttribute="ticket">
             <p><form:label path="filmshow">Сеанс</form:label>
                 <form:select path="filmshow">

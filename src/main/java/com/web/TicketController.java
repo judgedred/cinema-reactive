@@ -103,6 +103,7 @@ public class TicketController
                 ticketService.delete(ticket);
             }
             List<Ticket> ticketList = ticketService.getTicketAll();
+            response.setStatus(HttpServletResponse.SC_OK);
             return new ModelAndView("deleteTicket", "ticketList", ticketList);
         }
         catch(Exception e)
@@ -114,10 +115,11 @@ public class TicketController
     }
 
     @RequestMapping("/admin/ticketList")
-    public ModelAndView listTickets(@ModelAttribute Filmshow filmshow) throws Exception
+    public ModelAndView listTickets(@ModelAttribute Ticket ticket) throws Exception
     {
         List<Ticket> ticketList = ticketService.getTicketAll();
-        List<Ticket> filteredList = new ArrayList<>();
+        List<Ticket> filteredTicketList = new ArrayList<>();
+        Filmshow filmshow = ticket.getFilmshow();
         if(ticketList != null && filmshow != null && filmshow.getFilm() != null
                 && filmshow.getHall() != null && filmshow.getDateTime() != null)
         {
@@ -125,7 +127,7 @@ public class TicketController
             {
                 if(t.getFilmshow().equals(filmshow))
                 {
-                    filteredList.add(t);
+                    filteredTicketList.add(t);
                 }
             }
         }
@@ -133,13 +135,12 @@ public class TicketController
         ModelAndView mav = new ModelAndView("ticketList");
         mav.addObject("ticketList", ticketList);
         mav.addObject("filmshowList", filmshowList);
-        mav.addObject("filteredList", filteredList);
-        mav.addObject("ticket", new Ticket());
+        mav.addObject("filteredTicketList", filteredTicketList);
         return mav;
     }
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
-    public Model filterSeats(@PathVariable int filmshowId, Model model) throws Exception
+    public ModelAndView filterSeats(@PathVariable int filmshowId, HttpServletResponse response) throws Exception
     {
         List<Seat> seatList = seatService.getSeatAll();
         List<Ticket> ticketList = ticketService.getTicketAll();
@@ -169,8 +170,11 @@ public class TicketController
                 }
             }
         }
-        model.addAttribute("filteredSeatList", filteredSeatList);
-        return model;
+        ModelAndView mav = new ModelAndView("addTicket");
+        mav.addObject("ticket", new Ticket());
+        mav.addObject("filteredSeatList", filteredSeatList);
+        response.setStatus(HttpServletResponse.SC_OK);
+        return mav;
     }
 
     @RequestMapping(value = "/admin/ticketCheck/{ticketId}", produces = "text/html; charset=UTF-8")

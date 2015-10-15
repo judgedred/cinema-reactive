@@ -25,8 +25,8 @@
         </form:form>
     </c:if>
 
-    <c:if test="${!empty filteredList}">
-    <c:forEach items="filteredList" var="ticket">
+    <c:if test="${!empty filteredTicketList}">
+    <c:forEach items="${filteredTicketList}" var="ticket">
         <p>${ticket}</p>
     </c:forEach>
     </c:if>
