@@ -14,15 +14,17 @@
         $(document).ready(function() {
             $("#filmshow").change(function(){
                 $.ajax({
-                    url: "seatsFilter/" + $("#filmshow").val(), success: function(data) {
-                        alert("works");
-                        alert(data);
-                        $("#seat-div").load(document.URL + " #seat-div");
+                    url: "seatsFilter/" + $("#filmshow").val(), dataType: "json", success: function(data) {
+                        var options = '<option value="">Выберите место</option>';
+                        $.each(data, function(key, value) {
+                            options += '<option value="' + key + '">' + value + '</option>';
+                    })
+                        $("select#seat").html(options);
                     }
                 })
             });
             $("#ticket").submit(function (event) {
-                if ($("#filmshow").val() == null || $("#price").val() == "" || $("#seat").val() == null)
+                if ($("#filmshow").val() == null || $("#price").val() == "" || $("#seat").val() == null || $("#seat").val() == "")
                 {
                     alert("Заполните поля");
                     event.preventDefault();
@@ -39,7 +41,7 @@
 <p>Добавить билет</p>
 
     <c:if test="${!empty filmshowList}">
-        <form:form action="addTicket" modelAttribute="ticket">
+        <form:form action="addTicket" modelAttribute="ticket" method="post">
             <p><form:label path="filmshow">Сеанс</form:label>
                 <form:select path="filmshow">
                     <form:option value="0" label="Выберите сеанс"/>
@@ -47,51 +49,13 @@
                 </form:select></p>
             <p><form:label path="price">Введите цену</form:label>
                 <form:input path="price" type="text"/></p>
-            <div id="seat-div">
             <form:label path="seat">Место</form:label>
             <form:select path="seat">
                 <form:option value="0" label="Выберите место"/>
-                <form:options items="${filteredSeatList}" itemValue="seatId"/>
             </form:select>
-            </div>
             <p><input type="submit" value="Добавить"></p>
         </form:form>
     </c:if>
-
-<%--<form action="addTicket" method="Get" id="ticket-add">
-  <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
-    <option selected disabled>Выберите сеанс</option>
-      <%
-				List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
-
-				for(Filmshow f: filmshowLst)
-				{
-			%>
-    <option value=<%=f.getFilmshowId()%>><%=f%></option>
-      <%
-				}
-			%>
-  </select></p>
-    <p><label for="ticket-add-price">Введите цену </label><input type="text" name="ticket-add-price" id="ticket-add-price"></p>
-    <div id="seat-div">
-    <p><label for="seat-select">Место </label><select name="seat-select" id="seat-select">
-        <option selected disabled>Выберите место</option>
-            <%
-				List<Seat> seatLst = (List<Seat>)session.getAttribute("filteredSeatList");
-                if(seatLst != null)
-                {
-				for(Seat s: seatLst)
-				{
-			%>
-        <option value=<%=s.getSeatId()%>><%=s%></option>
-            <%
-				}
-                }
-			%>
-    </select></p>
-    </div>
-  <p><input type="submit" value="Добавить билет"></p>
-</form>--%>
 
     </div>
 </body>

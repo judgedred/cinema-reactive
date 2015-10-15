@@ -31,33 +31,6 @@
     </c:forEach>
     </c:if>
 
-<%--<form action="ticketList" method="Get" id="ticket-list">
-    <p><label for="filmshow-select">Сеанс </label><select name="filmshow-select" id="filmshow-select">
-        <option selected disabled>Выберите сеанс</option>
-        <%
-            List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowList");
-            for(Filmshow f: filmshowLst)
-            {
-        %>
-        <option value=<%=f.getFilmshowId()%>><%=f%></option>
-        <%
-            }
-        %>
-    </select></p>
-    <p><input type="submit" value="Показать"></p>
-</form>
-<%
-  List<Ticket> ls = (List<Ticket>)session.getAttribute("filteredTicketList");
-  if(ls != null)
-  {
-  for(Ticket t : ls)
-  {
-%>
-<p><%=t%></p>
-<%
-  }
-  }
-%>--%>
     </div>
 </body>
 </html>

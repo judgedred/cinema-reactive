@@ -81,11 +81,14 @@ public class FilmshowController
         {
             List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
             ModelAndView mav = new ModelAndView("deleteFilmshow");
-            if(filmshow != null && filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
+            if(filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
             {
                 filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
-                filmshowService.delete(filmshow);
-                return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
+                if(filmshow != null)
+                {
+                    filmshowService.delete(filmshow);
+                    return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
+                }
             }
             mav.addObject("filmshowList", filmshowList);
             response.setStatus(HttpServletResponse.SC_OK);

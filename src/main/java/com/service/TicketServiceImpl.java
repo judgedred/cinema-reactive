@@ -18,7 +18,27 @@ public class TicketServiceImpl implements TicketService
     @Override
     public Ticket create(Ticket ticket) throws DaoException
     {
-        return ticketDao.create(ticket);
+        List<Ticket> ticketList = ticketDao.getTicketAll();
+        boolean ticketValid = true;
+        if(ticketList != null)
+        {
+            for(Ticket t : ticketList)
+            {
+                if(t.getFilmshow().equals(ticket.getFilmshow()) && t.getSeat().equals(ticket.getSeat()))
+                {
+                    ticketValid = false;
+                    break;
+                }
+            }
+        }
+        if(ticketValid)
+        {
+            return ticketDao.create(ticket);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

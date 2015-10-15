@@ -39,28 +39,13 @@
                 <form:label path="ticketId">Билет</form:label>
                 <form:select path="ticketId">
                     <form:option value="0" label="Выберите билет"/>
-                    <form:options items="${tickeetList}" itemValue="ticketId" />
+                    <form:options items="${ticketList}" itemValue="ticketId" />
                 </form:select>
             </p>
             <p><input type="submit" value="Удалить"></p>
         </form:form>
     </c:if>
 
-    <%--<form action="deleteTicket" method="Get" id="ticket-delete">
-        <p><select name="ticket-select" id="ticket-select">
-            <option selected disabled>Выберите билет</option>
-                <%
-				List<Ticket> ticketLs = (List<Ticket>)session.getAttribute("ticketList");
-				for(Ticket t: ticketLs)
-				{
-			%>
-            <option value=<%=t.getTicketId()%>><%=t%></option>
-                <%
-				}
-			%>
-        </p></select>
-        <p><input type="submit" value="Удалить"></p>
-    </form>--%>
 </div>
 </body>
 </html>
