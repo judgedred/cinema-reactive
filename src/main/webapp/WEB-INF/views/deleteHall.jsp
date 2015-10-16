@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.domain.*" %>
@@ -10,9 +12,9 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#hall-delete").submit(function (event) {
+            $("#hall").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/hallCheck?hall-select=" + $("#hall-select").val(),
+                    url: "hallCheck/" + $("#hallId").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -30,7 +32,21 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Удалить зал</p>
-    <form action="deleteHall" method="Get" id="hall-delete">
+
+    <c:if test="${!empty hallList}">
+        <form:form action="deleteHall" modelAttribute="hall">
+            <p>
+                <form:label path="hallId">Зал</form:label>
+                <form:select path="hallId">
+                    <form:option value="0" label="Выберите зал"/>
+                    <form:options items="${hallList}" itemValue="hallId" />
+                </form:select>
+            </p>
+            <p><input type="submit" value="Удалить"></p>
+        </form:form>
+    </c:if>
+
+    <%--<form action="deleteHall" method="Get" id="hall-delete">
         <p><select name="hall-select" id="hall-select">
             <option selected disabled>Выберите зал</option>
                 <%
@@ -44,7 +60,7 @@
 			%>
         </p></select>
         <p><input type="submit" value="Удалить"></p>
-    </form>
+    </form>--%>
 </div>
 </body>
 </html>

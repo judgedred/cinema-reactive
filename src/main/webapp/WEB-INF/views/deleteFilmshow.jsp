@@ -30,7 +30,7 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Удалить сеанс</p>
-<c:if test="${!empty filmshowList}">
+    <c:if test="${!empty filmshowList}">
     <form:form action="deleteFilmshow" modelAttribute="filmshow">
         <p>
             <form:label path="filmshowId">Сеанс</form:label>

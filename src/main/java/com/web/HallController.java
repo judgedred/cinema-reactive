@@ -1,12 +1,18 @@
 package com.web;
 
+import com.domain.Filmshow;
 import com.domain.Hall;
+import com.domain.Seat;
+import com.service.FilmshowService;
 import com.service.HallService;
+import com.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -15,52 +21,93 @@ public class HallController
     @Autowired
     private HallService hallService;
 
-    @RequestMapping(value = "admin/addHall", method = RequestMethod.POST)
-    public @ResponseBody ModelAndView addHall(@RequestBody Hall hall) throws Exception
+    @Autowired
+    private FilmshowService filmshowService;
+
+    @Autowired
+    private SeatService seatService;
+
+    @RequestMapping("/admin/addHall")
+    public ModelAndView addHall(@ModelAttribute Hall hall) throws Exception
     {
-        if(hall != null && !hall.getHallName().equals("") && hall.getHallNumber() != null)
+        if(hall != null && hall.getHallName() != null && hall.getHallNumber() != null)
         {
-            List<Hall> hallList = hallService.getHallAll();
-            boolean hallValid = true;
-            for(Hall h : hallList)
-            {
-                if(h.getHallName().equals(hall.getHallName()) && h.getHallNumber().equals(hall.getHallNumber()))
-                {
-                    hallValid = false;
-                    break;
-                }
-            }
-            if(hallValid)
-            {
-                return new ModelAndView("addHall", "hallJson", hallService.create(hall));
-            }
-            return null;
+            hallService.create(hall);
+            return new ModelAndView(new RedirectView("addHall"));
         }
-        else
-        {
-            return null;
-        }
+        return new ModelAndView("addHall");
     }
 
 //    @RequestMapping("admin/updateHall")
 
-    @RequestMapping("/admin/deleteHall/{hallId}")
-    public @ResponseBody ModelAndView deleteHall(@PathVariable int hallId) throws Exception
+    @RequestMapping("/admin/deleteHall")
+    public ModelAndView deleteHall(@ModelAttribute Hall hall, HttpServletResponse response) throws Exception
     {
-        List<Hall> hallList = hallService.getHallAll();
-        Hall hall = hallService.getHallById(hallId);
-        if(hall != null)
+        try
         {
-            hallService.delete(hall);
+            if(hall.getHallId() != null && hall.getHallId() != 0)
+            {
+                hall = hallService.getHallById(hall.getHallId());
+                if(hall != null)
+                {
+                    hallService.delete(hall);
+                    return new ModelAndView(new RedirectView("deleteHall"));
+                }
+            }
+            List<Hall> hallList = hallService.getHallAll();
+            response.setStatus(HttpServletResponse.SC_OK);
+            return new ModelAndView("deleteHall", "hallList", hallList);
         }
-        return new ModelAndView("deleteHall", "hallListJson", hallList);
+        catch(Exception e)
+        {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @RequestMapping("/admin/hallList")
-    public @ResponseBody ModelAndView listHalls() throws Exception
+    public ModelAndView listHalls() throws Exception
     {
         List<Hall> hallList = hallService.getHallAll();
-        return new ModelAndView("hallList", "hallListJson", hallList);
+        return new ModelAndView("hallList", "hallList", hallList);
     }
 
+    @RequestMapping(value = "/admin/hallCheck/{hallId}", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String hallCheck(@PathVariable int hallId) throws Exception
+    {
+        Hall hall = hallService.getHallById(hallId);
+        if(hall != null)
+        {
+            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+            List<Seat> seatList = seatService.getSeatAll();
+            boolean hallFreeFilmshow = true;
+            boolean hallFreeSeat = true;
+            for(Filmshow f : filmshowList)
+            {
+                if(f.getHall().equals(hall))
+                {
+                    hallFreeFilmshow = false;
+                    break;
+                }
+                for(Seat s : seatList)
+                {
+                    if(s.getHall().equals(hall))
+                    {
+                        hallFreeSeat = false;
+                        break;
+                    }
+                }
+            }
+            if(!hallFreeFilmshow)
+            {
+                return "В зале имеются сеансы. Сначала удалите сеансы.";
+            }
+            if(!hallFreeSeat)
+            {
+                return "В зале имеются места. Сначала удалите места.";
+            }
+        }
+        return null;
+    }
 }

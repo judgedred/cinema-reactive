@@ -1,14 +1,20 @@
 package com.web;
 
+import com.domain.Film;
 import com.domain.Hall;
 import com.domain.Seat;
+import com.domain.Ticket;
 import com.service.HallService;
 import com.service.SeatService;
+import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -20,54 +26,80 @@ public class SeatController
     @Autowired
     private HallService hallService;
 
-    @RequestMapping(value = "/admin/addSeat", method = RequestMethod.POST)
-    public @ResponseBody ModelAndView addSeat(@RequestBody Seat seat) throws Exception
+    @Autowired
+    private TicketService ticketService;
+
+    @Autowired
+    private HallEditor hallEditor;
+
+    @RequestMapping("/admin/addSeat")
+    public ModelAndView addSeat(@ModelAttribute Seat seat) throws Exception
     {
-        List<Hall> hallList = hallService.getHallAll();
-        ModelAndView mav = new ModelAndView("addSeat");
-        mav.addObject("hallListJson", hallList);
         if(seat != null && seat.getHall() != null && seat.getRowNumber() != null
                 && seat.getSeatNumber() != null)
         {
-            List<Seat> seatList = seatService.getSeatAll();
-            boolean seatValid = true;
-            for(Seat s : seatList)
-            {
-                if(s.getSeatNumber().equals(seat.getSeatNumber())
-                        && s.getHall().equals(seat.getHall())
-                        && s.getRowNumber().equals(seat.getRowNumber()))
-                {
-                    seatValid = false;
-                    break;
-                }
-            }
-            if(seatValid)
-            {
-                seatService.create(seat);
-                mav.addObject("seatJson", seat);
-            }
+            seatService.create(seat);
+            return new ModelAndView(new RedirectView("addSeat"));
         }
-        return mav;
+        List<Hall> hallList = hallService.getHallAll();
+        return new ModelAndView("addSeat", "hallList", hallList);
     }
 
 //    @RequestMapping("updateSeat")
 
-    @RequestMapping("/admin/deleteSeat/{seatId}")
-    public @ResponseBody ModelAndView deleteSeat(@PathVariable int seatId) throws Exception
+    @RequestMapping("/admin/deleteSeat")
+    public ModelAndView deleteSeat(@ModelAttribute Seat seat, HttpServletResponse response) throws Exception
     {
-        List<Seat> seatList = seatService.getSeatAll();
-        Seat seat = seatService.getSeatById(seatId);
-        if(seat != null)
+        try
         {
-            seatService.delete(seat);
+            if(seat.getSeatId() != null && seat.getSeatId() != 0)
+            {
+                seat = seatService.getSeatById(seat.getSeatId());
+                if(seat != null)
+                {
+                    seatService.delete(seat);
+                }
+            }
+            List<Seat> seatList = seatService.getSeatAll();
+            response.setStatus(HttpServletResponse.SC_OK);
+            return new ModelAndView("deleteSeat", "seatList", seatList);
         }
-        return new ModelAndView("deleteSeat", "seatListJson", seatList);
+        catch(Exception e)
+        {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @RequestMapping("/admin/seatList")
-    public @ResponseBody ModelAndView listSeats() throws Exception
+    public ModelAndView listSeats() throws Exception
     {
         List<Seat> seatList = seatService.getSeatAll();
-        return new ModelAndView("seatList", "seatListJson", seatList);
+        return new ModelAndView("seatList", "seatList", seatList);
+    }
+
+    @RequestMapping(value = "/admin/seatCheck/{seatId}", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String seatCheck(@PathVariable int seatId) throws Exception
+    {
+        Seat seat = seatService.getSeatById(seatId);
+        if(seat != null)
+        {
+            List<Ticket> ticketList = ticketService.getTicketAll();
+            for(Ticket t : ticketList)
+            {
+                if(t.getSeat().equals(seat))
+                {
+                    return "На место выпущены билеты. Сначала удалите билеты.";
+                }
+            }
+        }
+        return null;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder)
+    {
+        binder.registerCustomEditor(Hall.class, hallEditor);
     }
 }

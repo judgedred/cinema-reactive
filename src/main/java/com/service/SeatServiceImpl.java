@@ -18,7 +18,26 @@ public class SeatServiceImpl implements SeatService
     @Override
     public Seat create(Seat seat) throws DaoException
     {
-        return seatDao.create(seat);
+        List<Seat> seatList = seatDao.getSeatAll();
+        boolean seatValid = true;
+        for(Seat s : seatList)
+        {
+            if(s.getSeatNumber().equals(seat.getSeatNumber())
+                    && s.getHall().equals(seat.getHall())
+                    && s.getRowNumber().equals(seat.getRowNumber()))
+            {
+                seatValid = false;
+                break;
+            }
+        }
+        if(seatValid)
+        {
+            return seatDao.create(seat);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

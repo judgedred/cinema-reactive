@@ -1,6 +1,6 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="java.util.*" %>
-<%@ page import="com.domain.*" %>
 
 
 <html>
@@ -10,9 +10,9 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#seat-delete").submit(function (event) {
+            $("#seat").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/seatCheck?seat-select=" + $("#seat-select").val(),
+                    url: "seatCheck/" + $("#seatId").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -30,21 +30,20 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Удалить место</p>
-    <form action="deleteSeat" method="Get" id="seat-delete">
-        <p><select name="seat-select" id="seat-select">
-            <option selected disabled>Выберите место</option>
-                <%
-				List<Seat> seatLs = (List<Seat>)session.getAttribute("seatList");
-				for(Seat s: seatLs)
-				{
-			%>
-            <option value=<%=s.getSeatId()%>><%=s%></option>
-                <%
-				}
-			%>
-        </p></select>
-        <p><input type="submit" value="Удалить"></p>
-    </form>
+
+    <c:if test="${!empty seatList}">
+        <form:form action="deleteSeat" modelAttribute="seat">
+            <p>
+                <form:label path="seatId">Место</form:label>
+                <form:select path="seatId">
+                    <form:option value="0" label="Выберите место"/>
+                    <form:options items="${seatList}" itemValue="seatId" />
+                </form:select>
+            </p>
+            <p><input type="submit" value="Удалить"></p>
+        </form:form>
+    </c:if>
+
 </div>
 </body>
 </html>

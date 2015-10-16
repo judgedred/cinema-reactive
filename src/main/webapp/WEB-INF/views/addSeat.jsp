@@ -1,5 +1,5 @@
-<%@ page import="java.util.List" %>
-<%@ page import="com.domain.Hall" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -13,23 +13,32 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Добавить место</p>
-    <form action="addSeat" method="Get" id="seat-add">
-        <p><label for="hall-select">Зал </label><select name="hall-select" id="hall-select">
-            <option selected disabled>Выберите зал</option>
-            <%
-                List<Hall> hallLst = (List<Hall>)session.getAttribute("hallList");
-                for(Hall h: hallLst)
-                {
-            %>
-            <option value=<%=h.getHallId()%>><%=h%></option>
-            <%
-                }
-            %>
-        </select></p>
-        <p><label for="seat-add-row">Введите ряд </label><input type="text" name="seat-add-row" id="seat-add-row"></p>
-        <p><label for="seat-add-number">Введите номер </label><input type="text" name="seat-add-number" id="seat-add-number"></p>
-        <p><input type="submit" value="Добавить место"></p>
-    </form>
+
+    <c:if test="${!empty hallList}">
+    <form:form action="addSeat" modelAttribute="seat" method="post">
+    <table>
+        <tr>
+            <td><form:label path="hall">Зал</form:label></td>
+            <td><form:select path="hall">
+                <form:option value="0" label="Выберите зал"/>
+                <form:options items="${hallList}" itemValue="hallId"/>
+            </form:select> </td>
+        </tr>
+        <tr>
+            <td><form:label path="rowNumber">Введите ряд</form:label> </td>
+            <td><form:input path="rowNumber" type="text"/> </td>
+        </tr>
+        <tr>
+            <td><form:label path="seatNumber">Введите номер</form:label> </td>
+            <td><form:input path="seatNumber" type="text"/> </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Добавить"/></td>
+        </tr>
+    </table>
+    </form:form>
+    </c:if>
+
 </div>
 </body>
 </html>

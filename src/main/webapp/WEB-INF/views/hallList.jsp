@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
@@ -13,15 +14,16 @@
 
     <p>HallList</p>
 
-    <%
-        List<Hall> hallLs = (List<Hall>)session.getAttribute("hallList");
-        for(Hall h : hallLs)
-        {
-    %>
-    <p><%=h%></p>
-    <%
-        }
-    %>
+    <c:if test="${!empty hallList}">
+        <table>
+            <c:forEach items="${hallList}" var="hall">
+                <tr>
+                    <td>${hall}</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
+
 </div>
 </body>
 </html>

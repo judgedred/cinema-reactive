@@ -1,6 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="com.domain.*" %>
-<%@ page import="java.util.*" %>
 
 <html>
 <head>
@@ -13,15 +12,16 @@
 
     <p>SeatList</p>
 
-    <%
-        List<Seat> seatLs = (List<Seat>)session.getAttribute("seatList");
-        for(Seat s : seatLs)
-        {
-    %>
-    <p><%=s%></p>
-    <%
-        }
-    %>
+    <c:if test="${!empty seatList}">
+        <table>
+            <c:forEach items="${seatList}" var="seat">
+                <tr>
+                    <td>${seat}</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
+
 </div>
 </body>
 </html>

@@ -17,7 +17,24 @@ public class FilmServiceImpl implements FilmService
     @Override
     public Film create(Film film) throws DaoException
     {
-        return filmDao.create(film);
+        List<Film> filmList = filmDao.getFilmAll();
+        boolean filmValid = true;
+        for(Film f : filmList)
+        {
+            if(f.getFilmName().equals(film.getFilmName()) && f.getDescription().equals(film.getDescription()))
+            {
+                filmValid = false;
+                break;
+            }
+        }
+        if(filmValid)
+        {
+            return filmDao.create(film);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

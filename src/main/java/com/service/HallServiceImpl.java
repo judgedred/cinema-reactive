@@ -18,7 +18,24 @@ public class HallServiceImpl implements HallService
     @Override
     public Hall create(Hall hall) throws DaoException
     {
-        return hallDao.create(hall);
+        List<Hall> hallList = hallDao.getHallAll();
+        boolean hallValid = true;
+        for(Hall h : hallList)
+        {
+            if(h.getHallName().equals(hall.getHallName()) && h.getHallNumber().equals(hall.getHallNumber()))
+            {
+                hallValid = false;
+                break;
+            }
+        }
+        if(hallValid)
+        {
+            return hallDao.create(hall);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

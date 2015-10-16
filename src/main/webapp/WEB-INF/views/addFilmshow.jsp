@@ -25,7 +25,7 @@
 	<p>Добавление сеанса</p>
 
     <c:if test="${!empty filmList || !empty hallList}">
-    <form:form action="addFilmshow" modelAttribute="filmshow">
+    <form:form action="addFilmshow" modelAttribute="filmshow" method="post">
     <p><form:label path="film">Фильм</form:label>
         <form:select path="film">
         <form:option value="0" disabled="false" label="Выберите фильм"/>

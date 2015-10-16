@@ -47,24 +47,8 @@ public class FilmshowController
         if(filmshow != null && filmshow.getFilm() != null
                 && filmshow.getHall() != null && filmshow.getDateTime() != null)
         {
-            List<Filmshow> filmshowLst = filmshowService.getFilmshowAll();
-            boolean filmshowValid = true;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
-            for(Filmshow f : filmshowLst)
-            {
-                if(f.getFilm().equals(filmshow.getFilm())
-                        && f.getHall().equals(filmshow.getHall())
-                        && dateFormat.format(f.getDateTime()).equals(dateFormat.format(filmshow.getDateTime())))
-                {
-                    filmshowValid = false;
-                    break;
-                }
-            }
-            if(filmshowValid)
-            {
-                filmshowService.create(filmshow);
-                return new ModelAndView(new RedirectView("/cinema/admin/addFilmshow"));
-            }
+            filmshowService.create(filmshow);
+            return new ModelAndView(new RedirectView("/cinema/admin/addFilmshow"));
         }
         List<Film> filmList = filmService.getFilmAll();
         List<Hall> hallList = hallService.getHallAll();

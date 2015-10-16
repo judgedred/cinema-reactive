@@ -1,14 +1,20 @@
 package com.web;
 
 import com.domain.Film;
+import com.domain.Filmshow;
 import com.service.FilmService;
+import com.service.FilmshowService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -17,54 +23,72 @@ public class FilmController
     @Autowired
     private FilmService filmService;
 
-    @RequestMapping(value = "/admin/addFilm", method = RequestMethod.POST)
-    public @ResponseBody ModelAndView addFilm(@RequestBody Film film) throws Exception
+    @Autowired
+    private FilmshowService filmshowService;
+
+    @RequestMapping("/admin/addFilm")
+    public ModelAndView addFilm(@ModelAttribute Film film) throws Exception
     {
-        if(film != null && !film.getFilmName().equals(" ") && !film.getDescription().equals(" "))
+        if(film != null && film.getFilmName() != null && film.getDescription() != null)
         {
-            List<Film> filmList = filmService.getFilmAll();
-            boolean filmValid = true;
-            for(Film f : filmList)
-            {
-                if(f.getFilmName().equals(film.getFilmName()) && f.getDescription().equals(film.getDescription()))
-                {
-                    filmValid = false;
-                    break;
-                }
-            }
-            if(filmValid)
-            {
-                return new ModelAndView("addFilm", "filmJson", filmService.create(film));
-            }
-            return null;
+            filmService.create(film);
+            return new ModelAndView(new RedirectView("/cinema/admin/addFilm"));
         }
-        else
-        {
-            return null;
-        }
+        return new ModelAndView("addFilm", "film", new Film());
     }
 
 //    @RequestMapping("/admin/updateFilm")
 
 
 
-    @RequestMapping("/admin/deleteFilm/{filmId}")
-    public @ResponseBody ModelAndView deleteFilm(@PathVariable int filmId) throws Exception
+    @RequestMapping("/admin/deleteFilm")
+    public ModelAndView deleteFilm(@ModelAttribute Film film, HttpServletResponse response) throws Exception
     {
-        List<Film> filmList = filmService.getFilmAll();
-        Film film = filmService.getFilmById(filmId);
-        if(film != null)
+        try
         {
-            filmService.delete(film);
+            if(film.getFilmId() != null && film.getFilmId() != 0)
+            {
+                film = filmService.getFilmById(film.getFilmId());
+                if(film != null)
+                {
+                    filmService.delete(film);
+                    return new ModelAndView(new RedirectView("deleteFilm"));
+                }
+            }
+            List<Film> filmList = filmService.getFilmAll();
+            response.setStatus(HttpServletResponse.SC_OK);
+            return new ModelAndView("deleteFilm", "filmList", filmList);
         }
-        return new ModelAndView("deleteFilm", "filmListJson", filmList);
+        catch(Exception e)
+        {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @RequestMapping("/admin/filmList")
-    public @ResponseBody ModelAndView listFilms() throws Exception
+    public ModelAndView listFilms() throws Exception
     {
         List<Film> filmList = filmService.getFilmAll();
-        return new ModelAndView("filmList", "filmListJson", filmList);
+        return new ModelAndView("filmList", "filmList", filmList);
     }
 
+    @RequestMapping(value = "/admin/filmCheck/{filmId}", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String filmCheck(@PathVariable int filmId) throws Exception
+    {
+        Film film = filmService.getFilmById(filmId);
+        if(film != null)
+        {
+            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+            for(Filmshow f : filmshowList)
+            {
+                if(f.getFilm().equals(film))
+                {
+                    return "На фильм созданы сеансы. Сначала удалите сеансы.";
+                }
+            }
+        }
+        return null;
+    }
 }

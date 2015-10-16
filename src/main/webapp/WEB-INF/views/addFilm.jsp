@@ -1,4 +1,5 @@
-﻿<%@ page contentType="text/html; charset=utf-8" %>
+﻿<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 
 <html>
 <head>
@@ -10,13 +11,23 @@
     <jsp:include page="admin_menu.jsp"/>
 
 	<p>Добавить фильм</p>
-	<form action="addFilm" method="Get">
-		<p><label>Введите название фильма
-            <input type="text" name="filmName">
-        </label></p>
-		<p><label for="description">Описание</label></p><p><textarea rows="3" name="description" id="description"></textarea></p>
-		<p><input type="submit" value="Добавить"></p>
-	</form>
+
+    <form:form action="addFilm" modelAttribute="film" method="post">
+        <table>
+            <tr>
+                <td><form:label path="filmName">Название фильма</form:label></td>
+                <td><form:input path="filmName" type="text"/></td>
+            </tr>
+            <tr>
+                <td><form:label path="description">Описание</form:label></td>
+                <td><form:input path="description" type="text"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Добавить"></td>
+            </tr>
+        </table>
+    </form:form>
+
 </div>
 </body>
 </html>

@@ -7,6 +7,7 @@ import com.domain.Filmshow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -18,7 +19,27 @@ public class FilmshowServiceImpl implements FilmshowService
     @Override
     public Filmshow create(Filmshow filmshow) throws DaoException
     {
-        return filmshowDao.create(filmshow);
+        List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+        boolean filmshowValid = true;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+        for(Filmshow f : filmshowLst)
+        {
+            if(f.getFilm().equals(filmshow.getFilm())
+                    && f.getHall().equals(filmshow.getHall())
+                    && dateFormat.format(f.getDateTime()).equals(dateFormat.format(filmshow.getDateTime())))
+            {
+                filmshowValid = false;
+                break;
+            }
+        }
+        if(filmshowValid)
+        {
+            return filmshowDao.create(filmshow);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

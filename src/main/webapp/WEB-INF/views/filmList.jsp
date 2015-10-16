@@ -1,6 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="com.domain.*" %>
-<%@ page import="java.util.*" %>
 
 <html>
 <head>
@@ -12,16 +11,16 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>FilmList</p>
+    <c:if test="${!empty filmList}">
+        <table>
+            <c:forEach items="${filmList}" var="film">
+                <tr>
+                    <td>${film}</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
 
-    <%
-        List<Film> filmLs = (List<Film>)session.getAttribute("filmList");
-        for(Film f : filmLs)
-        {
-    %>
-    <p><%=f%></p>
-    <%
-        }
-    %>
 </div>
 </body>
 </html>
