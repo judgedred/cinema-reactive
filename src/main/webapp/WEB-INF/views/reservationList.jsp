@@ -1,6 +1,5 @@
-<%@ page import="java.util.List" %>
-<%@ page import="com.domain.Reservation" %>
-<%@ page import="com.domain.User" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -11,33 +10,24 @@
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
     <p>Список броней</p>
-    <form action="reservationList" method="Get" id="reservation-list">
-        <p><label for="user-select">Пользователь </label><select name="user-select" id="user-select">
-            <option selected disabled>Выберите пользователя</option>
-            <%
-                List<User> userLst = (List<User>)session.getAttribute("userList");
-                for(User u: userLst)
-                {
-            %>
-            <option value=<%=u.getUserId()%>><%=u%></option>
-            <%
-                }
-            %>
-        </select></p>
-        <p><input type="submit" value="Показать"></p>
-    </form>
-    <%
-        List<Reservation> ls = (List<Reservation>)session.getAttribute("filteredReservationList");
-        if(ls != null)
-        {
-            for(Reservation r : ls)
-            {
-    %>
-    <p><%=r%></p>
-    <%
-            }
-        }
-    %>
+
+    <c:if test="${!empty userList}">
+        <form:form action="reservationList" modelAttribute="reservation">
+            <p><form:label path="user">Пользователь</form:label>
+                <form:select path="user">
+                    <form:option value="0" label="Выберите пользователя"/>
+                    <form:options items="${userList}" itemValue="userId"/>
+                </form:select></p>
+            <p><input type="submit" value="Показать"></p>
+        </form:form>
+    </c:if>
+
+    <c:if test="${!empty filteredReservationList}">
+        <c:forEach items="${filteredReservationList}" var="reservation">
+            <p>${reservation}</p>
+        </c:forEach>
+    </c:if>
+
 </div>
 </body>
 </html>

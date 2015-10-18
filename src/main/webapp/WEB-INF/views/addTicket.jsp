@@ -1,8 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="com.domain.Filmshow" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.domain.Seat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -24,7 +21,8 @@
                 })
             });
             $("#ticket").submit(function (event) {
-                if ($("#filmshow").val() == null || $("#price").val() == "" || $("#seat").val() == null || $("#seat").val() == "")
+                if ($("#filmshow").val() == null || $("#price").val() == "" || $("#seat").val() == null
+                        || $("#seat").val() == "" || $("#filmshow").val() == 0)
                 {
                     alert("Заполните поля");
                     event.preventDefault();

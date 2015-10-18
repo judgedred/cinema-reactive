@@ -18,7 +18,23 @@ public class UserServiceImpl implements UserService
     @Override
     public User create(User user) throws DaoException
     {
-        return userDao.create(user);
+        List<User> userList = userDao.getUserAll();
+        boolean userValid = true;
+        for(User u : userList)
+        {
+            if(u.getLogin().equals(user.getLogin()) || u.getEmail().equals(user.getEmail()))
+            {
+                userValid = false;
+            }
+        }
+        if(userValid)
+        {
+            return userDao.create(user);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

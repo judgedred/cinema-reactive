@@ -127,7 +127,6 @@ public class TicketController
         }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("ticketList");
-        mav.addObject("ticketList", ticketList);
         mav.addObject("filmshowList", filmshowList);
         mav.addObject("filteredTicketList", filteredTicketList);
         return mav;

@@ -1,6 +1,5 @@
-﻿<%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="com.domain.*" %>
-<%@ page import="java.util.*" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 
 <html>
 <head>
@@ -13,15 +12,15 @@
 
 	<p>UserList</p>
 
-	<%
-		List<User> ls = (List<User>)session.getAttribute("userList");
-		for(User u : ls)
-		{
-	%>
-	<p><%=u%></p>
-	<%
-		}
-	%>
+    <c:if test="${!empty userList}">
+        <table>
+            <c:forEach items="${userList}" var="user">
+                <tr>
+                    <td>${user}</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
 </div>
 </body>
 </html>

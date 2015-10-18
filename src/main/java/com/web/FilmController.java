@@ -2,6 +2,7 @@ package com.web;
 
 import com.domain.Film;
 import com.domain.Filmshow;
+import com.domain.User;
 import com.service.FilmService;
 import com.service.FilmshowService;
 import com.sun.org.apache.xpath.internal.operations.Mod;

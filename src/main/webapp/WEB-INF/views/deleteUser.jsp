@@ -1,6 +1,6 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="java.util.*" %>
-<%@ page import="com.domain.*" %>
 
 
 <html>
@@ -10,9 +10,9 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#user-delete").submit(function (event) {
+            $("#user").submit(function (event) {
                 $.ajax({
-                    url: "../ProcessServlet/userCheck?user-select=" + $("#user-select").val(),
+                    url: "userCheck/" + $("#userId").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {
@@ -30,21 +30,20 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Удалить пользователя</p>
-    <form action="deleteUser" method="Get" id="user-delete">
-        <p><select name="user-select" id="user-select">
-            <option selected disabled>Выберите пользователя</option>
-                <%
-				List<User> userLs = (List<User>)session.getAttribute("userList");
-				for(User u: userLs)
-				{
-			%>
-            <option value=<%=u.getUserId()%>><%=u%></option>
-                <%
-				}
-			%>
-        </p></select>
-        <p><input type="submit" value="Удалить"></p>
-    </form>
+
+    <c:if test="${!empty userList}">
+        <form:form action="deleteUser" modelAttribute="user">
+            <p>
+                <form:label path="userId">Фильм</form:label>
+                <form:select path="userId">
+                    <form:option value="0" label="Выберите пользователя"/>
+                    <form:options items="${userList}" itemValue="userId" />
+                </form:select>
+            </p>
+            <p><input type="submit" value="Удалить"></p>
+        </form:form>
+    </c:if>
+
 </div>
 </body>
 </html>

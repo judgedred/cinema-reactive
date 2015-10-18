@@ -29,11 +29,6 @@
         </table>
     </form:form>
 
-    <%--<form action="addHall" method="Get" id="hall-add">
-        <p><label for="hall-add-number">Введите номер </label><input type="text" name="hall-add-number" id="hall-add-number"></p>
-        <p><label for="hall-add-name">Введите название </label><input type="text" name="hall-add-name" id="hall-add-name"></p>
-        <p><input type="submit" value="Добавить зал"></p>
-    </form>--%>
 </div>
 </body>
 </html>

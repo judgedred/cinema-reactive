@@ -18,7 +18,24 @@ public class ReservationServiceImpl implements ReservationService
     @Override
     public Reservation create(Reservation reservation) throws DaoException
     {
-        return reservationDao.create(reservation);
+        List<Reservation> reservationList = reservationDao.getReservationAll();
+        boolean reservationValid = true;
+        for(Reservation r : reservationList)
+        {
+            if(r.getTicket().equals(reservation.getTicket()))
+            {
+                reservationValid = false;
+                break;
+            }
+        }
+        if(reservationValid)
+        {
+            return reservationDao.create(reservation);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

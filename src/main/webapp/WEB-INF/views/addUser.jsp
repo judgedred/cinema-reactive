@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -11,12 +12,27 @@
     <jsp:include page="admin_menu.jsp"/>
 
     <p>Добавить пользователя</p>
-    <form action="addUser" method="Get" id="user-add">
-        <p><label for="user-add-login">Введите логин </label><input type="text" name="user-add-login" id="user-add-login"></p>
-        <p><label for="user-add-password">Введите пароль </label><input type="text" name="user-add-password" id="user-add-password"></p>
-        <p><label for="user-add-email">Введите email </label><input type="text" name="user-add-email" id="user-add-email"></p>
-        <p><input type="submit" value="Добавить пользователя"></p>
-    </form>
+
+    <form:form action="addUser" modelAttribute="user" method="post">
+        <table>
+            <tr>
+                <td><form:label path="login">Введите логин</form:label></td>
+                <td><form:input path="login" type="text"/></td>
+            </tr>
+            <tr>
+                <td><form:label path="password">Ввведите пароль</form:label></td>
+                <td><form:input path="password" type="text"/></td>
+            </tr>
+            <tr>
+                <td><form:label path="email">Ввведите email</form:label></td>
+                <td><form:input path="email" type="text"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Добавить"></td>
+            </tr>
+        </table>
+    </form:form>
+
 </div>
 </body>
 </html>
