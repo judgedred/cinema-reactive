@@ -1,6 +1,15 @@
 $(document).ready(function()
 {
-    $.ajax({url: "ProcessServlet/loginCheck", success: function (data)
+    var user = {
+        login: null,
+        password: null
+    }
+
+    $.ajax({url: "loginCheck",
+        type: "Post",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(user),
+        success: function (data)
     {
         if(data != "")
         {
@@ -12,8 +21,16 @@ $(document).ready(function()
 });
 function authForm()
 {
-    var msg = $("#auth-form").serialize();
-    $.ajax({url: "ProcessServlet/loginCheck", type: "Post", data: msg, success: function(data)
+    var user = {
+        login: $("#login-auth").val(),
+        password: $("#password-auth").val()
+    }
+
+    $.ajax({url: "loginCheck",
+        type: "Post",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(user),
+        success: function(data)
     {
         if(data != null && data != "")
         {
@@ -31,7 +48,7 @@ function authForm()
 }
 function logout()
 {
-    $.ajax({url: "ProcessServlet/logout", success: function()
+    $.ajax({url: "logout", success: function()
     {
         $("#auth").show();
         $("#authLoggedIn").hide();

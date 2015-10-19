@@ -4,12 +4,15 @@ import com.domain.Filmshow;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
+import com.service.FilmshowService;
 import com.service.ReservationService;
 import com.service.TicketService;
 import com.service.UserService;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +40,9 @@ public class MainController
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private FilmshowService filmshowService;
 
     @RequestMapping("/admin")
     public ModelAndView adminView()
@@ -147,5 +155,76 @@ public class MainController
             mav.addObject("filteredReservationList", filteredList);
         }
         return mav;
+    }
+
+    @RequestMapping(value ="/authCheck", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String authCheck(HttpServletRequest request)
+    {
+        User validUser = (User)request.getSession().getAttribute("validUser");
+        if(validUser == null)
+        {
+            return "Войдите в систему";
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/loginCheck", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String loginCheck(@RequestBody User user, HttpServletRequest request) throws Exception
+    {
+        List<User> userList = userService.getUserAll();
+        if(user.getPassword() != null)
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
+            String passwordHash = DatatypeConverter.printHexBinary(hash);
+
+            if(user.getLogin() != null && passwordHash != null && !passwordHash.isEmpty())
+            {
+                for(User u : userList)
+                {
+                    if(u.getLogin().equals(user.getLogin()) && u.getPassword().toUpperCase().equals(passwordHash))
+                    {
+                        request.getSession().setAttribute("validUser", u);
+                        break;
+                    }
+                }
+            }
+        }
+        User validUser = (User) request.getSession().getAttribute("validUser");
+        if(validUser != null)
+        {
+            return validUser.getLogin();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @RequestMapping("/logout")
+    public void logout(HttpServletRequest request)
+    {
+        request.getSession().invalidate();
+    }
+
+    @RequestMapping("main")
+    public ModelAndView main() throws Exception
+    {
+        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+        List<Filmshow> filteredFilmshowList = new ArrayList<>();
+        for(Filmshow f : filmshowList)
+        {
+            Date javaDate = f.getDateTime();
+            LocalDate date = new LocalDate(javaDate);
+            if(date.equals(LocalDate.now()))
+            {
+                filteredFilmshowList.add(f);
+            }
+        }
+        return new ModelAndView("main", "filmshowToday", filteredFilmshowList);
     }
 }

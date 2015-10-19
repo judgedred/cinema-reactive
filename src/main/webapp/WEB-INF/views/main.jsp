@@ -1,21 +1,18 @@
-﻿<%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="com.domain.*" %>
-<%@ page import="java.util.*" %>
-<%@ page import="org.joda.time.format.DateTimeFormatter" %>
-<%@ page import="org.joda.time.format.DateTimeFormat" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Main</title>
-    <link rel="stylesheet" href="../../resources/css/styles.css"/>
-    <script type="text/javascript" src="../../resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript" src="../../resources/js/auth.js"></script>
+    <link rel="stylesheet" href="resources/css/styles.css"/>
+    <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="resources/js/auth.js"></script>
     <script type="text/javascript">
             function authCheck()
             {
                 var userValid = true;
-                $.ajax({url: "ProcessServlet/authCheck", async: false, success: function(data){
+                $.ajax({url: "authCheck", async: false, success: function(data){
                     if(data != "")
                     {
                         alert(data);
@@ -42,16 +39,16 @@
     <div class="content">
 	<h2>Сегодня в кино</h2>
 
-            <%
-            List<Filmshow> filmshowLst = (List<Filmshow>)session.getAttribute("filmshowToday");
-            DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
-            for(Filmshow f : filmshowLst)
-            {
-        %>
-        <p><a href="reserveTicket?filmshow-select=<%=f.getFilmshowId()%>" onclick="return authCheck();" ><%=f%></a></p>
-        <%
-            }
-        %>
+        <c:if test="${!empty filmshowToday}">
+            <table>
+                <c:forEach items="${filmshowToday}" var="filmshow">
+                    <tr>
+                        <td><a href="reserveTicket?filmshow-select=${filmshow.filmshowId}" onclick="return authCheck();" >${filmshow}</a></td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:if>
+
         <p><h4>Чтобы забронировать билет, нажмите на сеанс.</h4></p>
     </div>
     <jsp:include page="footer.jsp"/>
