@@ -8,13 +8,17 @@ import com.service.FilmshowService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -71,6 +75,16 @@ public class FilmController
     @RequestMapping("/admin/filmList")
     public ModelAndView listFilms() throws Exception
     {
+//        User adminUser = (User) request.getSession().getAttribute("adminUser");
+
+        /*if(result.hasErrors())
+        {
+            return new ModelAndView("forbidden");
+        }
+        if(adminUser.getLogin() == null)
+        {
+            return new ModelAndView("forbidden");
+        }*/
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("filmList", "filmList", filmList);
     }

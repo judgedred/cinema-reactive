@@ -27,6 +27,13 @@
     <beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
     </beans:bean>
 
+    <interceptors>
+        <interceptor>
+            <mapping path="/admin/*"/>
+            <beans:bean class="com.web.AuthenticationInterceptor" />
+        </interceptor>
+    </interceptors>
+
     <beans:import resource="controllers.xml" />
 
 </beans:beans>

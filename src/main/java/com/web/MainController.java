@@ -8,11 +8,10 @@ import com.service.ReservationService;
 import com.service.TicketService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -44,7 +43,7 @@ public class MainController
     }
 
     @RequestMapping("/admin/login")
-    public ModelAndView adminLogin(@ModelAttribute User user) throws Exception
+    public ModelAndView adminLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception
     {
         ModelAndView mav = new ModelAndView("adminMain");
         List<User> userList = userService.getUserAll();
@@ -61,7 +60,7 @@ public class MainController
                 {
                     if(u.getLogin().equals(user.getLogin()) && u.getPassword().toUpperCase().equals(passwordHash))
                     {
-                        mav.addObject("adminUser", u);
+                        request.getSession().setAttribute("adminUser", u);
                         userValid = true;
                         break;
                     }
@@ -82,7 +81,7 @@ public class MainController
     public ModelAndView adminLogout(HttpSession session)
     {
         session.invalidate();
-        return new ModelAndView("admin");
+        return new ModelAndView(new RedirectView("/cinema/admin"));
     }
 
     @RequestMapping("/reserveTicket")
