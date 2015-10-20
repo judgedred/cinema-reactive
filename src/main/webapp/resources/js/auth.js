@@ -3,7 +3,7 @@ $(document).ready(function()
     var user = {
         login: null,
         password: null
-    }
+    };
 
     $.ajax({url: "loginCheck",
         type: "Post",

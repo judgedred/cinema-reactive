@@ -227,4 +227,70 @@ public class MainController
         }
         return new ModelAndView("main", "filmshowToday", filteredFilmshowList);
     }
+
+    @RequestMapping("register")
+    public ModelAndView registerUser(@ModelAttribute User user) throws Exception
+    {
+        if(user.getPassword() != null)
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
+            String passwordHash = DatatypeConverter.printHexBinary(hash);
+            if(user.getLogin() != null
+                    && passwordHash != null
+                    && !passwordHash.isEmpty()
+                    && user.getEmail() != null)
+            {
+                userService.create(user);
+                ModelAndView mav = new ModelAndView("register");
+                mav.addObject("registered", "Вы зарегистрированы");
+                mav.addObject("user", new User());
+                return mav;
+            }
+        }
+        return new ModelAndView("register");
+    }
+
+    @RequestMapping(value = "registerCheck", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) throws Exception
+    {
+        List<User> userList = userService.getUserAll();
+        Boolean loginFree = true;
+        Boolean emailFree = true;
+        if(login != null && !login.isEmpty() || email != null && !email.isEmpty())
+        {
+            for(User u : userList)
+            {
+                if(u.getLogin().equals(login))
+                {
+                    loginFree = false;
+                }
+
+                if(u.getEmail().equals(email))
+                {
+                    emailFree = false;
+                }
+            }
+            if(login != null)
+            {
+                if(loginFree)
+                {
+                    return "Логин свободен";
+                }
+                else
+                {
+                    return"Логин занят";
+                }
+            }
+            if(email != null)
+            {
+                if(!emailFree)
+                {
+                    return "Логин с таким email уже есть";
+                }
+            }
+        }
+        return null;
+    }
 }
