@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,6 +44,9 @@ public class MainController
 
     @Autowired
     private FilmshowService filmshowService;
+
+    @Autowired
+    private TicketEditor ticketEditor;
 
     @RequestMapping("/admin")
     public ModelAndView adminView()
@@ -93,45 +97,47 @@ public class MainController
     }
 
     @RequestMapping("/reserveTicket")
-    public @ResponseBody ModelAndView reserveTicket(@RequestBody Ticket ticket, HttpSession session,
-                                                    @ModelAttribute Filmshow filmshow) throws Exception
+    public ModelAndView reserveTicket(@ModelAttribute Reservation reservation, HttpServletRequest request,
+                                                    @RequestParam(required = false) Integer filmshowId) throws Exception
     {
         ModelAndView mav = new ModelAndView("reserveTicket");
-        User user = (User)session.getAttribute("validUser");
-        if(ticket != null && ticket.getFilmshow() != null && user != null
-                && ticket.getSeat() != null && ticket.getPrice() != null)
+        User user = (User)request.getSession().getAttribute("validUser");
+        if(reservation.getTicket() != null)
         {
-            Reservation reservation = new Reservation();
             reservation.setUser(user);
-            reservation.setTicket(ticket);
             reservationService.create(reservation);
         }
-        if(filmshow != null)
+        if(filmshowId!= null)
         {
-            List<Ticket> ticketList = ticketService.getTicketAll();
-            List<Reservation> reservationList = reservationService.getReservationAll();
-            boolean ticketFree;
-            List<Ticket> filteredTicketList = new LinkedList<>();
+            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+            if(filmshow != null)
             {
-                for(Ticket t : ticketList)
-                    if(t.getFilmshow().equals(filmshow))
-                    {
-                        ticketFree = true;
-                        for(Reservation r : reservationList)
+                List<Ticket> ticketList = ticketService.getTicketAll();
+                List<Reservation> reservationList = reservationService.getReservationAll();
+                boolean ticketFree;
+                List<Ticket> filteredTicketList = new ArrayList<>();
+                {
+                    for(Ticket t : ticketList)
+                        if(t.getFilmshow().equals(filmshow))
                         {
-                            if(t.equals(r.getTicket()))
+                            ticketFree = true;
+                            for(Reservation r : reservationList)
                             {
-                                ticketFree = false;
-                                break;
+                                if(t.equals(r.getTicket()))
+                                {
+                                    ticketFree = false;
+                                    break;
+                                }
+                            }
+                            if(ticketFree)
+                            {
+                                filteredTicketList.add(t);
                             }
                         }
-                        if(ticketFree)
-                        {
-                            filteredTicketList.add(t);
-                        }
-                    }
                 }
-            mav.addObject("filteredTicketList", filteredTicketList);
+                mav.addObject("filteredTicketList", filteredTicketList);
+                mav.addObject("filmshow", filmshow);
+            }
         }
         return mav;
     }
@@ -206,12 +212,13 @@ public class MainController
     }
 
     @RequestMapping("/logout")
-    public void logout(HttpServletRequest request)
+    public void logout(HttpServletRequest request, HttpServletResponse response)
     {
         request.getSession().invalidate();
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    @RequestMapping("main")
+    @RequestMapping("/main")
     public ModelAndView main() throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
@@ -228,7 +235,7 @@ public class MainController
         return new ModelAndView("main", "filmshowToday", filteredFilmshowList);
     }
 
-    @RequestMapping("register")
+    @RequestMapping("/register")
     public ModelAndView registerUser(@ModelAttribute User user) throws Exception
     {
         if(user.getPassword() != null)
@@ -242,6 +249,7 @@ public class MainController
                     && !passwordHash.isEmpty()
                     && user.getEmail() != null)
             {
+                user.setPassword(passwordHash);
                 userService.create(user);
                 ModelAndView mav = new ModelAndView("register");
                 mav.addObject("registered", "Вы зарегистрированы");
@@ -252,7 +260,7 @@ public class MainController
         return new ModelAndView("register");
     }
 
-    @RequestMapping(value = "registerCheck", produces = "text/html; charset=UTF-8")
+    @RequestMapping(value = "/registerCheck", produces = "text/html; charset=UTF-8")
     public @ResponseBody String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) throws Exception
     {
         List<User> userList = userService.getUserAll();
@@ -292,5 +300,11 @@ public class MainController
             }
         }
         return null;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder)
+    {
+        binder.registerCustomEditor(Ticket.class, ticketEditor);
     }
 }

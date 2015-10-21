@@ -43,7 +43,7 @@
             <table>
                 <c:forEach items="${filmshowToday}" var="filmshow">
                     <tr>
-                        <td><a href="reserveTicket?filmshow-select=${filmshow.filmshowId}" onclick="return authCheck();" >${filmshow}</a></td>
+                        <td><a href="reserveTicket?filmshowId=${filmshow.filmshowId}" onclick="return authCheck();" >${filmshow}</a></td>
                     </tr>
                 </c:forEach>
             </table>
