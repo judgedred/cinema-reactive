@@ -1,13 +1,7 @@
 package com.web;
 
-import com.domain.Filmshow;
-import com.domain.Reservation;
-import com.domain.Ticket;
-import com.domain.User;
-import com.service.FilmshowService;
-import com.service.ReservationService;
-import com.service.TicketService;
-import com.service.UserService;
+import com.domain.*;
+import com.service.*;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -17,6 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.RequestDispatcher;
@@ -25,10 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class MainController
@@ -44,6 +36,9 @@ public class MainController
 
     @Autowired
     private FilmshowService filmshowService;
+
+    @Autowired
+    private FilmService filmService;
 
     @Autowired
     private TicketEditor ticketEditor;
@@ -143,12 +138,12 @@ public class MainController
     }
 
     @RequestMapping("/reservationList")
-    public @ResponseBody ModelAndView listReservations(HttpSession session) throws Exception
+    public ModelAndView listUserReservations(HttpServletRequest request) throws Exception
     {
         ModelAndView mav = new ModelAndView("userReservationList");
-        User user = (User)session.getAttribute("validUser");
+        User user = (User)request.getSession().getAttribute("validUser");
         List<Reservation> reservationList = reservationService.getReservationAll();
-        List<Reservation> filteredList = new LinkedList<>();
+        List<Reservation> filteredList = new ArrayList<>();
         if(user != null && reservationList != null)
         {
             for(Reservation r : reservationList)
@@ -219,7 +214,7 @@ public class MainController
     }
 
     @RequestMapping("/main")
-    public ModelAndView main() throws Exception
+    public ModelAndView navigateMain() throws Exception
     {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         List<Filmshow> filteredFilmshowList = new ArrayList<>();
@@ -300,6 +295,50 @@ public class MainController
             }
         }
         return null;
+    }
+
+    @RequestMapping("filmshow")
+    public ModelAndView navigateFilmshow() throws Exception
+    {
+        ModelAndView mav = new ModelAndView("filmshow");
+        Map<LocalDate, List<Filmshow>> filmshowMap = new TreeMap<>();
+        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+        if(filmshowList != null)
+        {
+            for(Filmshow f : filmshowList)
+            {
+                Date javaDate = f.getDateTime();
+                LocalDate date = new LocalDate(javaDate);
+                List<Filmshow> dateGroupedFilmshow = filmshowMap.get(date);
+                if(dateGroupedFilmshow == null)
+                {
+                    dateGroupedFilmshow = new ArrayList<>();
+                    filmshowMap.put(date, dateGroupedFilmshow);
+                }
+                dateGroupedFilmshow.add(f);
+            }
+            mav.addObject("filmshowMap", filmshowMap);
+        }
+        return mav;
+    }
+
+    @RequestMapping("film")
+    public ModelAndView navigateFilm() throws Exception
+    {
+        List<Film> filmList = filmService.getFilmAll();
+        return new ModelAndView("film", "filmList", filmList);
+    }
+
+    @RequestMapping("news")
+    public String navigateNews()
+    {
+        return "news";
+    }
+
+    @RequestMapping("about")
+    public String navigateAbout()
+    {
+        return "about";
     }
 
     @InitBinder

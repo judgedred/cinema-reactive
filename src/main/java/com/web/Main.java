@@ -99,7 +99,7 @@ public class Main extends HttpServlet
             dispatcher.forward(request, response);
         }
 
-        if(url.equals("/register"))
+       /* if(url.equals("/register"))
         {
             try
             {
@@ -147,7 +147,7 @@ public class Main extends HttpServlet
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
             dispatcher.forward(request, response);
-        }
+        }*/
 
         if(url.equals("/film"))
         {

@@ -36,10 +36,10 @@
 </div>
 <ul class="navigation">
 
-    <li><a href="news.jsp" title="News">Новости</a></li>
+    <li><a href="news" title="News">Новости</a></li>
     <li><a href="filmshow" title="Filmshow">Сеансы</a></li>
     <li><a href="film" title="Films">Фильмы</a></li>
-    <li><a href="about.jsp" title="About">О кинотеатре</a></li>
+    <li><a href="about" title="About">О кинотеатре</a></li>
 
     <div class="clear"></div>
 </ul>

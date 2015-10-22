@@ -27,28 +27,6 @@
                 <p><input type="submit" value="Зарезервировать билет"></p>
             </form:form>
 
-
-    <%--<form action="reserveTicket" method="Get" id="reservation-add">
-        <div id="ticket-div">
-            <p><label for="ticket-select">Билет </label><select name="ticket-select" id="ticket-select">
-                <option selected disabled>Выберите билет</option>
-                <%
-                    List<Ticket> ticketLst = (List<Ticket>)session.getAttribute("filteredTicketList");
-                    if(ticketLst != null)
-                    {
-                        for(Ticket t: ticketLst)
-                        {
-                %>
-                <option value=<%=t.getTicketId()%>><%=t%></option>
-                <%
-                        }
-                    }
-                %>
-            </select></p>
-        </div>
-        <p><input type="submit" value="Зарезервировать билет"></p>
-    </form>--%>
-
     </div>
     <jsp:include page="footer.jsp"/>
 
