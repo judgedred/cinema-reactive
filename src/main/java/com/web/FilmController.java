@@ -75,16 +75,6 @@ public class FilmController
     @RequestMapping("/admin/filmList")
     public ModelAndView listFilms() throws Exception
     {
-//        User adminUser = (User) request.getSession().getAttribute("adminUser");
-
-        /*if(result.hasErrors())
-        {
-            return new ModelAndView("forbidden");
-        }
-        if(adminUser.getLogin() == null)
-        {
-            return new ModelAndView("forbidden");
-        }*/
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("filmList", "filmList", filmList);
     }

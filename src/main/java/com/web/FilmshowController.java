@@ -94,17 +94,20 @@ public class FilmshowController
     }
 
     @RequestMapping(value = "/admin/filmshowCheck/{filmshowId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String filmshowCheck(@PathVariable int filmshowId) throws Exception
+    public @ResponseBody String filmshowCheck(@PathVariable Integer filmshowId) throws Exception
     {
-        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-        if(filmshow != null)
+        if(filmshowId != null)
         {
-            List<Ticket> ticketList = ticketService.getTicketAll();
-            for(Ticket t : ticketList)
+            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+            if(filmshow != null)
             {
-                if(t.getFilmshow().equals(filmshow))
+                List<Ticket> ticketList = ticketService.getTicketAll();
+                for(Ticket t : ticketList)
                 {
-                    return "На сеанс имеются билеты. Сначала удалите билеты.";
+                    if(t.getFilmshow().equals(filmshow))
+                    {
+                        return "На сеанс имеются билеты. Сначала удалите билеты.";
+                    }
                 }
             }
         }

@@ -74,38 +74,41 @@ public class HallController
     }
 
     @RequestMapping(value = "/admin/hallCheck/{hallId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String hallCheck(@PathVariable int hallId) throws Exception
+    public @ResponseBody String hallCheck(@PathVariable Integer hallId) throws Exception
     {
-        Hall hall = hallService.getHallById(hallId);
-        if(hall != null)
+        if(hallId != null)
         {
-            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-            List<Seat> seatList = seatService.getSeatAll();
-            boolean hallFreeFilmshow = true;
-            boolean hallFreeSeat = true;
-            for(Filmshow f : filmshowList)
+            Hall hall = hallService.getHallById(hallId);
+            if(hall != null)
             {
-                if(f.getHall().equals(hall))
+                List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+                List<Seat> seatList = seatService.getSeatAll();
+                boolean hallFreeFilmshow = true;
+                boolean hallFreeSeat = true;
+                for(Filmshow f : filmshowList)
                 {
-                    hallFreeFilmshow = false;
-                    break;
-                }
-                for(Seat s : seatList)
-                {
-                    if(s.getHall().equals(hall))
+                    if(f.getHall().equals(hall))
                     {
-                        hallFreeSeat = false;
+                        hallFreeFilmshow = false;
                         break;
                     }
+                    for(Seat s : seatList)
+                    {
+                        if(s.getHall().equals(hall))
+                        {
+                            hallFreeSeat = false;
+                            break;
+                        }
+                    }
                 }
-            }
-            if(!hallFreeFilmshow)
-            {
-                return "В зале имеются сеансы. Сначала удалите сеансы.";
-            }
-            if(!hallFreeSeat)
-            {
-                return "В зале имеются места. Сначала удалите места.";
+                if(!hallFreeFilmshow)
+                {
+                    return "В зале имеются сеансы. Сначала удалите сеансы.";
+                }
+                if(!hallFreeSeat)
+                {
+                    return "В зале имеются места. Сначала удалите места.";
+                }
             }
         }
         return null;

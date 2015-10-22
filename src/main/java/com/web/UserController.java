@@ -77,17 +77,20 @@ public class UserController
     }
 
     @RequestMapping(value = "/admin/userCheck/{userId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String userCheck(@PathVariable int userId) throws Exception
+    public @ResponseBody String userCheck(@PathVariable Integer userId) throws Exception
     {
-        User user = userService.getUserById(userId);
-        if(user != null)
+        if(userId != null)
         {
-            List<Reservation> reservationList = reservationService.getReservationAll();
-            for(Reservation r : reservationList)
+            User user = userService.getUserById(userId);
+            if(user != null)
             {
-                if(r.getUser().equals(user))
+                List<Reservation> reservationList = reservationService.getReservationAll();
+                for(Reservation r : reservationList)
                 {
-                    return "У пользователя есть брони. Сначала удалите бронь.";
+                    if(r.getUser().equals(user))
+                    {
+                        return "У пользователя есть брони. Сначала удалите бронь.";
+                    }
                 }
             }
         }

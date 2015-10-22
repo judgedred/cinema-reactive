@@ -80,17 +80,20 @@ public class SeatController
     }
 
     @RequestMapping(value = "/admin/seatCheck/{seatId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String seatCheck(@PathVariable int seatId) throws Exception
+    public @ResponseBody String seatCheck(@PathVariable Integer seatId) throws Exception
     {
-        Seat seat = seatService.getSeatById(seatId);
-        if(seat != null)
+        if(seatId != null)
         {
-            List<Ticket> ticketList = ticketService.getTicketAll();
-            for(Ticket t : ticketList)
+            Seat seat = seatService.getSeatById(seatId);
+            if(seat != null)
             {
-                if(t.getSeat().equals(seat))
+                List<Ticket> ticketList = ticketService.getTicketAll();
+                for(Ticket t : ticketList)
                 {
-                    return "На место выпущены билеты. Сначала удалите билеты.";
+                    if(t.getSeat().equals(seat))
+                    {
+                        return "На место выпущены билеты. Сначала удалите билеты.";
+                    }
                 }
             }
         }

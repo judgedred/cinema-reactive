@@ -109,37 +109,41 @@ public class ReservationController
     }
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
-    public @ResponseBody Map<Integer, String> filterTickets(@PathVariable int filmshowId) throws Exception
+    public @ResponseBody Map<Integer, String> filterTickets(@PathVariable Integer filmshowId) throws Exception
     {
-        List<Ticket> ticketList = ticketService.getTicketAll();
-        List<Reservation> reservationList = reservationService.getReservationAll();
-        boolean ticketFree;
-        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-        Map<Integer, String> filteredTicketMap = new HashMap<>();
-        if(filmshow != null && filmshow.getFilm() != null
-                && filmshow.getHall() != null && filmshow.getDateTime() != null)
+        if(filmshowId != null)
         {
-            for(Ticket t : ticketList)
+            List<Ticket> ticketList = ticketService.getTicketAll();
+            List<Reservation> reservationList = reservationService.getReservationAll();
+            boolean ticketFree;
+            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+            Map<Integer, String> filteredTicketMap = new HashMap<>();
+            if(filmshow != null && filmshow.getFilm() != null
+                    && filmshow.getHall() != null && filmshow.getDateTime() != null)
             {
-                if(t.getFilmshow().equals(filmshow))
+                for(Ticket t : ticketList)
                 {
-                    ticketFree = true;
-                    for(Reservation r : reservationList)
+                    if(t.getFilmshow().equals(filmshow))
                     {
-                        if(t.equals(r.getTicket()))
+                        ticketFree = true;
+                        for(Reservation r : reservationList)
                         {
-                            ticketFree = false;
-                            break;
+                            if(t.equals(r.getTicket()))
+                            {
+                                ticketFree = false;
+                                break;
+                            }
                         }
-                    }
-                    if(ticketFree)
-                    {
-                        filteredTicketMap.put(t.getTicketId(), t.toString());
+                        if(ticketFree)
+                        {
+                            filteredTicketMap.put(t.getTicketId(), t.toString());
+                        }
                     }
                 }
             }
+            return filteredTicketMap;
         }
-        return filteredTicketMap;
+        return null;
     }
 
     @InitBinder

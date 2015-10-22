@@ -169,17 +169,20 @@ public class TicketController
     }
 
     @RequestMapping(value = "/admin/ticketCheck/{ticketId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String ticketCheck(@PathVariable int ticketId) throws Exception
+    public @ResponseBody String ticketCheck(@PathVariable Integer ticketId) throws Exception
     {
-        Ticket ticket = ticketService.getTicketById(ticketId);
-        if(ticket != null)
+        if(ticketId != null)
         {
-            List<Reservation> reservationList = reservationService.getReservationAll();
-            for(Reservation r : reservationList)
+            Ticket ticket = ticketService.getTicketById(ticketId);
+            if(ticket != null)
             {
-                if(r.getTicket().equals(ticket))
+                List<Reservation> reservationList = reservationService.getReservationAll();
+                for(Reservation r : reservationList)
                 {
-                    return "Билет зарезервирован. Сначала удалите бронь.";
+                    if(r.getTicket().equals(ticket))
+                    {
+                        return "Билет зарезервирован. Сначала удалите бронь.";
+                    }
                 }
             }
         }
