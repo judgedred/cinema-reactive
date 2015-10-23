@@ -1,6 +1,5 @@
 package com.web;
 
-import com.domain.Film;
 import com.domain.Hall;
 import com.domain.Seat;
 import com.domain.Ticket;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 

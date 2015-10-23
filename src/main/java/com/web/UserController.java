@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
@@ -40,8 +39,6 @@ public class UserController
         }
         return new ModelAndView("addUser");
     }
-
-//    @RequestMapping("/admin/updateUser")
 
     @RequestMapping("/admin/deleteUser")
     public ModelAndView deleteUser(@ModelAttribute User user, HttpServletResponse response) throws Exception

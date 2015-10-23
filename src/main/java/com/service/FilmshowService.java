@@ -3,7 +3,6 @@ package com.service;
 
 import com.dao.DaoException;
 import com.domain.Filmshow;
-
 import java.util.List;
 
 public interface FilmshowService

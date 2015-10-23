@@ -3,6 +3,7 @@
 <%@ page import="com.domain.*" %>
 <%@ page import="java.util.*" %>
 
+
 <html>
 <head>
     <title>HallList</title>

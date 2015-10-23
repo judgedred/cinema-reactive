@@ -2,23 +2,13 @@ package com.web;
 
 import com.domain.Film;
 import com.domain.Filmshow;
-import com.domain.User;
 import com.service.FilmService;
 import com.service.FilmshowService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.HttpSessionRequiredException;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -41,10 +31,6 @@ public class FilmController
         }
         return new ModelAndView("addFilm", "film", new Film());
     }
-
-//    @RequestMapping("/admin/updateFilm")
-
-
 
     @RequestMapping("/admin/deleteFilm")
     public ModelAndView deleteFilm(@ModelAttribute Film film, HttpServletResponse response) throws Exception

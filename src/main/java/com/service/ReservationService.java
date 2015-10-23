@@ -3,7 +3,6 @@ package com.service;
 
 import com.dao.DaoException;
 import com.domain.Reservation;
-
 import java.util.List;
 
 public interface ReservationService

@@ -6,7 +6,6 @@ import com.dao.SeatDao;
 import com.domain.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

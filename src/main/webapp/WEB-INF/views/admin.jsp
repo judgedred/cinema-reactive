@@ -1,31 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
 <html>
 <head>
     <title>Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
-    <%--<script type="text/javascript">
-        $(document).ready(function() {
-            $("#auth-form").submit(function (event) {
-                event.preventDefault();
-                var user = {
-                    login: $("#login-auth").val(),
-                    password: $("#password-auth").val()
-                }
-                $.ajax({
-                    url: "admin/login",
-                    type: "POST",
-                    contentType: "application/json; charset=UTF-8",
-                    data: JSON.stringify(user),
-                    success: function(data)
-                    {
-                        alert(data);
-//                        $(".result").html(data);
-                    }
-                });
-            });
-        });
-    </script>--%>
 </head>
 <body>
 <div class="result">

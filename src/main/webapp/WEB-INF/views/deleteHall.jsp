@@ -1,8 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="java.util.*" %>
-<%@ page import="com.domain.*" %>
 
 
 <html>
@@ -46,21 +44,6 @@
         </form:form>
     </c:if>
 
-    <%--<form action="deleteHall" method="Get" id="hall-delete">
-        <p><select name="hall-select" id="hall-select">
-            <option selected disabled>Выберите зал</option>
-                <%
-				List<Hall> hallLs = (List<Hall>)session.getAttribute("hallList");
-				for(Hall h: hallLs)
-				{
-			%>
-            <option value=<%=h.getHallId()%>><%=h%></option>
-                <%
-				}
-			%>
-        </p></select>
-        <p><input type="submit" value="Удалить"></p>
-    </form>--%>
 </div>
 </body>
 </html>

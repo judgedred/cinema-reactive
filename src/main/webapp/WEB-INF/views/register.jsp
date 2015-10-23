@@ -1,6 +1,7 @@
 ﻿<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html; charset=utf-8"%>
 
+
 <html>
 <head>
 	<title>Register</title>

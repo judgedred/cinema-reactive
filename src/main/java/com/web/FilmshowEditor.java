@@ -4,7 +4,6 @@ import com.domain.Filmshow;
 import com.service.FilmshowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.beans.PropertyEditorSupport;
 
 @Component

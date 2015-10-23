@@ -6,7 +6,6 @@ import com.dao.FilmshowDao;
 import com.domain.Filmshow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 
