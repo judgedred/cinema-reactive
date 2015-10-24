@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,13 +47,13 @@ public class FilmshowController
                 && filmshow.getHall() != null && filmshow.getDateTime() != null)
         {
             filmshowService.create(filmshow);
-            return new ModelAndView(new RedirectView("/cinema/admin/addFilmshow"));
         }
         List<Film> filmList = filmService.getFilmAll();
         List<Hall> hallList = hallService.getHallAll();
         ModelAndView mav = new ModelAndView("addFilmshow");
         mav.addObject("filmList", filmList);
         mav.addObject("hallList", hallList);
+        mav.addObject("filmshow", new Filmshow());
         return mav;
     }
 
@@ -69,14 +68,11 @@ public class FilmshowController
                 if(filmshow != null)
                 {
                     filmshowService.delete(filmshow);
-                    return new ModelAndView(new RedirectView("/cinema/admin/deleteFilmshow"));
                 }
             }
             List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-            ModelAndView mav = new ModelAndView("deleteFilmshow");
-            mav.addObject("filmshowList", filmshowList);
             response.setStatus(HttpServletResponse.SC_OK);
-            return mav;
+            return new ModelAndView("deleteFilmshow", "filmshowList", filmshowList);
         }
         catch(Exception e)
         {

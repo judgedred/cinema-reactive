@@ -36,7 +36,7 @@ public class Ticket implements Serializable
 		return price;
 	}
 
-	public void setPrice(float price)
+	public void setPrice(Float price)
 	{
 		this.price = price;
 	}

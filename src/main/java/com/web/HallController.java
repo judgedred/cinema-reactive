@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -29,12 +28,11 @@ public class HallController
     @RequestMapping("/admin/addHall")
     public ModelAndView addHall(@ModelAttribute Hall hall) throws Exception
     {
-        if(hall != null && hall.getHallName() != null && hall.getHallNumber() != null)
+        if(hall != null && hall.getHallName() != null && !hall.getHallName().isEmpty() && hall.getHallNumber() != null)
         {
             hallService.create(hall);
-            return new ModelAndView(new RedirectView("addHall"));
         }
-        return new ModelAndView("addHall");
+        return new ModelAndView("addHall", "hall", new Hall());
     }
 
     @RequestMapping("/admin/deleteHall")
@@ -48,7 +46,6 @@ public class HallController
                 if(hall != null)
                 {
                     hallService.delete(hall);
-                    return new ModelAndView(new RedirectView("deleteHall"));
                 }
             }
             List<Hall> hallList = hallService.getHallAll();

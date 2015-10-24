@@ -10,11 +10,9 @@ import com.service.TicketService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,22 +42,20 @@ public class ReservationController
     private TicketEditor ticketEditor;
 
     @RequestMapping("/admin/addReservation")
-    public ModelAndView addReservation(@ModelAttribute Reservation reservation, BindingResult result) throws Exception
+    public ModelAndView addReservation(@ModelAttribute Reservation reservation) throws Exception
     {
         if(reservation != null && reservation.getTicket() != null && reservation.getUser() != null)
         {
             reservationService.create(reservation);
-            return new ModelAndView(new RedirectView("/cinema/admin/addReservation"));
         }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("addReservation");
         mav.addObject("filmshowList", filmshowList);
         mav.addObject("userList", userList);
+        mav.addObject("reservation", new Reservation());
         return mav;
     }
-
-//    @RequestMapping("updateReservation")
 
     @RequestMapping("/admin/deleteReservation")
     public ModelAndView deleteReservation(@ModelAttribute Reservation reservation, HttpServletResponse response) throws Exception
@@ -72,14 +68,11 @@ public class ReservationController
                 if(reservation != null)
                 {
                     reservationService.delete(reservation);
-                    return new ModelAndView(new RedirectView("/cinema/admin/deleteReservation"));
                 }
             }
             List<Reservation> reservationList = reservationService.getReservationAll();
-            ModelAndView mav = new ModelAndView("deleteReservation");
-            mav.addObject("reservationList", reservationList);
             response.setStatus(HttpServletResponse.SC_OK);
-            return mav;
+            return new ModelAndView("deleteReservation", "reservationList", reservationList);
         }
         catch(Exception e)
         {

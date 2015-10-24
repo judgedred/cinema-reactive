@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -24,10 +23,10 @@ public class FilmController
     @RequestMapping("/admin/addFilm")
     public ModelAndView addFilm(@ModelAttribute Film film) throws Exception
     {
-        if(film != null && film.getFilmName() != null && film.getDescription() != null)
+        if(film != null && film.getFilmName() != null && film.getDescription() != null
+                && !film.getFilmName().isEmpty() && !film.getDescription().isEmpty())
         {
             filmService.create(film);
-            return new ModelAndView(new RedirectView("/cinema/admin/addFilm"));
         }
         return new ModelAndView("addFilm", "film", new Film());
     }
@@ -43,7 +42,6 @@ public class FilmController
                 if(film != null)
                 {
                     filmService.delete(film);
-                    return new ModelAndView(new RedirectView("deleteFilm"));
                 }
             }
             List<Film> filmList = filmService.getFilmAll();

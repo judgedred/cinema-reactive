@@ -1,11 +1,24 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 
 <html>
 <head>
     <title>AddHall</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
+    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#hall").submit(function (event) {
+                if ($("#hallNumber").val() == null || $("#hallName").val() == "" || $("#hallName").val() == null
+                        || $("#hallNumber").val() == "")
+                {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="wrapper">

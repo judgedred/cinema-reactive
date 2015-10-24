@@ -32,7 +32,7 @@ public class Hall implements Serializable
 		return hallNumber;
 	}
 
-	public void setHallNumber(int hallNumber)
+	public void setHallNumber(Integer hallNumber)
 	{
 		this.hallNumber = hallNumber;
 	}

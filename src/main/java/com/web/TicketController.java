@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -50,11 +49,11 @@ public class TicketController
                 && ticket.getSeat() != null && ticket.getPrice() != null)
         {
             ticketService.create(ticket);
-            return new ModelAndView(new RedirectView("/cinema/admin/addTicket"));
         }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("addTicket");
         mav.addObject("filmshowList", filmshowList);
+        mav.addObject("ticket", new Ticket());
         return mav;
     }
 
@@ -70,15 +69,13 @@ public class TicketController
                 ticket.setSeat(s);
                 ticketService.create(ticket);
             }
-            return new ModelAndView(new RedirectView("/cinema/admin/addTicketAll"));
         }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("addTicketAll");
         mav.addObject("filmshowList", filmshowList);
+        mav.addObject("ticket", new Ticket());
         return mav;
     }
-
-//    @RequestMapping("/admin/updateTicket")
 
     @RequestMapping("/admin/deleteTicket")
     public ModelAndView deleteTicket(@ModelAttribute Ticket ticket, HttpServletResponse response) throws Exception
@@ -91,7 +88,6 @@ public class TicketController
                 if(ticket != null)
                 {
                     ticketService.delete(ticket);
-                    return new ModelAndView(new RedirectView("deleteTicket"));
                 }
             }
             List<Ticket> ticketList = ticketService.getTicketAll();

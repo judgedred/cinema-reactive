@@ -26,8 +26,9 @@ public class UserController
     @RequestMapping("/admin/addUser")
     public ModelAndView addUser(@ModelAttribute User user) throws Exception
     {
-        if(user != null && user.getLogin() != null
-                && user.getPassword() != null && user.getEmail() != null)
+        if(user != null && user.getLogin() != null && !user.getEmail().isEmpty()
+                && user.getPassword() != null && user.getEmail() != null
+                && !user.getLogin().isEmpty() && !user.getPassword().isEmpty())
         {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             digest.reset();
@@ -35,9 +36,8 @@ public class UserController
             String passwordHash = DatatypeConverter.printHexBinary(hash);
             user.setPassword(passwordHash);
             userService.create(user);
-            return new ModelAndView(new RedirectView("/cinema/admin/addUser"));
         }
-        return new ModelAndView("addUser");
+        return new ModelAndView("addUser", "user", new User());
     }
 
     @RequestMapping("/admin/deleteUser")
@@ -51,7 +51,6 @@ public class UserController
                 if(user != null)
                 {
                     userService.delete(user);
-                    return new ModelAndView(new RedirectView("deleteUser"));
                 }
             }
             List<User> userList = userService.getUserAll();

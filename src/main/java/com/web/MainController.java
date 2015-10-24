@@ -227,16 +227,16 @@ public class MainController
     @RequestMapping("/register")
     public ModelAndView registerUser(@ModelAttribute User user) throws Exception
     {
-        if(user.getPassword() != null)
+        if(user.getPassword() != null && !user.getPassword().equals(""))
         {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             digest.reset();
             byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
             String passwordHash = DatatypeConverter.printHexBinary(hash);
-            if(user.getLogin() != null
+            if(user.getLogin() != null && !user.getLogin().isEmpty()
                     && passwordHash != null
                     && !passwordHash.isEmpty()
-                    && user.getEmail() != null)
+                    && user.getEmail() != null && !user.getEmail().isEmpty())
             {
                 user.setPassword(passwordHash);
                 userService.create(user);

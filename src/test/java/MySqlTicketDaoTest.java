@@ -39,7 +39,8 @@ public class MySqlTicketDaoTest
         Seat seat = seatDao.getSeatById(1);
         ticket.setFilmshow(filmshow);
         ticket.setSeat(seat);
-        ticket.setPrice(60000);
+        float price = 60000;
+        ticket.setPrice(price);
         Filmshow filmshowExpected = ticket.getFilmshow();
         Seat seatExpected = ticket.getSeat();
         float priceExpected = ticket.getPrice();
@@ -62,7 +63,8 @@ public class MySqlTicketDaoTest
         Seat seat = seatDao.getSeatById(2);
         ticket.setFilmshow(filmshow);
         ticket.setSeat(seat);
-        ticket.setPrice(50000);
+        float price = 50000;
+        ticket.setPrice(price);
         Filmshow filmshowExpected = ticket.getFilmshow();
         Seat seatExpected = ticket.getSeat();
         float priceExpected = ticket.getPrice();

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -37,13 +36,13 @@ public class SeatController
                 && seat.getSeatNumber() != null)
         {
             seatService.create(seat);
-            return new ModelAndView(new RedirectView("addSeat"));
         }
         List<Hall> hallList = hallService.getHallAll();
-        return new ModelAndView("addSeat", "hallList", hallList);
+        ModelAndView mav = new ModelAndView("addSeat");
+        mav.addObject("hallList", hallList);
+        mav.addObject("seat", new Seat());
+        return mav;
     }
-
-//    @RequestMapping("updateSeat")
 
     @RequestMapping("/admin/deleteSeat")
     public ModelAndView deleteSeat(@ModelAttribute Seat seat, HttpServletResponse response) throws Exception

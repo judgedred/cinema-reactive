@@ -6,6 +6,19 @@
 <head>
     <title>AddUser</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
+    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#user").submit(function (event) {
+                if ($("#login").val() == null || $("#password").val() == "" || $("#password").val() == null
+                        || $("#login").val() == "" || $("#email").val() == null || $("#email").val() == "")
+                {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="wrapper">

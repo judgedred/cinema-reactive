@@ -1,12 +1,26 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 
 <html>
 <head>
     <title>AddSeat</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
+    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#seat").submit(function (event) {
+                if($("#hall").val() == null || $("#rowNumber").val() == null
+                        || $("#hall").val() == 0 || $("#rowNumber").val() == ""
+                        || $("#seatNumber").val() == null || $("#seatNumber").val() == "")
+                {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="wrapper">
