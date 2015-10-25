@@ -30,5 +30,4 @@ The design can seem a little bit poor, because the main focus was functionality 
 
 Java and web technologies used in the project: DAO pattern, MySql database, Maven project object model, Hibernate + JPA + JDBC, JUnit tests, Spring DI, Ajax + jQuery, CSS, Intellij Idea IDE.
 
-Update:
-v2.0: added spring mvc with spring forms and json.
+Update: v2.0. Added spring mvc with spring forms and json.
