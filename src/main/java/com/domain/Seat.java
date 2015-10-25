@@ -45,7 +45,7 @@ public class Seat implements Serializable
 		return rowNumber;
 	}
 
-	public void setRowNumber(int rowNumber)
+	public void setRowNumber(Integer rowNumber)
 	{
 		this.rowNumber = rowNumber;
 	}

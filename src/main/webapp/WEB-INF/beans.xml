@@ -13,7 +13,7 @@
     <tx:annotation-driven transaction-manager="transactionManager" />
     <context:component-scan base-package="com.dao" />
     <context:component-scan base-package="com.mysql" />
-    <context:component-scan base-package="com.web" />
+    <context:component-scan base-package="com.service" />
 
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
@@ -43,5 +43,7 @@
             </props>
         </property>
     </bean>
+
+
 
     </beans>

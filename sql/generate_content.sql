@@ -1,3 +1,4 @@
+
 use cinema;
 Insert Into User(login, password, email) Values("admin", SHA1("admin"), "admin@gmail.com");
 Insert Into User(login, password, email) Values("user", SHA1("user"), "user@gmail.com");
@@ -57,8 +58,8 @@ Insert Into Ticket(filmshow_id, seat_id, price) Values(1, 1, 60000);
 Insert Into Ticket(filmshow_id, seat_id, price) Values(1, 2, 60000);
 Insert Into Ticket(filmshow_id, seat_id, price) Values(1, 3, 60000);
 Insert Into Ticket(filmshow_id, seat_id, price) Values(2, 1, 50000);
-Insert Into Ticket(filmshow_id, seat_id, price) Values(3, 2, 50000);
-Insert Into Ticket(filmshow_id, seat_id, price) Values(4, 3, 50000);
-Insert Into Reservation(user_id, ticket_id) Values(2,6);
+Insert Into Ticket(filmshow_id, seat_id, price) Values(2, 2, 50000);
+Insert Into Ticket(filmshow_id, seat_id, price) Values(2, 3, 50000);
+Insert Into Reservation(user_id, ticket_id) Values(1,1);
 Insert Into Reservation(user_id, ticket_id) Values(1,3);
 Insert Into Reservation(user_id, ticket_id) Values(1,5);
