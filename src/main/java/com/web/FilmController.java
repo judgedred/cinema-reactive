@@ -6,9 +6,11 @@ import com.service.FilmService;
 import com.service.FilmshowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -20,14 +22,20 @@ public class FilmController
     @Autowired
     private FilmshowService filmshowService;
 
-    @RequestMapping("/admin/addFilm")
-    public ModelAndView addFilm(@ModelAttribute Film film) throws Exception
+    @RequestMapping("/admin/addFilmForm")
+    public ModelAndView addFilmForm()
     {
-        if(film != null && film.getFilmName() != null && film.getDescription() != null
-                && !film.getFilmName().isEmpty() && !film.getDescription().isEmpty())
+        return new ModelAndView("addFilm", "film", new Film());
+    }
+
+    @RequestMapping("/admin/addFilm")
+    public ModelAndView addFilm(@Valid Film film, BindingResult result) throws Exception
+    {
+        if(result.hasErrors())
         {
-            filmService.create(film);
+            return new ModelAndView("addFilm", "film", film);
         }
+        filmService.create(film);
         return new ModelAndView("addFilm", "film", new Film());
     }
 

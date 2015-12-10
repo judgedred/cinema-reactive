@@ -6,8 +6,8 @@
     <title>Admin menu</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
-<ul class="navigation">
 <body>
+<ul class="navigation">
     <li><a href="filmshowList" title="Filmshow">Сеансы</a>
     <ul>
         <li><a href="addFilmshow" title="Add">Добавить</a></li>
@@ -23,7 +23,7 @@
     </li>
     <li><a href="filmList" title="Films">Фильмы</a>
         <ul>
-            <li><a href="addFilm" title="Add">Добавить</a></li>
+            <li><a href="addFilmForm" title="Add">Добавить</a></li>
             <li><a href="deleteFilm" title="Delete">Удалить</a></li>
         </ul>
     </li>
