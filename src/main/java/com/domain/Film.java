@@ -84,14 +84,6 @@ public class Film implements Serializable
 		return true;
 	}
 
-	/*@Override
-	public int hashCode()
-	{
-		int result = filmId;
-		result = 31 * result;
-		return result;
-	}*/
-
     @Override
     public int hashCode()
     {

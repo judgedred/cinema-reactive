@@ -2,7 +2,9 @@ package com.service;
 
 import com.dao.DaoException;
 import com.dao.FilmDao;
+import com.dao.FilmshowDao;
 import com.domain.Film;
+import com.domain.Filmshow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,6 +14,9 @@ public class FilmServiceImpl implements FilmService
 {
     @Autowired
     private FilmDao filmDao;
+
+    @Autowired
+    private FilmshowDao filmshowDao;
 
     @Override
     public Film create(Film film) throws DaoException
@@ -41,5 +46,16 @@ public class FilmServiceImpl implements FilmService
     public Film getFilmById(int id) throws DaoException
     {
         return filmDao.getFilmById(id);
+    }
+
+    @Override
+    public boolean checkFilmInFilmshow(Film film) throws DaoException
+    {
+        List<Filmshow> filmshowList = filmshowDao.getFilmshowByFilm(film);
+        if(filmshowList != null)
+        {
+            return true;
+        }
+        return false;
     }
 }

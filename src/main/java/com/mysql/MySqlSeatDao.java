@@ -4,6 +4,7 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
@@ -144,7 +145,31 @@ public class MySqlSeatDao implements SeatDao
         }
 	}
 
-    MySqlSeatDao()
-	{
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Seat> getSeatByHall(Hall hall) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Seat> resultList = (List<Seat>) session.createCriteria(Seat.class).add(Restrictions.eq("hall", hall)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
 }

@@ -19,6 +19,7 @@ public class MySqlFilmDao implements FilmDao
     private Session session;
 
 	@Override
+    @SuppressWarnings("unchecked")
     public Film create(Film film) throws DaoException
 	{
 		try
@@ -151,10 +152,5 @@ public class MySqlFilmDao implements FilmDao
                 session.close();
             }
         }
-	}
-
-    MySqlFilmDao()
-	{
-
 	}
 }

@@ -12,4 +12,5 @@ public interface FilmshowService
     public void delete(Filmshow filmshow) throws DaoException;
     public List<Filmshow> getFilmshowAll() throws DaoException;
     public Filmshow getFilmshowById(int id) throws DaoException;
+    public boolean checkFilmshowInTicket(Filmshow filmshow)throws DaoException;
 }

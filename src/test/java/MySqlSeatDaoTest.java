@@ -89,6 +89,16 @@ public class MySqlSeatDaoTest
         Assert.assertTrue(listTest.size() > 0);
     }
 
+    @Test
+    public void testGetSeatByHall() throws DaoException
+    {
+        Hall hall = hallDao.getHallById(1);
+        Seat seatExpected = seatDao.getSeatById(1);
+        Seat seatResult = seatDao.getSeatByHall(hall).get(0);
+        Assert.assertNotNull(seatResult);
+        Assert.assertEquals(seatExpected, seatResult);
+    }
+
     @After
     public void cleanUp() throws DaoException
     {

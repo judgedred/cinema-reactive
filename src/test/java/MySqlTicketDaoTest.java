@@ -94,4 +94,14 @@ public class MySqlTicketDaoTest
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
+
+    @Test
+    public void testGetTicketByFilmshow() throws DaoException
+    {
+        Filmshow filmshow = filmshowDao.getFilmshowById(1);
+        Ticket ticketExpected = ticketDao.getTicketById(1);
+        Ticket ticketResult = ticketDao.getTicketByFilmshow(filmshow).get(0);
+        Assert.assertNotNull(ticketResult);
+        Assert.assertEquals(ticketExpected, ticketResult);
+    }
 }

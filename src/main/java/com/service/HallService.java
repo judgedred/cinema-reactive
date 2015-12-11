@@ -12,4 +12,6 @@ public interface HallService
     public void delete(Hall hall) throws DaoException;
     public List<Hall> getHallAll() throws DaoException;
     public Hall getHallById(int id) throws DaoException;
+    public boolean checkHallInFilmshow(Hall hall) throws DaoException;
+    public boolean checkHallInSeat(Hall hall) throws DaoException;
 }

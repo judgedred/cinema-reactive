@@ -4,6 +4,7 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
@@ -144,7 +145,31 @@ public class MySqlTicketDao implements TicketDao
         }
 	}
 
-    MySqlTicketDao()
-	{
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Ticket> getTicketByFilmshow(Filmshow filmshow) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Ticket> resultList = (List<Ticket>) session.createCriteria(Ticket.class).add(Restrictions.eq("filmshow", filmshow)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
 }

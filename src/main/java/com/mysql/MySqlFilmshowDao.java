@@ -4,6 +4,7 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
@@ -17,18 +18,26 @@ public class MySqlFilmshowDao implements FilmshowDao
 	private Session session;
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public Filmshow create(Filmshow filmshow) throws DaoException
 	{
 		try
 		{
             session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.save(filmshow);
-			session.flush();
-			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			filmshow = (Filmshow) session.load(Filmshow.class, lastId);
-            session.getTransaction().commit();
-            return filmshow;
+            List<Filmshow> resultList = (List<Filmshow>) session.createCriteria(Filmshow.class).add(Restrictions.conjunction(Restrictions.eq("film", filmshow.getFilm()),
+                    Restrictions.eq("hall", filmshow.getHall()), Restrictions.eq("dateTime", filmshow.getDateTime()))).list();
+            if(resultList.isEmpty())
+            {
+                session.beginTransaction();
+                session.save(filmshow);
+                session.flush();
+                session.getTransaction().commit();
+                return filmshow;
+            }
+            else
+            {
+                return null;
+            }
 		}
 		catch(Exception e)
 		{
@@ -144,8 +153,58 @@ public class MySqlFilmshowDao implements FilmshowDao
         }
 	}
 
-    MySqlFilmshowDao()
-	{
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Filmshow> getFilmshowByFilm(Film film) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Filmshow> resultList = (List<Filmshow>) session.createCriteria(Filmshow.class).add(Restrictions.eq("film", film)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
 
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Filmshow> getFilmshowByHall(Hall hall) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Filmshow> resultList = (List<Filmshow>) session.createCriteria(Filmshow.class).add(Restrictions.eq("hall", hall)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
 }

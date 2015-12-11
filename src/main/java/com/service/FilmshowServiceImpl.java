@@ -3,7 +3,9 @@ package com.service;
 
 import com.dao.DaoException;
 import com.dao.FilmshowDao;
+import com.dao.TicketDao;
 import com.domain.Filmshow;
+import com.domain.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
@@ -15,10 +17,13 @@ public class FilmshowServiceImpl implements FilmshowService
     @Autowired
     private FilmshowDao filmshowDao;
 
+    @Autowired
+    private TicketDao ticketDao;
+
     @Override
     public Filmshow create(Filmshow filmshow) throws DaoException
     {
-        List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
+        /*List<Filmshow> filmshowLst = filmshowDao.getFilmshowAll();
         boolean filmshowValid = true;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
         for(Filmshow f : filmshowLst)
@@ -38,7 +43,8 @@ public class FilmshowServiceImpl implements FilmshowService
         else
         {
             return null;
-        }
+        }*/
+        return filmshowDao.create(filmshow);
     }
 
     @Override
@@ -63,5 +69,16 @@ public class FilmshowServiceImpl implements FilmshowService
     public Filmshow getFilmshowById(int id) throws DaoException
     {
         return filmshowDao.getFilmshowById(id);
+    }
+
+    @Override
+    public boolean checkFilmshowInTicket(Filmshow filmshow) throws DaoException
+    {
+        List<Ticket> ticketList = ticketDao.getTicketByFilmshow(filmshow);
+        if(ticketList != null)
+        {
+            return true;
+        }
+        return false;
     }
 }

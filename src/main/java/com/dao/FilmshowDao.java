@@ -1,6 +1,9 @@
 package com.dao;
 
+import com.domain.Film;
 import com.domain.Filmshow;
+import com.domain.Hall;
+
 import java.util.List;
 
 public interface FilmshowDao
@@ -10,4 +13,7 @@ public interface FilmshowDao
 	public void delete(Filmshow filmshow) throws DaoException;
 	public List<Filmshow> getFilmshowAll() throws DaoException;
 	public Filmshow getFilmshowById(int id) throws DaoException;
+    public List<Filmshow> getFilmshowByFilm(Film film) throws DaoException;
+    public List<Filmshow> getFilmshowByHall(Hall hall) throws DaoException;
+
 }

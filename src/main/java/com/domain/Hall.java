@@ -1,6 +1,9 @@
 package com.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,8 +16,10 @@ public class Hall implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer hallId;
     @Column(name = "hall_number", nullable = false)
+    @NotNull
 	private Integer hallNumber;
     @Column(name = "hall_name", length = 45, nullable = false)
+    @NotNull @NotEmpty
 	private String hallName;
 
 	public Integer getHallId()
@@ -77,15 +82,13 @@ public class Hall implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		int result = hallId;
-		result = 31 * result + hallNumber;
-		return result;
-	}
+    @Override
+    public int hashCode()
+    {
+        return hallId != null ? hallId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		return hallNumber + " " + hallName;

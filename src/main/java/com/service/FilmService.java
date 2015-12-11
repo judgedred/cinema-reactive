@@ -12,4 +12,5 @@ public interface FilmService
     public void delete(Film film) throws DaoException;
     public List<Film> getFilmAll() throws DaoException;
     public Film getFilmById(int id) throws DaoException;
+    public boolean checkFilmInFilmshow(Film film) throws DaoException;
 }

@@ -96,4 +96,24 @@ public class MySqlFilmshowDaoTest
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
+
+    @Test
+    public void testGetFilmshowByFilm() throws DaoException
+    {
+        Film film = filmDao.getFilmById(1);
+        Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowResult = filmshowDao.getFilmshowByFilm(film).get(0);
+        Assert.assertNotNull(filmshowResult);
+        Assert.assertEquals(filmshowExpected, filmshowResult);
+    }
+
+    @Test
+    public void testGetFilmshowByHall() throws DaoException
+    {
+        Hall hall = hallDao.getHallById(1);
+        Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowResult = filmshowDao.getFilmshowByHall(hall).get(0);
+        Assert.assertNotNull(filmshowResult);
+        Assert.assertEquals(filmshowExpected, filmshowResult);
+    }
 }

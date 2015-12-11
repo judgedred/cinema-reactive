@@ -4,6 +4,7 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
@@ -17,18 +18,26 @@ public class MySqlHallDao implements HallDao
 	private Session session;
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public Hall create(Hall hall) throws DaoException
 	{
 		try
 		{
             session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.save(hall);
-			session.flush();
-			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			hall = (Hall) session.load(Hall.class, lastId);
-            session.getTransaction().commit();
-            return hall;
+            List<Hall> resultList = (List<Hall>) session.createCriteria(Hall.class).add(Restrictions.or(Restrictions.eq("hallName", hall.getHallName()),
+                    Restrictions.eq("hallNumber", hall.getHallNumber()))).list();
+            if(resultList.isEmpty())
+            {
+                session.beginTransaction();
+                session.save(hall);
+                session.flush();
+                session.getTransaction().commit();
+                return hall;
+            }
+            else
+            {
+                return null;
+            }
 		}
 		catch(Exception e)
 		{
@@ -144,8 +153,5 @@ public class MySqlHallDao implements HallDao
         }
 	}
 
-    MySqlHallDao() throws DaoException
-	{
 
-	}
 }
