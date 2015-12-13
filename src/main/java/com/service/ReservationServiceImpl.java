@@ -4,6 +4,7 @@ package com.service;
 import com.dao.DaoException;
 import com.dao.ReservationDao;
 import com.domain.Reservation;
+import com.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class ReservationServiceImpl implements ReservationService
     @Override
     public Reservation create(Reservation reservation) throws DaoException
     {
-        List<Reservation> reservationList = reservationDao.getReservationAll();
+        /*List<Reservation> reservationList = reservationDao.getReservationAll();
         boolean reservationValid = true;
         for(Reservation r : reservationList)
         {
@@ -35,7 +36,8 @@ public class ReservationServiceImpl implements ReservationService
         else
         {
             return null;
-        }
+        }*/
+        return reservationDao.create(reservation);
     }
 
     @Override
@@ -60,5 +62,11 @@ public class ReservationServiceImpl implements ReservationService
     public Reservation getReservationById(int id) throws DaoException
     {
         return reservationDao.getReservationById(id);
+    }
+
+    @Override
+    public List<Reservation> getReservationAllByUser(User user) throws DaoException
+    {
+        return reservationDao.getReservationAllByUser(user);
     }
 }

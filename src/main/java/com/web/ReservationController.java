@@ -10,10 +10,14 @@ import com.service.TicketService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,13 +45,9 @@ public class ReservationController
     @Autowired
     private TicketEditor ticketEditor;
 
-    @RequestMapping("/admin/addReservation")
-    public ModelAndView addReservation(@ModelAttribute Reservation reservation) throws Exception
+    @RequestMapping("/admin/addReservationForm")
+    public ModelAndView addReservationForm() throws Exception
     {
-        if(reservation != null && reservation.getTicket() != null && reservation.getUser() != null)
-        {
-            reservationService.create(reservation);
-        }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("addReservation");
@@ -57,53 +57,61 @@ public class ReservationController
         return mav;
     }
 
-    @RequestMapping("/admin/deleteReservation")
-    public ModelAndView deleteReservation(@ModelAttribute Reservation reservation, HttpServletResponse response) throws Exception
+    @RequestMapping("/admin/addReservation")
+    public ModelAndView addReservation(@Valid Reservation reservation, BindingResult result) throws Exception
     {
-        try
+        if(result.hasErrors())
         {
-            if(reservation.getReservationId() != null && reservation.getReservationId() != 0)
+            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+            List<User> userList = userService.getUserAll();
+            ModelAndView mav = new ModelAndView("addReservation");
+            mav.addObject("filmshowList", filmshowList);
+            mav.addObject("userList", userList);
+            mav.addObject("reservation", reservation);
+            return mav;
+        }
+        reservationService.create(reservation);
+        return new ModelAndView(new RedirectView("addReservationForm"));
+    }
+
+    @RequestMapping("/admin/deleteReservation")
+    public ModelAndView deleteReservation(@ModelAttribute Reservation reservation) throws Exception
+    {
+        if(reservation.getReservationId() != null && reservation.getReservationId() != 0)
+        {
+            reservation = reservationService.getReservationById(reservation.getReservationId());
+            if(reservation != null)
             {
-                reservation = reservationService.getReservationById(reservation.getReservationId());
-                if(reservation != null)
-                {
-                    reservationService.delete(reservation);
-                }
+                reservationService.delete(reservation);
             }
-            List<Reservation> reservationList = reservationService.getReservationAll();
-            response.setStatus(HttpServletResponse.SC_OK);
-            return new ModelAndView("deleteReservation", "reservationList", reservationList);
         }
-        catch(Exception e)
-        {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-            return null;
-        }
+        List<Reservation> reservationList = reservationService.getReservationAll();
+        return new ModelAndView("deleteReservation", "reservationList", reservationList);
     }
 
     @RequestMapping("/admin/reservationList")
     public ModelAndView listReservations(@ModelAttribute Reservation reservation) throws Exception
     {
-        List<Reservation> reservationList = reservationService.getReservationAll();
+        /*List<Reservation> reservationList = reservationService.getReservationAll();
         List<Reservation> filteredReservationList = new ArrayList<>();
         User user = reservation.getUser();
         if(reservationList != null && user != null && user.getLogin() != null
                 && user.getPassword() != null && user.getEmail() != null)
         {
             filteredReservationList.addAll(reservationList.stream().filter(r -> r.getUser().equals(user)).collect(Collectors.toList()));
-        }
+        }*/
+        List<Reservation> reservationList = reservationService.getReservationAllByUser(reservation.getUser());
         List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("reservationList");
         mav.addObject("userList", userList);
-        mav.addObject("filteredReservationList", filteredReservationList);
+        mav.addObject("filteredReservationList", reservationList);
         return mav;
     }
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
     public @ResponseBody Map<Integer, String> filterTickets(@PathVariable Integer filmshowId) throws Exception
     {
-        if(filmshowId != null)
+        /*if(filmshowId != null)
         {
             List<Ticket> ticketList = ticketService.getTicketAll();
             List<Reservation> reservationList = reservationService.getReservationAll();
@@ -134,6 +142,12 @@ public class ReservationController
                 }
             }
             return filteredTicketMap;
+        }
+        return null;*/
+        if(filmshowId != null)
+        {
+            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+            return ticketService.getTicketAllByFilmshow(filmshow);
         }
         return null;
     }

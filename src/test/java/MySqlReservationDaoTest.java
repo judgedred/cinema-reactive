@@ -88,6 +88,15 @@ public class MySqlReservationDaoTest
         Assert.assertTrue(listTest.size() > 0);
     }
 
+    @Test
+    public void testGetAllByUser() throws DaoException
+    {
+        User user = userDao.getUserById(2);
+        List<Reservation> listTest = reservationDao.getReservationAllByUser(user);
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() == 1);
+    }
+
 }
 
 
