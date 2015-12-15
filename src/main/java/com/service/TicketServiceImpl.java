@@ -3,6 +3,7 @@ package com.service;
 
 import com.dao.DaoException;
 import com.dao.TicketDao;
+import com.domain.Filmshow;
 import com.domain.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,5 +63,11 @@ public class TicketServiceImpl implements TicketService
     public Ticket getTicketById(int id) throws DaoException
     {
         return ticketDao.getTicketById(id);
+    }
+
+    @Override
+    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException
+    {
+        return ticketDao.getTicketFreeByFilmshow(filmshow);
     }
 }

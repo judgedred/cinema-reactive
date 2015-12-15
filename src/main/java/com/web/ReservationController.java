@@ -92,14 +92,6 @@ public class ReservationController
     @RequestMapping("/admin/reservationList")
     public ModelAndView listReservations(@ModelAttribute Reservation reservation) throws Exception
     {
-        /*List<Reservation> reservationList = reservationService.getReservationAll();
-        List<Reservation> filteredReservationList = new ArrayList<>();
-        User user = reservation.getUser();
-        if(reservationList != null && user != null && user.getLogin() != null
-                && user.getPassword() != null && user.getEmail() != null)
-        {
-            filteredReservationList.addAll(reservationList.stream().filter(r -> r.getUser().equals(user)).collect(Collectors.toList()));
-        }*/
         List<Reservation> reservationList = reservationService.getReservationAllByUser(reservation.getUser());
         List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("reservationList");
@@ -111,43 +103,22 @@ public class ReservationController
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
     public @ResponseBody Map<Integer, String> filterTickets(@PathVariable Integer filmshowId) throws Exception
     {
-        /*if(filmshowId != null)
-        {
-            List<Ticket> ticketList = ticketService.getTicketAll();
-            List<Reservation> reservationList = reservationService.getReservationAll();
-            boolean ticketFree;
-            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-            Map<Integer, String> filteredTicketMap = new HashMap<>();
-            if(filmshow != null && filmshow.getFilm() != null
-                    && filmshow.getHall() != null && filmshow.getDateTime() != null)
-            {
-                for(Ticket t : ticketList)
-                {
-                    if(t.getFilmshow().equals(filmshow))
-                    {
-                        ticketFree = true;
-                        for(Reservation r : reservationList)
-                        {
-                            if(t.equals(r.getTicket()))
-                            {
-                                ticketFree = false;
-                                break;
-                            }
-                        }
-                        if(ticketFree)
-                        {
-                            filteredTicketMap.put(t.getTicketId(), t.toString());
-                        }
-                    }
-                }
-            }
-            return filteredTicketMap;
-        }
-        return null;*/
         if(filmshowId != null)
         {
             Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-            return ticketService.getTicketAllByFilmshow(filmshow);
+            if(filmshow != null)
+            {
+                List<Ticket> ticketList = ticketService.getTicketFreeByFilmshow(filmshow);
+                if(ticketList != null)
+                {
+                    Map<Integer, String> ticketMap = new HashMap<>();
+                    for(Ticket t : ticketList)
+                    {
+                        ticketMap.put(t.getTicketId(), t.toString());
+                    }
+                    return ticketMap;
+                }
+            }
         }
         return null;
     }

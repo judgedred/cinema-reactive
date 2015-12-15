@@ -12,4 +12,5 @@ public interface TicketDao
 	public List<Ticket> getTicketAll() throws DaoException;
 	public Ticket getTicketById(int id) throws DaoException;
     public List<Ticket> getTicketByFilmshow(Filmshow filmshow) throws DaoException;
+    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException;
 }

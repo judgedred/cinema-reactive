@@ -1,5 +1,6 @@
 import com.dao.*;
 import com.domain.Filmshow;
+import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import org.junit.Assert;
@@ -103,5 +104,14 @@ public class MySqlTicketDaoTest
         Ticket ticketResult = ticketDao.getTicketByFilmshow(filmshow).get(0);
         Assert.assertNotNull(ticketResult);
         Assert.assertEquals(ticketExpected, ticketResult);
+    }
+
+    @Test
+    public void testGetTicketFreeByFilmshow() throws DaoException
+    {
+        Filmshow filmshow = filmshowDao.getFilmshowById(3);
+        List<Ticket> listTest = ticketDao.getTicketFreeByFilmshow(filmshow);
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() == 1);
     }
 }
