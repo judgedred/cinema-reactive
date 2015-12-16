@@ -3,7 +3,10 @@ package com.service;
 
 import com.dao.DaoException;
 import com.dao.SeatDao;
+import com.dao.TicketDao;
+import com.domain.Filmshow;
 import com.domain.Seat;
+import com.domain.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -14,29 +17,13 @@ public class SeatServiceImpl implements SeatService
     @Autowired
     private SeatDao seatDao;
 
+    @Autowired
+    private TicketDao ticketDao;
+
     @Override
     public Seat create(Seat seat) throws DaoException
     {
-        List<Seat> seatList = seatDao.getSeatAll();
-        boolean seatValid = true;
-        for(Seat s : seatList)
-        {
-            if(s.getSeatNumber().equals(seat.getSeatNumber())
-                    && s.getHall().equals(seat.getHall())
-                    && s.getRowNumber().equals(seat.getRowNumber()))
-            {
-                seatValid = false;
-                break;
-            }
-        }
-        if(seatValid)
-        {
-            return seatDao.create(seat);
-        }
-        else
-        {
-            return null;
-        }
+        return seatDao.create(seat);
     }
 
     @Override
@@ -61,5 +48,22 @@ public class SeatServiceImpl implements SeatService
     public Seat getSeatById(int id) throws DaoException
     {
         return seatDao.getSeatById(id);
+    }
+
+    @Override
+    public boolean checkSeatInTicket(Seat seat) throws DaoException
+    {
+        List<Ticket> ticketList = ticketDao.getTicketAllBySeat(seat);
+        if(ticketList != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<Seat> getSeatFreeByFilmshow(Filmshow filmshow) throws DaoException
+    {
+        return seatDao.getSeatFreeByFilmshow(filmshow);
     }
 }

@@ -97,6 +97,15 @@ public class MySqlReservationDaoTest
         Assert.assertTrue(listTest.size() == 1);
     }
 
+    @Test
+    public void testGetAllByTicket() throws DaoException
+    {
+        Ticket ticketExpected = ticketDao.getTicketById(7);
+        List<Reservation> listTest = reservationDao.getReservationAllByTicket(ticketExpected);
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() == 1);
+    }
+
 }
 
 

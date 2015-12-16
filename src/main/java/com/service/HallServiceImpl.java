@@ -59,7 +59,7 @@ public class HallServiceImpl implements HallService
     @Override
     public boolean checkHallInFilmshow(Hall hall) throws DaoException
     {
-        List<Filmshow> filmshowList = filmshowDao.getFilmshowByHall(hall);
+        List<Filmshow> filmshowList = filmshowDao.getFilmshowAllByHall(hall);
         if(filmshowList != null)
         {
             return true;
@@ -70,7 +70,7 @@ public class HallServiceImpl implements HallService
     @Override
     public boolean checkHallInSeat(Hall hall) throws DaoException
     {
-        List<Seat> seatList = seatDao.getSeatByHall(hall);
+        List<Seat> seatList = seatDao.getSeatAllByHall(hall);
         if(seatList != null)
         {
             return true;

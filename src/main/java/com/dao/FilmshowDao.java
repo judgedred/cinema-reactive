@@ -13,7 +13,7 @@ public interface FilmshowDao
 	public void delete(Filmshow filmshow) throws DaoException;
 	public List<Filmshow> getFilmshowAll() throws DaoException;
 	public Filmshow getFilmshowById(int id) throws DaoException;
-    public List<Filmshow> getFilmshowByFilm(Film film) throws DaoException;
-    public List<Filmshow> getFilmshowByHall(Hall hall) throws DaoException;
+    public List<Filmshow> getFilmshowAllByFilm(Film film) throws DaoException;
+    public List<Filmshow> getFilmshowAllByHall(Hall hall) throws DaoException;
 
 }

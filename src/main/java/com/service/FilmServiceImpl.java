@@ -51,7 +51,7 @@ public class FilmServiceImpl implements FilmService
     @Override
     public boolean checkFilmInFilmshow(Film film) throws DaoException
     {
-        List<Filmshow> filmshowList = filmshowDao.getFilmshowByFilm(film);
+        List<Filmshow> filmshowList = filmshowDao.getFilmshowAllByFilm(film);
         if(filmshowList != null)
         {
             return true;

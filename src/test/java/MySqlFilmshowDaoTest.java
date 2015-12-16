@@ -102,7 +102,7 @@ public class MySqlFilmshowDaoTest
     {
         Film film = filmDao.getFilmById(1);
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
-        Filmshow filmshowResult = filmshowDao.getFilmshowByFilm(film).get(0);
+        Filmshow filmshowResult = filmshowDao.getFilmshowAllByFilm(film).get(0);
         Assert.assertNotNull(filmshowResult);
         Assert.assertEquals(filmshowExpected, filmshowResult);
     }
@@ -112,7 +112,7 @@ public class MySqlFilmshowDaoTest
     {
         Hall hall = hallDao.getHallById(1);
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
-        Filmshow filmshowResult = filmshowDao.getFilmshowByHall(hall).get(0);
+        Filmshow filmshowResult = filmshowDao.getFilmshowAllByHall(hall).get(0);
         Assert.assertNotNull(filmshowResult);
         Assert.assertEquals(filmshowExpected, filmshowResult);
     }

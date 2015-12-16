@@ -18,7 +18,7 @@
         <ul>
             <li><a href="addTicketForm" title="Add">Добавить</a></li>
             <li><a href="deleteTicket" title="Delete">Удалить</a></li>
-            <li><a href="addTicketAll" title="Add tickets for the show">Выпустить билеты на сеанс</a></li>
+            <li><a href="addTicketAllForm" title="Add tickets for the show">Выпустить билеты на сеанс</a></li>
         </ul>
     </li>
     <li><a href="filmList" title="Films">Фильмы</a>

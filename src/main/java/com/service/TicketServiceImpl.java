@@ -2,8 +2,10 @@ package com.service;
 
 
 import com.dao.DaoException;
+import com.dao.ReservationDao;
 import com.dao.TicketDao;
 import com.domain.Filmshow;
+import com.domain.Reservation;
 import com.domain.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,30 +17,13 @@ public class TicketServiceImpl implements TicketService
     @Autowired
     private TicketDao ticketDao;
 
+    @Autowired
+    private ReservationDao reservationDao;
+
     @Override
     public Ticket create(Ticket ticket) throws DaoException
     {
-        List<Ticket> ticketList = ticketDao.getTicketAll();
-        boolean ticketValid = true;
-        if(ticketList != null)
-        {
-            for(Ticket t : ticketList)
-            {
-                if(t.getFilmshow().equals(ticket.getFilmshow()) && t.getSeat().equals(ticket.getSeat()))
-                {
-                    ticketValid = false;
-                    break;
-                }
-            }
-        }
-        if(ticketValid)
-        {
-            return ticketDao.create(ticket);
-        }
-        else
-        {
-            return null;
-        }
+        return ticketDao.create(ticket);
     }
 
     @Override
@@ -63,6 +48,23 @@ public class TicketServiceImpl implements TicketService
     public Ticket getTicketById(int id) throws DaoException
     {
         return ticketDao.getTicketById(id);
+    }
+
+    @Override
+    public List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) throws DaoException
+    {
+        return ticketDao.getTicketAllByFilmshow(filmshow);
+    }
+
+    @Override
+    public boolean checkTicketInReservation(Ticket ticket) throws DaoException
+    {
+        List<Reservation> reservationList = reservationDao.getReservationAllByTicket(ticket);
+        if(reservationList != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override

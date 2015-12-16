@@ -1,8 +1,8 @@
-import com.dao.DaoException;
-import com.dao.HallDao;
-import com.dao.SeatDao;
+import com.dao.*;
+import com.domain.Filmshow;
 import com.domain.Hall;
 import com.domain.Seat;
+import com.domain.Ticket;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,6 +24,12 @@ public class MySqlSeatDaoTest
 
     @Autowired
     private HallDao hallDao;
+
+    @Autowired
+    private FilmshowDao filmshowDao;
+
+    @Autowired
+    private TicketDao ticketDao;
 
     @Test
     public void testGetSeatById() throws DaoException
@@ -94,9 +102,41 @@ public class MySqlSeatDaoTest
     {
         Hall hall = hallDao.getHallById(1);
         Seat seatExpected = seatDao.getSeatById(1);
-        Seat seatResult = seatDao.getSeatByHall(hall).get(0);
+        Seat seatResult = seatDao.getSeatAllByHall(hall).get(0);
         Assert.assertNotNull(seatResult);
         Assert.assertEquals(seatExpected, seatResult);
+    }
+
+    @Test
+    public void testGetSeatFreeByFilmshow() throws DaoException
+    {
+        Filmshow filmshow = filmshowDao.getFilmshowById(1);
+        List<Seat> seatList = seatDao.getSeatAll();
+        List<Ticket> ticketList = ticketDao.getTicketAll();
+        boolean seatFree;
+        List<Seat> seatListExpected = new ArrayList<>();
+        for(Seat s : seatList)
+        {
+            seatFree = true;
+            if(s.getHall().equals(filmshow.getHall()))
+            {
+                for(Ticket t : ticketList)
+                {
+                    if(t.getFilmshow().equals(filmshow) && t.getSeat().equals(s))
+                    {
+                        seatFree = false;
+                        break;
+                    }
+                }
+                if(seatFree)
+                {
+                    seatListExpected.add(s);
+                }
+            }
+        }
+        List<Seat> seatListResult = seatDao.getSeatFreeByFilmshow(filmshow);
+        Assert.assertNotNull(seatListResult);
+        Assert.assertEquals(seatListExpected, seatListResult);
     }
 
     @After

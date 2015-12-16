@@ -160,7 +160,39 @@ public class MySqlReservationDao implements ReservationDao
         try
         {
             session = sessionFactory.openSession();
-            return (List<Reservation>) session.createCriteria(Reservation.class).add(Restrictions.eq("user", user)).list();
+            List<Reservation> resultList = (List<Reservation>) session.createCriteria(Reservation.class).add(Restrictions.eq("user", user)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Reservation> getReservationAllByTicket(Ticket ticket) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Reservation> resultList = (List<Reservation>) session.createCriteria(Reservation.class).add(Restrictions.eq("ticket", ticket)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
         }
         catch(Exception e)
         {

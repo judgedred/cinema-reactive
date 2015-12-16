@@ -155,7 +155,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Filmshow> getFilmshowByFilm(Film film) throws DaoException
+    public List<Filmshow> getFilmshowAllByFilm(Film film) throws DaoException
     {
         try
         {
@@ -182,7 +182,7 @@ public class MySqlFilmshowDao implements FilmshowDao
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Filmshow> getFilmshowByHall(Hall hall) throws DaoException
+    public List<Filmshow> getFilmshowAllByHall(Hall hall) throws DaoException
     {
         try
         {
