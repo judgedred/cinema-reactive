@@ -5,6 +5,12 @@
 <head>
     <title>Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="resources/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#login").focus();
+        });
+    </script>
 </head>
 <body>
 <div class="result">
@@ -16,7 +22,7 @@
         </tr>
         <tr>
             <td><label for="password">Пароль</label></td>
-            <td><input type="text" id="password" name="password" size="10" ></td>
+            <td><input type="password" id="password" name="password" size="10" ></td>
         </tr>
         <tr>
             <td><input type="submit" value="Вход"></td>

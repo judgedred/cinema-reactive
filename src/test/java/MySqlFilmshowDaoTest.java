@@ -116,4 +116,17 @@ public class MySqlFilmshowDaoTest
         Assert.assertNotNull(filmshowResult);
         Assert.assertEquals(filmshowExpected, filmshowResult);
     }
+
+    @Test
+    public void testGetFilmshowAllByDate() throws DaoException
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2015, Calendar.MARCH, 3, 3, 0);
+        Date startDate = cal.getTime();
+        cal.add(Calendar.MINUTE, 30);
+        Date endDate = cal.getTime();
+        List<Filmshow> testList = filmshowDao.getFilmshowAllByDate(startDate, endDate);
+        Assert.assertNotNull(testList);
+        Assert.assertTrue(testList.size() == 1);
+    }
 }

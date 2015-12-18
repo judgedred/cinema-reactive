@@ -8,6 +8,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -188,6 +190,34 @@ public class MySqlFilmshowDao implements FilmshowDao
         {
             session = sessionFactory.openSession();
             List<Filmshow> resultList = (List<Filmshow>) session.createCriteria(Filmshow.class).add(Restrictions.eq("hall", hall)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Filmshow> getFilmshowAllByDate(Date startDate, Date endDate) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Filmshow> resultList = (List<Filmshow>) session.createCriteria(Filmshow.class)
+                    .add(Restrictions.between("dateTime", startDate, endDate)).list();
             if(resultList.isEmpty())
             {
                 return null;

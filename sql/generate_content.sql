@@ -1,4 +1,3 @@
-
 use cinema;
 Insert Into User(login, password, email) Values("admin", SHA1("admin"), "admin@gmail.com");
 Insert Into User(login, password, email) Values("user", SHA1("user"), "user@gmail.com");
@@ -41,6 +40,7 @@ Insert Into Film(film_name, description) Values("Восхождение Юпит
 Insert Into Film(film_name, description) Values("Аватар", "Фантастика");
 Insert Into Film(film_name, description) Values("testUpdate", "testUpdate");
 Insert Into Film(film_name, description) Values("testDelete", "testDelete");
+Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-03-03 03:03", 1);
 Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-09-11 23:00", 1);
 Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-09-12 21:30", 1);
 Insert Into Filmshow(film_id, date_time, hall_id) Values(1, "2015-09-13 21:30", 1);

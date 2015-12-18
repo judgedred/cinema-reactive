@@ -37,12 +37,7 @@
                     url: "registerCheck?email=" + $("#email").val(),
                     async: false,
                     success: function (data) {
-                        if ($("#login").val() == "" || $("#password").val() == "" || $("#email").val() == "")
-                        {
-                            alert("Заполните поля");
-                            event.preventDefault();
-                        }
-                        else if (data != "") {
+                        if (data != "") {
                             alert(data);
                             event.preventDefault();
                         }
@@ -53,7 +48,7 @@
             if($("#registered").text() != "")
             {
                 alert($("#registered").text());
-                location.replace("register");
+                location.replace("registerForm");
             }
         });
     </script>
@@ -70,16 +65,18 @@
             <table>
                 <tr>
                     <td><form:label path="login">Введите логин</form:label></td>
-                    <td><form:input path="login"/></td>
-                    <td><div id="login-check"></div></td>
+                    <td><form:input type="text" path="login"/></td>
+                    <td><div id="login-check"><form:errors path="login" /> </div></td>
                 </tr>
                 <tr>
                     <td><form:label path="password">Введите пароль</form:label></td>
-                    <td><form:input path="password"/></td>
+                    <td><form:input type="password" path="password"/></td>
+                    <td><form:errors path="password" /> </td>
                 </tr>
                 <tr>
                     <td><form:label path="email">Введите email</form:label></td>
-                    <td><form:input path="email"/></td>
+                    <td><form:input type="text" path="email"/></td>
+                    <td><form:errors path="email" /> </td>
                 </tr>
                 <tr>
                     <td><input type="submit" id="register-submit" value="Зарегистрироваться"></td>

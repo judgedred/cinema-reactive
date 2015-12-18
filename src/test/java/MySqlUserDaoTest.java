@@ -108,6 +108,15 @@ public class MySqlUserDaoTest
 		Assert.assertTrue(listTest.size() > 0);
 	}
 
+    @Test
+    public void testGetUserByUser() throws DaoException
+    {
+        User userExpected = userDao.getUserById(1);
+        User userResult = userDao.getUserByUser(userExpected);
+        Assert.assertNotNull(userResult);
+        Assert.assertEquals(userExpected, userResult);
+    }
+
     @After
     public void cleanUp() throws DaoException
     {

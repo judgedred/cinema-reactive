@@ -1,6 +1,9 @@
 package com.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,10 +16,13 @@ public class User implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
     @Column(name = "login", nullable = false)
+    @NotNull @NotEmpty
 	private String login;
     @Column(name = "password", nullable = false)
+    @NotNull @NotEmpty
 	private String password;
     @Column(name = "email", nullable = false)
+    @NotNull @NotEmpty
 	private String email;
 
 	public Integer getUserId()
@@ -93,13 +99,13 @@ public class User implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return userId;
-	}
+    @Override
+    public int hashCode()
+    {
+        return userId != null ? userId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		return login + " " + email;

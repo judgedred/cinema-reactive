@@ -4,6 +4,7 @@ $(document).ready(function()
         login: null,
         password: null
     };
+    $("#login-auth").focus();
 
     $.ajax({url: "loginCheck",
         type: "Post",

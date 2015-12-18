@@ -10,4 +10,5 @@ public interface UserDao
 	public void delete(User user) throws DaoException;
 	public List<User> getUserAll() throws DaoException;
 	public User getUserById(Integer id) throws DaoException;
+    public User getUserByUser(User user) throws DaoException;
 }

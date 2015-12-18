@@ -2,10 +2,17 @@ package com.service;
 
 
 import com.dao.DaoException;
+import com.dao.ReservationDao;
 import com.dao.UserDao;
+import com.domain.Reservation;
 import com.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
@@ -14,26 +21,18 @@ public class UserServiceImpl implements UserService
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private ReservationDao reservationDao;
+
     @Override
-    public User create(User user) throws DaoException
+    public User create(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        List<User> userList = userDao.getUserAll();
-        boolean userValid = true;
-        for(User u : userList)
-        {
-            if(u.getLogin().equals(user.getLogin()) || u.getEmail().equals(user.getEmail()))
-            {
-                userValid = false;
-            }
-        }
-        if(userValid)
-        {
-            return userDao.create(user);
-        }
-        else
-        {
-            return null;
-        }
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
+        String passwordHash = DatatypeConverter.printHexBinary(hash);
+        user.setPassword(passwordHash);
+        return userDao.create(user);
     }
 
     @Override
@@ -58,5 +57,51 @@ public class UserServiceImpl implements UserService
     public User getUserById(Integer id) throws DaoException
     {
         return userDao.getUserById(id);
+    }
+
+    @Override
+    public boolean checkUserInReservation(User user) throws DaoException
+    {
+        List<Reservation> reservationList = reservationDao.getReservationAllByUser(user);
+        if(reservationList != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public User authenticateAdmin(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        if(user.getLogin().equals("admin"))
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
+            String passwordHash = DatatypeConverter.printHexBinary(hash);
+            user.setPassword(passwordHash);
+            User adminUser = userDao.getUserByUser(user);
+            if(adminUser != null)
+            {
+                return adminUser;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public User authenticateUser(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
+        String passwordHash = DatatypeConverter.printHexBinary(hash);
+        user.setPassword(passwordHash);
+        User validUser = userDao.getUserByUser(user);
+        if(validUser != null)
+        {
+            return validUser;
+        }
+        return null;
     }
 }
