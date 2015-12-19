@@ -1,19 +1,13 @@
 package com.web;
 
-import com.domain.Reservation;
 import com.domain.User;
-import com.service.ReservationService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
 import java.util.List;
 
 @Controller
@@ -21,9 +15,6 @@ public class UserController
 {
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ReservationService reservationService;
 
     @RequestMapping("/admin/addUserForm")
     public ModelAndView addUserForm() throws Exception

@@ -3,11 +3,9 @@ package com.web;
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
-import com.domain.Ticket;
 import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
-import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,9 +30,6 @@ public class FilmshowController
 
     @Autowired
     private FilmService filmService;
-
-    @Autowired
-    private TicketService ticketService;
 
     @Autowired
     private FilmEditor filmEditor;
@@ -74,7 +67,7 @@ public class FilmshowController
     }
 
     @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow, HttpServletResponse response) throws Exception
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
     {
         if(filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
         {

@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
 import java.util.*;
 
 @Controller

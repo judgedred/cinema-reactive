@@ -1,11 +1,9 @@
 package com.web;
 
 import com.domain.Filmshow;
-import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import com.service.FilmshowService;
-import com.service.ReservationService;
 import com.service.SeatService;
 import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -31,9 +27,6 @@ public class TicketController
 
     @Autowired
     private SeatService seatService;
-
-    @Autowired
-    private ReservationService reservationService;
 
     @Autowired
     private TicketEditor ticketEditor;

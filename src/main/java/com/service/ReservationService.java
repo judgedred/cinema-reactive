@@ -3,7 +3,6 @@ package com.service;
 
 import com.dao.DaoException;
 import com.domain.Reservation;
-import com.domain.Ticket;
 import com.domain.User;
 
 import java.util.List;

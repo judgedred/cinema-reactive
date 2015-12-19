@@ -1,9 +1,10 @@
 import com.dao.*;
 import com.domain.*;
-import java.security.MessageDigest;
-import java.util.*;
 
-import com.service.UserService;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.Assert;
@@ -21,9 +22,6 @@ public class MySqlUserDaoTest
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private UserService userService;
-
 	@Test
 	public void testGetUserById() throws DaoException
 	{
@@ -32,69 +30,55 @@ public class MySqlUserDaoTest
 	}	
 
 	@Test
-	public void testCreate() throws DaoException
+	public void testCreate() throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException
 	{
-        try
-        {
-            User user = new User();
-            user.setLogin("testCreatePassed");
-            String password = "testCreatePassed";
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            String passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            user.setEmail("testCreatePassed@gmail.com");
-            String loginExpected = user.getLogin();
-            String passwordExpected = user.getPassword();
-            String emailExpected = user.getEmail();
-            User userTest = userDao.create(user);
-            Assert.assertNotNull(userTest);
-            String loginResult = userTest.getLogin();
-            String passwordResult = userTest.getPassword();
-            String emailResult = userTest.getEmail();
-            Assert.assertEquals(loginExpected, loginResult);
-            Assert.assertEquals(passwordExpected, passwordResult);
-            Assert.assertEquals(emailExpected, emailResult);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        User user = new User();
+        user.setLogin("testCreatePassed");
+        String password = "testCreatePassed";
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        byte[] hash = digest.digest(password.getBytes("UTF-8"));
+        String passwordHash = DatatypeConverter.printHexBinary(hash);
+        user.setPassword(passwordHash);
+        user.setEmail("testCreatePassed@gmail.com");
+        String loginExpected = user.getLogin();
+        String passwordExpected = user.getPassword();
+        String emailExpected = user.getEmail();
+        User userTest = userDao.create(user);
+        Assert.assertNotNull(userTest);
+        String loginResult = userTest.getLogin();
+        String passwordResult = userTest.getPassword();
+        String emailResult = userTest.getEmail();
+        Assert.assertEquals(loginExpected, loginResult);
+        Assert.assertEquals(passwordExpected, passwordResult);
+        Assert.assertEquals(emailExpected, emailResult);
 	}
 	
 	@Test
-	public void testUpdate() throws DaoException
+	public void testUpdate() throws DaoException,NoSuchAlgorithmException, UnsupportedEncodingException
 	{
-        try
-        {
-            User user = new User();
-            user.setUserId(3);
-            user.setLogin("testUpdatePassed");
-            String password = "testUpdatePassed";
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            String passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            user.setEmail("testUpdatePassed@gmail.com");
-            String loginExpected = user.getLogin();
-            String passwordExpected = user.getPassword();
-            String emailExpected = user.getEmail();
-            userDao.update(user);
-            User userTest = userDao.getUserById(user.getUserId());
-            Assert.assertNotNull(userTest);
-            String loginResult = userTest.getLogin();
-            String passwordResult = userTest.getPassword();
-            String emailResult = userTest.getEmail();
-            Assert.assertEquals(loginExpected, loginResult);
-            Assert.assertEquals(passwordExpected, passwordResult);
-            Assert.assertEquals(emailExpected, emailResult);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        User user = new User();
+        user.setUserId(3);
+        user.setLogin("testUpdatePassed");
+        String password = "testUpdatePassed";
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        byte[] hash = digest.digest(password.getBytes("UTF-8"));
+        String passwordHash = DatatypeConverter.printHexBinary(hash);
+        user.setPassword(passwordHash);
+        user.setEmail("testUpdatePassed@gmail.com");
+        String loginExpected = user.getLogin();
+        String passwordExpected = user.getPassword();
+        String emailExpected = user.getEmail();
+        userDao.update(user);
+        User userTest = userDao.getUserById(user.getUserId());
+        Assert.assertNotNull(userTest);
+        String loginResult = userTest.getLogin();
+        String passwordResult = userTest.getPassword();
+        String emailResult = userTest.getEmail();
+        Assert.assertEquals(loginExpected, loginResult);
+        Assert.assertEquals(passwordExpected, passwordResult);
+        Assert.assertEquals(emailExpected, emailResult);
 	}
 
 	@Test
@@ -140,22 +124,6 @@ public class MySqlUserDaoTest
         Assert.assertNotNull(testList);
         Assert.assertTrue(testList.size() == 1);
         Assert.assertEquals(userExpected, testList.get(0));
-    }
-
-    @Test
-    public void testEffectivity() throws Exception
-    {
-        User user = new User();
-        long start = System.currentTimeMillis();
-        for(int i = 2005; i <= 3000; i++)
-        {
-            user.setLogin("user" + i);
-            user.setPassword("user" + i);
-            user.setEmail("user" + i + "@gmail.com");
-            userService.create(user);
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("DEBUG: Logic A toke " + (end - start) + " MilliSeconds");
     }
 
     @After

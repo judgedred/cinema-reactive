@@ -2,10 +2,8 @@ package com.web;
 
 import com.domain.Hall;
 import com.domain.Seat;
-import com.domain.Ticket;
 import com.service.HallService;
 import com.service.SeatService;
-import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,9 +22,6 @@ public class SeatController
 
     @Autowired
     private HallService hallService;
-
-    @Autowired
-    private TicketService ticketService;
 
     @Autowired
     private HallEditor hallEditor;
