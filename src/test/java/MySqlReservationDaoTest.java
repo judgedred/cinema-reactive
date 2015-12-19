@@ -38,7 +38,7 @@ public class MySqlReservationDaoTest
     {
         Reservation reservation = new Reservation();
         User user = userDao.getUserById(1);
-        Ticket ticket = ticketDao.getTicketById(1);
+        Ticket ticket = ticketDao.getTicketById(2);
         reservation.setUser(user);
         reservation.setTicket(ticket);
         User userExpected = reservation.getUser();

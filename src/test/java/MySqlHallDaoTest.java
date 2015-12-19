@@ -29,7 +29,7 @@ public class MySqlHallDaoTest
 	public void testCreate() throws DaoException
 	{
 		Hall hall = new Hall();
-		hall.setHallNumber(4);
+		hall.setHallNumber(5);
 		hall.setHallName("testCreatePassed");
 		int numberExpected = hall.getHallNumber();
 		String hallNameExpected = hall.getHallName();

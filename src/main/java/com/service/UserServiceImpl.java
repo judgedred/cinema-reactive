@@ -104,4 +104,32 @@ public class UserServiceImpl implements UserService
         }
         return null;
     }
+
+    @Override
+    public boolean checkLogin(String login) throws DaoException
+    {
+        List<User> userList = userDao.getUserByLogin(login);
+        if(userList != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean checkEmail(String email) throws DaoException
+    {
+        List<User> userList = userDao.getUserByEmail(email);
+        if(userList != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

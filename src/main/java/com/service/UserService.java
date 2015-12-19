@@ -17,4 +17,6 @@ public interface UserService
     public boolean checkUserInReservation(User user) throws DaoException;
     public User authenticateAdmin(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
     public User authenticateUser(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+    public boolean checkLogin(String login) throws DaoException;
+    public boolean checkEmail(String email) throws DaoException;
 }

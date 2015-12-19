@@ -183,6 +183,60 @@ public class MySqlUserDao implements UserDao
             }
         }
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getUserByLogin(String login) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<User> resultList = (List<User>) session.createCriteria(User.class).add(Restrictions.eq("login", login)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getUserByEmail(String email) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<User> resultList = (List<User>) session.createCriteria(User.class).add(Restrictions.eq("email", email)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
 }
 
 

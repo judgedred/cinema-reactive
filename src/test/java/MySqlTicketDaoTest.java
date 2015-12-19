@@ -36,7 +36,7 @@ public class MySqlTicketDaoTest
     {
         Ticket ticket = new Ticket();
         Filmshow filmshow = filmshowDao.getFilmshowById(1);
-        Seat seat = seatDao.getSeatById(1);
+        Seat seat = seatDao.getSeatById(4);
         ticket.setFilmshow(filmshow);
         ticket.setSeat(seat);
         float price = 60000;
@@ -108,7 +108,7 @@ public class MySqlTicketDaoTest
     @Test
     public void testGetTicketFreeByFilmshow() throws DaoException
     {
-        Filmshow filmshow = filmshowDao.getFilmshowById(3);
+        Filmshow filmshow = filmshowDao.getFilmshowById(4);
         List<Ticket> listTest = ticketDao.getTicketFreeByFilmshow(filmshow);
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() == 1);

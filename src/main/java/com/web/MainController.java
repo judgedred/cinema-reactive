@@ -179,40 +179,22 @@ public class MainController
     @RequestMapping(value = "/registerCheck", produces = "text/html; charset=UTF-8")
     public @ResponseBody String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) throws Exception
     {
-        List<User> userList = userService.getUserAll();
-        Boolean loginFree = true;
-        Boolean emailFree = true;
-        if(login != null && !login.isEmpty() || email != null && !email.isEmpty())
+        if(login != null && !login.isEmpty())
         {
-            for(User u : userList)
+            if(!userService.checkLogin(login))
             {
-                if(u.getLogin().equals(login))
-                {
-                    loginFree = false;
-                }
-
-                if(u.getEmail().equals(email))
-                {
-                    emailFree = false;
-                }
+                return "Логин свободен";
             }
-            if(login != null)
+            else
             {
-                if(loginFree)
-                {
-                    return "Логин свободен";
-                }
-                else
-                {
-                    return"Логин занят";
-                }
+                return"Логин занят";
             }
-            if(email != null)
+        }
+        if(email != null && !email.isEmpty())
+        {
+            if(userService.checkEmail(email))
             {
-                if(!emailFree)
-                {
-                    return "Логин с таким email уже есть";
-                }
+                return "Логин с таким email уже есть";
             }
         }
         return null;
