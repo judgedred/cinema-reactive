@@ -96,4 +96,37 @@ public class MySqlFilmshowDaoTest
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
+
+    @Test
+    public void testGetFilmshowByFilm() throws DaoException
+    {
+        Film film = filmDao.getFilmById(1);
+        Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowResult = filmshowDao.getFilmshowAllByFilm(film).get(0);
+        Assert.assertNotNull(filmshowResult);
+        Assert.assertEquals(filmshowExpected, filmshowResult);
+    }
+
+    @Test
+    public void testGetFilmshowByHall() throws DaoException
+    {
+        Hall hall = hallDao.getHallById(1);
+        Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowResult = filmshowDao.getFilmshowAllByHall(hall).get(0);
+        Assert.assertNotNull(filmshowResult);
+        Assert.assertEquals(filmshowExpected, filmshowResult);
+    }
+
+    @Test
+    public void testGetFilmshowAllByDate() throws DaoException
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2015, Calendar.MARCH, 3, 3, 0);
+        Date startDate = cal.getTime();
+        cal.add(Calendar.MINUTE, 30);
+        Date endDate = cal.getTime();
+        List<Filmshow> testList = filmshowDao.getFilmshowAllByDate(startDate, endDate);
+        Assert.assertNotNull(testList);
+        Assert.assertTrue(testList.size() == 1);
+    }
 }

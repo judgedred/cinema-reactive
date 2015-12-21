@@ -1,6 +1,9 @@
 import com.dao.*;
 import com.domain.*;
+
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import org.junit.After;
 import org.junit.Test;
@@ -27,69 +30,55 @@ public class MySqlUserDaoTest
 	}	
 
 	@Test
-	public void testCreate() throws DaoException
+	public void testCreate() throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException
 	{
-        try
-        {
-            User user = new User();
-            user.setLogin("testCreatePassed");
-            String password = "testCreatePassed";
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            String passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            user.setEmail("testCreatePassed@gmail.com");
-            String loginExpected = user.getLogin();
-            String passwordExpected = user.getPassword();
-            String emailExpected = user.getEmail();
-            User userTest = userDao.create(user);
-            Assert.assertNotNull(userTest);
-            String loginResult = userTest.getLogin();
-            String passwordResult = userTest.getPassword();
-            String emailResult = userTest.getEmail();
-            Assert.assertEquals(loginExpected, loginResult);
-            Assert.assertEquals(passwordExpected, passwordResult);
-            Assert.assertEquals(emailExpected, emailResult);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        User user = new User();
+        user.setLogin("testCreatePassed");
+        String password = "testCreatePassed";
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        byte[] hash = digest.digest(password.getBytes("UTF-8"));
+        String passwordHash = DatatypeConverter.printHexBinary(hash);
+        user.setPassword(passwordHash);
+        user.setEmail("testCreatePassed@gmail.com");
+        String loginExpected = user.getLogin();
+        String passwordExpected = user.getPassword();
+        String emailExpected = user.getEmail();
+        User userTest = userDao.create(user);
+        Assert.assertNotNull(userTest);
+        String loginResult = userTest.getLogin();
+        String passwordResult = userTest.getPassword();
+        String emailResult = userTest.getEmail();
+        Assert.assertEquals(loginExpected, loginResult);
+        Assert.assertEquals(passwordExpected, passwordResult);
+        Assert.assertEquals(emailExpected, emailResult);
 	}
 	
 	@Test
-	public void testUpdate() throws DaoException
+	public void testUpdate() throws DaoException,NoSuchAlgorithmException, UnsupportedEncodingException
 	{
-        try
-        {
-            User user = new User();
-            user.setUserId(3);
-            user.setLogin("testUpdatePassed");
-            String password = "testUpdatePassed";
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            String passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            user.setEmail("testUpdatePassed@gmail.com");
-            String loginExpected = user.getLogin();
-            String passwordExpected = user.getPassword();
-            String emailExpected = user.getEmail();
-            userDao.update(user);
-            User userTest = userDao.getUserById(user.getUserId());
-            Assert.assertNotNull(userTest);
-            String loginResult = userTest.getLogin();
-            String passwordResult = userTest.getPassword();
-            String emailResult = userTest.getEmail();
-            Assert.assertEquals(loginExpected, loginResult);
-            Assert.assertEquals(passwordExpected, passwordResult);
-            Assert.assertEquals(emailExpected, emailResult);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        User user = new User();
+        user.setUserId(3);
+        user.setLogin("testUpdatePassed");
+        String password = "testUpdatePassed";
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        byte[] hash = digest.digest(password.getBytes("UTF-8"));
+        String passwordHash = DatatypeConverter.printHexBinary(hash);
+        user.setPassword(passwordHash);
+        user.setEmail("testUpdatePassed@gmail.com");
+        String loginExpected = user.getLogin();
+        String passwordExpected = user.getPassword();
+        String emailExpected = user.getEmail();
+        userDao.update(user);
+        User userTest = userDao.getUserById(user.getUserId());
+        Assert.assertNotNull(userTest);
+        String loginResult = userTest.getLogin();
+        String passwordResult = userTest.getPassword();
+        String emailResult = userTest.getEmail();
+        Assert.assertEquals(loginExpected, loginResult);
+        Assert.assertEquals(passwordExpected, passwordResult);
+        Assert.assertEquals(emailExpected, emailResult);
 	}
 
 	@Test
@@ -107,6 +96,35 @@ public class MySqlUserDaoTest
 		Assert.assertNotNull(listTest);
 		Assert.assertTrue(listTest.size() > 0);
 	}
+
+    @Test
+    public void testGetUserByUser() throws DaoException
+    {
+        User userExpected = userDao.getUserById(1);
+        User userResult = userDao.getUserByUser(userExpected);
+        Assert.assertNotNull(userResult);
+        Assert.assertEquals(userExpected, userResult);
+    }
+
+    @Test
+    public void testGetUserByLogin() throws DaoException
+    {
+        User userExpected = userDao.getUserById(1);
+        List<User> testList = userDao.getUserByLogin(userExpected.getLogin());
+        Assert.assertNotNull(testList);
+        Assert.assertTrue(testList.size() == 1);
+        Assert.assertEquals(userExpected, testList.get(0));
+    }
+
+    @Test
+    public void testGetUserByEmail() throws DaoException
+    {
+        User userExpected = userDao.getUserById(1);
+        List<User> testList = userDao.getUserByEmail(userExpected.getEmail());
+        Assert.assertNotNull(testList);
+        Assert.assertTrue(testList.size() == 1);
+        Assert.assertEquals(userExpected, testList.get(0));
+    }
 
     @After
     public void cleanUp() throws DaoException

@@ -12,7 +12,7 @@
         $(document).ready(function(){
             $("#film").submit(function (event) {
                 $.ajax({
-                    url: "filmCheck/" + $("#filmId").val(),
+                    url: "checkFilm/" + $("#filmId").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {

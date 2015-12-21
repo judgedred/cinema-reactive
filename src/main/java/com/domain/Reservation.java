@@ -1,6 +1,7 @@
 package com.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,9 +15,11 @@ public class Reservation implements Serializable
 	private Integer reservationId;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull
 	private User user;
     @ManyToOne
     @JoinColumn(name = "ticket_id")
+    @NotNull
 	private Ticket ticket;
 
 	public Integer getReservationId()
@@ -79,13 +82,13 @@ public class Reservation implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return reservationId;
-	}
+    @Override
+    public int hashCode()
+    {
+        return reservationId != null ? reservationId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		return user.getLogin() + " " + ticket;

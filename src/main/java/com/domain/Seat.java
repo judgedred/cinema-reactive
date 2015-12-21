@@ -1,6 +1,7 @@
 package com.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,11 +14,14 @@ public class Seat implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer seatId;
     @Column(name = "seat_number", nullable = false)
+    @NotNull
 	private Integer seatNumber;
     @Column(name = "row_number", nullable = false)
+    @NotNull
 	private Integer rowNumber;
     @ManyToOne
     @JoinColumn(name = "hall_id")
+    @NotNull
 	private Hall hall;
 
 	public Integer getSeatId()
@@ -94,16 +98,13 @@ public class Seat implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		int result = seatId;
-		result = 31 * result + seatNumber;
-		result = 31 * result + rowNumber;
-		return result;
-	}
+    @Override
+    public int hashCode()
+    {
+        return seatId != null ? seatId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		return seatNumber + " " + "место" + " " + rowNumber + " " + "ряд" + " " + hall.getHallName();

@@ -4,9 +4,9 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.math.BigInteger;
 import java.util.List;
 
 
@@ -18,18 +18,26 @@ public class MySqlFilmDao implements FilmDao
     private Session session;
 
 	@Override
+    @SuppressWarnings("unchecked")
     public Film create(Film film) throws DaoException
 	{
 		try
 		{
 			session = sessionFactory.openSession();
-			session.beginTransaction();
-            session.save(film);
-            session.flush();
-			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-            film = (Film) session.load(Film.class, lastId);
-            session.getTransaction().commit();
-            return film;
+            List<Film> resultList = (List<Film>) session.createCriteria(Film.class).add(Restrictions.and(Restrictions.eq("filmName", film.getFilmName()),
+                    Restrictions.eq("description", film.getDescription()))).list();
+            if(resultList.isEmpty())
+            {
+                session.beginTransaction();
+                session.save(film);
+                session.flush();
+                session.getTransaction().commit();
+                return film;
+            }
+            else
+            {
+                return null;
+            }
 		}
 		catch(Exception e)
 		{
@@ -143,10 +151,5 @@ public class MySqlFilmDao implements FilmDao
                 session.close();
             }
         }
-	}
-
-    MySqlFilmDao()
-	{
-
 	}
 }

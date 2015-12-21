@@ -2,6 +2,7 @@ package com.domain;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -17,12 +18,15 @@ public class Filmshow implements Serializable
 	private Integer filmshowId;
     @Column(name = "date_time", nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
+    @NotNull
 	private Date dateTime;
     @ManyToOne
     @JoinColumn(name = "film_id")
+    @NotNull
 	private Film film;
     @ManyToOne
     @JoinColumn(name = "hall_id")
+    @NotNull
 	private Hall hall;
 
 	public Integer getFilmshowId()
@@ -99,13 +103,13 @@ public class Filmshow implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return filmshowId;
-	}
+    @Override
+    public int hashCode()
+    {
+        return filmshowId != null ? filmshowId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");

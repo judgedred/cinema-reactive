@@ -12,7 +12,7 @@
         $(document).ready(function(){
             $("#seat").submit(function (event) {
                 $.ajax({
-                    url: "seatCheck/" + $("#seatId").val(),
+                    url: "checkSeat/" + $("#seatId").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {

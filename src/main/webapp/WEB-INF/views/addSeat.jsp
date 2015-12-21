@@ -7,20 +7,6 @@
 <head>
     <title>AddSeat</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
-    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#seat").submit(function (event) {
-                if($("#hall").val() == null || $("#rowNumber").val() == null
-                        || $("#hall").val() == 0 || $("#rowNumber").val() == ""
-                        || $("#seatNumber").val() == null || $("#seatNumber").val() == "")
-                {
-                    alert("Заполните поля");
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
 </head>
 <body>
 <div class="wrapper">
@@ -38,14 +24,17 @@
                 <form:option value="0" label="Выберите зал"/>
                 <form:options items="${hallList}" itemValue="hallId"/>
             </form:select> </td>
+            <td><form:errors path="hall" /></td>
         </tr>
         <tr>
             <td><form:label path="rowNumber">Введите ряд</form:label> </td>
             <td><form:input path="rowNumber" type="text"/> </td>
+            <td><form:errors path="rowNumber" /></td>
         </tr>
         <tr>
             <td><form:label path="seatNumber">Введите номер</form:label> </td>
             <td><form:input path="seatNumber" type="text"/> </td>
+            <td><form:errors path="seatNumber" /></td>
         </tr>
         <tr>
             <td><input type="submit" value="Добавить"/></td>

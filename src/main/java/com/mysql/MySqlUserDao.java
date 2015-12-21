@@ -4,9 +4,9 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -17,18 +17,26 @@ public class MySqlUserDao implements UserDao
 	private Session session;
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public User create(User user) throws DaoException
 	{
         try
         {
             session = sessionFactory.openSession();
-            session.beginTransaction();
-            session.save(user);
-            session.flush();
-            Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-            user = (User) session.load(User.class, lastId);
-            session.getTransaction().commit();
-            return user;
+            List<User> resultList = (List<User>) session.createCriteria(User.class).add(Restrictions.or(Restrictions.eq("login", user.getLogin()),
+                    Restrictions.eq("email", user.getEmail()))).list();
+            if(resultList.isEmpty())
+            {
+                session.beginTransaction();
+                session.save(user);
+                session.flush();
+                session.getTransaction().commit();
+                return user;
+            }
+            else
+            {
+                return null;
+            }
         }
         catch(Exception e)
         {
@@ -144,10 +152,90 @@ public class MySqlUserDao implements UserDao
         }
 	}
 
-	MySqlUserDao()
-	{
+    @Override
+    @SuppressWarnings("unchecked")
+    public User getUserByUser(User user) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<User> resultList = (List<User>) session.createCriteria(User.class).add(Restrictions.and(Restrictions.eq("login", user.getLogin()),
+                    Restrictions.eq("password", user.getPassword()))).list();
+            if(resultList.size() == 1)
+            {
+                return resultList.get(0);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
 
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getUserByLogin(String login) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<User> resultList = (List<User>) session.createCriteria(User.class).add(Restrictions.eq("login", login)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getUserByEmail(String email) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<User> resultList = (List<User>) session.createCriteria(User.class).add(Restrictions.eq("email", email)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
 }
 
 

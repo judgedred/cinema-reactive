@@ -12,7 +12,7 @@
         $(document).ready(function(){
             $("#user").submit(function (event) {
                 $.ajax({
-                    url: "userCheck/" + $("#userId").val(),
+                    url: "checkUser/" + $("#userId").val(),
                     async: false,
                     success: function (data) {
                         if (data != "") {

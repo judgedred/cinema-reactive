@@ -6,19 +6,6 @@
 <head>
 	<title>Add Film</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
-    <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#film").submit(function (event) {
-                if ($("#filmName").val() == null || $("#description").val() == "" || $("#description").val() == null
-                        || $("#filmName").val() == "")
-                {
-                    alert("Заполните поля");
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
 </head>
 <body>
 <div class="wrapper">
@@ -31,10 +18,12 @@
             <tr>
                 <td><form:label path="filmName">Название фильма</form:label></td>
                 <td><form:input path="filmName" type="text"/></td>
+                <td><form:errors path="filmName" /></td>
             </tr>
             <tr>
                 <td><form:label path="description">Описание</form:label></td>
                 <td><form:textarea path="description" type="text" cols="22" rows="4"/></td>
+                <td><form:errors path="description" /></td>
             </tr>
             <tr>
                 <td><input type="submit" value="Добавить"></td>

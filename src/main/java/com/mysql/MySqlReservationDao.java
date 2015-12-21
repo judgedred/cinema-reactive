@@ -4,9 +4,9 @@ import com.dao.*;
 import com.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.math.BigInteger;
 import java.util.List;
 
 
@@ -18,18 +18,25 @@ public class MySqlReservationDao implements ReservationDao
 	private Session session;
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public Reservation create(Reservation reservation) throws DaoException
 	{
 		try
 		{
             session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.save(reservation);
-			session.flush();
-			Integer lastId = ((BigInteger) session.createSQLQuery("Select last_insert_id()").uniqueResult()).intValue();
-			reservation = (Reservation) session.load(Reservation.class, lastId);
-            session.getTransaction().commit();
-            return reservation;
+            List<Reservation> resultList = (List<Reservation>) session.createCriteria(Reservation.class).add(Restrictions.eq("ticket", reservation.getTicket())).list();
+            if(resultList.isEmpty())
+            {
+                session.beginTransaction();
+                session.save(reservation);
+                session.flush();
+                session.getTransaction().commit();
+                return reservation;
+            }
+            else
+            {
+                return null;
+            }
 		}
 		catch(Exception e)
 		{
@@ -145,7 +152,58 @@ public class MySqlReservationDao implements ReservationDao
         }
 	}
 
-    MySqlReservationDao()
-	{
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Reservation> getReservationAllByUser(User user) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Reservation> resultList = (List<Reservation>) session.createCriteria(Reservation.class).add(Restrictions.eq("user", user)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Reservation> getReservationAllByTicket(Ticket ticket) throws DaoException
+    {
+        try
+        {
+            session = sessionFactory.openSession();
+            List<Reservation> resultList = (List<Reservation>) session.createCriteria(Reservation.class).add(Restrictions.eq("ticket", ticket)).list();
+            if(resultList.isEmpty())
+            {
+                return null;
+            }
+            return resultList;
+        }
+        catch(Exception e)
+        {
+            throw new DaoException(e);
+        }
+        finally
+        {
+            if(session != null && session.isOpen())
+            {
+                session.close();
+            }
+        }
+    }
+
 }

@@ -1,7 +1,9 @@
 package com.domain;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,8 +16,10 @@ public class Film implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer filmId;
     @Column(name = "film_name", length = 50, nullable = false)
+    @NotNull @NotEmpty
 	private String filmName;
     @Column(name = "description", nullable = false)
+    @NotNull @NotEmpty
 	private String description;
 
 	public Integer getFilmId()
@@ -78,15 +82,13 @@ public class Film implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		int result = filmId;
-		result = 31 * result + filmName.hashCode();
-		return result;
-	}
+    @Override
+    public int hashCode()
+    {
+        return filmId != null ? filmId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		return filmName + " " + description;

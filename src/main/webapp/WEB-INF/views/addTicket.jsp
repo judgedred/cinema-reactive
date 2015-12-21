@@ -21,14 +21,6 @@
                     }
                 })
             });
-            $("#ticket").submit(function (event) {
-                if ($("#filmshow").val() == null || $("#price").val() == "" || $("#seat").val() == null
-                        || $("#seat").val() == "" || $("#filmshow").val() == 0)
-                {
-                    alert("Заполните поля");
-                    event.preventDefault();
-                }
-            });
         });
     </script>
 </head>
@@ -45,13 +37,16 @@
                 <form:select path="filmshow">
                     <form:option value="0" label="Выберите сеанс"/>
                     <form:options items="${filmshowList}" itemValue="filmshowId"/>
-                </form:select></p>
+                </form:select>
+            <form:errors path="filmshow" /> </p>
             <p><form:label path="price">Введите цену</form:label>
-                <form:input path="price" type="text"/></p>
+                <form:input path="price" type="text"/>
+            <form:errors path="price" /> </p>
             <form:label path="seat">Место</form:label>
             <form:select path="seat">
                 <form:option value="0" label="Выберите место"/>
             </form:select>
+            <form:errors path="seat" />
             <p><input type="submit" value="Добавить"></p>
         </form:form>
     </c:if>

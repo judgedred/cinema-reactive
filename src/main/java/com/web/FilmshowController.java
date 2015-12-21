@@ -3,18 +3,18 @@ package com.web;
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
-import com.domain.Ticket;
 import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
-import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.view.RedirectView;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,22 +32,14 @@ public class FilmshowController
     private FilmService filmService;
 
     @Autowired
-    private TicketService ticketService;
-
-    @Autowired
     private FilmEditor filmEditor;
 
     @Autowired
     private HallEditor hallEditor;
 
-    @RequestMapping("/admin/addFilmshow")
-    public ModelAndView addFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
+    @RequestMapping("/admin/addFilmshowForm")
+    public ModelAndView addFilmshowForm() throws Exception
     {
-        if(filmshow != null && filmshow.getFilm() != null
-                && filmshow.getHall() != null && filmshow.getDateTime() != null)
-        {
-            filmshowService.create(filmshow);
-        }
         List<Film> filmList = filmService.getFilmAll();
         List<Hall> hallList = hallService.getHallAll();
         ModelAndView mav = new ModelAndView("addFilmshow");
@@ -57,29 +49,36 @@ public class FilmshowController
         return mav;
     }
 
-    @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow, HttpServletResponse response) throws Exception
+    @RequestMapping("/admin/addFilmshow")
+    public ModelAndView addFilmshow(@Valid Filmshow filmshow, BindingResult result) throws Exception
     {
-        try
+        if(result.hasErrors())
         {
-            if(filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
+            List<Film> filmList = filmService.getFilmAll();
+            List<Hall> hallList = hallService.getHallAll();
+            ModelAndView mav = new ModelAndView("addFilmshow");
+            mav.addObject("filmList", filmList);
+            mav.addObject("hallList", hallList);
+            mav.addObject("filmshow", filmshow);
+            return mav;
+        }
+        filmshowService.create(filmshow);
+        return new ModelAndView(new RedirectView("addFilmshowForm"));
+    }
+
+    @RequestMapping("/admin/deleteFilmshow")
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception
+    {
+        if(filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0)
+        {
+            filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
+            if(filmshow != null)
             {
-                filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
-                if(filmshow != null)
-                {
-                    filmshowService.delete(filmshow);
-                }
+                filmshowService.delete(filmshow);
             }
-            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-            response.setStatus(HttpServletResponse.SC_OK);
-            return new ModelAndView("deleteFilmshow", "filmshowList", filmshowList);
         }
-        catch(Exception e)
-        {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-            return null;
-        }
+        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+        return new ModelAndView("deleteFilmshow", "filmshowList", filmshowList);
     }
 
     @RequestMapping("/admin/filmshowList")
@@ -89,22 +88,15 @@ public class FilmshowController
         return new ModelAndView("filmshowList", "filmshowList", filmshowList);
     }
 
-    @RequestMapping(value = "/admin/filmshowCheck/{filmshowId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String filmshowCheck(@PathVariable Integer filmshowId) throws Exception
+    @RequestMapping(value = "/admin/checkFilmshow/{filmshowId}", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String checkFilmshow(@PathVariable Integer filmshowId) throws Exception
     {
         if(filmshowId != null)
         {
             Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-            if(filmshow != null)
+            if(filmshow != null && filmshowService.checkFilmshowInTicket(filmshow))
             {
-                List<Ticket> ticketList = ticketService.getTicketAll();
-                for(Ticket t : ticketList)
-                {
-                    if(t.getFilmshow().equals(filmshow))
-                    {
-                        return "На сеанс имеются билеты. Сначала удалите билеты.";
-                    }
-                }
+                return "На сеанс имеются билеты. Сначала удалите билеты.";
             }
         }
         return null;

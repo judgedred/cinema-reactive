@@ -36,7 +36,7 @@ public class MySqlTicketDaoTest
     {
         Ticket ticket = new Ticket();
         Filmshow filmshow = filmshowDao.getFilmshowById(1);
-        Seat seat = seatDao.getSeatById(1);
+        Seat seat = seatDao.getSeatById(4);
         ticket.setFilmshow(filmshow);
         ticket.setSeat(seat);
         float price = 60000;
@@ -93,5 +93,34 @@ public class MySqlTicketDaoTest
         List<Ticket> listTest = ticketDao.getTicketAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
+    }
+
+    @Test
+    public void testGetTicketByFilmshow() throws DaoException
+    {
+        Filmshow filmshow = filmshowDao.getFilmshowById(1);
+        Ticket ticketExpected = ticketDao.getTicketById(1);
+        Ticket ticketResult = ticketDao.getTicketAllByFilmshow(filmshow).get(0);
+        Assert.assertNotNull(ticketResult);
+        Assert.assertEquals(ticketExpected, ticketResult);
+    }
+
+    @Test
+    public void testGetTicketFreeByFilmshow() throws DaoException
+    {
+        Filmshow filmshow = filmshowDao.getFilmshowById(4);
+        List<Ticket> listTest = ticketDao.getTicketFreeByFilmshow(filmshow);
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() == 1);
+    }
+
+    @Test
+    public void testGetTicketBySeat() throws DaoException
+    {
+        Seat seat = seatDao.getSeatById(4);
+        Ticket ticketExpected = ticketDao.getTicketById(7);
+        Ticket ticketResult = ticketDao.getTicketAllBySeat(seat).get(0);
+        Assert.assertNotNull(ticketResult);
+        Assert.assertEquals(ticketExpected, ticketResult);
     }
 }

@@ -25,11 +25,11 @@
                 </tr>
                 <tr>
                     <td><label for="password-auth">Пароль</label></td>
-                    <td><input type="text" id="password-auth" name="password-auth" size="10" ></td>
+                    <td><input type="password" id="password-auth" name="password-auth" size="10" ></td>
                 </tr>
             </table>
             <ul class="navigation">
-                <li><a href="register" style="line-height: 15px" title="Register">Регистрация</a></li>
+                <li><a href="registerForm" style="line-height: 15px" title="Register">Регистрация</a></li>
                 <li><input type="submit" value="Вход"></li>
             </ul>
         </form>

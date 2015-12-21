@@ -21,15 +21,6 @@
                     }
                 })
             });
-            $("#reservation").submit(function (event) {
-                if($("#filmshow").val() == null || $("#user").val() == null
-                || $("#filmshow").val() == 0 || $("#user").val() == 0
-                || $("#ticket").val() == null || $("#ticket").val() == 0)
-                {
-                    alert("Заполните поля");
-                    event.preventDefault();
-                }
-            });
         });
     </script>
 </head>
@@ -48,16 +39,19 @@
                     <c:forEach items="${filmshowList}" var="filmshow">
                         <option value="${filmshow.filmshowId}">${filmshow}</option>
                     </c:forEach>
-                </select></p>
+                </select>
+            </p>
             <p><form:label path="user">Пользователь</form:label>
                 <form:select path="user">
                     <form:option value="0" label="Выберите пользователя"/>
                     <form:options items="${userList}" itemValue="userId"/>
-                </form:select></p>
+                </form:select>
+            <form:errors path="user" /> </p>
             <form:label path="ticket">Билет</form:label>
             <form:select path="ticket">
                 <form:option value="0" label="Выберите билет"/>
             </form:select>
+            <form:errors path="ticket" />
             <p><input type="submit" value="Зарезервировать билет"></p>
         </form:form>
     </c:if>

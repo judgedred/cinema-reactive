@@ -38,7 +38,7 @@ public class MySqlReservationDaoTest
     {
         Reservation reservation = new Reservation();
         User user = userDao.getUserById(1);
-        Ticket ticket = ticketDao.getTicketById(1);
+        Ticket ticket = ticketDao.getTicketById(2);
         reservation.setUser(user);
         reservation.setTicket(ticket);
         User userExpected = reservation.getUser();
@@ -86,6 +86,24 @@ public class MySqlReservationDaoTest
         List<Reservation> listTest = reservationDao.getReservationAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
+    }
+
+    @Test
+    public void testGetAllByUser() throws DaoException
+    {
+        User user = userDao.getUserById(2);
+        List<Reservation> listTest = reservationDao.getReservationAllByUser(user);
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() == 1);
+    }
+
+    @Test
+    public void testGetAllByTicket() throws DaoException
+    {
+        Ticket ticketExpected = ticketDao.getTicketById(7);
+        List<Reservation> listTest = reservationDao.getReservationAllByTicket(ticketExpected);
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() == 1);
     }
 
 }

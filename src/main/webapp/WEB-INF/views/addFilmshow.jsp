@@ -15,15 +15,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $("#dateTime").datetimepicker({firstDay: 1, showOtherMonths: true, selectOtherMonths: true, dateFormat: "yy-mm-dd"});
-            $("#filmshow").submit(function (event) {
-                if($("#film").val() == null || $("#hall").val() == null
-                        || $("#film").val() == 0 || $("#hall").val() == 0
-                        || $("#dateTime").val() == null || $("#dateTime").val() == "")
-                {
-                    alert("Заполните поля");
-                    event.preventDefault();
-                }
-            });
         });
     </script>
 </head>
@@ -39,14 +30,17 @@
         <form:select path="film">
         <form:option value="0" label="Выберите фильм"/>
         <form:options items="${filmList}" itemLabel="filmName" itemValue="filmId"/>
-        </form:select></p>
+        </form:select>
+        <form:errors path="film" /></p>
         <form:label path="hall">Зал</form:label>
         <form:select path="hall">
             <form:option value="0" label="Выберите зал"/>
             <form:options items="${hallList}" itemLabel="hallName" itemValue="hallId"/>
-        </form:select></p>
+        </form:select>
+        <form:errors path="hall" /></p>
         <p><form:label path="dateTime">Дата</form:label>
-            <form:input path="dateTime" type="text" size="25"/></p>
+            <form:input path="dateTime" type="text" size="25"/>
+            <form:errors path="dateTime" /></p>
         <p><input type="submit" value="Добавить"></p>
     </form:form>
     </c:if>

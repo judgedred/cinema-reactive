@@ -1,19 +1,19 @@
 package com.web;
 
 import com.domain.Filmshow;
-import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import com.service.FilmshowService;
-import com.service.ReservationService;
 import com.service.SeatService;
 import com.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.view.RedirectView;
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -29,9 +29,6 @@ public class TicketController
     private SeatService seatService;
 
     @Autowired
-    private ReservationService reservationService;
-
-    @Autowired
     private TicketEditor ticketEditor;
 
     @Autowired
@@ -42,16 +39,36 @@ public class TicketController
 
     private List<Seat> filteredSeatList = new ArrayList<>();
 
-    @RequestMapping("/admin/addTicket")
-    public ModelAndView addTicket(@ModelAttribute Ticket ticket) throws Exception
+    @RequestMapping("/admin/addTicketForm")
+    public ModelAndView addTicketForm() throws Exception
     {
-        if(ticket != null && ticket.getFilmshow() != null
-                && ticket.getSeat() != null && ticket.getPrice() != null)
-        {
-            ticketService.create(ticket);
-        }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("addTicket");
+        mav.addObject("filmshowList", filmshowList);
+        mav.addObject("ticket", new Ticket());
+        return mav;
+    }
+
+    @RequestMapping("/admin/addTicket")
+    public ModelAndView addTicket(@Valid Ticket ticket, BindingResult result) throws Exception
+    {
+        if(result.hasErrors())
+        {
+            List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+            ModelAndView mav = new ModelAndView("addTicket");
+            mav.addObject("filmshowList", filmshowList);
+            mav.addObject("ticket", ticket);
+            return mav;
+        }
+        ticketService.create(ticket);
+        return new ModelAndView(new RedirectView("addTicketForm"));
+    }
+
+    @RequestMapping("/admin/addTicketAllForm")
+    public ModelAndView addTicketAllForm() throws Exception
+    {
+        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
+        ModelAndView mav = new ModelAndView("addTicketAll");
         mav.addObject("filmshowList", filmshowList);
         mav.addObject("ticket", new Ticket());
         return mav;
@@ -60,9 +77,7 @@ public class TicketController
     @RequestMapping("/admin/addTicketAll")
     public ModelAndView addTicketAll(@ModelAttribute Ticket ticket) throws Exception
     {
-        if(ticket != null && ticket.getFilmshow() != null
-             && ticket.getPrice() != null
-                && filteredSeatList != null)
+        if(ticket.getFilmshow() != null && ticket.getPrice() != null && filteredSeatList != null)
         {
             for(Seat s : filteredSeatList)
             {
@@ -70,114 +85,60 @@ public class TicketController
                 ticketService.create(ticket);
             }
         }
-        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        ModelAndView mav = new ModelAndView("addTicketAll");
-        mav.addObject("filmshowList", filmshowList);
-        mav.addObject("ticket", new Ticket());
-        return mav;
+        return new ModelAndView(new RedirectView("addTicketAllForm"));
     }
 
     @RequestMapping("/admin/deleteTicket")
-    public ModelAndView deleteTicket(@ModelAttribute Ticket ticket, HttpServletResponse response) throws Exception
+    public ModelAndView deleteTicket(@ModelAttribute Ticket ticket) throws Exception
     {
-        try
+        if(ticket.getTicketId() != null && ticket.getTicketId() != 0)
         {
-            if(ticket.getTicketId() != null && ticket.getTicketId() != 0)
+            ticket = ticketService.getTicketById(ticket.getTicketId());
+            if(ticket != null)
             {
-                ticket = ticketService.getTicketById(ticket.getTicketId());
-                if(ticket != null)
-                {
-                    ticketService.delete(ticket);
-                }
+                ticketService.delete(ticket);
             }
-            List<Ticket> ticketList = ticketService.getTicketAll();
-            response.setStatus(HttpServletResponse.SC_OK);
-            return new ModelAndView("deleteTicket", "ticketList", ticketList);
         }
-        catch(Exception e)
-        {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-            return null;
-        }
+        List<Ticket> ticketList = ticketService.getTicketAll();
+        return new ModelAndView("deleteTicket", "ticketList", ticketList);
     }
 
     @RequestMapping("/admin/ticketList")
     public ModelAndView listTickets(@ModelAttribute Ticket ticket) throws Exception
     {
-        List<Ticket> ticketList = ticketService.getTicketAll();
-        List<Ticket> filteredTicketList = new ArrayList<>();
-        Filmshow filmshow = ticket.getFilmshow();
-        if(ticketList != null && filmshow != null && filmshow.getFilm() != null
-                && filmshow.getHall() != null && filmshow.getDateTime() != null)
-        {
-            for(Ticket t : ticketList)
-            {
-                if(t.getFilmshow().equals(filmshow))
-                {
-                    filteredTicketList.add(t);
-                }
-            }
-        }
+        List<Ticket> ticketList = ticketService.getTicketAllByFilmshow(ticket.getFilmshow());
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("ticketList");
         mav.addObject("filmshowList", filmshowList);
-        mav.addObject("filteredTicketList", filteredTicketList);
+        mav.addObject("filteredTicketList", ticketList);
         return mav;
     }
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     public @ResponseBody Map<Integer, String> filterSeats(@PathVariable int filmshowId) throws Exception
     {
-        List<Seat> seatList = seatService.getSeatAll();
-        List<Ticket> ticketList = ticketService.getTicketAll();
-        boolean seatFree;
         Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-        filteredSeatList.clear();
         Map<Integer, String> filteredSeatMap = new HashMap<>();
-        if(filmshow != null && filmshow.getFilm() != null
-                && filmshow.getHall() != null && filmshow.getDateTime() != null)
+        if(filmshow != null)
         {
-            for(Seat s : seatList)
+            filteredSeatList = seatService.getSeatFreeByFilmshow(filmshow);
+            for(Seat s : filteredSeatList)
             {
-                seatFree = true;
-                if(s.getHall().equals(filmshow.getHall()))
-                {
-                    for(Ticket t : ticketList)
-                    {
-                        if(t.getFilmshow().equals(filmshow) && t.getSeat().equals(s))
-                        {
-                            seatFree = false;
-                            break;
-                        }
-                    }
-                    if(seatFree)
-                    {
-                        filteredSeatMap.put(s.getSeatId(), s.toString());
-                        filteredSeatList.add(s);
-                    }
-                }
+                filteredSeatMap.put(s.getSeatId(), s.toString());
             }
         }
         return filteredSeatMap;
     }
 
-    @RequestMapping(value = "/admin/ticketCheck/{ticketId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String ticketCheck(@PathVariable Integer ticketId) throws Exception
+    @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")
+    public @ResponseBody String checkTicket(@PathVariable Integer ticketId) throws Exception
     {
         if(ticketId != null)
         {
             Ticket ticket = ticketService.getTicketById(ticketId);
-            if(ticket != null)
+            if(ticket != null && ticketService.checkTicketInReservation(ticket))
             {
-                List<Reservation> reservationList = reservationService.getReservationAll();
-                for(Reservation r : reservationList)
-                {
-                    if(r.getTicket().equals(ticket))
-                    {
-                        return "Билет зарезервирован. Сначала удалите бронь.";
-                    }
-                }
+                return "Билет зарезервирован. Сначала удалите бронь.";
             }
         }
         return null;

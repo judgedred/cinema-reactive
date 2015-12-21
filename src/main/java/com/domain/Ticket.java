@@ -1,6 +1,7 @@
 package com.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -14,12 +15,15 @@ public class Ticket implements Serializable
     @Column(name = "ticket_id")
 	private Integer ticketId;
     @Column(name = "price", nullable = false)
+    @NotNull
 	private Float price;
     @ManyToOne
     @JoinColumn(name = "filmshow_id")
+    @NotNull
 	private Filmshow filmshow;
     @OneToOne
     @JoinColumn(name = "seat_id")
+    @NotNull
 	private Seat seat;
 
 	public Integer getTicketId()
@@ -95,13 +99,13 @@ public class Ticket implements Serializable
 		return true;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return ticketId;
-	}
+    @Override
+    public int hashCode()
+    {
+        return ticketId != null ? ticketId.hashCode() : 0;
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");
