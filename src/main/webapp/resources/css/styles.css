@@ -59,10 +59,6 @@ body {
     color: #fff;
 
 }
-#authLoggedIn li {
-    padding:3px 10px;
-    float: left;
-}
 
 .navigation li:hover {
     background: #222;
@@ -88,9 +84,6 @@ body {
 }
 
 #auth {
-    float: right;
-}
-#authLoggedIn{
     float: right;
 }
 

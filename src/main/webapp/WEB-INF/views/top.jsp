@@ -9,13 +9,6 @@
 <div class="top">
     <a href="main"><img src="resources/img/logo.jpg" align="left"></a>
 
-    <div id="authLoggedIn" style="display: none">
-        <ul class="navigation">
-            <li><a href="reservationList" style="line-height: 15px; padding: 6px 0" title="брони">список билетов</a></li>
-            <p><li><a href="javascript: logout()" style="line-height: 15px; padding: 0 60px" title="Выйти">Выход</a></li></p>
-        </ul>
-    </div>
-
     <div id="auth">
         <form id="auth-form" action="javascript:void(null);" method="Post" onsubmit="authForm()">
             <table>
