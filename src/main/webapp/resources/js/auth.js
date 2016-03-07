@@ -14,9 +14,11 @@ $(document).ready(function()
     {
         if(data != "")
         {
-            $("#auth").hide();
-            $("#authLoggedIn").find("ul").prepend("<li>" + data  + "</li>");
-            $("#authLoggedIn").show();
+            $("#auth").html('<ul class="navigation">' +
+                '<li style="padding: 0 10px">' + data  + '</li>' +
+                '<li><a href="reservationList" style="line-height: 15px; padding: 6px 0" title="брони">список билетов</a></li>' +
+                '<p><li><a href="javascript: logout()" style="line-height: 15px; padding: 0 60px" title="Выйти">Выход</a></li></p>' +
+                '</ul>');
         }
     }})
 });
@@ -35,9 +37,7 @@ function authForm()
     {
         if(data != null && data != "")
         {
-            $("#auth").hide();
-            $("#authLoggedIn").find("ul").prepend("<li>" + data  + "</li>");
-            $("#authLoggedIn").show();
+            location.reload();
         }
         else
         {
@@ -51,8 +51,6 @@ function logout()
 {
     $.ajax({url: "logout", success: function()
     {
-        $("#auth").show();
-        $("#authLoggedIn").hide();
         location.reload();
     }
     });
