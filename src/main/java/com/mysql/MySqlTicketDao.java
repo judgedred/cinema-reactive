@@ -1,22 +1,38 @@
 package com.mysql;
 
-import com.dao.*;
-import com.domain.*;
+
+import java.util.List;
+import javax.persistence.EntityManagerFactory;
+
+import com.dao.DaoException;
+import com.dao.TicketDao;
+import com.domain.Filmshow;
+import com.domain.Reservation;
+import com.domain.Seat;
+import com.domain.Ticket;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.*;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
 
 @Repository
 public class MySqlTicketDao implements TicketDao
 {
-    @Autowired
     private SessionFactory sessionFactory;
 	private Session session;
 
-	@Override
+    @Autowired
+    public MySqlTicketDao(EntityManagerFactory entityManagerFactory)
+    {
+        this.sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
 	public Ticket create(Ticket ticket) throws DaoException
 	{

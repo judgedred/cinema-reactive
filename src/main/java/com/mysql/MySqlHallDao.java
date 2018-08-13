@@ -1,22 +1,32 @@
 package com.mysql;
 
-import com.dao.*;
-import com.domain.*;
+
+import java.util.List;
+import javax.persistence.EntityManagerFactory;
+
+import com.dao.DaoException;
+import com.dao.HallDao;
+import com.domain.Hall;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
 
 @Repository
 public class MySqlHallDao implements HallDao
 {
-    @Autowired
     private SessionFactory sessionFactory;
 	private Session session;
 
-	@Override
+    @Autowired
+    public MySqlHallDao(EntityManagerFactory entityManagerFactory)
+    {
+        this.sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
 	public Hall create(Hall hall) throws DaoException
 	{

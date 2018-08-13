@@ -1,18 +1,25 @@
-import com.dao.*;
-import com.domain.*;
-import com.mysql.*;
-import java.util.*;
-import org.junit.Test;
+package com.dao;
+
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import com.domain.Film;
+import com.domain.Filmshow;
+import com.domain.Hall;
+import com.mysql.MySqlFilmshowDao;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import java.text.SimpleDateFormat;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
+@SpringBootTest
 public class MySqlFilmshowDaoTest
 {
     @Autowired

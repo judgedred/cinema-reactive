@@ -1,9 +1,17 @@
 package com.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Reservation")
@@ -11,7 +19,7 @@ public class Reservation implements Serializable
 {
     @Id
     @Column(name = "reservation_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer reservationId;
     @ManyToOne
     @JoinColumn(name = "user_id")

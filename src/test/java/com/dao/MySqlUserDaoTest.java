@@ -1,22 +1,24 @@
-import com.dao.*;
-import com.domain.*;
+package com.dao;
+
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.List;
+import javax.xml.bind.DatatypeConverter;
+
+import com.domain.User;
 import org.junit.After;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import javax.xml.bind.DatatypeConverter;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src/main/webapp/WEB-INF/beans.xml")
+@SpringBootTest
 public class MySqlUserDaoTest
 {
     @Autowired
