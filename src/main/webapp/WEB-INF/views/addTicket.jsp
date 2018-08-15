@@ -10,13 +10,13 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#filmshow").change(function(){
+            $("#filmshow").change(function() {
                 $.ajax({
                     url: "seatsFilter/" + $("#filmshow").val(), dataType: "json", success: function(data) {
                         var options = '<option value="">Выберите место</option>';
                         $.each(data, function(key, value) {
                             options += '<option value="' + key + '">' + value + '</option>';
-                    })
+                        })
                         $("select#seat").html(options);
                     }
                 })
@@ -29,7 +29,7 @@
 
     <jsp:include page="admin_menu.jsp"/>
 
-<p>Добавить билет</p>
+    <p>Добавить билет</p>
 
     <c:if test="${!empty filmshowList}">
         <form:form action="addTicket" modelAttribute="ticket" method="post">
@@ -38,19 +38,19 @@
                     <form:option value="0" label="Выберите сеанс"/>
                     <form:options items="${filmshowList}" itemValue="filmshowId"/>
                 </form:select>
-            <form:errors path="filmshow" /> </p>
+                <form:errors path="filmshow"/></p>
             <p><form:label path="price">Введите цену</form:label>
                 <form:input path="price" type="text"/>
-            <form:errors path="price" /> </p>
+                <form:errors path="price"/></p>
             <form:label path="seat">Место</form:label>
             <form:select path="seat">
                 <form:option value="0" label="Выберите место"/>
             </form:select>
-            <form:errors path="seat" />
+            <form:errors path="seat"/>
             <p><input type="submit" value="Добавить"></p>
         </form:form>
     </c:if>
 
-    </div>
+</div>
 </body>
 </html>

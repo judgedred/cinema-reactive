@@ -1,24 +1,39 @@
 package com.web;
 
-import com.domain.*;
-import com.service.*;
+import com.domain.Film;
+import com.domain.Filmshow;
+import com.domain.Reservation;
+import com.domain.Ticket;
+import com.domain.User;
+import com.service.FilmService;
+import com.service.FilmshowService;
+import com.service.ReservationService;
+import com.service.TicketService;
+import com.service.UserService;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-public class MainController
-{
+public class MainController {
+
     @Autowired
     private UserService userService;
 
@@ -38,20 +53,17 @@ public class MainController
     private TicketEditor ticketEditor;
 
     @RequestMapping("/admin")
-    public ModelAndView adminView()
-    {
+    public ModelAndView adminView() {
         return new ModelAndView("admin");
     }
 
     @RequestMapping("/admin/login")
-    public ModelAndView adminLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception
-    {
-        if(user.getLogin() != null && user.getPassword() != null
-                && !user.getLogin().isEmpty() && !user.getPassword().isEmpty())
-        {
+    public ModelAndView adminLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception {
+        if (user.getLogin() != null && user.getPassword() != null && !user.getLogin().isEmpty() && !user
+                .getPassword()
+                .isEmpty()) {
             User adminUser = userService.authenticateAdmin(user);
-            if(adminUser != null)
-            {
+            if (adminUser != null) {
                 request.getSession().setAttribute("adminUser", adminUser);
                 return new ModelAndView("adminMain");
             }
@@ -60,28 +72,23 @@ public class MainController
     }
 
     @RequestMapping("/admin/logout")
-    public ModelAndView adminLogout(HttpSession session)
-    {
+    public ModelAndView adminLogout(HttpSession session) {
         session.invalidate();
         return new ModelAndView(new RedirectView("/admin", true));
     }
 
     @RequestMapping("/reserveTicket")
     public ModelAndView reserveTicket(@ModelAttribute Reservation reservation, HttpServletRequest request,
-                                                    @RequestParam(required = false) Integer filmshowId) throws Exception
-    {
+            @RequestParam(required = false) Integer filmshowId) throws Exception {
         ModelAndView mav = new ModelAndView("reserveTicket");
-        User user = (User)request.getSession().getAttribute("validUser");
-        if(reservation.getTicket() != null)
-        {
+        User user = (User) request.getSession().getAttribute("validUser");
+        if (reservation.getTicket() != null) {
             reservation.setUser(user);
             reservationService.create(reservation);
         }
-        if(filmshowId!= null)
-        {
+        if (filmshowId != null) {
             Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-            if(filmshow != null)
-            {
+            if (filmshow != null) {
                 List<Ticket> ticketList = ticketService.getTicketFreeByFilmshow(filmshow);
                 mav.addObject("filteredTicketList", ticketList);
                 mav.addObject("filmshow", filmshow);
@@ -91,80 +98,66 @@ public class MainController
     }
 
     @RequestMapping("/reservationList")
-    public ModelAndView listUserReservations(HttpServletRequest request) throws Exception
-    {
+    public ModelAndView listUserReservations(HttpServletRequest request) throws Exception {
         ModelAndView mav = new ModelAndView("userReservationList");
-        User user = (User)request.getSession().getAttribute("validUser");
-        if(user != null)
-        {
+        User user = (User) request.getSession().getAttribute("validUser");
+        if (user != null) {
             List<Reservation> reservationList = reservationService.getReservationAllByUser(user);
             mav.addObject("filteredReservationList", reservationList);
         }
         return mav;
     }
 
-    @RequestMapping(value ="/authCheck", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String authCheck(HttpServletRequest request)
-    {
-        User validUser = (User)request.getSession().getAttribute("validUser");
-        if(validUser == null)
-        {
+    @RequestMapping(value = "/authCheck", produces = "text/html; charset=UTF-8")
+    public @ResponseBody
+    String authCheck(HttpServletRequest request) {
+        User validUser = (User) request.getSession().getAttribute("validUser");
+        if (validUser == null) {
             return "Войдите в систему";
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     @RequestMapping(value = "/loginCheck", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String checkLogin(@RequestBody User user, HttpServletRequest request) throws Exception
-    {
-        if(user.getLogin() != null && user.getPassword() != null
-                && !user.getLogin().isEmpty() && !user.getPassword().isEmpty())
-        {
+    public @ResponseBody
+    String checkLogin(@RequestBody User user, HttpServletRequest request) throws Exception {
+        if (user.getLogin() != null && user.getPassword() != null && !user.getLogin().isEmpty() && !user
+                .getPassword()
+                .isEmpty()) {
             User validUser = userService.authenticateUser(user);
-            if(validUser != null)
-            {
+            if (validUser != null) {
                 request.getSession().setAttribute("validUser", validUser);
             }
         }
         User validUser = (User) request.getSession().getAttribute("validUser");
-        if(validUser != null)
-        {
+        if (validUser != null) {
             return validUser.getLogin();
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     @RequestMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response)
-    {
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @RequestMapping("/main")
-    public ModelAndView navigateMain() throws Exception
-    {
+    public ModelAndView navigateMain() throws Exception {
         List<Filmshow> filmshowList = filmshowService.getFilmshowToday();
         return new ModelAndView("main", "filmshowToday", filmshowList);
     }
 
     @RequestMapping("/registerForm")
-    public ModelAndView registerUserForm()
-    {
+    public ModelAndView registerUserForm() {
         return new ModelAndView("register", "user", new User());
     }
 
     @RequestMapping("/register")
-    public ModelAndView registerUser(@Valid User user, BindingResult result) throws Exception
-    {
-        if(result.hasErrors())
-        {
+    public ModelAndView registerUser(@Valid User user, BindingResult result) throws Exception {
+        if (result.hasErrors()) {
             return new ModelAndView("register", "user", user);
         }
         userService.create(user);
@@ -175,23 +168,18 @@ public class MainController
     }
 
     @RequestMapping(value = "/registerCheck", produces = "text/html; charset=UTF-8")
-    public @ResponseBody String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) throws Exception
-    {
-        if(login != null && !login.isEmpty())
-        {
-            if(!userService.checkLogin(login))
-            {
+    public @ResponseBody
+    String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email)
+            throws Exception {
+        if (login != null && !login.isEmpty()) {
+            if (!userService.checkLogin(login)) {
                 return "Логин свободен";
-            }
-            else
-            {
-                return"Логин занят";
+            } else {
+                return "Логин занят";
             }
         }
-        if(email != null && !email.isEmpty())
-        {
-            if(userService.checkEmail(email))
-            {
+        if (email != null && !email.isEmpty()) {
+            if (userService.checkEmail(email)) {
                 return "Логин с таким email уже есть";
             }
         }
@@ -199,12 +187,10 @@ public class MainController
     }
 
     @RequestMapping("filmshow")
-    public ModelAndView navigateFilmshow() throws Exception
-    {
+    public ModelAndView navigateFilmshow() throws Exception {
         ModelAndView mav = new ModelAndView("filmshow");
         List<Filmshow> filmshowList = filmshowService.getFilmshowWeek();
-        if(filmshowList != null)
-        {
+        if (filmshowList != null) {
             Map<LocalDate, List<Filmshow>> filmshowMap = filmshowService.groupFilmshowByDate(filmshowList);
             mav.addObject("filmshowMap", filmshowMap);
         }
@@ -212,27 +198,23 @@ public class MainController
     }
 
     @RequestMapping("film")
-    public ModelAndView navigateFilm() throws Exception
-    {
+    public ModelAndView navigateFilm() throws Exception {
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("film", "filmList", filmList);
     }
 
     @RequestMapping("news")
-    public String navigateNews()
-    {
+    public String navigateNews() {
         return "news";
     }
 
     @RequestMapping("about")
-    public String navigateAbout()
-    {
+    public String navigateAbout() {
         return "about";
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Ticket.class, ticketEditor);
     }
 }

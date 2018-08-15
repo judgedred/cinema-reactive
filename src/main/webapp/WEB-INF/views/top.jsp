@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Menu</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <div class="top">
     <a href="main"><img src="resources/img/logo.jpg" align="left"></a>
@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     <td><label for="password-auth">Пароль</label></td>
-                    <td><input type="password" id="password-auth" name="password-auth" size="10" ></td>
+                    <td><input type="password" id="password-auth" name="password-auth" size="10"></td>
                 </tr>
             </table>
             <ul class="navigation">

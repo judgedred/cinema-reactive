@@ -20,7 +20,7 @@
                 <form:label path="reservationId">Бронь</form:label>
                 <form:select path="reservationId">
                     <form:option value="0" label="Выберите бронь"/>
-                    <form:options items="${reservationList}" itemValue="reservationId" />
+                    <form:options items="${reservationList}" itemValue="reservationId"/>
                 </form:select>
             </p>
             <p><input type="submit" value="Удалить"></p>

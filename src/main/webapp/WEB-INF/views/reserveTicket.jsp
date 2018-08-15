@@ -15,18 +15,18 @@
 
     <jsp:include page="top.jsp"/>
     <div class="content">
-    <p>Забронировать билет</p>
+        <p>Забронировать билет</p>
 
-            <form:form action="reserveTicket?filmshowId=${filmshow.filmshowId}" modelAttribute="reservation" method="post">
-                <form:label path="ticket">Билет</form:label>
-                <form:select path="ticket">
-                    <form:option value="0" label="Выберите билет"/>
-                    <c:if test="${!empty filteredTicketList}">
-                    <form:options items="${filteredTicketList}" itemValue="ticketId" />
-                    </c:if>
-                </form:select>
-                <p><input type="submit" value="Зарезервировать билет"></p>
-            </form:form>
+        <form:form action="reserveTicket?filmshowId=${filmshow.filmshowId}" modelAttribute="reservation" method="post">
+            <form:label path="ticket">Билет</form:label>
+            <form:select path="ticket">
+                <form:option value="0" label="Выберите билет"/>
+                <c:if test="${!empty filteredTicketList}">
+                    <form:options items="${filteredTicketList}" itemValue="ticketId"/>
+                </c:if>
+            </form:select>
+            <p><input type="submit" value="Зарезервировать билет"></p>
+        </form:form>
 
     </div>
     <jsp:include page="footer.jsp"/>

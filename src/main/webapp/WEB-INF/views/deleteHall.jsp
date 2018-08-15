@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="../resources/css/styles.css"/>
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            $("#hall").submit(function (event) {
+        $(document).ready(function() {
+            $("#hall").submit(function(event) {
                 $.ajax({
                     url: "checkHall/" + $("#hallId").val(),
                     async: false,
-                    success: function (data) {
-                        if (data != "") {
+                    success: function(data) {
+                        if(data != "") {
                             alert(data);
                             event.preventDefault();
                         }
@@ -37,7 +37,7 @@
                 <form:label path="hallId">Зал</form:label>
                 <form:select path="hallId">
                     <form:option value="0" label="Выберите зал"/>
-                    <form:options items="${hallList}" itemValue="hallId" />
+                    <form:options items="${hallList}" itemValue="hallId"/>
                 </form:select>
             </p>
             <p><input type="submit" value="Удалить"></p>

@@ -14,7 +14,7 @@
     <jsp:include page="top.jsp"/>
     <div class="content">
 
-    <p>Список броней</p>
+        <p>Список броней</p>
 
         <c:if test="${!empty filteredReservationList}">
             <c:forEach items="${filteredReservationList}" var="reservation">

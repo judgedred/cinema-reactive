@@ -7,14 +7,21 @@ import com.domain.Hall;
 import java.util.Date;
 import java.util.List;
 
-public interface FilmshowDao
-{
-	public Filmshow create(Filmshow filmshow) throws DaoException;
-	public void update(Filmshow filmshow) throws DaoException;
-	public void delete(Filmshow filmshow) throws DaoException;
-	public List<Filmshow> getFilmshowAll() throws DaoException;
-	public Filmshow getFilmshowById(int id) throws DaoException;
-    public List<Filmshow> getFilmshowAllByFilm(Film film) throws DaoException;
-    public List<Filmshow> getFilmshowAllByHall(Hall hall) throws DaoException;
-    public List<Filmshow> getFilmshowAllByDate(Date startDate, Date endDate) throws DaoException;
+public interface FilmshowDao {
+
+    Filmshow create(Filmshow filmshow) throws DaoException;
+
+    void update(Filmshow filmshow) throws DaoException;
+
+    void delete(Filmshow filmshow) throws DaoException;
+
+    List<Filmshow> getFilmshowAll() throws DaoException;
+
+    Filmshow getFilmshowById(int id) throws DaoException;
+
+    List<Filmshow> getFilmshowAllByFilm(Film film) throws DaoException;
+
+    List<Filmshow> getFilmshowAllByHall(Hall hall) throws DaoException;
+
+    List<Filmshow> getFilmshowAllByDate(Date startDate, Date endDate) throws DaoException;
 }

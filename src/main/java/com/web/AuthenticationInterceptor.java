@@ -1,22 +1,20 @@
 package com.web;
 
-
 import com.domain.User;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AuthenticationInterceptor implements HandlerInterceptor
-{
+public class AuthenticationInterceptor implements HandlerInterceptor {
+
     @Override
-    public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception
-    {
-        if(!request.getRequestURI().equals("/cinema/admin/login"))
-        {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        if (!request.getRequestURI().equals("/cinema/admin/login")) {
             User adminUser = (User) request.getSession().getAttribute("adminUser");
-            if(adminUser == null)
-            {
+            if (adminUser == null) {
                 response.sendRedirect("/cinema/admin/login");
                 return false;
             }
@@ -25,17 +23,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor
     }
 
     @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception
-    {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+            ModelAndView modelAndView) throws Exception {
 
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response, Object handler, Exception ex) throws Exception
-    {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
 
     }
 }

@@ -19,17 +19,17 @@
             <tr>
                 <td><form:label path="login">Введите логин</form:label></td>
                 <td><form:input path="login" type="text"/></td>
-                <td><form:errors path="login" /> </td>
+                <td><form:errors path="login"/></td>
             </tr>
             <tr>
                 <td><form:label path="password">Ввведите пароль</form:label></td>
                 <td><form:input path="password" type="text"/></td>
-                <td><form:errors path="password" /> </td>
+                <td><form:errors path="password"/></td>
             </tr>
             <tr>
                 <td><form:label path="email">Ввведите email</form:label></td>
                 <td><form:input path="email" type="text"/></td>
-                <td><form:errors path="email" /> </td>
+                <td><form:errors path="email"/></td>
             </tr>
             <tr>
                 <td><input type="submit" value="Добавить"></td>

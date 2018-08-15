@@ -12,15 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-public class ReservationController
-{
+public class ReservationController {
+
     @Autowired
     private ReservationService reservationService;
 
@@ -43,8 +50,7 @@ public class ReservationController
     private TicketEditor ticketEditor;
 
     @RequestMapping("/admin/addReservationForm")
-    public ModelAndView addReservationForm() throws Exception
-    {
+    public ModelAndView addReservationForm() throws Exception {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("addReservation");
@@ -55,10 +61,8 @@ public class ReservationController
     }
 
     @RequestMapping("/admin/addReservation")
-    public ModelAndView addReservation(@Valid Reservation reservation, BindingResult result) throws Exception
-    {
-        if(result.hasErrors())
-        {
+    public ModelAndView addReservation(@Valid Reservation reservation, BindingResult result) throws Exception {
+        if (result.hasErrors()) {
             List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
             List<User> userList = userService.getUserAll();
             ModelAndView mav = new ModelAndView("addReservation");
@@ -72,13 +76,10 @@ public class ReservationController
     }
 
     @RequestMapping("/admin/deleteReservation")
-    public ModelAndView deleteReservation(@ModelAttribute Reservation reservation) throws Exception
-    {
-        if(reservation.getReservationId() != null && reservation.getReservationId() != 0)
-        {
+    public ModelAndView deleteReservation(@ModelAttribute Reservation reservation) throws Exception {
+        if (reservation.getReservationId() != null && reservation.getReservationId() != 0) {
             reservation = reservationService.getReservationById(reservation.getReservationId());
-            if(reservation != null)
-            {
+            if (reservation != null) {
                 reservationService.delete(reservation);
             }
         }
@@ -87,8 +88,7 @@ public class ReservationController
     }
 
     @RequestMapping("/admin/reservationList")
-    public ModelAndView listReservations(@ModelAttribute Reservation reservation) throws Exception
-    {
+    public ModelAndView listReservations(@ModelAttribute Reservation reservation) throws Exception {
         List<Reservation> reservationList = reservationService.getReservationAllByUser(reservation.getUser());
         List<User> userList = userService.getUserAll();
         ModelAndView mav = new ModelAndView("reservationList");
@@ -98,19 +98,15 @@ public class ReservationController
     }
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
-    public @ResponseBody Map<Integer, String> filterTickets(@PathVariable Integer filmshowId) throws Exception
-    {
-        if(filmshowId != null)
-        {
+    public @ResponseBody
+    Map<Integer, String> filterTickets(@PathVariable Integer filmshowId) throws Exception {
+        if (filmshowId != null) {
             Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
-            if(filmshow != null)
-            {
+            if (filmshow != null) {
                 List<Ticket> ticketList = ticketService.getTicketFreeByFilmshow(filmshow);
-                if(ticketList != null)
-                {
+                if (ticketList != null) {
                     Map<Integer, String> ticketMap = new HashMap<>();
-                    for(Ticket t : ticketList)
-                    {
+                    for (Ticket t : ticketList) {
                         ticketMap.put(t.getTicketId(), t.toString());
                     }
                     return ticketMap;
@@ -121,8 +117,7 @@ public class ReservationController
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(User.class, userEditor);
         binder.registerCustomEditor(Filmshow.class, filmshowEditor);
         binder.registerCustomEditor(Ticket.class, ticketEditor);

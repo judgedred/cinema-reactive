@@ -10,17 +10,16 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#filmshow").change(function(){
+            $("#filmshow").change(function() {
                 $.ajax({
                     url: "seatsFilter/" + $("#filmshow").val()
                 })
             });
-            $("#ticket").submit(function (event) {
-                if($("#filmshow").val() == null || $("#filmshow").val() == 0 || $("#price").val() == "")
-                        {
-                            alert("Заполните поля");
-                            event.preventDefault();
-                        }
+            $("#ticket").submit(function(event) {
+                if($("#filmshow").val() == null || $("#filmshow").val() == 0 || $("#price").val() == "") {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
             });
         });
     </script>

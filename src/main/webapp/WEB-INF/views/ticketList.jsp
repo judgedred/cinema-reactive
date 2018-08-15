@@ -11,7 +11,7 @@
 <body>
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
-<p>TicketList</p>
+    <p>TicketList</p>
 
     <c:if test="${!empty filmshowList}">
         <form:form action="ticketList" modelAttribute="ticket">
@@ -25,11 +25,11 @@
     </c:if>
 
     <c:if test="${!empty filteredTicketList}">
-    <c:forEach items="${filteredTicketList}" var="ticket">
-        <p>${ticket}</p>
-    </c:forEach>
+        <c:forEach items="${filteredTicketList}" var="ticket">
+            <p>${ticket}</p>
+        </c:forEach>
     </c:if>
 
-    </div>
+</div>
 </body>
 </html>

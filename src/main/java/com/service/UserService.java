@@ -7,16 +7,26 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public interface UserService
-{
-    public User create(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
-    public void update(User user) throws DaoException;
-    public void delete(User user) throws DaoException;
-    public List<User> getUserAll() throws DaoException;
-    public User getUserById(Integer id) throws DaoException;
-    public boolean checkUserInReservation(User user) throws DaoException;
-    public User authenticateAdmin(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
-    public User authenticateUser(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
-    public boolean checkLogin(String login) throws DaoException;
-    public boolean checkEmail(String email) throws DaoException;
+public interface UserService {
+
+    User create(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    void update(User user) throws DaoException;
+
+    void delete(User user) throws DaoException;
+
+    List<User> getUserAll() throws DaoException;
+
+    User getUserById(Integer id) throws DaoException;
+
+    boolean checkUserInReservation(User user) throws DaoException;
+
+    User authenticateAdmin(User user)
+            throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    User authenticateUser(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    boolean checkLogin(String login) throws DaoException;
+
+    boolean checkEmail(String email) throws DaoException;
 }

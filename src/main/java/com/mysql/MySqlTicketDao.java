@@ -1,9 +1,5 @@
 package com.mysql;
 
-
-import java.util.List;
-import javax.persistence.EntityManagerFactory;
-
 import com.dao.DaoException;
 import com.dao.TicketDao;
 import com.domain.Filmshow;
@@ -19,177 +15,78 @@ import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 @Repository
-public class MySqlTicketDao implements TicketDao
-{
+public class MySqlTicketDao implements TicketDao {
+
     private SessionFactory sessionFactory;
-	private Session session;
+    private Session session;
 
     @Autowired
-    public MySqlTicketDao(EntityManagerFactory entityManagerFactory)
-    {
+    public MySqlTicketDao(EntityManagerFactory entityManagerFactory) {
         this.sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-	public Ticket create(Ticket ticket) throws DaoException
-	{
-		try
-		{
+    public Ticket create(Ticket ticket) throws DaoException {
+        try {
             session = sessionFactory.openSession();
-            List<Ticket> resultList = (List<Ticket>) session.createCriteria(Ticket.class).add(Restrictions.conjunction(Restrictions.eq("filmshow", ticket.getFilmshow()),
-                    Restrictions.eq("seat", ticket.getSeat()))).list();
-            if(resultList.isEmpty())
-            {
+            List<Ticket> resultList = (List<Ticket>) session
+                    .createCriteria(Ticket.class)
+                    .add(Restrictions.conjunction(Restrictions.eq("filmshow", ticket.getFilmshow()),
+                            Restrictions.eq("seat", ticket.getSeat())))
+                    .list();
+            if (resultList.isEmpty()) {
                 session.beginTransaction();
                 session.save(ticket);
                 session.flush();
                 session.getTransaction().commit();
                 return ticket;
-            }
-            else
-            {
+            } else {
                 return null;
             }
-		}
-		catch(Exception e)
-		{
-			session.getTransaction().rollback();
-			throw new DaoException(e);
-		}
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new DaoException(e);
+        } finally {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-	}
+    }
 
-	@Override
-	public void update(Ticket ticket) throws DaoException
-	{
-		try
-		{
-            session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.update(ticket);
-			session.getTransaction().commit();
-		}
-		catch(Exception e)
-		{
-			session.getTransaction().rollback();
-			throw new DaoException(e);
-		}
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
-                session.close();
-            }
-        }
-	}
-
-	@Override
-	public void delete(Ticket ticket) throws DaoException
-	{
-		try
-		{
-            session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.delete(ticket);
-			session.getTransaction().commit();
-		}
-		catch(Exception e)
-		{
-			session.getTransaction().rollback();
-			throw new DaoException(e);
-		}
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
-                session.close();
-            }
-        }
-	}
-
-	@Override
-    @SuppressWarnings("unchecked")
-	public List<Ticket> getTicketAll() throws DaoException
-	{
-		try
-		{
-            session = sessionFactory.openSession();
-			return (List<Ticket>) session.createCriteria(Ticket.class).list();
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
-                session.close();
-            }
-        }
-	}
-
-	@Override
-	public Ticket getTicketById(int id) throws DaoException
-	{
-		try
-		{
+    @Override
+    public void update(Ticket ticket) throws DaoException {
+        try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-			Ticket ticket = (Ticket)session.get(Ticket.class, id);
-			if(ticket != null)
-			{
-				return ticket;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		catch(Exception e)
-		{
-			throw new DaoException(e);
-		}
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
+            session.update(ticket);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new DaoException(e);
+        } finally {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-	}
+    }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) throws DaoException
-    {
-        try
-        {
+    public void delete(Ticket ticket) throws DaoException {
+        try {
             session = sessionFactory.openSession();
-            List<Ticket> resultList = (List<Ticket>) session.createCriteria(Ticket.class).add(Restrictions.eq("filmshow", filmshow)).list();
-            if(resultList.isEmpty())
-            {
-                return null;
-            }
-            return resultList;
-        }
-        catch(Exception e)
-        {
+            session.beginTransaction();
+            session.delete(ticket);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
             throw new DaoException(e);
-        }
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
+        } finally {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }
@@ -197,30 +94,56 @@ public class MySqlTicketDao implements TicketDao
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException
-    {
-        try
-        {
+    public List<Ticket> getTicketAll() throws DaoException {
+        try {
             session = sessionFactory.openSession();
-            List<Ticket> resultList = (List<Ticket>) session.createCriteria(Ticket.class)
+            return (List<Ticket>) session.createCriteria(Ticket.class).list();
+        } catch (Exception e) {
+            throw new DaoException(e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public Ticket getTicketById(int id) throws DaoException {
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            Ticket ticket = (Ticket) session.get(Ticket.class, id);
+            if (ticket != null) {
+                return ticket;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new DaoException(e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) throws DaoException {
+        try {
+            session = sessionFactory.openSession();
+            List<Ticket> resultList = (List<Ticket>) session
+                    .createCriteria(Ticket.class)
                     .add(Restrictions.eq("filmshow", filmshow))
-                    .add(Subqueries.propertyNotIn("ticketId", DetachedCriteria.forClass(Reservation.class)
-                    .setProjection(Property.forName("ticket.ticketId"))))
                     .list();
-            if(resultList.isEmpty())
-            {
+            if (resultList.isEmpty()) {
                 return null;
             }
             return resultList;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             throw new DaoException(e);
-        }
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
+        } finally {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }
@@ -228,26 +151,48 @@ public class MySqlTicketDao implements TicketDao
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Ticket> getTicketAllBySeat(Seat seat) throws DaoException
-    {
-        try
-        {
+    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException {
+        try {
             session = sessionFactory.openSession();
-            List<Ticket> resultList = (List<Ticket>) session.createCriteria(Ticket.class).add(Restrictions.eq("seat", seat)).list();
-            if(resultList.isEmpty())
-            {
+            List<Ticket> resultList = (List<Ticket>) session
+                    .createCriteria(Ticket.class)
+                    .add(Restrictions.eq("filmshow", filmshow))
+                    .add(Subqueries.propertyNotIn(
+                            "ticketId",
+                            DetachedCriteria
+                                    .forClass(Reservation.class)
+                                    .setProjection(Property.forName("ticket.ticketId"))))
+                    .list();
+            if (resultList.isEmpty()) {
                 return null;
             }
             return resultList;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             throw new DaoException(e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        finally
-        {
-            if(session != null && session.isOpen())
-            {
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Ticket> getTicketAllBySeat(Seat seat) throws DaoException {
+        try {
+            session = sessionFactory.openSession();
+            List<Ticket> resultList = (List<Ticket>) session
+                    .createCriteria(Ticket.class)
+                    .add(Restrictions.eq("seat", seat))
+                    .list();
+            if (resultList.isEmpty()) {
+                return null;
+            }
+            return resultList;
+        } catch (Exception e) {
+            throw new DaoException(e);
+        } finally {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }

@@ -19,12 +19,12 @@
             <tr>
                 <td><form:label path="hallNumber">Введите номер</form:label></td>
                 <td><form:input path="hallNumber" type="text"/></td>
-                <td><form:errors path="hallNumber" /> </td>
+                <td><form:errors path="hallNumber"/></td>
             </tr>
             <tr>
                 <td><form:label path="hallName">Введите название</form:label></td>
                 <td><form:input path="hallName" type="text"/></td>
-                <td><form:errors path="hallName" /> </td>
+                <td><form:errors path="hallName"/></td>
             </tr>
             <tr>
                 <td><input type="submit" value="Добавить"></td>

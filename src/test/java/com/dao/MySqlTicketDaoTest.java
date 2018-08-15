@@ -1,8 +1,5 @@
 package com.dao;
 
-
-import java.util.List;
-
 import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
@@ -13,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class MySqlTicketDaoTest
-{
+public class MySqlTicketDaoTest {
+
     @Autowired
     private TicketDao ticketDao;
 
@@ -28,15 +26,13 @@ public class MySqlTicketDaoTest
     private SeatDao seatDao;
 
     @Test
-    public void testGetTicketById() throws DaoException
-    {
+    public void testGetTicketById() throws DaoException {
         Ticket ticketTest = ticketDao.getTicketById(1);
         Assert.assertNotNull(ticketTest);
     }
 
     @Test
-    public void testCreate() throws DaoException
-    {
+    public void testCreate() throws DaoException {
         Ticket ticket = new Ticket();
         Filmshow filmshow = filmshowDao.getFilmshowById(1);
         Seat seat = seatDao.getSeatById(4);
@@ -58,8 +54,7 @@ public class MySqlTicketDaoTest
     }
 
     @Test
-    public void testUpdate() throws DaoException
-    {
+    public void testUpdate() throws DaoException {
         Ticket ticket = new Ticket();
         ticket.setTicketId(2);
         Filmshow filmshow = filmshowDao.getFilmshowById(2);
@@ -83,24 +78,21 @@ public class MySqlTicketDaoTest
     }
 
     @Test
-    public void testDelete() throws DaoException
-    {
+    public void testDelete() throws DaoException {
         Ticket ticket = ticketDao.getTicketById(6);
         ticketDao.delete(ticket);
         Assert.assertNull(ticketDao.getTicketById(ticket.getTicketId()));
     }
 
     @Test
-    public void testGetAll() throws DaoException
-    {
+    public void testGetAll() throws DaoException {
         List<Ticket> listTest = ticketDao.getTicketAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
 
     @Test
-    public void testGetTicketByFilmshow() throws DaoException
-    {
+    public void testGetTicketByFilmshow() throws DaoException {
         Filmshow filmshow = filmshowDao.getFilmshowById(1);
         Ticket ticketExpected = ticketDao.getTicketById(1);
         Ticket ticketResult = ticketDao.getTicketAllByFilmshow(filmshow).get(0);
@@ -109,8 +101,7 @@ public class MySqlTicketDaoTest
     }
 
     @Test
-    public void testGetTicketFreeByFilmshow() throws DaoException
-    {
+    public void testGetTicketFreeByFilmshow() throws DaoException {
         Filmshow filmshow = filmshowDao.getFilmshowById(4);
         List<Ticket> listTest = ticketDao.getTicketFreeByFilmshow(filmshow);
         Assert.assertNotNull(listTest);
@@ -118,8 +109,7 @@ public class MySqlTicketDaoTest
     }
 
     @Test
-    public void testGetTicketBySeat() throws DaoException
-    {
+    public void testGetTicketBySeat() throws DaoException {
         Seat seat = seatDao.getSeatById(4);
         Ticket ticketExpected = ticketDao.getTicketById(7);
         Ticket ticketResult = ticketDao.getTicketAllBySeat(seat).get(0);

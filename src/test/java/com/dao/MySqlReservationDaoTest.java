@@ -1,8 +1,5 @@
 package com.dao;
 
-
-import java.util.List;
-
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
@@ -13,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class MySqlReservationDaoTest
-{
+public class MySqlReservationDaoTest {
+
     @Autowired
     private TicketDao ticketDao;
 
@@ -28,8 +26,7 @@ public class MySqlReservationDaoTest
     private ReservationDao reservationDao;
 
     @Test
-    public void testGetReservationById() throws DaoException
-    {
+    public void testGetReservationById() throws DaoException {
         Reservation reservation = new Reservation();
         reservation.setReservationId(1);
         Reservation reservationTest = reservationDao.getReservationById(reservation.getReservationId());
@@ -37,8 +34,7 @@ public class MySqlReservationDaoTest
     }
 
     @Test
-    public void testCreate() throws DaoException
-    {
+    public void testCreate() throws DaoException {
         Reservation reservation = new Reservation();
         User user = userDao.getUserById(1);
         Ticket ticket = ticketDao.getTicketById(2);
@@ -55,8 +51,7 @@ public class MySqlReservationDaoTest
     }
 
     @Test
-    public void testUpdate() throws DaoException
-    {
+    public void testUpdate() throws DaoException {
         Reservation reservation = new Reservation();
         reservation.setReservationId(2);
         User user = userDao.getUserById(2);
@@ -75,8 +70,7 @@ public class MySqlReservationDaoTest
     }
 
     @Test
-    public void testDelete() throws DaoException
-    {
+    public void testDelete() throws DaoException {
         Reservation reservation = new Reservation();
         reservation.setReservationId(3);
         reservationDao.delete(reservation);
@@ -84,16 +78,14 @@ public class MySqlReservationDaoTest
     }
 
     @Test
-    public void testGetAll() throws DaoException
-    {
+    public void testGetAll() throws DaoException {
         List<Reservation> listTest = reservationDao.getReservationAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
 
     @Test
-    public void testGetAllByUser() throws DaoException
-    {
+    public void testGetAllByUser() throws DaoException {
         User user = userDao.getUserById(2);
         List<Reservation> listTest = reservationDao.getReservationAllByUser(user);
         Assert.assertNotNull(listTest);
@@ -101,8 +93,7 @@ public class MySqlReservationDaoTest
     }
 
     @Test
-    public void testGetAllByTicket() throws DaoException
-    {
+    public void testGetAllByTicket() throws DaoException {
         Ticket ticketExpected = ticketDao.getTicketById(7);
         List<Reservation> listTest = reservationDao.getReservationAllByTicket(ticketExpected);
         Assert.assertNotNull(listTest);

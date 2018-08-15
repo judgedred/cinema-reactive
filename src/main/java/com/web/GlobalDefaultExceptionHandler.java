@@ -6,12 +6,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class GlobalDefaultExceptionHandler
-{
+public class GlobalDefaultExceptionHandler {
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
-    public String defaultErrorHandler(Exception e)
-    {
+    public String defaultErrorHandler(Exception e) {
         e.printStackTrace();
         return "error";
     }

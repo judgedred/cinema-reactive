@@ -1,11 +1,5 @@
 package com.dao;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
@@ -17,11 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class MySqlFilmshowDaoTest
-{
+public class MySqlFilmshowDaoTest {
+
     @Autowired
     private MySqlFilmshowDao filmshowDao;
 
@@ -32,15 +30,13 @@ public class MySqlFilmshowDaoTest
     private HallDao hallDao;
 
     @Test
-    public void testGetFilmshowById() throws DaoException
-    {
+    public void testGetFilmshowById() throws DaoException {
         Filmshow filmshowTest = filmshowDao.getFilmshowById(1);
         Assert.assertNotNull(filmshowTest);
     }
 
     @Test
-    public void testCreate() throws DaoException
-    {
+    public void testCreate() throws DaoException {
         Filmshow filmshow = new Filmshow();
         Film film = filmDao.getFilmById(1);
         Hall hall = hallDao.getHallById(1);
@@ -63,8 +59,7 @@ public class MySqlFilmshowDaoTest
     }
 
     @Test
-    public void testUpdate() throws DaoException
-    {
+    public void testUpdate() throws DaoException {
         Filmshow filmshow = new Filmshow();
         Film film = filmDao.getFilmById(2);
         Hall hall = hallDao.getHallById(2);
@@ -89,24 +84,21 @@ public class MySqlFilmshowDaoTest
     }
 
     @Test
-    public void testDelete() throws DaoException
-    {
+    public void testDelete() throws DaoException {
         Filmshow filmshow = filmshowDao.getFilmshowById(3);
         filmshowDao.delete(filmshow);
         Assert.assertNull(filmshowDao.getFilmshowById(filmshow.getFilmshowId()));
     }
 
     @Test
-    public void testGetFilmshowAll() throws DaoException
-    {
+    public void testGetFilmshowAll() throws DaoException {
         List<Filmshow> listTest = filmshowDao.getFilmshowAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
 
     @Test
-    public void testGetFilmshowByFilm() throws DaoException
-    {
+    public void testGetFilmshowByFilm() throws DaoException {
         Film film = filmDao.getFilmById(1);
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByFilm(film).get(0);
@@ -115,8 +107,7 @@ public class MySqlFilmshowDaoTest
     }
 
     @Test
-    public void testGetFilmshowByHall() throws DaoException
-    {
+    public void testGetFilmshowByHall() throws DaoException {
         Hall hall = hallDao.getHallById(1);
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByHall(hall).get(0);
@@ -125,8 +116,7 @@ public class MySqlFilmshowDaoTest
     }
 
     @Test
-    public void testGetFilmshowAllByDate() throws DaoException
-    {
+    public void testGetFilmshowAllByDate() throws DaoException {
         Calendar cal = Calendar.getInstance();
         cal.set(2015, Calendar.MARCH, 3, 3, 0);
         Date startDate = cal.getTime();

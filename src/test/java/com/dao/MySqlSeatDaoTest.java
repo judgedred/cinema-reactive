@@ -1,9 +1,5 @@
 package com.dao;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.domain.Filmshow;
 import com.domain.Hall;
 import com.domain.Seat;
@@ -16,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class MySqlSeatDaoTest
-{
+public class MySqlSeatDaoTest {
+
     @Autowired
     private SeatDao seatDao;
 
@@ -34,15 +32,13 @@ public class MySqlSeatDaoTest
     private TicketDao ticketDao;
 
     @Test
-    public void testGetSeatById() throws DaoException
-    {
+    public void testGetSeatById() throws DaoException {
         Seat seatTest = seatDao.getSeatById(1);
         Assert.assertNotNull(seatTest);
     }
 
     @Test
-    public void testCreate() throws DaoException
-    {
+    public void testCreate() throws DaoException {
         Seat seat = new Seat();
         seat.setSeatNumber(777);
         seat.setRowNumber(777);
@@ -62,8 +58,7 @@ public class MySqlSeatDaoTest
     }
 
     @Test
-    public void testUpdate() throws DaoException
-    {
+    public void testUpdate() throws DaoException {
         Seat seat = new Seat();
         seat.setSeatId(27);
         seat.setSeatNumber(555);
@@ -84,24 +79,21 @@ public class MySqlSeatDaoTest
     }
 
     @Test
-    public void testDelete() throws DaoException
-    {
+    public void testDelete() throws DaoException {
         Seat seat = seatDao.getSeatById(28);
         seatDao.delete(seat);
         Assert.assertNull(seatDao.getSeatById(seat.getSeatId()));
     }
 
     @Test
-    public void testGetSeatAll() throws DaoException
-    {
+    public void testGetSeatAll() throws DaoException {
         List<Seat> listTest = seatDao.getSeatAll();
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() > 0);
     }
 
     @Test
-    public void testGetSeatByHall() throws DaoException
-    {
+    public void testGetSeatByHall() throws DaoException {
         Hall hall = hallDao.getHallById(1);
         Seat seatExpected = seatDao.getSeatById(1);
         Seat seatResult = seatDao.getSeatAllByHall(hall).get(0);
@@ -110,28 +102,22 @@ public class MySqlSeatDaoTest
     }
 
     @Test
-    public void testGetSeatFreeByFilmshow() throws DaoException
-    {
+    public void testGetSeatFreeByFilmshow() throws DaoException {
         Filmshow filmshow = filmshowDao.getFilmshowById(1);
         List<Seat> seatList = seatDao.getSeatAll();
         List<Ticket> ticketList = ticketDao.getTicketAll();
         boolean seatFree;
         List<Seat> seatListExpected = new ArrayList<>();
-        for(Seat s : seatList)
-        {
+        for (Seat s : seatList) {
             seatFree = true;
-            if(s.getHall().equals(filmshow.getHall()))
-            {
-                for(Ticket t : ticketList)
-                {
-                    if(t.getFilmshow().equals(filmshow) && t.getSeat().equals(s))
-                    {
+            if (s.getHall().equals(filmshow.getHall())) {
+                for (Ticket t : ticketList) {
+                    if (t.getFilmshow().equals(filmshow) && t.getSeat().equals(s)) {
                         seatFree = false;
                         break;
                     }
                 }
-                if(seatFree)
-                {
+                if (seatFree) {
                     seatListExpected.add(s);
                 }
             }
@@ -142,13 +128,10 @@ public class MySqlSeatDaoTest
     }
 
     @After
-    public void cleanUp() throws DaoException
-    {
+    public void cleanUp() throws DaoException {
         List<Seat> lst = seatDao.getSeatAll();
-        for(Seat s : lst)
-        {
-            if(s.getSeatNumber().equals(777) || s.getSeatNumber().equals(555))
-            {
+        for (Seat s : lst) {
+            if (s.getSeatNumber().equals(777) || s.getSeatNumber().equals(555)) {
                 seatDao.delete(s);
             }
         }

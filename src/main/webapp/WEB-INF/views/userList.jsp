@@ -4,14 +4,14 @@
 
 <html>
 <head>
-	<title>UserList</title>
+    <title>UserList</title>
     <link rel="stylesheet" href="../resources/css/styles.css"/>
 </head>
 <body>
 <div class="wrapper">
     <jsp:include page="admin_menu.jsp"/>
 
-	<p>UserList</p>
+    <p>UserList</p>
 
     <c:if test="${!empty userList}">
         <table>

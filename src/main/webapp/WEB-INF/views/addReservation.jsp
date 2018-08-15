@@ -10,7 +10,7 @@
     <script type="text/javascript" src="../resources/js/jquery-2.1.4.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#filmshow").change(function(){
+            $("#filmshow").change(function() {
                 $.ajax({
                     url: "ticketsFilter/" + $("#filmshow").val(), dataType: "json", success: function(data) {
                         var options = '<option value="">Выберите билет</option>';
@@ -46,12 +46,12 @@
                     <form:option value="0" label="Выберите пользователя"/>
                     <form:options items="${userList}" itemValue="userId"/>
                 </form:select>
-            <form:errors path="user" /> </p>
+                <form:errors path="user"/></p>
             <form:label path="ticket">Билет</form:label>
             <form:select path="ticket">
                 <form:option value="0" label="Выберите билет"/>
             </form:select>
-            <form:errors path="ticket" />
+            <form:errors path="ticket"/>
             <p><input type="submit" value="Зарезервировать билет"></p>
         </form:form>
     </c:if>

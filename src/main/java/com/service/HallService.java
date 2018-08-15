@@ -1,17 +1,23 @@
 package com.service;
 
-
 import com.dao.DaoException;
 import com.domain.Hall;
+
 import java.util.List;
 
-public interface HallService
-{
-    public Hall create(Hall hall) throws DaoException;
-    public void update(Hall hall) throws DaoException;
-    public void delete(Hall hall) throws DaoException;
-    public List<Hall> getHallAll() throws DaoException;
-    public Hall getHallById(int id) throws DaoException;
-    public boolean checkHallInFilmshow(Hall hall) throws DaoException;
-    public boolean checkHallInSeat(Hall hall) throws DaoException;
+public interface HallService {
+
+    Hall create(Hall hall) throws DaoException;
+
+    void update(Hall hall) throws DaoException;
+
+    void delete(Hall hall) throws DaoException;
+
+    List<Hall> getHallAll() throws DaoException;
+
+    Hall getHallById(int id) throws DaoException;
+
+    boolean checkHallInFilmshow(Hall hall) throws DaoException;
+
+    boolean checkHallInSeat(Hall hall) throws DaoException;
 }

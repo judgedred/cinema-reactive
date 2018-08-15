@@ -1,12 +1,5 @@
 package com.dao;
 
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import javax.xml.bind.DatatypeConverter;
-
 import com.domain.User;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,24 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class MySqlUserDaoTest
-{
+public class MySqlUserDaoTest {
+
     @Autowired
     private UserDao userDao;
 
-	@Test
-	public void testGetUserById() throws DaoException
-	{
-		User userTest = userDao.getUserById(1);
-		Assert.assertNotNull(userTest);
-	}	
+    @Test
+    public void testGetUserById() throws DaoException {
+        User userTest = userDao.getUserById(1);
+        Assert.assertNotNull(userTest);
+    }
 
-	@Test
-	public void testCreate() throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException
-	{
+    @Test
+    public void testCreate() throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException {
         User user = new User();
         user.setLogin("testCreatePassed");
         String password = "testCreatePassed";
@@ -54,11 +50,10 @@ public class MySqlUserDaoTest
         Assert.assertEquals(loginExpected, loginResult);
         Assert.assertEquals(passwordExpected, passwordResult);
         Assert.assertEquals(emailExpected, emailResult);
-	}
-	
-	@Test
-	public void testUpdate() throws DaoException,NoSuchAlgorithmException, UnsupportedEncodingException
-	{
+    }
+
+    @Test
+    public void testUpdate() throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException {
         User user = new User();
         user.setUserId(3);
         user.setLogin("testUpdatePassed");
@@ -81,27 +76,24 @@ public class MySqlUserDaoTest
         Assert.assertEquals(loginExpected, loginResult);
         Assert.assertEquals(passwordExpected, passwordResult);
         Assert.assertEquals(emailExpected, emailResult);
-	}
-
-	@Test
-	public void testDelete() throws DaoException
-	{
-		User user = userDao.getUserById(4);
-		userDao.delete(user);
-		Assert.assertNull(userDao.getUserById(user.getUserId()));
-	}
-
-	@Test
-	public void testGetUserAll() throws DaoException
-	{
-		List<User> listTest = userDao.getUserAll();
-		Assert.assertNotNull(listTest);
-		Assert.assertTrue(listTest.size() > 0);
-	}
+    }
 
     @Test
-    public void testGetUserByUser() throws DaoException
-    {
+    public void testDelete() throws DaoException {
+        User user = userDao.getUserById(4);
+        userDao.delete(user);
+        Assert.assertNull(userDao.getUserById(user.getUserId()));
+    }
+
+    @Test
+    public void testGetUserAll() throws DaoException {
+        List<User> listTest = userDao.getUserAll();
+        Assert.assertNotNull(listTest);
+        Assert.assertTrue(listTest.size() > 0);
+    }
+
+    @Test
+    public void testGetUserByUser() throws DaoException {
         User userExpected = userDao.getUserById(1);
         User userResult = userDao.getUserByUser(userExpected);
         Assert.assertNotNull(userResult);
@@ -109,8 +101,7 @@ public class MySqlUserDaoTest
     }
 
     @Test
-    public void testGetUserByLogin() throws DaoException
-    {
+    public void testGetUserByLogin() throws DaoException {
         User userExpected = userDao.getUserById(1);
         List<User> testList = userDao.getUserByLogin(userExpected.getLogin());
         Assert.assertNotNull(testList);
@@ -119,8 +110,7 @@ public class MySqlUserDaoTest
     }
 
     @Test
-    public void testGetUserByEmail() throws DaoException
-    {
+    public void testGetUserByEmail() throws DaoException {
         User userExpected = userDao.getUserById(1);
         List<User> testList = userDao.getUserByEmail(userExpected.getEmail());
         Assert.assertNotNull(testList);
@@ -129,13 +119,10 @@ public class MySqlUserDaoTest
     }
 
     @After
-    public void cleanUp() throws DaoException
-    {
+    public void cleanUp() throws DaoException {
         List<User> lst = userDao.getUserAll();
-        for(User u : lst)
-        {
-            if(u.getLogin().equals("testCreatePassed") || u.getLogin().equals("testUpdatePassed"))
-            {
+        for (User u : lst) {
+            if (u.getLogin().equals("testCreatePassed") || u.getLogin().equals("testUpdatePassed")) {
                 userDao.delete(u);
             }
         }

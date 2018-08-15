@@ -4,15 +4,15 @@
 <html>
 <head>
     <title>Admin menu</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 <ul class="navigation">
     <li><a href="filmshowList" title="Filmshow">Сеансы</a>
-    <ul>
-        <li><a href="addFilmshowForm" title="Add">Добавить</a></li>
-        <li><a href="deleteFilmshow" title="Delete">Удалить</a></li>
-    </ul>
+        <ul>
+            <li><a href="addFilmshowForm" title="Add">Добавить</a></li>
+            <li><a href="deleteFilmshow" title="Delete">Удалить</a></li>
+        </ul>
     </li>
     <li><a href="ticketList" title="Ticket">Билеты</a>
         <ul>
@@ -28,10 +28,10 @@
         </ul>
     </li>
     <li><a href="seatList" title="Seats">Места</a>
-    <ul>
-        <li><a href="addSeatForm" title="Add">Добавить</a></li>
-        <li><a href="deleteSeat" title="Delete">Удалить</a></li>
-    </ul>
+        <ul>
+            <li><a href="addSeatForm" title="Add">Добавить</a></li>
+            <li><a href="deleteSeat" title="Delete">Удалить</a></li>
+        </ul>
     </li>
     <li><a href="hallList" title="Halls">Залы</a>
         <ul>
