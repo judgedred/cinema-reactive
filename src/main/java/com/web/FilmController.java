@@ -3,6 +3,7 @@ package com.web;
 import com.domain.Film;
 import com.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,7 +19,11 @@ import java.util.List;
 public class FilmController {
 
     @Autowired
+    @Qualifier("filmServiceImpl")
     private FilmService filmService;
+
+    @Autowired
+    private FilmService defaultFilmService;
 
     @RequestMapping("/admin/addFilmForm")
     public ModelAndView addFilmForm() {
@@ -31,6 +36,7 @@ public class FilmController {
             return new ModelAndView("addFilm", "film", film);
         }
         filmService.create(film);
+        defaultFilmService.create(film);
         return new ModelAndView("addFilm", "film", new Film());
     }
 

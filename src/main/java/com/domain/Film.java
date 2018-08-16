@@ -17,6 +17,7 @@ import java.util.Objects;
 public class Film implements Serializable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @Column(name = "film_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer filmId;

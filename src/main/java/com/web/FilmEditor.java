@@ -3,6 +3,7 @@ package com.web;
 import com.domain.Film;
 import com.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.beans.PropertyEditorSupport;

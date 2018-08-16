@@ -7,6 +7,7 @@ import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,7 @@ public class FilmshowController {
     @Autowired
     private HallService hallService;
 
+    @Qualifier("filmServiceImpl")
     @Autowired
     private FilmService filmService;
 

@@ -12,6 +12,7 @@ import com.service.TicketService;
 import com.service.UserService;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -46,6 +47,7 @@ public class MainController {
     @Autowired
     private FilmshowService filmshowService;
 
+    @Qualifier("filmServiceImpl")
     @Autowired
     private FilmService filmService;
 
