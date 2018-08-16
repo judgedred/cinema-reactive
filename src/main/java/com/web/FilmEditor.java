@@ -11,6 +11,7 @@ import java.beans.PropertyEditorSupport;
 @Component
 public class FilmEditor extends PropertyEditorSupport {
 
+    @Qualifier("filmServiceImpl")
     @Autowired
     private FilmService filmService;
 
