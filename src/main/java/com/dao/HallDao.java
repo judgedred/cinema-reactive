@@ -2,6 +2,7 @@ package com.dao;
 
 import com.domain.Hall;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface HallDao {
@@ -14,5 +15,5 @@ public interface HallDao {
 
     List<Hall> getHallAll() throws DaoException;
 
-    Hall getHallById(int id) throws DaoException;
+    Hall getHallById(BigInteger id) throws DaoException;
 }

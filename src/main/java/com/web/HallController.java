@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 @Controller
@@ -36,7 +37,7 @@ public class HallController {
 
     @RequestMapping("/admin/deleteHall")
     public ModelAndView deleteHall(@ModelAttribute Hall hall) throws Exception {
-        if (hall.getHallId() != null && hall.getHallId() != 0) {
+        if (hall.getHallId() != null && !hall.getHallId().equals(BigInteger.ZERO)) {
             hall = hallService.getHallById(hall.getHallId());
             if (hall != null) {
                 hallService.delete(hall);
@@ -56,7 +57,7 @@ public class HallController {
     public @ResponseBody
     String checkHall(@PathVariable Integer hallId) throws Exception {
         if (hallId != null) {
-            Hall hall = hallService.getHallById(hallId);
+            Hall hall = hallService.getHallById(BigInteger.valueOf(hallId));
             if (hall != null) {
                 if (hallService.checkHallInFilmshow(hall)) {
                     return "В зале имеются сеансы. Сначала удалите сеансы.";

@@ -39,8 +39,8 @@ public class MySqlFilmshowDaoTest {
     @Test
     public void testCreate() throws DaoException {
         Filmshow filmshow = new Filmshow();
-        Film film = filmDao.getFilmById(BigInteger.valueOf(1));
-        Hall hall = hallDao.getHallById(1);
+        Film film = filmDao.getFilmById(BigInteger.ONE);
+        Hall hall = hallDao.getHallById(BigInteger.ONE);
         filmshow.setFilm(film);
         filmshow.setHall(hall);
         Calendar cal = Calendar.getInstance();
@@ -63,7 +63,7 @@ public class MySqlFilmshowDaoTest {
     public void testUpdate() throws DaoException {
         Filmshow filmshow = new Filmshow();
         Film film = filmDao.getFilmById(BigInteger.valueOf(2));
-        Hall hall = hallDao.getHallById(2);
+        Hall hall = hallDao.getHallById(BigInteger.valueOf(2));
         filmshow.setFilmshowId(2);
         filmshow.setFilm(film);
         filmshow.setHall(hall);
@@ -100,7 +100,7 @@ public class MySqlFilmshowDaoTest {
 
     @Test
     public void testGetFilmshowByFilm() throws DaoException {
-        Film film = filmDao.getFilmById(BigInteger.valueOf(1));
+        Film film = filmDao.getFilmById(BigInteger.ONE);
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByFilm(film).get(0);
         Assert.assertNotNull(filmshowResult);
@@ -109,7 +109,7 @@ public class MySqlFilmshowDaoTest {
 
     @Test
     public void testGetFilmshowByHall() throws DaoException {
-        Hall hall = hallDao.getHallById(1);
+        Hall hall = hallDao.getHallById(BigInteger.ONE);
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByHall(hall).get(0);
         Assert.assertNotNull(filmshowResult);

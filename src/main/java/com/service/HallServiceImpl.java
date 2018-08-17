@@ -10,6 +10,7 @@ import com.domain.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -45,7 +46,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public Hall getHallById(int id) throws DaoException {
+    public Hall getHallById(BigInteger id) throws DaoException {
         return hallDao.getHallById(id);
     }
 

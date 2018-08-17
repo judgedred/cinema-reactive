@@ -3,6 +3,7 @@ package com.service;
 import com.dao.DaoException;
 import com.domain.Hall;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface HallService {
@@ -15,7 +16,7 @@ public interface HallService {
 
     List<Hall> getHallAll() throws DaoException;
 
-    Hall getHallById(int id) throws DaoException;
+    Hall getHallById(BigInteger id) throws DaoException;
 
     boolean checkHallInFilmshow(Hall hall) throws DaoException;
 

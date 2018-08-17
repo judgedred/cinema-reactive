@@ -9,10 +9,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -37,8 +38,8 @@ public class MongoFilmDaoTest {
     @Test
     public void getByIdTest() throws DaoException {
         Film film = createTestFilm();
-        Film filmTest = filmRepository.getFilmByfilmId(film.getFilmId());
-        assertNotNull(filmTest);
+        Optional<Film> filmTest = filmRepository.findById(film.getFilmId());
+        assertTrue(filmTest.isPresent());
         filmRepository.delete(film);
     }
 
@@ -50,8 +51,9 @@ public class MongoFilmDaoTest {
         film.setFilmName(filmNameExpected);
         film.setDescription(descriptionExpected);
         filmRepository.save(film);
-        Film filmUpdated = filmRepository.getFilmByfilmId(film.getFilmId());
-        assertNotNull(filmUpdated);
+        Optional<Film> filmOptional = filmRepository.findById(film.getFilmId());
+        assertTrue(filmOptional.isPresent());
+        Film filmUpdated = filmOptional.get();
         assertThat(filmUpdated.getFilmName(), is(filmNameExpected));
         assertThat(filmUpdated.getDescription(), is(descriptionExpected));
         filmRepository.delete(film);
@@ -61,11 +63,11 @@ public class MongoFilmDaoTest {
     public void deleteTest() {
         Film film = createTestFilm();
         filmRepository.delete(film);
-        assertNull(filmRepository.getFilmByfilmId(film.getFilmId()));
+        assertFalse(filmRepository.findById(film.getFilmId()).isPresent());
     }
 
     @Test
-    public void testGetFilmAll() throws DaoException {
+    public void getAllFilmsTest() throws DaoException {
         Film film = createTestFilm();
         List<Film> films = filmRepository.findAll();
         assertNotNull(films);

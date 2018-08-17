@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -100,7 +101,7 @@ public class MySqlHallDao implements HallDao {
     }
 
     @Override
-    public Hall getHallById(int id) throws DaoException {
+    public Hall getHallById(BigInteger id) throws DaoException {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();

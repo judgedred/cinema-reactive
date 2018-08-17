@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class MySqlSeatDaoTest {
         Seat seat = new Seat();
         seat.setSeatNumber(777);
         seat.setRowNumber(777);
-        Hall hall = hallDao.getHallById(1);
+        Hall hall = hallDao.getHallById(BigInteger.valueOf(1));
         seat.setHall(hall);
         int seatNumberExpected = seat.getSeatNumber();
         int rowNumberExpected = seat.getRowNumber();
@@ -63,7 +64,7 @@ public class MySqlSeatDaoTest {
         seat.setSeatId(27);
         seat.setSeatNumber(555);
         seat.setRowNumber(555);
-        Hall hall = hallDao.getHallById(2);
+        Hall hall = hallDao.getHallById(BigInteger.valueOf(2));
         seat.setHall(hall);
         int seatNumberExpected = seat.getSeatNumber();
         int rowNumberExpected = seat.getRowNumber();
@@ -94,7 +95,7 @@ public class MySqlSeatDaoTest {
 
     @Test
     public void testGetSeatByHall() throws DaoException {
-        Hall hall = hallDao.getHallById(1);
+        Hall hall = hallDao.getHallById(BigInteger.valueOf(1));
         Seat seatExpected = seatDao.getSeatById(1);
         Seat seatResult = seatDao.getSeatAllByHall(hall).get(0);
         Assert.assertNotNull(seatResult);

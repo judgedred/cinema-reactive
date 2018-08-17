@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,7 +22,7 @@ public class MySqlHallDaoTest {
 
     @Test
     public void testGetHallById() throws DaoException {
-        Hall hallTest = hallDao.getHallById(1);
+        Hall hallTest = hallDao.getHallById(BigInteger.ONE);
         Assert.assertNotNull(hallTest);
     }
 
@@ -43,7 +44,7 @@ public class MySqlHallDaoTest {
     @Test
     public void testUpdate() throws DaoException {
         Hall hall = new Hall();
-        hall.setHallId(3);
+        hall.setHallId(BigInteger.valueOf(3));
         hall.setHallNumber(777);
         hall.setHallName("testUpdatePassed");
         int numberExpected = hall.getHallNumber();
@@ -59,7 +60,7 @@ public class MySqlHallDaoTest {
 
     @Test
     public void testDelete() throws DaoException {
-        Hall hall = hallDao.getHallById(4);
+        Hall hall = hallDao.getHallById(BigInteger.valueOf(4));
         hallDao.delete(hall);
         Assert.assertNull(hallDao.getHallById(hall.getHallId()));
     }

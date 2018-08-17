@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -17,9 +18,10 @@ import java.util.Objects;
 public class Hall implements Serializable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @Column(name = "hall_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer hallId;
+    private BigInteger hallId;
     @Column(name = "hall_number", nullable = false)
     @NotNull
     private Integer hallNumber;
@@ -28,11 +30,11 @@ public class Hall implements Serializable {
     @NotEmpty
     private String hallName;
 
-    public Integer getHallId() {
+    public BigInteger getHallId() {
         return hallId;
     }
 
-    public void setHallId(Integer hallId) {
+    public void setHallId(BigInteger hallId) {
         this.hallId = hallId;
     }
 
