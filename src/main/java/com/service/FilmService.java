@@ -3,6 +3,7 @@ package com.service;
 import com.dao.DaoException;
 import com.domain.Film;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface FilmService {
@@ -15,7 +16,7 @@ public interface FilmService {
 
     List<Film> getFilmAll() throws DaoException;
 
-    Film getFilmById(int id) throws DaoException;
+    Film getFilmById(BigInteger id) throws DaoException;
 
     boolean checkFilmInFilmshow(Film film) throws DaoException;
 }

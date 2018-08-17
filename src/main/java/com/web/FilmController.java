@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,7 @@ public class FilmController {
 
     @RequestMapping("/admin/deleteFilm")
     public ModelAndView deleteFilm(@ModelAttribute Film film) throws Exception {
-        if (film.getFilmId() != null && film.getFilmId() != 0) {
+        if (film.getFilmId() != null && !film.getFilmId().equals(BigInteger.ZERO)) {
             film = filmService.getFilmById(film.getFilmId());
             if (film != null) {
                 filmService.delete(film);
@@ -62,7 +63,7 @@ public class FilmController {
     public @ResponseBody
     String checkFilm(@PathVariable Integer filmId) throws Exception {
         if (filmId != null) {
-            Film film = filmService.getFilmById(filmId);
+            Film film = filmService.getFilmById(BigInteger.valueOf(filmId));
             if (film != null && filmService.checkFilmInFilmshow(film)) {
                 return "На фильм созданы сеансы. Сначала удалите сеансы.";
             }

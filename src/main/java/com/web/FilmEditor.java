@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.beans.PropertyEditorSupport;
+import java.math.BigInteger;
 
 @Component
 public class FilmEditor extends PropertyEditorSupport {
@@ -18,7 +19,7 @@ public class FilmEditor extends PropertyEditorSupport {
     @Override
     public void setAsText(String text) {
         try {
-            Film f = filmService.getFilmById(Integer.parseInt(text));
+            Film f = filmService.getFilmById(BigInteger.valueOf(Integer.parseInt(text)));
         /*Film f = new Film();
         f.setFilmId(Integer.parseInt(text));*/
             this.setValue(f);

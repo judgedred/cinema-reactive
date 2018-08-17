@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -20,7 +21,7 @@ public class Film implements Serializable {
     @org.springframework.data.annotation.Id
     @Column(name = "film_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer filmId;
+    private BigInteger filmId;
     @Column(name = "film_name", length = 50, nullable = false)
     @NotNull
     @NotEmpty
@@ -30,11 +31,11 @@ public class Film implements Serializable {
     @NotEmpty
     private String description;
 
-    public Integer getFilmId() {
+    public BigInteger getFilmId() {
         return filmId;
     }
 
-    public void setFilmId(Integer filmId) {
+    public void setFilmId(BigInteger filmId) {
         this.filmId = filmId;
     }
 

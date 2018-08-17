@@ -6,6 +6,7 @@ import com.domain.Film;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -35,7 +36,7 @@ public class DefaultFilmService implements FilmService {
     }
 
     @Override
-    public Film getFilmById(int id) throws DaoException {
+    public Film getFilmById(BigInteger id) throws DaoException {
         return null;
     }
 

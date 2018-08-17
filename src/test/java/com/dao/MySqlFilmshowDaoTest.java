@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +39,7 @@ public class MySqlFilmshowDaoTest {
     @Test
     public void testCreate() throws DaoException {
         Filmshow filmshow = new Filmshow();
-        Film film = filmDao.getFilmById(1);
+        Film film = filmDao.getFilmById(BigInteger.valueOf(1));
         Hall hall = hallDao.getHallById(1);
         filmshow.setFilm(film);
         filmshow.setHall(hall);
@@ -61,7 +62,7 @@ public class MySqlFilmshowDaoTest {
     @Test
     public void testUpdate() throws DaoException {
         Filmshow filmshow = new Filmshow();
-        Film film = filmDao.getFilmById(2);
+        Film film = filmDao.getFilmById(BigInteger.valueOf(2));
         Hall hall = hallDao.getHallById(2);
         filmshow.setFilmshowId(2);
         filmshow.setFilm(film);
@@ -99,7 +100,7 @@ public class MySqlFilmshowDaoTest {
 
     @Test
     public void testGetFilmshowByFilm() throws DaoException {
-        Film film = filmDao.getFilmById(1);
+        Film film = filmDao.getFilmById(BigInteger.valueOf(1));
         Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByFilm(film).get(0);
         Assert.assertNotNull(filmshowResult);

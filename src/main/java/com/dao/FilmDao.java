@@ -2,6 +2,7 @@ package com.dao;
 
 import com.domain.Film;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface FilmDao {
@@ -14,5 +15,5 @@ public interface FilmDao {
 
     List<Film> getFilmAll() throws DaoException;
 
-    Film getFilmById(int id) throws DaoException;
+    Film getFilmById(BigInteger id) throws DaoException;
 }
