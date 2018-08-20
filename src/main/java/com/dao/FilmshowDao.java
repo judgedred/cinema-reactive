@@ -4,6 +4,7 @@ import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface FilmshowDao {
 
     List<Filmshow> getFilmshowAll() throws DaoException;
 
-    Filmshow getFilmshowById(int id) throws DaoException;
+    Filmshow getFilmshowById(BigInteger id) throws DaoException;
 
     List<Filmshow> getFilmshowAllByFilm(Film film) throws DaoException;
 

@@ -104,7 +104,7 @@ public class MySqlSeatDaoTest {
 
     @Test
     public void testGetSeatFreeByFilmshow() throws DaoException {
-        Filmshow filmshow = filmshowDao.getFilmshowById(1);
+        Filmshow filmshow = filmshowDao.getFilmshowById(BigInteger.ONE);
         List<Seat> seatList = seatDao.getSeatAll();
         List<Ticket> ticketList = ticketDao.getTicketAll();
         boolean seatFree;

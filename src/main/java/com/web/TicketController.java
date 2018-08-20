@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,7 +115,7 @@ public class TicketController {
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     public @ResponseBody
     Map<Integer, String> filterSeats(@PathVariable int filmshowId) throws Exception {
-        Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+        Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
         Map<Integer, String> filteredSeatMap = new HashMap<>();
         if (filmshow != null) {
             filteredSeatList = seatService.getSeatFreeByFilmshow(filmshow);

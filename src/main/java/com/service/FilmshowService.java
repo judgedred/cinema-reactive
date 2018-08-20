@@ -4,6 +4,7 @@ import com.dao.DaoException;
 import com.domain.Filmshow;
 import org.joda.time.LocalDate;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface FilmshowService {
 
     List<Filmshow> getFilmshowAll() throws DaoException;
 
-    Filmshow getFilmshowById(int id) throws DaoException;
+    Filmshow getFilmshowById(BigInteger id) throws DaoException;
 
     boolean checkFilmshowInTicket(Filmshow filmshow) throws DaoException;
 

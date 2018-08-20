@@ -12,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -21,9 +22,10 @@ import java.util.Objects;
 public class Filmshow implements Serializable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @Column(name = "filmshow_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer filmshowId;
+    private BigInteger filmshowId;
     @Column(name = "date_time", nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     @NotNull
@@ -37,11 +39,11 @@ public class Filmshow implements Serializable {
     @NotNull
     private Hall hall;
 
-    public Integer getFilmshowId() {
+    public BigInteger getFilmshowId() {
         return filmshowId;
     }
 
-    public void setFilmshowId(Integer filmshowId) {
+    public void setFilmshowId(BigInteger filmshowId) {
         this.filmshowId = filmshowId;
     }
 

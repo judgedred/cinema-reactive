@@ -32,7 +32,7 @@ public class MySqlFilmshowDaoTest {
 
     @Test
     public void testGetFilmshowById() throws DaoException {
-        Filmshow filmshowTest = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowTest = filmshowDao.getFilmshowById(BigInteger.ONE);
         Assert.assertNotNull(filmshowTest);
     }
 
@@ -64,7 +64,7 @@ public class MySqlFilmshowDaoTest {
         Filmshow filmshow = new Filmshow();
         Film film = filmDao.getFilmById(BigInteger.valueOf(2));
         Hall hall = hallDao.getHallById(BigInteger.valueOf(2));
-        filmshow.setFilmshowId(2);
+        filmshow.setFilmshowId(BigInteger.valueOf(2));
         filmshow.setFilm(film);
         filmshow.setHall(hall);
         Calendar cal = Calendar.getInstance();
@@ -86,7 +86,7 @@ public class MySqlFilmshowDaoTest {
 
     @Test
     public void testDelete() throws DaoException {
-        Filmshow filmshow = filmshowDao.getFilmshowById(3);
+        Filmshow filmshow = filmshowDao.getFilmshowById(BigInteger.valueOf(3));
         filmshowDao.delete(filmshow);
         Assert.assertNull(filmshowDao.getFilmshowById(filmshow.getFilmshowId()));
     }
@@ -101,7 +101,7 @@ public class MySqlFilmshowDaoTest {
     @Test
     public void testGetFilmshowByFilm() throws DaoException {
         Film film = filmDao.getFilmById(BigInteger.ONE);
-        Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowExpected = filmshowDao.getFilmshowById(BigInteger.ONE);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByFilm(film).get(0);
         Assert.assertNotNull(filmshowResult);
         Assert.assertEquals(filmshowExpected, filmshowResult);
@@ -110,7 +110,7 @@ public class MySqlFilmshowDaoTest {
     @Test
     public void testGetFilmshowByHall() throws DaoException {
         Hall hall = hallDao.getHallById(BigInteger.ONE);
-        Filmshow filmshowExpected = filmshowDao.getFilmshowById(1);
+        Filmshow filmshowExpected = filmshowDao.getFilmshowById(BigInteger.ONE);
         Filmshow filmshowResult = filmshowDao.getFilmshowAllByHall(hall).get(0);
         Assert.assertNotNull(filmshowResult);
         Assert.assertEquals(filmshowExpected, filmshowResult);

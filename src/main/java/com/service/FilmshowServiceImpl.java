@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,7 +47,7 @@ public class FilmshowServiceImpl implements FilmshowService {
     }
 
     @Override
-    public Filmshow getFilmshowById(int id) throws DaoException {
+    public Filmshow getFilmshowById(BigInteger id) throws DaoException {
         return filmshowDao.getFilmshowById(id);
     }
 

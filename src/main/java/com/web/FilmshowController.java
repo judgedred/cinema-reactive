@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ public class FilmshowController {
 
     @RequestMapping("/admin/deleteFilmshow")
     public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception {
-        if (filmshow.getFilmshowId() != null && filmshow.getFilmshowId() != 0) {
+        if (filmshow.getFilmshowId() != null && !filmshow.getFilmshowId().equals(BigInteger.ZERO)) {
             filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
             if (filmshow != null) {
                 filmshowService.delete(filmshow);
@@ -92,7 +93,7 @@ public class FilmshowController {
     public @ResponseBody
     String checkFilmshow(@PathVariable Integer filmshowId) throws Exception {
         if (filmshowId != null) {
-            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+            Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
             if (filmshow != null && filmshowService.checkFilmshowInTicket(filmshow)) {
                 return "На сеанс имеются билеты. Сначала удалите билеты.";
             }

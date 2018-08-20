@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.CinemaTestConfiguration;
 import com.domain.Film;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,17 +18,20 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = CinemaTestConfiguration.class)
 public class MongoFilmDaoTest {
 
     @Autowired
     private FilmRepository filmRepository;
 
+    @Autowired
+    private TestDataCreator testDataCreator;
+
     @Test
     public void createTest() {
         String filmNameExpected = "testFilmName";
         String descriptionExpected = "testFilmDescription";
-        Film film = createFilm(null, filmNameExpected, descriptionExpected);
+        Film film = testDataCreator.createFilm(null, filmNameExpected, descriptionExpected);
         assertNotNull(film);
         assertThat(film.getFilmName(), is(filmNameExpected));
         assertThat(film.getDescription(), is(descriptionExpected));
@@ -36,8 +39,8 @@ public class MongoFilmDaoTest {
     }
 
     @Test
-    public void getByIdTest() throws DaoException {
-        Film film = createTestFilm();
+    public void getByIdTest() {
+        Film film = testDataCreator.createTestFilm();
         Optional<Film> filmTest = filmRepository.findById(film.getFilmId());
         assertTrue(filmTest.isPresent());
         filmRepository.delete(film);
@@ -45,7 +48,7 @@ public class MongoFilmDaoTest {
 
     @Test
     public void updateTest() {
-        Film film = createTestFilm();
+        Film film = testDataCreator.createTestFilm();
         String filmNameExpected = "updatedFilmName";
         String descriptionExpected = "updatedFilmDescription";
         film.setFilmName(filmNameExpected);
@@ -61,29 +64,18 @@ public class MongoFilmDaoTest {
 
     @Test
     public void deleteTest() {
-        Film film = createTestFilm();
+        Film film = testDataCreator.createTestFilm();
         filmRepository.delete(film);
         assertFalse(filmRepository.findById(film.getFilmId()).isPresent());
     }
 
     @Test
-    public void getAllFilmsTest() throws DaoException {
-        Film film = createTestFilm();
+    public void getAllFilmsTest() {
+        Film film = testDataCreator.createTestFilm();
         List<Film> films = filmRepository.findAll();
         assertNotNull(films);
         assertTrue(films.size() > 0);
         filmRepository.delete(film);
     }
 
-    private Film createFilm(BigInteger filmId, String filmName, String description) {
-        Film film = new Film();
-        film.setFilmId(filmId);
-        film.setFilmName(filmName);
-        film.setDescription(description);
-        return filmRepository.save(film);
-    }
-
-    private Film createTestFilm() {
-        return createFilm(BigInteger.valueOf(555), "testFilm", "testFilm");
-    }
 }

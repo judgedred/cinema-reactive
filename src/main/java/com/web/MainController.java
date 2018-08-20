@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,7 @@ public class MainController {
             reservationService.create(reservation);
         }
         if (filmshowId != null) {
-            Filmshow filmshow = filmshowService.getFilmshowById(filmshowId);
+            Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
             if (filmshow != null) {
                 List<Ticket> ticketList = ticketService.getTicketFreeByFilmshow(filmshow);
                 mav.addObject("filteredTicketList", ticketList);
