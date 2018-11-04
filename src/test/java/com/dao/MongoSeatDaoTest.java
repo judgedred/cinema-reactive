@@ -29,12 +29,6 @@ public class MongoSeatDaoTest {
     private SeatRepository seatRepository;
 
     @Autowired
-    private FilmshowDao filmshowDao;
-
-    @Autowired
-    private TicketDao ticketDao;
-
-    @Autowired
     private TestDataRepository testDataRepository;
 
     @Test
