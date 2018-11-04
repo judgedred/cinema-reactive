@@ -3,7 +3,8 @@ package com;
 import com.dao.FilmRepository;
 import com.dao.FilmshowRepository;
 import com.dao.HallRepository;
-import com.dao.TestDataCreator;
+import com.dao.SeatRepository;
+import com.dao.TestDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,9 +23,12 @@ public class CinemaTestConfiguration {
     @Autowired
     private FilmshowRepository filmshowRepository;
 
+    @Autowired
+    private SeatRepository seatRepository;
+
     @Bean
-    public TestDataCreator testDataCreator() {
-        return new TestDataCreator(filmRepository, hallRepository, filmshowRepository);
+    public TestDataRepository testDataCreator() {
+        return new TestDataRepository(filmRepository, hallRepository, filmshowRepository, seatRepository);
     }
 
 }

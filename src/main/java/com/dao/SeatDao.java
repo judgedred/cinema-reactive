@@ -4,6 +4,7 @@ import com.domain.Filmshow;
 import com.domain.Hall;
 import com.domain.Seat;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface SeatDao {
@@ -16,7 +17,7 @@ public interface SeatDao {
 
     List<Seat> getSeatAll() throws DaoException;
 
-    Seat getSeatById(int id) throws DaoException;
+    Seat getSeatById(BigInteger id) throws DaoException;
 
     List<Seat> getSeatAllByHall(Hall hall) throws DaoException;
 

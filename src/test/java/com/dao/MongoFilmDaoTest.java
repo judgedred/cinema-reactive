@@ -25,13 +25,13 @@ public class MongoFilmDaoTest {
     private FilmRepository filmRepository;
 
     @Autowired
-    private TestDataCreator testDataCreator;
+    private TestDataRepository testDataRepository;
 
     @Test
     public void createTest() {
         String filmNameExpected = "testFilmName";
         String descriptionExpected = "testFilmDescription";
-        Film film = testDataCreator.createFilm(null, filmNameExpected, descriptionExpected);
+        Film film = testDataRepository.createFilm(null, filmNameExpected, descriptionExpected);
         assertNotNull(film);
         assertThat(film.getFilmName(), is(filmNameExpected));
         assertThat(film.getDescription(), is(descriptionExpected));
@@ -40,7 +40,7 @@ public class MongoFilmDaoTest {
 
     @Test
     public void getByIdTest() {
-        Film film = testDataCreator.createTestFilm();
+        Film film = testDataRepository.createTestFilm();
         Optional<Film> filmTest = filmRepository.findById(film.getFilmId());
         assertTrue(filmTest.isPresent());
         filmRepository.delete(film);
@@ -48,7 +48,7 @@ public class MongoFilmDaoTest {
 
     @Test
     public void updateTest() {
-        Film film = testDataCreator.createTestFilm();
+        Film film = testDataRepository.createTestFilm();
         String filmNameExpected = "updatedFilmName";
         String descriptionExpected = "updatedFilmDescription";
         film.setFilmName(filmNameExpected);
@@ -64,14 +64,14 @@ public class MongoFilmDaoTest {
 
     @Test
     public void deleteTest() {
-        Film film = testDataCreator.createTestFilm();
+        Film film = testDataRepository.createTestFilm();
         filmRepository.delete(film);
         assertFalse(filmRepository.findById(film.getFilmId()).isPresent());
     }
 
     @Test
     public void getAllFilmsTest() {
-        Film film = testDataCreator.createTestFilm();
+        Film film = testDataRepository.createTestFilm();
         List<Film> films = filmRepository.findAll();
         assertNotNull(films);
         assertTrue(films.size() > 0);

@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -17,9 +18,10 @@ import java.util.Objects;
 public class Seat implements Serializable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @Column(name = "seat_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer seatId;
+    private BigInteger seatId;
     @Column(name = "seat_number", nullable = false)
     @NotNull
     private Integer seatNumber;
@@ -31,11 +33,11 @@ public class Seat implements Serializable {
     @NotNull
     private Hall hall;
 
-    public Integer getSeatId() {
+    public BigInteger getSeatId() {
         return seatId;
     }
 
-    public void setSeatId(Integer seatId) {
+    public void setSeatId(BigInteger seatId) {
         this.seatId = seatId;
     }
 

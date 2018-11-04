@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,7 +22,7 @@ public class MySqlFilmDaoTest {
 
     @Test
     public void testGetFilmById() throws DaoException {
-        Film filmTest = filmDao.getFilmById(1);
+        Film filmTest = filmDao.getFilmById(BigInteger.ONE);
         Assert.assertNotNull(filmTest);
     }
 
@@ -43,7 +44,7 @@ public class MySqlFilmDaoTest {
     @Test
     public void testUpdate() throws DaoException {
         Film film = new Film();
-        film.setFilmId(4);
+        film.setFilmId(BigInteger.valueOf(4));
         film.setFilmName("testUpdatePassed");
         film.setDescription("testUpdatePassed");
         String filmNameExpected = film.getFilmName();
@@ -59,7 +60,7 @@ public class MySqlFilmDaoTest {
 
     @Test
     public void testDelete() throws DaoException {
-        Film film = filmDao.getFilmById(5);
+        Film film = filmDao.getFilmById(BigInteger.valueOf(5));
         filmDao.delete(film);
         Assert.assertNull(filmDao.getFilmById(film.getFilmId()));
     }

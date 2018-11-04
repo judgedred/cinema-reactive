@@ -34,7 +34,7 @@ public class MySqlSeatDaoTest {
 
     @Test
     public void testGetSeatById() throws DaoException {
-        Seat seatTest = seatDao.getSeatById(1);
+        Seat seatTest = seatDao.getSeatById(BigInteger.ONE);
         Assert.assertNotNull(seatTest);
     }
 
@@ -43,7 +43,7 @@ public class MySqlSeatDaoTest {
         Seat seat = new Seat();
         seat.setSeatNumber(777);
         seat.setRowNumber(777);
-        Hall hall = hallDao.getHallById(BigInteger.valueOf(1));
+        Hall hall = hallDao.getHallById(BigInteger.ONE);
         seat.setHall(hall);
         int seatNumberExpected = seat.getSeatNumber();
         int rowNumberExpected = seat.getRowNumber();
@@ -61,7 +61,7 @@ public class MySqlSeatDaoTest {
     @Test
     public void testUpdate() throws DaoException {
         Seat seat = new Seat();
-        seat.setSeatId(27);
+        seat.setSeatId(BigInteger.valueOf(27));
         seat.setSeatNumber(555);
         seat.setRowNumber(555);
         Hall hall = hallDao.getHallById(BigInteger.valueOf(2));
@@ -81,7 +81,7 @@ public class MySqlSeatDaoTest {
 
     @Test
     public void testDelete() throws DaoException {
-        Seat seat = seatDao.getSeatById(28);
+        Seat seat = seatDao.getSeatById(BigInteger.valueOf(28));
         seatDao.delete(seat);
         Assert.assertNull(seatDao.getSeatById(seat.getSeatId()));
     }
@@ -96,7 +96,7 @@ public class MySqlSeatDaoTest {
     @Test
     public void testGetSeatByHall() throws DaoException {
         Hall hall = hallDao.getHallById(BigInteger.valueOf(1));
-        Seat seatExpected = seatDao.getSeatById(1);
+        Seat seatExpected = seatDao.getSeatById(BigInteger.ONE);
         Seat seatResult = seatDao.getSeatAllByHall(hall).get(0);
         Assert.assertNotNull(seatResult);
         Assert.assertEquals(seatExpected, seatResult);

@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.CinemaTestConfiguration;
 import com.domain.Hall;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,20 +18,20 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = CinemaTestConfiguration.class)
 public class MongoHallDaoTest {
 
     @Autowired
     private HallRepository hallRepository;
 
     @Autowired
-    private TestDataCreator testDataCreator;
+    private TestDataRepository testDataRepository;
 
     @Test
     public void createTest() {
         String hallNameExpected = "testHallName";
         Integer numberExpected = 3;
-        Hall hall = testDataCreator.createHall(null, hallNameExpected, numberExpected);
+        Hall hall = testDataRepository.createHall(null, hallNameExpected, numberExpected);
         assertNotNull(hall);
         assertThat(hall.getHallName(), is(hallNameExpected));
         assertThat(hall.getHallNumber(), is(numberExpected));
@@ -39,7 +40,7 @@ public class MongoHallDaoTest {
 
     @Test
     public void getByIdTest() {
-        Hall hall = testDataCreator.createTestHall();
+        Hall hall = testDataRepository.createTestHall();
         Optional<Hall> hallTest = hallRepository.findById(hall.getHallId());
         assertTrue(hallTest.isPresent());
         hallRepository.delete(hall);
@@ -47,7 +48,7 @@ public class MongoHallDaoTest {
 
     @Test
     public void updateTest() {
-        Hall hall = testDataCreator.createTestHall();
+        Hall hall = testDataRepository.createTestHall();
         String hallNameExpected = "updatedHallName";
         Integer numberExpected = 777;
         hall.setHallName(hallNameExpected);
@@ -63,14 +64,14 @@ public class MongoHallDaoTest {
 
     @Test
     public void deleteTest() {
-        Hall hall = testDataCreator.createTestHall();
+        Hall hall = testDataRepository.createTestHall();
         hallRepository.delete(hall);
         assertFalse(hallRepository.findById(hall.getHallId()).isPresent());
     }
 
     @Test
     public void getAllHallsTest() {
-        Hall hall = testDataCreator.createTestHall();
+        Hall hall = testDataRepository.createTestHall();
         List<Hall> halls = hallRepository.findAll();
         assertNotNull(halls);
         assertTrue(halls.size() > 0);

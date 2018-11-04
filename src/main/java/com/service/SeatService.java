@@ -4,6 +4,7 @@ import com.dao.DaoException;
 import com.domain.Filmshow;
 import com.domain.Seat;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface SeatService {
@@ -16,7 +17,7 @@ public interface SeatService {
 
     List<Seat> getSeatAll() throws DaoException;
 
-    Seat getSeatById(int id) throws DaoException;
+    Seat getSeatById(BigInteger id) throws DaoException;
 
     boolean checkSeatInTicket(Seat seat) throws DaoException;
 

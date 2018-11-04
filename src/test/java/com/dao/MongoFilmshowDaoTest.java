@@ -34,13 +34,13 @@ public class MongoFilmshowDaoTest {
     private FilmshowRepository filmshowRepository;
 
     @Autowired
-    private TestDataCreator testDataCreator;
+    private TestDataRepository testDataRepository;
 
     @Test
     public void createTest() {
         Filmshow filmshow = new Filmshow();
-        Film film = testDataCreator.createTestFilm();
-        Hall hall = testDataCreator.createTestHall();
+        Film film = testDataRepository.createTestFilm();
+        Hall hall = testDataRepository.createTestHall();
         filmshow.setFilm(film);
         filmshow.setHall(hall);
         filmshow.setDateTime(new Date());
@@ -52,15 +52,15 @@ public class MongoFilmshowDaoTest {
 
     @Test
     public void getByIdTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         Optional<Filmshow> filmshowTest = filmshowRepository.findById(filmshow.getFilmshowId());
         assertTrue(filmshowTest.isPresent());
-        filmshowRepository.delete(filmshow);
+        testDataRepository.cleanUpFilmshow(filmshow);
     }
 
     @Test
     public void updateTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         filmshow.setDateTime(new Date());
         Film film = filmshow.getFilm();
         film.setFilmName("testFilmUpdated");
@@ -75,14 +75,14 @@ public class MongoFilmshowDaoTest {
 
     @Test
     public void deleteTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         filmshowRepository.delete(filmshow);
         Assert.assertFalse(filmshowRepository.findById(filmshow.getFilmshowId()).isPresent());
     }
 
     @Test
     public void getAllFilmshowsTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         List<Filmshow> filmshows = filmshowRepository.findAll();
         assertNotNull(filmshows);
         assertTrue(filmshows.size() > 0);
@@ -91,7 +91,7 @@ public class MongoFilmshowDaoTest {
 
     @Test
     public void findAllByFilmTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         List<Filmshow> filmshows = filmshowRepository.findAllByFilm(filmshow.getFilm());
         assertThat(filmshows, is(notNullValue()));
         assertThat(filmshows.size(), greaterThan(0));
@@ -101,7 +101,7 @@ public class MongoFilmshowDaoTest {
 
     @Test
     public void findAllByHallTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         List<Filmshow> filmshows = filmshowRepository.findAllByHall(filmshow.getHall());
         assertThat(filmshows, is(notNullValue()));
         assertThat(filmshows.size(), greaterThan(0));
@@ -111,7 +111,7 @@ public class MongoFilmshowDaoTest {
 
     @Test
     public void findAllBetweenDatesTest() {
-        Filmshow filmshow = testDataCreator.createTestFilmshow();
+        Filmshow filmshow = testDataRepository.createTestFilmshow();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, -1);
         Date startDate = cal.getTime();

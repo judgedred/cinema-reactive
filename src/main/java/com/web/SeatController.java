@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 @Controller
@@ -55,7 +56,7 @@ public class SeatController {
 
     @RequestMapping("/admin/deleteSeat")
     public ModelAndView deleteSeat(@ModelAttribute Seat seat) throws Exception {
-        if (seat.getSeatId() != null && seat.getSeatId() != 0) {
+        if (seat.getSeatId() != null && !seat.getSeatId().equals(BigInteger.ZERO)) {
             seat = seatService.getSeatById(seat.getSeatId());
             if (seat != null) {
                 seatService.delete(seat);
@@ -75,7 +76,7 @@ public class SeatController {
     public @ResponseBody
     String checkSeat(@PathVariable Integer seatId) throws Exception {
         if (seatId != null) {
-            Seat seat = seatService.getSeatById(seatId);
+            Seat seat = seatService.getSeatById(BigInteger.valueOf(seatId));
             if (seat != null && seatService.checkSeatInTicket(seat)) {
                 return "На место выпущены билеты. Сначала удалите билеты.";
             }

@@ -9,6 +9,7 @@ import com.domain.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -41,7 +42,7 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public Seat getSeatById(int id) throws DaoException {
+    public Seat getSeatById(BigInteger id) throws DaoException {
         return seatDao.getSeatById(id);
     }
 
@@ -55,7 +56,7 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public List<Seat> getSeatFreeByFilmshow(Filmshow filmshow) throws DaoException {
-        return seatDao.getSeatFreeByFilmshow(filmshow);
+    public List<Seat> getSeatFreeByFilmshow(Filmshow filmshow) throws DaoException {        // TODO rewrite using two repositories
+        return seatDao.getSeatFreeByFilmshow(filmshow);                                     // TODO getTicketsByFilmshow and then getSeatsByHallNotInTickestsSeatIDs
     }
 }

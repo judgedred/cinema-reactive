@@ -114,9 +114,9 @@ public class TicketController {
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     public @ResponseBody
-    Map<Integer, String> filterSeats(@PathVariable int filmshowId) throws Exception {
+    Map<BigInteger, String> filterSeats(@PathVariable int filmshowId) throws Exception {
         Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
-        Map<Integer, String> filteredSeatMap = new HashMap<>();
+        Map<BigInteger, String> filteredSeatMap = new HashMap<>();
         if (filmshow != null) {
             filteredSeatList = seatService.getSeatFreeByFilmshow(filmshow);
             for (Seat s : filteredSeatList) {
