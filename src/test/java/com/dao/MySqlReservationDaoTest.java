@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,7 +38,7 @@ public class MySqlReservationDaoTest {
     public void testCreate() throws DaoException {
         Reservation reservation = new Reservation();
         User user = userDao.getUserById(1);
-        Ticket ticket = ticketDao.getTicketById(2);
+        Ticket ticket = ticketDao.getTicketById(BigInteger.valueOf(2));
         reservation.setUser(user);
         reservation.setTicket(ticket);
         User userExpected = reservation.getUser();
@@ -55,7 +56,7 @@ public class MySqlReservationDaoTest {
         Reservation reservation = new Reservation();
         reservation.setReservationId(2);
         User user = userDao.getUserById(2);
-        Ticket ticket = ticketDao.getTicketById(2);
+        Ticket ticket = ticketDao.getTicketById(BigInteger.valueOf(2));
         reservation.setUser(user);
         reservation.setTicket(ticket);
         User userExpected = reservation.getUser();
@@ -94,7 +95,7 @@ public class MySqlReservationDaoTest {
 
     @Test
     public void testGetAllByTicket() throws DaoException {
-        Ticket ticketExpected = ticketDao.getTicketById(7);
+        Ticket ticketExpected = ticketDao.getTicketById(BigInteger.valueOf(7));
         List<Reservation> listTest = reservationDao.getReservationAllByTicket(ticketExpected);
         Assert.assertNotNull(listTest);
         Assert.assertTrue(listTest.size() == 1);

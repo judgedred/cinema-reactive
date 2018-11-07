@@ -4,6 +4,7 @@ import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
 import com.domain.Seat;
+import com.domain.Ticket;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -14,13 +15,15 @@ public class TestDataRepository {
     private final HallRepository hallRepository;
     private final FilmshowRepository filmshowRepository;
     private final SeatRepository seatRepository;
+    private final TicketRepository ticketRepository;
 
     public TestDataRepository(FilmRepository filmRepository, HallRepository hallRepository,
-            FilmshowRepository filmshowRepository, SeatRepository seatRepository) {
+            FilmshowRepository filmshowRepository, SeatRepository seatRepository, TicketRepository ticketRepository) {
         this.filmRepository = filmRepository;
         this.hallRepository = hallRepository;
         this.filmshowRepository = filmshowRepository;
         this.seatRepository = seatRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     Film createFilm(BigInteger filmId, String filmName, String description) {
@@ -79,5 +82,24 @@ public class TestDataRepository {
     void cleanUpSeat(Seat seat) {
         hallRepository.delete(seat.getHall());
         seatRepository.delete(seat);
+    }
+
+    Ticket createTicket(BigInteger id, Float price, Filmshow filmshow, Seat seat) {
+        Ticket ticket = new Ticket();
+        ticket.setTicketId(id);
+        ticket.setPrice(price);
+        ticket.setFilmshow(filmshow);
+        ticket.setSeat(seat);
+        return ticketRepository.save(ticket);
+    }
+
+    Ticket createTestTicket() {
+        return createTicket(BigInteger.valueOf(555), 100F, createTestFilmshow(), createTestSeat());
+    }
+
+    void cleanUpTicket(Ticket ticket) {
+        filmshowRepository.delete(ticket.getFilmshow());
+        seatRepository.delete(ticket.getSeat());
+        ticketRepository.delete(ticket);
     }
 }

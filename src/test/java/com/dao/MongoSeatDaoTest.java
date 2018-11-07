@@ -40,6 +40,7 @@ public class MongoSeatDaoTest {
         assertNotNull(seat);
         assertThat(seat.getRowNumber(), is(rowNumberExpected));
         assertThat(seat.getSeatNumber(), is(seatNumberExpected));
+        testDataRepository.cleanUpSeat(seat);
     }
 
     @Test

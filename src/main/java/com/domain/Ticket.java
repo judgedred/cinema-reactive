@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 
@@ -19,9 +20,10 @@ import java.util.Objects;
 public class Ticket implements Serializable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @Column(name = "ticket_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ticketId;
+    private BigInteger ticketId;
     @Column(name = "price", nullable = false)
     @NotNull
     private Float price;
@@ -34,11 +36,11 @@ public class Ticket implements Serializable {
     @NotNull
     private Seat seat;
 
-    public Integer getTicketId() {
+    public BigInteger getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(Integer ticketId) {
+    public void setTicketId(BigInteger ticketId) {
         this.ticketId = ticketId;
     }
 

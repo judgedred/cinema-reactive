@@ -92,7 +92,7 @@ public class TicketController {
 
     @RequestMapping("/admin/deleteTicket")
     public ModelAndView deleteTicket(@ModelAttribute Ticket ticket) throws Exception {
-        if (ticket.getTicketId() != null && ticket.getTicketId() != 0) {
+        if (ticket.getTicketId() != null && !ticket.getTicketId().equals(BigInteger.ZERO)) {
             ticket = ticketService.getTicketById(ticket.getTicketId());
             if (ticket != null) {
                 ticketService.delete(ticket);
@@ -113,8 +113,8 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
-    public @ResponseBody
-    Map<BigInteger, String> filterSeats(@PathVariable int filmshowId) throws Exception {
+    @ResponseBody
+    public Map<BigInteger, String> filterSeats(@PathVariable int filmshowId) throws Exception {
         Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
         Map<BigInteger, String> filteredSeatMap = new HashMap<>();
         if (filmshow != null) {
@@ -127,10 +127,10 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String checkTicket(@PathVariable Integer ticketId) throws Exception {
+    @ResponseBody
+    public String checkTicket(@PathVariable Integer ticketId) throws Exception {
         if (ticketId != null) {
-            Ticket ticket = ticketService.getTicketById(ticketId);
+            Ticket ticket = ticketService.getTicketById(BigInteger.valueOf(ticketId));
             if (ticket != null && ticketService.checkTicketInReservation(ticket)) {
                 return "Билет зарезервирован. Сначала удалите бронь.";
             }

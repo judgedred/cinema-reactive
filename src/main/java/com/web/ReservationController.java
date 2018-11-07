@@ -99,14 +99,14 @@ public class ReservationController {
     }
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
-    public @ResponseBody
-    Map<Integer, String> filterTickets(@PathVariable Integer filmshowId) throws Exception {
+    @ResponseBody
+    public Map<BigInteger, String> filterTickets(@PathVariable Integer filmshowId) throws Exception {
         if (filmshowId != null) {
             Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
             if (filmshow != null) {
                 List<Ticket> ticketList = ticketService.getTicketFreeByFilmshow(filmshow);
                 if (ticketList != null) {
-                    Map<Integer, String> ticketMap = new HashMap<>();
+                    Map<BigInteger, String> ticketMap = new HashMap<>();
                     for (Ticket t : ticketList) {
                         ticketMap.put(t.getTicketId(), t.toString());
                     }

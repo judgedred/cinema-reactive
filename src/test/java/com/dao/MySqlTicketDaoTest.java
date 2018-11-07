@@ -28,7 +28,7 @@ public class MySqlTicketDaoTest {
 
     @Test
     public void testGetTicketById() throws DaoException {
-        Ticket ticketTest = ticketDao.getTicketById(1);
+        Ticket ticketTest = ticketDao.getTicketById(BigInteger.ONE);
         Assert.assertNotNull(ticketTest);
     }
 
@@ -57,7 +57,7 @@ public class MySqlTicketDaoTest {
     @Test
     public void testUpdate() throws DaoException {
         Ticket ticket = new Ticket();
-        ticket.setTicketId(2);
+        ticket.setTicketId(BigInteger.valueOf(2));
         Filmshow filmshow = filmshowDao.getFilmshowById(BigInteger.valueOf(2));
         Seat seat = seatDao.getSeatById(BigInteger.valueOf(2));
         ticket.setFilmshow(filmshow);
@@ -80,7 +80,7 @@ public class MySqlTicketDaoTest {
 
     @Test
     public void testDelete() throws DaoException {
-        Ticket ticket = ticketDao.getTicketById(6);
+        Ticket ticket = ticketDao.getTicketById(BigInteger.valueOf(6));
         ticketDao.delete(ticket);
         Assert.assertNull(ticketDao.getTicketById(ticket.getTicketId()));
     }
@@ -95,7 +95,7 @@ public class MySqlTicketDaoTest {
     @Test
     public void testGetTicketByFilmshow() throws DaoException {
         Filmshow filmshow = filmshowDao.getFilmshowById(BigInteger.ONE);
-        Ticket ticketExpected = ticketDao.getTicketById(1);
+        Ticket ticketExpected = ticketDao.getTicketById(BigInteger.ONE);
         Ticket ticketResult = ticketDao.getTicketAllByFilmshow(filmshow).get(0);
         Assert.assertNotNull(ticketResult);
         Assert.assertEquals(ticketExpected, ticketResult);
@@ -112,7 +112,7 @@ public class MySqlTicketDaoTest {
     @Test
     public void testGetTicketBySeat() throws DaoException {
         Seat seat = seatDao.getSeatById(BigInteger.valueOf(4));
-        Ticket ticketExpected = ticketDao.getTicketById(7);
+        Ticket ticketExpected = ticketDao.getTicketById(BigInteger.valueOf(7));
         Ticket ticketResult = ticketDao.getTicketAllBySeat(seat).get(0);
         Assert.assertNotNull(ticketResult);
         Assert.assertEquals(ticketExpected, ticketResult);

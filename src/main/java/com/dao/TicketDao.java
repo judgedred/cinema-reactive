@@ -4,6 +4,7 @@ import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface TicketDao {
@@ -16,7 +17,7 @@ public interface TicketDao {
 
     List<Ticket> getTicketAll() throws DaoException;
 
-    Ticket getTicketById(int id) throws DaoException;
+    Ticket getTicketById(BigInteger id) throws DaoException;
 
     List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) throws DaoException;
 

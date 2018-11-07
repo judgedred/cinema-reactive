@@ -9,6 +9,7 @@ import com.domain.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -41,7 +42,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket getTicketById(int id) throws DaoException {
+    public Ticket getTicketById(BigInteger id) throws DaoException {
         return ticketDao.getTicketById(id);
     }
 
@@ -60,7 +61,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException {
+    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException {        // TODO
         return ticketDao.getTicketFreeByFilmshow(filmshow);
     }
 }
