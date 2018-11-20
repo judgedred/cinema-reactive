@@ -1,6 +1,5 @@
 package com.service;
 
-import com.dao.DaoException;
 import com.domain.Hall;
 
 import java.math.BigInteger;
@@ -9,15 +8,15 @@ import java.util.Optional;
 
 public interface HallService {
 
-    Hall save(Hall hall) throws DaoException;
+    Hall save(Hall hall);
 
-    void delete(Hall hall) throws DaoException;
+    void delete(Hall hall);
 
-    List<Hall> getHallAll() throws DaoException;
+    List<Hall> getHallAll();
 
-    Optional<Hall> getHallById(BigInteger id) throws DaoException;
+    Optional<Hall> getHallById(BigInteger id);
 
-    boolean checkHallInFilmshow(Hall hall) throws DaoException;
+    boolean checkHallInFilmshow(Hall hall);
 
-    boolean checkHallInSeat(Hall hall) throws DaoException;
+    boolean checkHallInSeat(Hall hall);
 }

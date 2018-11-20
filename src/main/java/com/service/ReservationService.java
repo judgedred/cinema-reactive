@@ -1,7 +1,7 @@
 package com.service;
 
-import com.dao.DaoException;
 import com.domain.Reservation;
+import com.domain.Ticket;
 import com.domain.User;
 
 import java.math.BigInteger;
@@ -10,13 +10,15 @@ import java.util.Optional;
 
 public interface ReservationService {
 
-    Reservation create(Reservation reservation) throws DaoException;
+    Reservation create(Reservation reservation);
 
-    void delete(Reservation reservation) throws DaoException;
+    void delete(Reservation reservation);
 
-    List<Reservation> getReservationAll() throws DaoException;
+    List<Reservation> getReservationAll();
 
-    Optional<Reservation> getReservationById(BigInteger id) throws DaoException;
+    Optional<Reservation> getReservationById(BigInteger id);
 
-    List<Reservation> getReservationAllByUser(User user) throws DaoException;
+    List<Reservation> getReservationAllByUser(User user);
+
+    List<Reservation> getReservationAllByTicket(Ticket ticket);
 }

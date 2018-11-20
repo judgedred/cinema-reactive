@@ -2,6 +2,7 @@ package com.service;
 
 import com.dao.ReservationRepository;
 import com.domain.Reservation;
+import com.domain.Ticket;
 import com.domain.User;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,11 @@ public class DefaultReservationService implements ReservationService {
     @Override
     public List<Reservation> getReservationAllByUser(User user) {
         return reservationRepository.findAllByUser(user);
+    }
+
+    @Override
+    public List<Reservation> getReservationAllByTicket(Ticket ticket) {
+        return reservationRepository.findAllByTicket(ticket);
     }
 
 }

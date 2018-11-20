@@ -92,10 +92,7 @@ public class TicketController {
     @RequestMapping("/admin/deleteTicket")
     public ModelAndView deleteTicket(@ModelAttribute Ticket ticket) {
         if (ticket.getTicketId() != null && !ticket.getTicketId().equals(BigInteger.ZERO)) {
-            ticket = ticketService.getTicketById(ticket.getTicketId());
-            if (ticket != null) {
-                ticketService.delete(ticket);
-            }
+            ticketService.getTicketById(ticket.getTicketId()).ifPresent(ticketService::delete);
         }
         List<Ticket> ticketList = ticketService.getTicketAll();
         return new ModelAndView("deleteTicket", "ticketList", ticketList);
@@ -130,13 +127,12 @@ public class TicketController {
     @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
     public String checkTicket(@PathVariable Integer ticketId) {
-        if (ticketId != null) {
-            Ticket ticket = ticketService.getTicketById(BigInteger.valueOf(ticketId));
-            if (ticket != null && ticketService.checkTicketInReservation(ticket)) {
-                return "Билет зарезервирован. Сначала удалите бронь.";
-            }
-        }
-        return null;
+        return Optional.ofNullable(ticketId)
+                .map(BigInteger::valueOf)
+                .flatMap(ticketService::getTicketById)
+                .filter(ticketService::checkTicketInReservation)
+                .map(ticket -> "Билет зарезервирован. Сначала удалите бронь.")
+                .orElse(null);
     }
 
     @InitBinder

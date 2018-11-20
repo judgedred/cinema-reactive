@@ -1,31 +1,29 @@
 package com.service;
 
-import com.dao.DaoException;
 import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 public interface TicketService {
 
-    Ticket create(Ticket ticket) throws DaoException;
+    Ticket create(Ticket ticket);
 
-    void update(Ticket ticket) throws DaoException;
+    void delete(Ticket ticket);
 
-    void delete(Ticket ticket) throws DaoException;
+    List<Ticket> getTicketAll();
 
-    List<Ticket> getTicketAll() throws DaoException;
+    Optional<Ticket> getTicketById(BigInteger id);
 
-    Ticket getTicketById(BigInteger id) throws DaoException;
+    List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow);
 
-    List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) throws DaoException;
-
-    List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) throws DaoException;
+    List<Ticket> getTicketAllByFilmshow(Filmshow filmshow);
 
     List<Ticket> getTicketAllBySeat(Seat seat);
 
-    boolean checkTicketInReservation(Ticket ticket) throws DaoException;
+    boolean checkTicketInReservation(Ticket ticket);
 
 }
