@@ -79,10 +79,7 @@ public class ReservationController {
     @RequestMapping("/admin/deleteReservation")
     public ModelAndView deleteReservation(@ModelAttribute Reservation reservation) {
         if (reservation.getReservationId() != null && !reservation.getReservationId().equals(BigInteger.ZERO)) {
-            reservation = reservationService.getReservationById(reservation.getReservationId());
-            if (reservation != null) {
-                reservationService.delete(reservation);
-            }
+            reservationService.getReservationById(reservation.getReservationId()).ifPresent(reservationService::delete);
         }
         List<Reservation> reservationList = reservationService.getReservationAll();
         return new ModelAndView("deleteReservation", "reservationList", reservationList);
