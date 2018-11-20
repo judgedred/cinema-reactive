@@ -2,7 +2,6 @@ package com.web;
 
 import com.domain.User;
 import com.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,16 +18,19 @@ import java.util.Optional;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("/admin/addUserForm")
-    public ModelAndView addUserForm() throws Exception {
+    public ModelAndView addUserForm() {
         return new ModelAndView("addUser", "user", new User());
     }
 
     @RequestMapping("/admin/addUser")
-    public ModelAndView addUser(@Valid User user, BindingResult result) throws Exception {
+    public ModelAndView addUser(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return new ModelAndView("addUser", "user", user);
         }
@@ -46,14 +48,14 @@ public class UserController {
     }
 
     @RequestMapping("/admin/userList")
-    public ModelAndView listUsers() throws Exception {
+    public ModelAndView listUsers() {
         List<User> userList = userService.getUserAll();
         return new ModelAndView("userList", "userList", userList);
     }
 
     @RequestMapping(value = "/admin/checkUser/{userId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String checkUser(@PathVariable Integer userId) {
+    @ResponseBody
+    public String checkUser(@PathVariable Integer userId) {
         return Optional
                 .ofNullable(userId)
                 .map(BigInteger::valueOf)

@@ -2,8 +2,6 @@ package com.web;
 
 import com.domain.Film;
 import com.service.FilmService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,16 +13,16 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class FilmController {
 
-    @Autowired
-    @Qualifier("filmServiceImpl")
-    private FilmService filmService;
+    private final FilmService filmService;
 
-    @Autowired
-    private FilmService defaultFilmService;
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @RequestMapping("/admin/addFilmForm")
     public ModelAndView addFilmForm() {
@@ -32,42 +30,37 @@ public class FilmController {
     }
 
     @RequestMapping("/admin/addFilm")
-    public ModelAndView addFilm(@Valid Film film, BindingResult result) throws Exception {
+    public ModelAndView addFilm(@Valid Film film, BindingResult result) {
         if (result.hasErrors()) {
             return new ModelAndView("addFilm", "film", film);
         }
         filmService.create(film);
-        defaultFilmService.create(film);
         return new ModelAndView("addFilm", "film", new Film());
     }
 
     @RequestMapping("/admin/deleteFilm")
-    public ModelAndView deleteFilm(@ModelAttribute Film film) throws Exception {
+    public ModelAndView deleteFilm(@ModelAttribute Film film) {
         if (film.getFilmId() != null && !film.getFilmId().equals(BigInteger.ZERO)) {
-            film = filmService.getFilmById(film.getFilmId());
-            if (film != null) {
-                filmService.delete(film);
-            }
+            filmService.getFilmById(film.getFilmId()).ifPresent(filmService::delete);
         }
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("deleteFilm", "filmList", filmList);
     }
 
     @RequestMapping("/admin/filmList")
-    public ModelAndView listFilms() throws Exception {
+    public ModelAndView listFilms() {
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("filmList", "filmList", filmList);
     }
 
     @RequestMapping(value = "/admin/checkFilm/{filmId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String checkFilm(@PathVariable Integer filmId) throws Exception {
-        if (filmId != null) {
-            Film film = filmService.getFilmById(BigInteger.valueOf(filmId));
-            if (film != null && filmService.checkFilmInFilmshow(film)) {
-                return "На фильм созданы сеансы. Сначала удалите сеансы.";
-            }
-        }
-        return null;
+    @ResponseBody
+    public String checkFilm(@PathVariable Integer filmId) {
+        return Optional.ofNullable(filmId)
+                .map(BigInteger::valueOf)
+                .flatMap(filmService::getFilmById)
+                .filter(filmService::checkFilmInFilmshow)
+                .map(film -> "На фильм созданы сеансы. Сначала удалите сеансы.")
+                .orElse(null);
     }
 }

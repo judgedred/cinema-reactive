@@ -48,7 +48,7 @@ public class MainController {
     @Autowired
     private FilmshowService filmshowService;
 
-    @Qualifier("filmServiceImpl")
+    @Qualifier("defaultFilmService")
     @Autowired
     private FilmService filmService;
 

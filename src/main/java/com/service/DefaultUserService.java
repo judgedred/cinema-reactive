@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
 
-    public UserServiceImpl(UserRepository userRepository, ReservationRepository reservationRepository) {
+    public DefaultUserService(UserRepository userRepository, ReservationRepository reservationRepository) {
         this.userRepository = userRepository;
         this.reservationRepository = reservationRepository;
     }

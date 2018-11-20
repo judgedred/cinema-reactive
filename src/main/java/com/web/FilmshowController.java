@@ -35,7 +35,7 @@ public class FilmshowController {
     @Autowired
     private HallService hallService;
 
-    @Qualifier("filmServiceImpl")
+    @Qualifier("defaultFilmService")
     @Autowired
     private FilmService filmService;
 
