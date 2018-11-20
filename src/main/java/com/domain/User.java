@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -18,9 +19,10 @@ import java.util.Objects;
 public class User implements Serializable {
 
     @Id
+    @org.springframework.data.annotation.Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private BigInteger userId;
     @Column(name = "login", nullable = false)
     @NotNull
     @NotEmpty
@@ -35,11 +37,11 @@ public class User implements Serializable {
     @Email
     private String email;
 
-    public Integer getUserId() {
+    public BigInteger getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(BigInteger userId) {
         this.userId = userId;
     }
 

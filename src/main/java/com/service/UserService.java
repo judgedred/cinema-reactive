@@ -4,6 +4,7 @@ import com.dao.DaoException;
 import com.domain.User;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface UserService {
 
     List<User> getUserAll() throws DaoException;
 
-    User getUserById(Integer id) throws DaoException;
+    User getUserById(BigInteger id) throws DaoException;
 
     boolean checkUserInReservation(User user) throws DaoException;
 

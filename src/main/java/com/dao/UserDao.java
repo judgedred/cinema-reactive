@@ -2,6 +2,7 @@ package com.dao;
 
 import com.domain.User;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface UserDao {
@@ -14,7 +15,7 @@ public interface UserDao {
 
     List<User> getUserAll() throws DaoException;
 
-    User getUserById(Integer id) throws DaoException;
+    User getUserById(BigInteger id) throws DaoException;
 
     User getUserByUser(User user) throws DaoException;
 

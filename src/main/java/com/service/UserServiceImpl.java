@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Integer id) throws DaoException {
+    public User getUserById(BigInteger id) throws DaoException {
         return userDao.getUserById(id);
     }
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -102,7 +103,7 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public User getUserById(Integer id) throws DaoException {
+    public User getUserById(BigInteger id) throws DaoException {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();

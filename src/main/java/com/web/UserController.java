@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 @Controller
@@ -36,7 +37,7 @@ public class UserController {
 
     @RequestMapping("/admin/deleteUser")
     public ModelAndView deleteUser(@ModelAttribute User user) throws Exception {
-        if (user.getUserId() != null && user.getUserId() != 0) {
+        if (user.getUserId() != null && !user.getUserId().equals(BigInteger.ZERO)) {
             user = userService.getUserById(user.getUserId());
             if (user != null) {
                 userService.delete(user);
@@ -56,7 +57,7 @@ public class UserController {
     public @ResponseBody
     String checkUser(@PathVariable Integer userId) throws Exception {
         if (userId != null) {
-            User user = userService.getUserById(userId);
+            User user = userService.getUserById(BigInteger.valueOf(userId));
             if (user != null && userService.checkUserInReservation(user)) {
                 return "У пользователя есть брони. Сначала удалите бронь.";
             }

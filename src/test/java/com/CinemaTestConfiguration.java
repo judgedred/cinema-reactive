@@ -6,6 +6,7 @@ import com.dao.HallRepository;
 import com.dao.SeatRepository;
 import com.dao.TestDataRepository;
 import com.dao.TicketRepository;
+import com.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,10 +31,13 @@ public class CinemaTestConfiguration {
     @Autowired
     private TicketRepository ticketRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Bean
     public TestDataRepository testDataCreator() {
         return new TestDataRepository(filmRepository, hallRepository, filmshowRepository, seatRepository,
-                ticketRepository);
+                ticketRepository, userRepository);
     }
 
 }

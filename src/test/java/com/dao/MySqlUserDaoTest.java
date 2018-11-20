@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -24,7 +25,7 @@ public class MySqlUserDaoTest {
 
     @Test
     public void testGetUserById() throws DaoException {
-        User userTest = userDao.getUserById(1);
+        User userTest = userDao.getUserById(BigInteger.ONE);
         Assert.assertNotNull(userTest);
     }
 
@@ -55,7 +56,7 @@ public class MySqlUserDaoTest {
     @Test
     public void testUpdate() throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException {
         User user = new User();
-        user.setUserId(3);
+        user.setUserId(BigInteger.valueOf(3));
         user.setLogin("testUpdatePassed");
         String password = "testUpdatePassed";
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -80,7 +81,7 @@ public class MySqlUserDaoTest {
 
     @Test
     public void testDelete() throws DaoException {
-        User user = userDao.getUserById(4);
+        User user = userDao.getUserById(BigInteger.valueOf(4));
         userDao.delete(user);
         Assert.assertNull(userDao.getUserById(user.getUserId()));
     }
@@ -94,7 +95,7 @@ public class MySqlUserDaoTest {
 
     @Test
     public void testGetUserByUser() throws DaoException {
-        User userExpected = userDao.getUserById(1);
+        User userExpected = userDao.getUserById(BigInteger.ONE);
         User userResult = userDao.getUserByUser(userExpected);
         Assert.assertNotNull(userResult);
         Assert.assertEquals(userExpected, userResult);
@@ -102,7 +103,7 @@ public class MySqlUserDaoTest {
 
     @Test
     public void testGetUserByLogin() throws DaoException {
-        User userExpected = userDao.getUserById(1);
+        User userExpected = userDao.getUserById(BigInteger.ONE);
         List<User> testList = userDao.getUserByLogin(userExpected.getLogin());
         Assert.assertNotNull(testList);
         Assert.assertTrue(testList.size() == 1);
@@ -111,7 +112,7 @@ public class MySqlUserDaoTest {
 
     @Test
     public void testGetUserByEmail() throws DaoException {
-        User userExpected = userDao.getUserById(1);
+        User userExpected = userDao.getUserById(BigInteger.ONE);
         List<User> testList = userDao.getUserByEmail(userExpected.getEmail());
         Assert.assertNotNull(testList);
         Assert.assertTrue(testList.size() == 1);

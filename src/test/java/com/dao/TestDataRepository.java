@@ -5,6 +5,7 @@ import com.domain.Filmshow;
 import com.domain.Hall;
 import com.domain.Seat;
 import com.domain.Ticket;
+import com.domain.User;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -16,14 +17,17 @@ public class TestDataRepository {
     private final FilmshowRepository filmshowRepository;
     private final SeatRepository seatRepository;
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
 
     public TestDataRepository(FilmRepository filmRepository, HallRepository hallRepository,
-            FilmshowRepository filmshowRepository, SeatRepository seatRepository, TicketRepository ticketRepository) {
+            FilmshowRepository filmshowRepository, SeatRepository seatRepository, TicketRepository ticketRepository,
+            UserRepository userRepository) {
         this.filmRepository = filmRepository;
         this.hallRepository = hallRepository;
         this.filmshowRepository = filmshowRepository;
         this.seatRepository = seatRepository;
         this.ticketRepository = ticketRepository;
+        this.userRepository = userRepository;
     }
 
     Film createFilm(BigInteger filmId, String filmName, String description) {
@@ -102,4 +106,17 @@ public class TestDataRepository {
         seatRepository.delete(ticket.getSeat());
         ticketRepository.delete(ticket);
     }
+
+    User createUser(String login, String password, String email) {
+        User user = new User();
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setEmail(email);
+        return userRepository.save(user);
+    }
+
+    User createTestUser() {
+        return createUser("test", "test", "test@domain.com");
+    }
+
 }
