@@ -1,6 +1,5 @@
 package com.service;
 
-import com.dao.ReservationRepository;
 import com.dao.UserRepository;
 import com.domain.User;
 import org.springframework.stereotype.Service;
@@ -14,11 +13,11 @@ import java.util.Optional;
 public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
-    private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
-    public DefaultUserService(UserRepository userRepository, ReservationRepository reservationRepository) {
+    public DefaultUserService(UserRepository userRepository, ReservationService reservationService) {
         this.userRepository = userRepository;
-        this.reservationRepository = reservationRepository;
+        this.reservationService = reservationService;
     }
 
     @Override
@@ -44,7 +43,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     public boolean checkUserInReservation(User user) {
-        return !reservationRepository.findAllByUser(user).isEmpty();
+        return !reservationService.getReservationAllByUser(user).isEmpty();
     }
 
     @Override

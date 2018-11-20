@@ -1,25 +1,26 @@
 package com.service;
 
-import com.dao.DaoException;
 import com.domain.Filmshow;
+import com.domain.Hall;
 import com.domain.Seat;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 public interface SeatService {
 
-    Seat create(Seat seat) throws DaoException;
+    Seat create(Seat seat);
 
-    void update(Seat seat) throws DaoException;
+    void delete(Seat seat);
 
-    void delete(Seat seat) throws DaoException;
+    List<Seat> getSeatAll();
 
-    List<Seat> getSeatAll() throws DaoException;
+    Optional<Seat> getSeatById(BigInteger id);
 
-    Seat getSeatById(BigInteger id) throws DaoException;
+    boolean checkSeatInTicket(Seat seat);
 
-    boolean checkSeatInTicket(Seat seat) throws DaoException;
+    List<Seat> getSeatFreeByFilmshow(Filmshow filmshow);
 
-    List<Seat> getSeatFreeByFilmshow(Filmshow filmshow) throws DaoException;
+    List<Seat> getSeatAllByHall(Hall hall);
 }

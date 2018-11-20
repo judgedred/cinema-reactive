@@ -1,7 +1,6 @@
 package com.service;
 
 import com.dao.FilmRepository;
-import com.dao.FilmshowRepository;
 import com.domain.Film;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,11 @@ import java.util.Optional;
 public class DefaultFilmService implements FilmService {
 
     private final FilmRepository filmRepository;
-    private final FilmshowRepository filmshowRepository;
+    private final FilmshowService filmshowService;
 
-    public DefaultFilmService(FilmRepository filmRepository, FilmshowRepository filmshowRepository) {
+    public DefaultFilmService(FilmRepository filmRepository, FilmshowService filmshowService) {
         this.filmRepository = filmRepository;
-        this.filmshowRepository = filmshowRepository;
+        this.filmshowService = filmshowService;
     }
 
     @Override
@@ -42,6 +41,6 @@ public class DefaultFilmService implements FilmService {
 
     @Override
     public boolean checkFilmInFilmshow(Film film) {
-        return !filmshowRepository.findAllByFilm(film).isEmpty();
+        return !filmshowService.getFilmshowByFilm(film).isEmpty();
     }
 }

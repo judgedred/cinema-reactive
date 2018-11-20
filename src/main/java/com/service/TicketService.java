@@ -2,6 +2,7 @@ package com.service;
 
 import com.dao.DaoException;
 import com.domain.Filmshow;
+import com.domain.Seat;
 import com.domain.Ticket;
 
 import java.math.BigInteger;
@@ -23,5 +24,8 @@ public interface TicketService {
 
     List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) throws DaoException;
 
+    List<Ticket> getTicketAllBySeat(Seat seat);
+
     boolean checkTicketInReservation(Ticket ticket) throws DaoException;
+
 }

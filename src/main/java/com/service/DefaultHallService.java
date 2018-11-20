@@ -1,8 +1,6 @@
 package com.service;
 
-import com.dao.FilmshowRepository;
 import com.dao.HallRepository;
-import com.dao.SeatRepository;
 import com.domain.Hall;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +12,13 @@ import java.util.Optional;
 public class DefaultHallService implements HallService {
 
     private final HallRepository hallRepository;
-    private final FilmshowRepository filmshowRepository;
-    private final SeatRepository seatRepository;
+    private final FilmshowService filmshowService;
+    private final SeatService seatService;
 
-    public DefaultHallService(HallRepository hallRepository, FilmshowRepository filmshowRepository,
-            SeatRepository seatRepository) {
+    public DefaultHallService(HallRepository hallRepository, FilmshowService filmshowService, SeatService seatService) {
         this.hallRepository = hallRepository;
-        this.filmshowRepository = filmshowRepository;
-        this.seatRepository = seatRepository;
+        this.filmshowService = filmshowService;
+        this.seatService = seatService;
     }
 
     @Override
@@ -46,11 +43,11 @@ public class DefaultHallService implements HallService {
 
     @Override
     public boolean checkHallInFilmshow(Hall hall) {
-        return !filmshowRepository.findAllByHall(hall).isEmpty();
+        return !filmshowService.getFilmshowByHall(hall).isEmpty();
     }
 
     @Override
     public boolean checkHallInSeat(Hall hall) {
-        return !seatRepository.findAllByHall(hall).isEmpty();
+        return !seatService.getSeatAllByHall(hall).isEmpty();
     }
 }

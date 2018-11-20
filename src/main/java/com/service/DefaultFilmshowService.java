@@ -1,8 +1,9 @@
 package com.service;
 
 import com.dao.FilmshowRepository;
-import com.dao.TicketRepository;
+import com.domain.Film;
 import com.domain.Filmshow;
+import com.domain.Hall;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -15,11 +16,11 @@ import java.util.Optional;
 public class DefaultFilmshowService implements FilmshowService {
 
     private final FilmshowRepository filmshowRepository;
-    private final TicketRepository ticketRepository;
+    private final TicketService ticketService;
 
-    public DefaultFilmshowService(FilmshowRepository filmshowRepository, TicketRepository ticketRepository) {
+    public DefaultFilmshowService(FilmshowRepository filmshowRepository, TicketService ticketService) {
         this.filmshowRepository = filmshowRepository;
-        this.ticketRepository = ticketRepository;
+        this.ticketService = ticketService;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class DefaultFilmshowService implements FilmshowService {
 
     @Override
     public boolean checkFilmshowInTicket(Filmshow filmshow) {
-        return !ticketRepository.findAllByFilmshow(filmshow).isEmpty();
+        return !ticketService.getTicketAllByFilmshow(filmshow).isEmpty();
     }
 
     @Override
@@ -66,6 +67,16 @@ public class DefaultFilmshowService implements FilmshowService {
         cal.add(Calendar.DATE, 7);
         Date endDate = cal.getTime();
         return filmshowRepository.findByDateTimeBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<Filmshow> getFilmshowByFilm(Film film) {
+        return filmshowRepository.findAllByFilm(film);
+    }
+
+    @Override
+    public List<Filmshow> getFilmshowByHall(Hall hall) {
+        return filmshowRepository.findAllByHall(hall);
     }
 
 }
