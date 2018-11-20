@@ -1,117 +1,83 @@
 package com.service;
 
-import com.dao.DaoException;
-import com.dao.ReservationDao;
-import com.dao.UserDao;
-import com.domain.Reservation;
+import com.dao.ReservationRepository;
+import com.dao.UserRepository;
 import com.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
-    @Autowired
-    private ReservationDao reservationDao;
-
-    @Override
-    public User create(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        digest.reset();
-        byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
-        String passwordHash = DatatypeConverter.printHexBinary(hash);
-        user.setPassword(passwordHash);
-        return userDao.create(user);
+    public UserServiceImpl(UserRepository userRepository, ReservationRepository reservationRepository) {
+        this.userRepository = userRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
-    public void update(User user) throws DaoException {
-        userDao.update(user);
+    public User create(User user) {
+        user.setPassword(HashGenerator.invoke(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
-    public void delete(User user) throws DaoException {
-        userDao.delete(user);
+    public void update(User user) {
+        userRepository.save(user);
     }
 
     @Override
-    public List<User> getUserAll() throws DaoException {
-        return userDao.getUserAll();
+    public void delete(User user) {
+        userRepository.delete(user);
     }
 
     @Override
-    public User getUserById(BigInteger id) throws DaoException {
-        return userDao.getUserById(id);
+    public List<User> getUserAll() {
+        return userRepository.findAll();
     }
 
     @Override
-    public boolean checkUserInReservation(User user) throws DaoException {
-        List<Reservation> reservationList = reservationDao.getReservationAllByUser(user);
-        if (reservationList != null) {
-            return true;
-        }
-        return false;
+    public Optional<User> getUserById(BigInteger id) {
+        return userRepository.findById(id);
     }
 
     @Override
-    public User authenticateAdmin(User user)
-            throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        if (user.getLogin().equals("admin")) {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
-            String passwordHash = DatatypeConverter.printHexBinary(hash);
-            user.setPassword(passwordHash);
-            User adminUser = userDao.getUserByUser(user);
-            if (adminUser != null) {
-                return adminUser;
-            }
-        }
-        return null;
+    public boolean checkUserInReservation(User user) {
+        return !reservationRepository.findAllByUser(user).isEmpty();
     }
 
     @Override
-    public User authenticateUser(User user)
-            throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        digest.reset();
-        byte[] hash = digest.digest(user.getPassword().getBytes("UTF-8"));
-        String passwordHash = DatatypeConverter.printHexBinary(hash);
-        user.setPassword(passwordHash);
-        User validUser = userDao.getUserByUser(user);
-        if (validUser != null) {
-            return validUser;
-        }
-        return null;
+    public User authenticateAdmin(User user) {
+        return Optional.of(user.getLogin())
+                .filter(login -> login.equals("admin"))
+                .map(userRepository::findAllByLogin)
+                .flatMap(users -> users.stream()
+                        .findFirst()
+                        .filter(adminUser -> adminUser.getPassword().equals(HashGenerator.invoke(user.getPassword()))))
+                .orElse(null);
     }
 
     @Override
-    public boolean checkLogin(String login) throws DaoException {
-        List<User> userList = userDao.getUserByLogin(login);
-        if (userList != null) {
-            return true;
-        } else {
-            return false;
-        }
+    public User authenticateUser(User user) {
+        return userRepository.findAllByLogin(user.getLogin())
+                .stream()
+                .findFirst()
+                .filter(foundUser -> foundUser.getPassword().equals(HashGenerator.invoke(user.getPassword())))
+                .orElse(null);
     }
 
     @Override
-    public boolean checkEmail(String email) throws DaoException {
-        List<User> userList = userDao.getUserByEmail(email);
-        if (userList != null) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean checkLogin(String login) {
+        return !userRepository.findAllByLogin(login).isEmpty();
+    }
+
+    @Override
+    public boolean checkEmail(String email) {
+        return !userRepository.findAllByEmail(email).isEmpty();
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -36,12 +37,9 @@ public class UserController {
     }
 
     @RequestMapping("/admin/deleteUser")
-    public ModelAndView deleteUser(@ModelAttribute User user) throws Exception {
+    public ModelAndView deleteUser(@ModelAttribute User user) {
         if (user.getUserId() != null && !user.getUserId().equals(BigInteger.ZERO)) {
-            user = userService.getUserById(user.getUserId());
-            if (user != null) {
-                userService.delete(user);
-            }
+            userService.getUserById(user.getUserId()).ifPresent(userService::delete);
         }
         List<User> userList = userService.getUserAll();
         return new ModelAndView("deleteUser", "userList", userList);
@@ -55,13 +53,13 @@ public class UserController {
 
     @RequestMapping(value = "/admin/checkUser/{userId}", produces = "text/html; charset=UTF-8")
     public @ResponseBody
-    String checkUser(@PathVariable Integer userId) throws Exception {
-        if (userId != null) {
-            User user = userService.getUserById(BigInteger.valueOf(userId));
-            if (user != null && userService.checkUserInReservation(user)) {
-                return "У пользователя есть брони. Сначала удалите бронь.";
-            }
-        }
-        return null;
+    String checkUser(@PathVariable Integer userId) {
+        return Optional
+                .ofNullable(userId)
+                .map(BigInteger::valueOf)
+                .flatMap(userService::getUserById)
+                .filter(userService::checkUserInReservation)
+                .map(user -> "У пользователя есть брони. Сначала удалите бронь.")
+                .orElse(null);
     }
 }

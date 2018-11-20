@@ -1,33 +1,30 @@
 package com.service;
 
-import com.dao.DaoException;
 import com.domain.User;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    User create(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+    User create(User user);
 
-    void update(User user) throws DaoException;
+    void update(User user);
 
-    void delete(User user) throws DaoException;
+    void delete(User user);
 
-    List<User> getUserAll() throws DaoException;
+    List<User> getUserAll();
 
-    User getUserById(BigInteger id) throws DaoException;
+    Optional<User> getUserById(BigInteger id);
 
-    boolean checkUserInReservation(User user) throws DaoException;
+    boolean checkUserInReservation(User user);
 
-    User authenticateAdmin(User user)
-            throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+    User authenticateAdmin(User user);
 
-    User authenticateUser(User user) throws DaoException, NoSuchAlgorithmException, UnsupportedEncodingException;
+    User authenticateUser(User user);
 
-    boolean checkLogin(String login) throws DaoException;
+    boolean checkLogin(String login);
 
-    boolean checkEmail(String email) throws DaoException;
+    boolean checkEmail(String email);
 }
