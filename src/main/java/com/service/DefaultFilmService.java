@@ -21,13 +21,8 @@ public class DefaultFilmService implements FilmService {
     }
 
     @Override
-    public Film create(Film film) {
+    public Film save(Film film) {
         return filmRepository.save(film);
-    }
-
-    @Override
-    public void update(Film film) {
-        filmRepository.save(film);
     }
 
     @Override

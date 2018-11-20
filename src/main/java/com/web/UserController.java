@@ -34,7 +34,7 @@ public class UserController {
         if (result.hasErrors()) {
             return new ModelAndView("addUser", "user", user);
         }
-        userService.create(user);
+        userService.save(user);
         return new ModelAndView("addUser", "user", new User());
     }
 

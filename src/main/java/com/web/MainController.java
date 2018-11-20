@@ -11,8 +11,6 @@ import com.service.ReservationService;
 import com.service.TicketService;
 import com.service.UserService;
 import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -31,29 +29,29 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final ReservationService reservationService;
+    private final TicketService ticketService;
+    private final FilmshowService filmshowService;
+    private final FilmService filmService;
+    private final TicketEditor ticketEditor;
 
-    @Autowired
-    private ReservationService reservationService;
-
-    @Autowired
-    private TicketService ticketService;
-
-    @Autowired
-    private FilmshowService filmshowService;
-
-    @Qualifier("defaultFilmService")
-    @Autowired
-    private FilmService filmService;
-
-    @Autowired
-    private TicketEditor ticketEditor;
+    public MainController(UserService userService, ReservationService reservationService, TicketService ticketService,
+            FilmshowService filmshowService, FilmService filmService, TicketEditor ticketEditor) {
+        this.userService = userService;
+        this.reservationService = reservationService;
+        this.ticketService = ticketService;
+        this.filmshowService = filmshowService;
+        this.filmService = filmService;
+        this.ticketEditor = ticketEditor;
+    }
 
     @RequestMapping("/admin")
     public ModelAndView adminView() {
@@ -61,7 +59,7 @@ public class MainController {
     }
 
     @RequestMapping("/admin/login")
-    public ModelAndView adminLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception {
+    public ModelAndView adminLogin(@ModelAttribute User user, HttpServletRequest request) {
         if (user.getLogin() != null && user.getPassword() != null && !user.getLogin().isEmpty() && !user
                 .getPassword()
                 .isEmpty()) {
@@ -82,26 +80,25 @@ public class MainController {
 
     @RequestMapping("/reserveTicket")
     public ModelAndView reserveTicket(@ModelAttribute Reservation reservation, HttpServletRequest request,
-            @RequestParam(required = false) Integer filmshowId) throws Exception {
+            @RequestParam(required = false) Integer filmshowId) {
         ModelAndView mav = new ModelAndView("reserveTicket");
         User user = (User) request.getSession().getAttribute("validUser");
-        if (reservation.getTicket() != null) {
-            reservation.setUser(user);
-            reservationService.create(reservation);
-        }
-        if (filmshowId != null) {
-            Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
-            if (filmshow != null) {
-                List<Ticket> ticketList = ticketService.getTicketFreeByFilmshow(filmshow);
-                mav.addObject("filteredTicketList", ticketList);
-                mav.addObject("filmshow", filmshow);
-            }
-        }
+        Optional.of(reservation)
+                .filter(r -> r.getTicket() != null)
+                .map(r -> r.setUser(user))
+                .ifPresent(reservationService::create);
+        Optional.ofNullable(filmshowId)
+                .map(BigInteger::valueOf)
+                .flatMap(filmshowService::getFilmshowById)
+                .ifPresent(filmshow -> {
+                    mav.addObject("filteredTicketList", ticketService.getTicketFreeByFilmshow(filmshow));
+                    mav.addObject("filmshow", filmshow);
+                });
         return mav;
     }
 
     @RequestMapping("/reservationList")
-    public ModelAndView listUserReservations(HttpServletRequest request) throws Exception {
+    public ModelAndView listUserReservations(HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("userReservationList");
         User user = (User) request.getSession().getAttribute("validUser");
         if (user != null) {
@@ -112,8 +109,8 @@ public class MainController {
     }
 
     @RequestMapping(value = "/authCheck", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String authCheck(HttpServletRequest request) {
+    @ResponseBody
+    public String authCheck(HttpServletRequest request) {
         User validUser = (User) request.getSession().getAttribute("validUser");
         if (validUser == null) {
             return "Войдите в систему";
@@ -123,11 +120,12 @@ public class MainController {
     }
 
     @RequestMapping(value = "/loginCheck", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String checkLogin(@RequestBody User user, HttpServletRequest request) throws Exception {
-        if (user.getLogin() != null && user.getPassword() != null && !user.getLogin().isEmpty() && !user
-                .getPassword()
-                .isEmpty()) {
+    @ResponseBody
+    public String checkLogin(@RequestBody User user, HttpServletRequest request) {
+        if (user.getLogin() != null
+                && user.getPassword() != null
+                && !user.getLogin().isEmpty()
+                && !user.getPassword().isEmpty()) {
             User validUser = userService.authenticateUser(user);
             if (validUser != null) {
                 request.getSession().setAttribute("validUser", validUser);
@@ -148,7 +146,7 @@ public class MainController {
     }
 
     @RequestMapping("/main")
-    public ModelAndView navigateMain() throws Exception {
+    public ModelAndView navigateMain() {
         List<Filmshow> filmshowList = filmshowService.getFilmshowToday();
         return new ModelAndView("main", "filmshowToday", filmshowList);
     }
@@ -159,11 +157,11 @@ public class MainController {
     }
 
     @RequestMapping("/register")
-    public ModelAndView registerUser(@Valid User user, BindingResult result) throws Exception {
+    public ModelAndView registerUser(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return new ModelAndView("register", "user", user);
         }
-        userService.create(user);
+        userService.save(user);
         ModelAndView mav = new ModelAndView("register");
         mav.addObject("registered", "Вы зарегистрированы");
         mav.addObject("user", new User());
@@ -171,9 +169,8 @@ public class MainController {
     }
 
     @RequestMapping(value = "/registerCheck", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email)
-            throws Exception {
+    @ResponseBody
+    public String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) {
         if (login != null && !login.isEmpty()) {
             if (!userService.checkLogin(login)) {
                 return "Логин свободен";
@@ -190,18 +187,20 @@ public class MainController {
     }
 
     @RequestMapping("filmshow")
-    public ModelAndView navigateFilmshow() throws Exception {
-        ModelAndView mav = new ModelAndView("filmshow");
-        List<Filmshow> filmshowList = filmshowService.getFilmshowWeek();
-        if (filmshowList != null) {
-            Map<LocalDate, List<Filmshow>> filmshowMap = filmshowService.groupFilmshowByDate(filmshowList);
-            mav.addObject("filmshowMap", filmshowMap);
-        }
-        return mav;
+    public ModelAndView navigateFilmshow() {
+        return Optional.of(filmshowService.getFilmshowWeek()
+                .stream()
+                .collect(
+                        Collectors.groupingBy(filmshow -> new LocalDate(filmshow.getDateTime()),
+                        TreeMap::new,
+                        Collectors.toList())))
+                .filter(filmshowMap -> !filmshowMap.isEmpty())
+                .map(filmshowMap -> new ModelAndView("filmshow").addObject("filmshowMap", filmshowMap))
+                .orElse(new ModelAndView("filmshow"));
     }
 
     @RequestMapping("film")
-    public ModelAndView navigateFilm() throws Exception {
+    public ModelAndView navigateFilm() {
         List<Film> filmList = filmService.getFilmAll();
         return new ModelAndView("film", "filmList", filmList);
     }

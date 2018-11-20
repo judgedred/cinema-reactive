@@ -34,7 +34,7 @@ public class FilmController {
         if (result.hasErrors()) {
             return new ModelAndView("addFilm", "film", film);
         }
-        filmService.create(film);
+        filmService.save(film);
         return new ModelAndView("addFilm", "film", new Film());
     }
 

@@ -6,8 +6,6 @@ import com.domain.Hall;
 import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,28 +23,28 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class FilmshowController {
 
-    @Autowired
-    private FilmshowService filmshowService;
+    private final FilmshowService filmshowService;
+    private final HallService hallService;
+    private final FilmService filmService;
+    private final FilmEditor filmEditor;
+    private final HallEditor hallEditor;
 
-    @Autowired
-    private HallService hallService;
-
-    @Qualifier("defaultFilmService")
-    @Autowired
-    private FilmService filmService;
-
-    @Autowired
-    private FilmEditor filmEditor;
-
-    @Autowired
-    private HallEditor hallEditor;
+    public FilmshowController(FilmshowService filmshowService, HallService hallService, FilmService filmService,
+            FilmEditor filmEditor, HallEditor hallEditor) {
+        this.filmshowService = filmshowService;
+        this.hallService = hallService;
+        this.filmService = filmService;
+        this.filmEditor = filmEditor;
+        this.hallEditor = hallEditor;
+    }
 
     @RequestMapping("/admin/addFilmshowForm")
-    public ModelAndView addFilmshowForm() throws Exception {
+    public ModelAndView addFilmshowForm() {
         List<Film> filmList = filmService.getFilmAll();
         List<Hall> hallList = hallService.getHallAll();
         ModelAndView mav = new ModelAndView("addFilmshow");
@@ -57,7 +55,7 @@ public class FilmshowController {
     }
 
     @RequestMapping("/admin/addFilmshow")
-    public ModelAndView addFilmshow(@Valid Filmshow filmshow, BindingResult result) throws Exception {
+    public ModelAndView addFilmshow(@Valid Filmshow filmshow, BindingResult result) {
         if (result.hasErrors()) {
             List<Film> filmList = filmService.getFilmAll();
             List<Hall> hallList = hallService.getHallAll();
@@ -67,38 +65,34 @@ public class FilmshowController {
             mav.addObject("filmshow", filmshow);
             return mav;
         }
-        filmshowService.create(filmshow);
+        filmshowService.save(filmshow);
         return new ModelAndView(new RedirectView("addFilmshowForm"));
     }
 
     @RequestMapping("/admin/deleteFilmshow")
-    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) throws Exception {
+    public ModelAndView deleteFilmshow(@ModelAttribute Filmshow filmshow) {
         if (filmshow.getFilmshowId() != null && !filmshow.getFilmshowId().equals(BigInteger.ZERO)) {
-            filmshow = filmshowService.getFilmshowById(filmshow.getFilmshowId());
-            if (filmshow != null) {
-                filmshowService.delete(filmshow);
-            }
+            filmshowService.getFilmshowById(filmshow.getFilmshowId()).ifPresent(filmshowService::delete);
         }
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         return new ModelAndView("deleteFilmshow", "filmshowList", filmshowList);
     }
 
     @RequestMapping("/admin/filmshowList")
-    public ModelAndView listFilmshows() throws Exception {
+    public ModelAndView listFilmshows() {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         return new ModelAndView("filmshowList", "filmshowList", filmshowList);
     }
 
     @RequestMapping(value = "/admin/checkFilmshow/{filmshowId}", produces = "text/html; charset=UTF-8")
-    public @ResponseBody
-    String checkFilmshow(@PathVariable Integer filmshowId) throws Exception {
-        if (filmshowId != null) {
-            Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
-            if (filmshow != null && filmshowService.checkFilmshowInTicket(filmshow)) {
-                return "На сеанс имеются билеты. Сначала удалите билеты.";
-            }
-        }
-        return null;
+    @ResponseBody
+    public String checkFilmshow(@PathVariable Integer filmshowId) {
+        return Optional.ofNullable(filmshowId)
+                .map(BigInteger::valueOf)
+                .flatMap(filmshowService::getFilmshowById)
+                .filter(filmshowService::checkFilmshowInTicket)
+                .map(filmshow -> "На сеанс имеются билеты. Сначала удалите билеты.")
+                .orElse(null);
     }
 
     @InitBinder

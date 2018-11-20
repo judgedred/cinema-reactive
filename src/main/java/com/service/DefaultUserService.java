@@ -6,6 +6,7 @@ import com.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,14 +22,9 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User create(User user) {
+    public User save(User user) {
         user.setPassword(HashGenerator.invoke(user.getPassword()));
         return userRepository.save(user);
-    }
-
-    @Override
-    public void update(User user) {
-        userRepository.save(user);
     }
 
     @Override
@@ -56,9 +52,10 @@ public class DefaultUserService implements UserService {
         return Optional.of(user.getLogin())
                 .filter(login -> login.equals("admin"))
                 .map(userRepository::findAllByLogin)
-                .flatMap(users -> users.stream()
-                        .findFirst()
-                        .filter(adminUser -> adminUser.getPassword().equals(HashGenerator.invoke(user.getPassword()))))
+                .orElse(Collections.emptyList())
+                .stream()
+                .findFirst()
+                .filter(adminUser -> adminUser.getPassword().equals(HashGenerator.invoke(user.getPassword())))
                 .orElse(null);
     }
 

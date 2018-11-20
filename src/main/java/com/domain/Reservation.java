@@ -43,8 +43,9 @@ public class Reservation implements Serializable {
         return user;
     }
 
-    public void setUser(User user) {
+    public Reservation setUser(User user) {
         this.user = user;
+        return this;
     }
 
     public Ticket getTicket() {

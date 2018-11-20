@@ -6,7 +6,6 @@ import com.domain.Ticket;
 import com.service.FilmshowService;
 import com.service.SeatService;
 import com.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,38 +17,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class TicketController {
 
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
+    private final FilmshowService filmshowService;
+    private final SeatService seatService;
+    private final TicketEditor ticketEditor;
+    private final FilmshowEditor filmshowEditor;
+    private final SeatEditor seatEditor;
 
-    @Autowired
-    private FilmshowService filmshowService;
-
-    @Autowired
-    private SeatService seatService;
-
-    @Autowired
-    private TicketEditor ticketEditor;
-
-    @Autowired
-    private FilmshowEditor filmshowEditor;
-
-    @Autowired
-    private SeatEditor seatEditor;
-
-    private List<Seat> filteredSeatList = new ArrayList<>();
+    public TicketController(TicketService ticketService, FilmshowService filmshowService, SeatService seatService,
+            TicketEditor ticketEditor, FilmshowEditor filmshowEditor, SeatEditor seatEditor) {
+        this.ticketService = ticketService;
+        this.filmshowService = filmshowService;
+        this.seatService = seatService;
+        this.ticketEditor = ticketEditor;
+        this.filmshowEditor = filmshowEditor;
+        this.seatEditor = seatEditor;
+    }
 
     @RequestMapping("/admin/addTicketForm")
-    public ModelAndView addTicketForm() throws Exception {
+    public ModelAndView addTicketForm() {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("addTicket");
         mav.addObject("filmshowList", filmshowList);
@@ -58,7 +56,7 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/addTicket")
-    public ModelAndView addTicket(@Valid Ticket ticket, BindingResult result) throws Exception {
+    public ModelAndView addTicket(@Valid Ticket ticket, BindingResult result) {
         if (result.hasErrors()) {
             List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
             ModelAndView mav = new ModelAndView("addTicket");
@@ -71,7 +69,7 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/addTicketAllForm")
-    public ModelAndView addTicketAllForm() throws Exception {
+    public ModelAndView addTicketAllForm() {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("addTicketAll");
         mav.addObject("filmshowList", filmshowList);
@@ -80,9 +78,10 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/addTicketAll")
-    public ModelAndView addTicketAll(@ModelAttribute Ticket ticket) throws Exception {
-        if (ticket.getFilmshow() != null && ticket.getPrice() != null && filteredSeatList != null) {
-            for (Seat s : filteredSeatList) {
+    public ModelAndView addTicketAll(@ModelAttribute Ticket ticket, HttpServletRequest request) {
+        List<Seat> filteredSeats = (List<Seat>) request.getSession().getAttribute("filteredSeats");
+        if (ticket.getFilmshow() != null && ticket.getPrice() != null && filteredSeats != null) {
+            for (Seat s : filteredSeats) {
                 ticket.setSeat(s);
                 ticketService.create(ticket);
             }
@@ -91,7 +90,7 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/deleteTicket")
-    public ModelAndView deleteTicket(@ModelAttribute Ticket ticket) throws Exception {
+    public ModelAndView deleteTicket(@ModelAttribute Ticket ticket) {
         if (ticket.getTicketId() != null && !ticket.getTicketId().equals(BigInteger.ZERO)) {
             ticket = ticketService.getTicketById(ticket.getTicketId());
             if (ticket != null) {
@@ -103,7 +102,7 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/ticketList")
-    public ModelAndView listTickets(@ModelAttribute Ticket ticket) throws Exception {
+    public ModelAndView listTickets(@ModelAttribute Ticket ticket) {
         List<Ticket> ticketList = ticketService.getTicketAllByFilmshow(ticket.getFilmshow());
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         ModelAndView mav = new ModelAndView("ticketList");
@@ -114,21 +113,23 @@ public class TicketController {
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     @ResponseBody
-    public Map<BigInteger, String> filterSeats(@PathVariable int filmshowId) throws Exception {
-        Filmshow filmshow = filmshowService.getFilmshowById(BigInteger.valueOf(filmshowId));
-        Map<BigInteger, String> filteredSeatMap = new HashMap<>();
-        if (filmshow != null) {
-            filteredSeatList = seatService.getSeatFreeByFilmshow(filmshow);
-            for (Seat s : filteredSeatList) {
-                filteredSeatMap.put(s.getSeatId(), s.toString());
-            }
-        }
-        return filteredSeatMap;
+    public Map<BigInteger, String> filterSeats(@PathVariable int filmshowId, HttpServletRequest request) {
+        return Optional.of(filmshowId)
+                .map(BigInteger::valueOf)
+                .flatMap(filmshowService::getFilmshowById)
+                .map(seatService::getSeatFreeByFilmshow)
+                .map(seats -> {
+                    request.getSession().setAttribute("filteredSeats", seats);
+                    return seats;
+                })
+                .orElse(Collections.emptyList())
+                .stream()
+                .collect(Collectors.toMap(Seat::getSeatId, Seat::toString));
     }
 
     @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkTicket(@PathVariable Integer ticketId) throws Exception {
+    public String checkTicket(@PathVariable Integer ticketId) {
         if (ticketId != null) {
             Ticket ticket = ticketService.getTicketById(BigInteger.valueOf(ticketId));
             if (ticket != null && ticketService.checkTicketInReservation(ticket)) {

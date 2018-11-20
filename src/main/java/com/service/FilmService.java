@@ -8,9 +8,7 @@ import java.util.Optional;
 
 public interface FilmService {
 
-    Film create(Film film);
-
-    void update(Film film);
+    Film save(Film film);
 
     void delete(Film film);
 
