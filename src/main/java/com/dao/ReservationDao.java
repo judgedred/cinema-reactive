@@ -4,6 +4,7 @@ import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface ReservationDao {
@@ -16,7 +17,7 @@ public interface ReservationDao {
 
     List<Reservation> getReservationAll() throws DaoException;
 
-    Reservation getReservationById(int id) throws DaoException;
+    Reservation getReservationById(BigInteger id) throws DaoException;
 
     List<Reservation> getReservationAllByUser(User user) throws DaoException;
 

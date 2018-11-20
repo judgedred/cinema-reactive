@@ -78,7 +78,7 @@ public class ReservationController {
 
     @RequestMapping("/admin/deleteReservation")
     public ModelAndView deleteReservation(@ModelAttribute Reservation reservation) throws Exception {
-        if (reservation.getReservationId() != null && reservation.getReservationId() != 0) {
+        if (reservation.getReservationId() != null && !reservation.getReservationId().equals(BigInteger.ZERO)) {
             reservation = reservationService.getReservationById(reservation.getReservationId());
             if (reservation != null) {
                 reservationService.delete(reservation);

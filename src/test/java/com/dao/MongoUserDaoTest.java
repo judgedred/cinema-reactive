@@ -90,7 +90,7 @@ public class MongoUserDaoTest {
     @Test
     public void getUsersByLoginTest() {
         User user = testDataRepository.createTestUser();
-        List<User> users = userRepository.findUserByLogin(user.getLogin());
+        List<User> users = userRepository.findAllByLogin(user.getLogin());
         assertThat(users, is(notNullValue()));
         assertThat(users.size(), greaterThan(0));
         users.forEach(u -> assertThat(u.getLogin(), is(user.getLogin())));
@@ -100,7 +100,7 @@ public class MongoUserDaoTest {
     @Test
     public void getUsersByEmailTest() {
         User user = testDataRepository.createTestUser();
-        List<User> users = userRepository.findUserByEmail(user.getEmail());
+        List<User> users = userRepository.findAllByEmail(user.getEmail());
         assertThat(users, is(notNullValue()));
         assertThat(users.size(), greaterThan(0));
         users.forEach(u -> assertThat(u.getEmail(), is(user.getEmail())));

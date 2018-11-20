@@ -29,7 +29,7 @@ public class MySqlReservationDaoTest {
     @Test
     public void testGetReservationById() throws DaoException {
         Reservation reservation = new Reservation();
-        reservation.setReservationId(1);
+        reservation.setReservationId(BigInteger.ONE);
         Reservation reservationTest = reservationDao.getReservationById(reservation.getReservationId());
         Assert.assertNotNull(reservationTest);
     }
@@ -54,7 +54,7 @@ public class MySqlReservationDaoTest {
     @Test
     public void testUpdate() throws DaoException {
         Reservation reservation = new Reservation();
-        reservation.setReservationId(2);
+        reservation.setReservationId(BigInteger.valueOf(2));
         User user = userDao.getUserById(BigInteger.valueOf(2));
         Ticket ticket = ticketDao.getTicketById(BigInteger.valueOf(2));
         reservation.setUser(user);
@@ -73,7 +73,7 @@ public class MySqlReservationDaoTest {
     @Test
     public void testDelete() throws DaoException {
         Reservation reservation = new Reservation();
-        reservation.setReservationId(3);
+        reservation.setReservationId(BigInteger.valueOf(3));
         reservationDao.delete(reservation);
         Assert.assertNull(reservationDao.getReservationById(reservation.getReservationId()));
     }

@@ -3,6 +3,7 @@ package com;
 import com.dao.FilmRepository;
 import com.dao.FilmshowRepository;
 import com.dao.HallRepository;
+import com.dao.ReservationRepository;
 import com.dao.SeatRepository;
 import com.dao.TestDataRepository;
 import com.dao.TicketRepository;
@@ -34,10 +35,13 @@ public class CinemaTestConfiguration {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     @Bean
     public TestDataRepository testDataCreator() {
         return new TestDataRepository(filmRepository, hallRepository, filmshowRepository, seatRepository,
-                ticketRepository, userRepository);
+                ticketRepository, userRepository, reservationRepository);
     }
 
 }

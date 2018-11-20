@@ -7,6 +7,7 @@ import com.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -36,7 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation getReservationById(int id) throws DaoException {
+    public Reservation getReservationById(BigInteger id) throws DaoException {
         return reservationDao.getReservationById(id);
     }
 

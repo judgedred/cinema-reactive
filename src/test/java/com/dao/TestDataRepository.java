@@ -3,6 +3,7 @@ package com.dao;
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
+import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import com.domain.User;
@@ -18,16 +19,18 @@ public class TestDataRepository {
     private final SeatRepository seatRepository;
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
     public TestDataRepository(FilmRepository filmRepository, HallRepository hallRepository,
             FilmshowRepository filmshowRepository, SeatRepository seatRepository, TicketRepository ticketRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository, ReservationRepository reservationRepository) {
         this.filmRepository = filmRepository;
         this.hallRepository = hallRepository;
         this.filmshowRepository = filmshowRepository;
         this.seatRepository = seatRepository;
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     Film createFilm(BigInteger filmId, String filmName, String description) {
@@ -117,6 +120,23 @@ public class TestDataRepository {
 
     User createTestUser() {
         return createUser("test", "test", "test@domain.com");
+    }
+
+    Reservation createReservation(Ticket ticket, User user) {
+        Reservation reservation = new Reservation();
+        reservation.setTicket(ticket);
+        reservation.setUser(user);
+        return reservationRepository.save(reservation);
+    }
+
+    Reservation createTestReservation() {
+        return createReservation(createTestTicket(), createTestUser());
+    }
+
+    void cleanUpReservation(Reservation reservation) {
+        ticketRepository.delete(reservation.getTicket());
+        userRepository.delete(reservation.getUser());
+        reservationRepository.delete(reservation);
     }
 
 }
