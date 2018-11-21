@@ -33,24 +33,27 @@ public class Film implements Serializable {
         return filmId;
     }
 
-    public void setFilmId(BigInteger filmId) {
+    public Film setFilmId(BigInteger filmId) {
         this.filmId = filmId;
+        return this;
     }
 
     public String getFilmName() {
         return filmName;
     }
 
-    public void setFilmName(String filmName) {
+    public Film setFilmName(String filmName) {
         this.filmName = filmName;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Film setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     @Override
@@ -67,10 +70,10 @@ public class Film implements Serializable {
         if (!Objects.equals(filmId, film.filmId)) {
             return false;
         }
-        if (!description.equals(film.description)) {
+        if (!Objects.equals(description, film.description)) {
             return false;
         }
-        if (!filmName.equals(film.filmName)) {
+        if (!Objects.equals(filmName, film.filmName)) {
             return false;
         }
 

@@ -55,10 +55,9 @@ public class UserController {
 
     @RequestMapping(value = "/admin/checkUser/{userId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkUser(@PathVariable Integer userId) {
+    public String checkUser(@PathVariable BigInteger userId) {
         return Optional
                 .ofNullable(userId)
-                .map(BigInteger::valueOf)
                 .flatMap(userService::getUserById)
                 .filter(userService::checkUserInReservation)
                 .map(user -> "У пользователя есть брони. Сначала удалите бронь.")

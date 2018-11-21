@@ -95,7 +95,7 @@ public class DataGenerator {
         Film film = filmService.getFilmByName("Матрица")
                 .orElseThrow(() -> new IllegalStateException("Film must be created."));
         LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
-        LongStream.range(0, 11)
+        LongStream.range(0, 8)
                 .forEach(index -> filmshowService.save(new Filmshow(dateTime.plusDays(index), film, getHall(1))));
     }
 

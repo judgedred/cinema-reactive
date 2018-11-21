@@ -72,7 +72,6 @@ public class MongoUserDaoTest {
         User user = testDataRepository.createTestUser();
         userRepository.delete(user);
         assertFalse(userRepository.findById(user.getUserId()).isPresent());
-        userRepository.delete(user);
     }
 
 

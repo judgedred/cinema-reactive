@@ -110,9 +110,8 @@ public class TicketController {
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     @ResponseBody
-    public Map<BigInteger, String> filterSeats(@PathVariable int filmshowId, HttpServletRequest request) {
+    public Map<BigInteger, String> filterSeats(@PathVariable BigInteger filmshowId, HttpServletRequest request) {
         return Optional.of(filmshowId)
-                .map(BigInteger::valueOf)
                 .flatMap(filmshowService::getFilmshowById)
                 .map(seatService::getSeatFreeByFilmshow)
                 .map(seats -> {
@@ -126,9 +125,8 @@ public class TicketController {
 
     @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkTicket(@PathVariable Integer ticketId) {
+    public String checkTicket(@PathVariable BigInteger ticketId) {
         return Optional.ofNullable(ticketId)
-                .map(BigInteger::valueOf)
                 .flatMap(ticketService::getTicketById)
                 .filter(ticketService::checkTicketInReservation)
                 .map(ticket -> "Билет зарезервирован. Сначала удалите бронь.")

@@ -12,7 +12,7 @@ public class SeatEditor extends PropertyEditorSupport {
     public void setAsText(String text) {
         try {
             Seat seat = new Seat();
-            seat.setSeatId(BigInteger.valueOf(Integer.parseInt(text)));
+            seat.setSeatId(new BigInteger(text));
             this.setValue(seat);
         } catch (Exception e) {
             e.printStackTrace();

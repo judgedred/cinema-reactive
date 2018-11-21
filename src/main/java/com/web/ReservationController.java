@@ -97,9 +97,8 @@ public class ReservationController {
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
     @ResponseBody
-    public Map<BigInteger, String> filterTickets(@PathVariable Integer filmshowId) {
+    public Map<BigInteger, String> filterTickets(@PathVariable BigInteger filmshowId) {
         return Optional.ofNullable(filmshowId)
-                .map(BigInteger::valueOf)
                 .flatMap(filmshowService::getFilmshowById)
                 .map(ticketService::getTicketFreeByFilmshow)
                 .orElse(Collections.emptyList())

@@ -54,9 +54,10 @@ public class MongoReservationDaoTest {
     public void updateTest() {
         Ticket ticketExpected = testDataRepository.createTestTicket();
         ticketExpected.setPrice(60F);
-        User userExpected = testDataRepository.createTestUser();
-        userExpected.setLogin("updated");
+        User userExpected = testDataRepository.createUser("updated", "testUpdated", "testUpdated@gmail.com");
         Reservation reservation = testDataRepository.createTestReservation();
+        User userInitial = reservation.getUser();
+        Ticket ticketInitial = reservation.getTicket();
         reservation.setTicket(ticketExpected);
         reservation.setUser(userExpected);
         reservationRepository.save(reservation);
@@ -66,6 +67,8 @@ public class MongoReservationDaoTest {
         assertThat(reservationUpdated.getTicket(), is(ticketExpected));
         assertThat(reservationUpdated.getUser(), is(userExpected));
         testDataRepository.cleanUpReservation(reservation);
+        testDataRepository.cleanUpUser(userInitial);
+        testDataRepository.cleanUpTicket(ticketInitial);
     }
 
     @Test

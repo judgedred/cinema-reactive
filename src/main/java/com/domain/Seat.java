@@ -3,6 +3,7 @@ package com.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -17,7 +18,7 @@ public class Seat implements Serializable {
     private Integer seatNumber;
     @NotNull
     private Integer rowNumber;
-    @NotNull
+    @Valid
     private Hall hall;
 
     public Seat() {
@@ -33,32 +34,36 @@ public class Seat implements Serializable {
         return seatId;
     }
 
-    public void setSeatId(BigInteger seatId) {
+    public Seat setSeatId(BigInteger seatId) {
         this.seatId = seatId;
+        return this;
     }
 
     public Integer getSeatNumber() {
         return seatNumber;
     }
 
-    public void setSeatNumber(Integer seatNumber) {
+    public Seat setSeatNumber(Integer seatNumber) {
         this.seatNumber = seatNumber;
+        return this;
     }
 
     public Integer getRowNumber() {
         return rowNumber;
     }
 
-    public void setRowNumber(Integer rowNumber) {
+    public Seat setRowNumber(Integer rowNumber) {
         this.rowNumber = rowNumber;
+        return this;
     }
 
     public Hall getHall() {
         return hall;
     }
 
-    public void setHall(Hall hall) {
+    public Seat setHall(Hall hall) {
         this.hall = hall;
+        return this;
     }
 
     @Override

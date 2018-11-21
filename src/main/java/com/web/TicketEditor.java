@@ -13,7 +13,7 @@ public class TicketEditor extends PropertyEditorSupport {
     public void setAsText(String text) {
         try {
             Ticket t = new Ticket();
-            t.setTicketId(BigInteger.valueOf(Integer.parseInt(text)));
+            t.setTicketId(new BigInteger(text));
             this.setValue(t);
         } catch (Exception e) {
             e.printStackTrace();

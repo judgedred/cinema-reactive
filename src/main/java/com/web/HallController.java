@@ -55,9 +55,8 @@ public class HallController {
 
     @RequestMapping(value = "/admin/checkHall/{hallId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkHall(@PathVariable Integer hallId) {
+    public String checkHall(@PathVariable BigInteger hallId) {
         return Optional.ofNullable(hallId)
-                .map(BigInteger::valueOf)
                 .flatMap(hallService::getHallById)
                 .flatMap(this::checkHallConstraints)
                 .orElse(null);

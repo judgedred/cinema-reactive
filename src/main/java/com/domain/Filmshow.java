@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -19,9 +20,9 @@ public class Filmshow implements Serializable {
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
-    @NotNull
+    @Valid
     private Film film;
-    @NotNull
+    @Valid
     private Hall hall;
 
     public Filmshow() {
@@ -37,32 +38,36 @@ public class Filmshow implements Serializable {
         return filmshowId;
     }
 
-    public void setFilmshowId(BigInteger filmshowId) {
+    public Filmshow setFilmshowId(BigInteger filmshowId) {
         this.filmshowId = filmshowId;
+        return this;
     }
 
     public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public Filmshow setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+        return this;
     }
 
     public Film getFilm() {
         return film;
     }
 
-    public void setFilm(Film film) {
+    public Filmshow setFilm(Film film) {
         this.film = film;
+        return this;
     }
 
     public Hall getHall() {
         return hall;
     }
 
-    public void setHall(Hall hall) {
+    public Filmshow setHall(Hall hall) {
         this.hall = hall;
+        return this;
     }
 
     @Override

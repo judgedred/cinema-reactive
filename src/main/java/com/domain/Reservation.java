@@ -3,7 +3,7 @@ package com.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
@@ -13,9 +13,9 @@ public class Reservation implements Serializable {
 
     @Id
     private BigInteger reservationId;
-    @NotNull
+    @Valid
     private User user;
-    @NotNull
+    @Valid
     private Ticket ticket;
 
     public Reservation() {
@@ -30,8 +30,9 @@ public class Reservation implements Serializable {
         return reservationId;
     }
 
-    public void setReservationId(BigInteger reservationId) {
+    public Reservation setReservationId(BigInteger reservationId) {
         this.reservationId = reservationId;
+        return this;
     }
 
     public User getUser() {
@@ -47,8 +48,9 @@ public class Reservation implements Serializable {
         return ticket;
     }
 
-    public void setTicket(Ticket ticket) {
+    public Reservation setTicket(Ticket ticket) {
         this.ticket = ticket;
+        return this;
     }
 
     @Override

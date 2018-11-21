@@ -82,7 +82,7 @@ public class MainController {
 
     @RequestMapping("/reserveTicket")
     public ModelAndView reserveTicket(@ModelAttribute Reservation reservation, HttpServletRequest request,
-            @RequestParam(required = false) Integer filmshowId) {
+            @RequestParam(required = false) BigInteger filmshowId) {
         ModelAndView mav = new ModelAndView("reserveTicket");
         User user = (User) request.getSession().getAttribute("validUser");
         Optional.of(reservation)
@@ -90,7 +90,6 @@ public class MainController {
                 .map(r -> r.setUser(user))
                 .ifPresent(reservationService::save);
         Optional.ofNullable(filmshowId)
-                .map(BigInteger::valueOf)
                 .flatMap(filmshowService::getFilmshowById)
                 .ifPresent(filmshow -> {
                     mav.addObject("filteredTicketList", ticketService.getTicketFreeByFilmshow(filmshow));

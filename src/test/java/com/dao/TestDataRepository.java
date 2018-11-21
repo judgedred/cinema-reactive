@@ -34,10 +34,10 @@ public class TestDataRepository {
     }
 
     Film createFilm(BigInteger filmId, String filmName, String description) {
-        Film film = new Film();
-        film.setFilmId(filmId);
-        film.setFilmName(filmName);
-        film.setDescription(description);
+        Film film = new Film()
+                .setFilmId(filmId)
+                .setFilmName(filmName)
+                .setDescription(description);
         return filmRepository.save(film);
     }
 
@@ -46,10 +46,10 @@ public class TestDataRepository {
     }
 
     Hall createHall(BigInteger id, String name, Integer number) {
-        Hall hall = new Hall();
-        hall.setHallId(id);
-        hall.setHallName(name);
-        hall.setHallNumber(number);
+        Hall hall = new Hall()
+                .setHallId(id)
+                .setHallName(name)
+                .setHallNumber(number);
         return hallRepository.save(hall);
     }
 
@@ -58,12 +58,12 @@ public class TestDataRepository {
     }
 
     Filmshow createTestFilmshow() {
-        Filmshow filmshow = new Filmshow();
         Film film = createTestFilm();
         Hall hall = createTestHall();
-        filmshow.setFilm(film);
-        filmshow.setHall(hall);
-        filmshow.setDateTime(LocalDateTime.now());
+        Filmshow filmshow = new Filmshow()
+                .setFilm(film)
+                .setHall(hall)
+                .setDateTime(LocalDateTime.now());
         return filmshowRepository.save(filmshow);
     }
 
@@ -74,11 +74,11 @@ public class TestDataRepository {
     }
 
     Seat createSeat(BigInteger id, int rowNumber, int seatNumber, Hall hall) {
-        Seat seat = new Seat();
-        seat.setSeatId(id);
-        seat.setRowNumber(rowNumber);
-        seat.setSeatNumber(seatNumber);
-        seat.setHall(hall);
+        Seat seat = new Seat()
+                .setSeatId(id)
+                .setRowNumber(rowNumber)
+                .setSeatNumber(seatNumber)
+                .setHall(hall);
         return seatRepository.save(seat);
     }
 
@@ -92,11 +92,11 @@ public class TestDataRepository {
     }
 
     Ticket createTicket(BigInteger id, Float price, Filmshow filmshow, Seat seat) {
-        Ticket ticket = new Ticket();
-        ticket.setTicketId(id);
-        ticket.setPrice(price);
-        ticket.setFilmshow(filmshow);
-        ticket.setSeat(seat);
+        Ticket ticket = new Ticket()
+                .setTicketId(id)
+                .setPrice(price)
+                .setFilmshow(filmshow)
+                .setSeat(seat);
         return ticketRepository.save(ticket);
     }
 
@@ -106,15 +106,15 @@ public class TestDataRepository {
 
     void cleanUpTicket(Ticket ticket) {
         cleanUpFilmshow(ticket.getFilmshow());
-        seatRepository.delete(ticket.getSeat());
+        cleanUpSeat(ticket.getSeat());
         ticketRepository.delete(ticket);
     }
 
     User createUser(String login, String password, String email) {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-        user.setEmail(email);
+        User user = new User()
+                .setLogin(login)
+                .setPassword(password)
+                .setEmail(email);
         return userRepository.save(user);
     }
 
@@ -122,10 +122,14 @@ public class TestDataRepository {
         return createUser("test", "test", "test@domain.com");
     }
 
+    void cleanUpUser(User user) {
+        userRepository.delete(user);
+    }
+
     Reservation createReservation(Ticket ticket, User user) {
-        Reservation reservation = new Reservation();
-        reservation.setTicket(ticket);
-        reservation.setUser(user);
+        Reservation reservation = new Reservation()
+                .setTicket(ticket)
+                .setUser(user);
         return reservationRepository.save(reservation);
     }
 
@@ -134,7 +138,7 @@ public class TestDataRepository {
     }
 
     void cleanUpReservation(Reservation reservation) {
-        ticketRepository.delete(reservation.getTicket());
+        cleanUpTicket(reservation.getTicket());
         userRepository.delete(reservation.getUser());
         reservationRepository.delete(reservation);
     }

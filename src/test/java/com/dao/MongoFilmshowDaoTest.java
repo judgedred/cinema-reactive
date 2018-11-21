@@ -69,7 +69,7 @@ public class MongoFilmshowDaoTest {
         filmshow.setHall(hall);
         Filmshow filmshowUpdated = filmshowRepository.save(filmshow);
         assertThat(filmshowUpdated, is(filmshow));
-        testDataRepository.cleanUpFilmshow(filmshow);
+        testDataRepository.cleanUpFilmshow(filmshowUpdated);
     }
 
     @Test

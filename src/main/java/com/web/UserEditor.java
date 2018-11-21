@@ -13,7 +13,7 @@ public class UserEditor extends PropertyEditorSupport {
     public void setAsText(String text) {
         try {
             User user = new User();
-            user.setUserId(BigInteger.valueOf(Integer.parseInt(text)));
+            user.setUserId(new BigInteger(text));
             this.setValue(user);
         } catch (Exception e) {
             e.printStackTrace();

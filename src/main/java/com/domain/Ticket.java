@@ -3,6 +3,7 @@ package com.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -16,9 +17,9 @@ public class Ticket implements Serializable {
     private BigInteger ticketId;
     @NotNull
     private Float price;
-    @NotNull
+    @Valid
     private Filmshow filmshow;
-    @NotNull
+    @Valid
     private Seat seat;
 
     public Ticket() {
@@ -34,32 +35,36 @@ public class Ticket implements Serializable {
         return ticketId;
     }
 
-    public void setTicketId(BigInteger ticketId) {
+    public Ticket setTicketId(BigInteger ticketId) {
         this.ticketId = ticketId;
+        return this;
     }
 
     public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public Ticket setPrice(Float price) {
         this.price = price;
+        return this;
     }
 
     public Filmshow getFilmshow() {
         return filmshow;
     }
 
-    public void setFilmshow(Filmshow filmshow) {
+    public Ticket setFilmshow(Filmshow filmshow) {
         this.filmshow = filmshow;
+        return this;
     }
 
     public Seat getSeat() {
         return seat;
     }
 
-    public void setSeat(Seat seat) {
+    public Ticket setSeat(Seat seat) {
         this.seat = seat;
+        return this;
     }
 
     @Override
@@ -96,18 +101,12 @@ public class Ticket implements Serializable {
 
     @Override
     public String toString() {
-        return filmshow.getFilm().getFilmName()
-                + " "
-                + filmshow.getDateTime().format(DateTimeFormatter.ofPattern("MM.dd HH:mm"))
-                + " "
-                + seat.getSeatNumber()
-                + " "
-                + "место"
-                + " "
-                + seat.getRowNumber()
-                + " "
-                + "ряд"
-                + " "
+        return filmshow.getFilm().getFilmName() + " "
+                + filmshow.getDateTime().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")) + " "
+                + seat.getSeatNumber() + " "
+                + "место" + " "
+                + seat.getRowNumber() + " "
+                + "ряд" + " "
                 + String.format("%d", price.intValue());
     }
 }

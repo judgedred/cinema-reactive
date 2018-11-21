@@ -6,7 +6,6 @@ import com.domain.Hall;
 import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -20,8 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,9 +83,8 @@ public class FilmshowController {
 
     @RequestMapping(value = "/admin/checkFilmshow/{filmshowId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkFilmshow(@PathVariable Integer filmshowId) {
+    public String checkFilmshow(@PathVariable BigInteger filmshowId) {
         return Optional.ofNullable(filmshowId)
-                .map(BigInteger::valueOf)
                 .flatMap(filmshowService::getFilmshowById)
                 .filter(filmshowService::checkFilmshowInTicket)
                 .map(filmshow -> "На сеанс имеются билеты. Сначала удалите билеты.")
@@ -97,7 +93,6 @@ public class FilmshowController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), true));
         binder.registerCustomEditor(Film.class, filmEditor);
         binder.registerCustomEditor(Hall.class, hallEditor);
     }

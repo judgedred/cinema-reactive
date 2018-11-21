@@ -13,7 +13,7 @@ public class FilmshowEditor extends PropertyEditorSupport {
     public void setAsText(String text) {
         try {
             Filmshow filmshow = new Filmshow();
-            filmshow.setFilmshowId(BigInteger.valueOf(Integer.parseInt(text)));
+            filmshow.setFilmshowId(new BigInteger(text));
             this.setValue(filmshow);
         } catch (Exception e) {
             e.printStackTrace();

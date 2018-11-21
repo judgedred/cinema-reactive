@@ -33,24 +33,27 @@ public class Hall implements Serializable {
         return hallId;
     }
 
-    public void setHallId(BigInteger hallId) {
+    public Hall setHallId(BigInteger hallId) {
         this.hallId = hallId;
+        return this;
     }
 
     public Integer getHallNumber() {
         return hallNumber;
     }
 
-    public void setHallNumber(Integer hallNumber) {
+    public Hall setHallNumber(Integer hallNumber) {
         this.hallNumber = hallNumber;
+        return this;
     }
 
     public String getHallName() {
         return hallName;
     }
 
-    public void setHallName(String hallName) {
+    public Hall setHallName(String hallName) {
         this.hallName = hallName;
+        return this;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class Hall implements Serializable {
         if (!Objects.equals(hallNumber, hall.hallNumber)) {
             return false;
         }
-        if (!hallName.equals(hall.hallName)) {
+        if (!Objects.equals(hallName, hall.hallName)) {
             return false;
         }
 

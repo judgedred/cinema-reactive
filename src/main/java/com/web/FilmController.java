@@ -55,9 +55,8 @@ public class FilmController {
 
     @RequestMapping(value = "/admin/checkFilm/{filmId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkFilm(@PathVariable Integer filmId) {
+    public String checkFilm(@PathVariable BigInteger filmId) {
         return Optional.ofNullable(filmId)
-                .map(BigInteger::valueOf)
                 .flatMap(filmService::getFilmById)
                 .filter(filmService::checkFilmInFilmshow)
                 .map(film -> "На фильм созданы сеансы. Сначала удалите сеансы.")

@@ -13,7 +13,7 @@ public class HallEditor extends PropertyEditorSupport {
     public void setAsText(String text) {
         try {
             Hall h = new Hall();
-            h.setHallId(BigInteger.valueOf(Integer.parseInt(text)));
+            h.setHallId(new BigInteger(text));
             this.setValue(h);
         } catch (Exception e) {
             e.printStackTrace();
