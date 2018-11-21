@@ -1,35 +1,33 @@
 package com.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Film")
+@Document
 public class Film implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
-    @Column(name = "film_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger filmId;
-    @Column(name = "film_name", length = 50, nullable = false)
     @NotNull
     @NotEmpty
     private String filmName;
-    @Column(name = "description", nullable = false)
     @NotNull
     @NotEmpty
     private String description;
+
+    public Film() {
+    }
+
+    public Film(String filmName, String description) {
+        this.filmName = filmName;
+        this.description = description;
+    }
 
     public BigInteger getFilmId() {
         return filmId;

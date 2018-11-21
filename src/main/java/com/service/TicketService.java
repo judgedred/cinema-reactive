@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface TicketService {
 
-    Ticket create(Ticket ticket);
+    Ticket save(Ticket ticket);
 
     void delete(Ticket ticket);
 

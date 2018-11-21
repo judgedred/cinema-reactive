@@ -1,40 +1,34 @@
 package com.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Ticket")
+@Document
 public class Ticket implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
-    @Column(name = "ticket_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger ticketId;
-    @Column(name = "price", nullable = false)
     @NotNull
     private Float price;
-    @ManyToOne
-    @JoinColumn(name = "filmshow_id")
     @NotNull
     private Filmshow filmshow;
-    @OneToOne
-    @JoinColumn(name = "seat_id")
     @NotNull
     private Seat seat;
+
+    public Ticket() {
+    }
+
+    public Ticket(Float price, Filmshow filmshow, Seat seat) {
+        this.price = price;
+        this.filmshow = filmshow;
+        this.seat = seat;
+    }
 
     public BigInteger getTicketId() {
         return ticketId;
@@ -102,10 +96,9 @@ public class Ticket implements Serializable {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");
         return filmshow.getFilm().getFilmName()
                 + " "
-                + dateFormat.format(filmshow.getDateTime())
+                + filmshow.getDateTime().format(DateTimeFormatter.ofPattern("MM.dd HH:mm"))
                 + " "
                 + seat.getSeatNumber()
                 + " "

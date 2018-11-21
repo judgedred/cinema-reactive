@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ReservationService {
 
-    Reservation create(Reservation reservation);
+    Reservation save(Reservation reservation);
 
     void delete(Reservation reservation);
 

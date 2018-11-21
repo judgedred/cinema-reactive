@@ -7,8 +7,8 @@ import com.domain.Hall;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,22 +50,15 @@ public class DefaultFilmshowService implements FilmshowService {
 
     @Override
     public List<Filmshow> getFilmshowToday() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 30);
-        Date startDate = cal.getTime();
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        Date endDate = cal.getTime();
+        LocalDateTime startDate = LocalDateTime.now().plusMinutes(30);
+        LocalDateTime endDate = LocalDateTime.of(startDate.toLocalDate(), LocalTime.of(23, 59));
         return filmshowRepository.findByDateTimeBetween(startDate, endDate);
     }
 
     @Override
     public List<Filmshow> getFilmshowWeek() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 30);
-        Date startDate = cal.getTime();
-        cal.add(Calendar.DATE, 7);
-        Date endDate = cal.getTime();
+        LocalDateTime startDate = LocalDateTime.now().plusMinutes(30);
+        LocalDateTime endDate = startDate.plusDays(7);
         return filmshowRepository.findByDateTimeBetween(startDate, endDate);
     }
 

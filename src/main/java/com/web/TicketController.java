@@ -64,7 +64,7 @@ public class TicketController {
             mav.addObject("ticket", ticket);
             return mav;
         }
-        ticketService.create(ticket);
+        ticketService.save(ticket);
         return new ModelAndView(new RedirectView("addTicketForm"));
     }
 
@@ -83,7 +83,7 @@ public class TicketController {
         if (ticket.getFilmshow() != null && ticket.getPrice() != null && filteredSeats != null) {
             for (Seat s : filteredSeats) {
                 ticket.setSeat(s);
-                ticketService.create(ticket);
+                ticketService.save(ticket);
             }
         }
         return new ModelAndView(new RedirectView("addTicketAllForm"));

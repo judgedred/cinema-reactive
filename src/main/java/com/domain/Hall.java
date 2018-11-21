@@ -1,34 +1,33 @@
 package com.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Hall")
+@Document
 public class Hall implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
-    @Column(name = "hall_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger hallId;
-    @Column(name = "hall_number", nullable = false)
     @NotNull
     private Integer hallNumber;
-    @Column(name = "hall_name", length = 45, nullable = false)
     @NotNull
     @NotEmpty
     private String hallName;
+
+    public Hall() {
+    }
+
+    public Hall(Integer hallNumber, String hallName) {
+        this.hallNumber = hallNumber;
+        this.hallName = hallName;
+    }
 
     public BigInteger getHallId() {
         return hallId;

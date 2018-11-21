@@ -10,7 +10,6 @@ import com.service.FilmshowService;
 import com.service.ReservationService;
 import com.service.TicketService;
 import com.service.UserService;
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -86,7 +88,7 @@ public class MainController {
         Optional.of(reservation)
                 .filter(r -> r.getTicket() != null)
                 .map(r -> r.setUser(user))
-                .ifPresent(reservationService::create);
+                .ifPresent(reservationService::save);
         Optional.ofNullable(filmshowId)
                 .map(BigInteger::valueOf)
                 .flatMap(filmshowService::getFilmshowById)
@@ -191,7 +193,7 @@ public class MainController {
         return Optional.of(filmshowService.getFilmshowWeek()
                 .stream()
                 .collect(
-                        Collectors.groupingBy(filmshow -> new LocalDate(filmshow.getDateTime()),
+                        Collectors.groupingBy(filmshow -> toDate(filmshow.getDateTime().toLocalDate()),
                         TreeMap::new,
                         Collectors.toList())))
                 .filter(filmshowMap -> !filmshowMap.isEmpty())
@@ -218,5 +220,9 @@ public class MainController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Ticket.class, ticketEditor);
+    }
+
+    private Date toDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

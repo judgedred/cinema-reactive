@@ -4,12 +4,12 @@ import com.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends MongoRepository<User, BigInteger> {
 
-    List<User> findAllByLogin(String login);
+    Optional<User> findByLogin(String login);
 
-    List<User> findAllByEmail(String email);
+    Optional<User> findByEmail(String email);
 
 }

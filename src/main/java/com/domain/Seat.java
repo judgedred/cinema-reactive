@@ -1,37 +1,33 @@
 package com.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Seat")
+@Document
 public class Seat implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
-    @Column(name = "seat_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger seatId;
-    @Column(name = "seat_number", nullable = false)
     @NotNull
     private Integer seatNumber;
-    @Column(name = "row_number", nullable = false)
     @NotNull
     private Integer rowNumber;
-    @ManyToOne
-    @JoinColumn(name = "hall_id")
     @NotNull
     private Hall hall;
+
+    public Seat() {
+    }
+
+    public Seat(Integer seatNumber, Integer rowNumber, Hall hall) {
+        this.seatNumber = seatNumber;
+        this.rowNumber = rowNumber;
+        this.hall = hall;
+    }
 
     public BigInteger getSeatId() {
         return seatId;

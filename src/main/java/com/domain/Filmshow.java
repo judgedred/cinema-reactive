@@ -1,43 +1,37 @@
 package com.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Filmshow")
+@Document
 public class Filmshow implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
-    @Column(name = "filmshow_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger filmshowId;
-    @Column(name = "date_time", nullable = false)
-    @Temporal(value = TemporalType.TIMESTAMP)
     @NotNull
-    private Date dateTime;
-    @ManyToOne
-    @JoinColumn(name = "film_id")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateTime;
     @NotNull
     private Film film;
-    @ManyToOne
-    @JoinColumn(name = "hall_id")
     @NotNull
     private Hall hall;
+
+    public Filmshow() {
+    }
+
+    public Filmshow(LocalDateTime dateTime, Film film, Hall hall) {
+        this.dateTime = dateTime;
+        this.film = film;
+        this.hall = hall;
+    }
 
     public BigInteger getFilmshowId() {
         return filmshowId;
@@ -47,11 +41,11 @@ public class Filmshow implements Serializable {
         this.filmshowId = filmshowId;
     }
 
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -105,7 +99,8 @@ public class Filmshow implements Serializable {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd HH:mm");
-        return film.getFilmName() + " " + hall.getHallName() + " " + dateFormat.format(dateTime);
+        return film.getFilmName() + " "
+                + hall.getHallName() + " "
+                + dateTime.format(DateTimeFormatter.ofPattern("MM.dd HH:mm"));
     }
 }

@@ -39,7 +39,7 @@
 
         <c:if test="${!empty filmshowMap}">
             <c:forEach items="${filmshowMap}" var="date">
-                <p><fmt:formatDate value="${date.key.toDate()}" pattern="dd-MM-yyyy"/></p>
+                <p><fmt:formatDate value="${date.key}" pattern="dd-MM-yyyy"/></p>
                 <c:forEach items="${date.value}" var="filmshow">
                     <p><a href="reserveTicket?filmshowId=${filmshow.filmshowId}"
                           onclick="return authCheck();">${filmshow}</a></p>

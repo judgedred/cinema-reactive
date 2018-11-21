@@ -72,7 +72,7 @@ public class ReservationController {
             mav.addObject("reservation", reservation);
             return mav;
         }
-        reservationService.create(reservation);
+        reservationService.save(reservation);
         return new ModelAndView(new RedirectView("addReservationForm"));
     }
 

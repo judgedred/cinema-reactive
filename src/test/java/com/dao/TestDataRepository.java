@@ -9,7 +9,7 @@ import com.domain.Ticket;
 import com.domain.User;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class TestDataRepository {
 
@@ -63,7 +63,7 @@ public class TestDataRepository {
         Hall hall = createTestHall();
         filmshow.setFilm(film);
         filmshow.setHall(hall);
-        filmshow.setDateTime(new Date());
+        filmshow.setDateTime(LocalDateTime.now());
         return filmshowRepository.save(filmshow);
     }
 
@@ -105,7 +105,7 @@ public class TestDataRepository {
     }
 
     void cleanUpTicket(Ticket ticket) {
-        filmshowRepository.delete(ticket.getFilmshow());
+        cleanUpFilmshow(ticket.getFilmshow());
         seatRepository.delete(ticket.getSeat());
         ticketRepository.delete(ticket);
     }

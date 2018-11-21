@@ -51,7 +51,7 @@ public class SeatController {
             mav.addObject("seat", seat);
             return mav;
         }
-        seatService.create(seat);
+        seatService.save(seat);
         return new ModelAndView(new RedirectView("addSeatForm"));
     }
 

@@ -40,6 +40,11 @@ public class DefaultFilmService implements FilmService {
     }
 
     @Override
+    public Optional<Film> getFilmByName(String filmName) {
+        return filmRepository.findByFilmName(filmName);
+    }
+
+    @Override
     public boolean checkFilmInFilmshow(Film film) {
         return !filmshowService.getFilmshowByFilm(film).isEmpty();
     }

@@ -42,6 +42,11 @@ public class DefaultHallService implements HallService {
     }
 
     @Override
+    public Optional<Hall> getHallByNumber(Integer hallNumber) {
+        return hallRepository.findByHallNumber(hallNumber);
+    }
+
+    @Override
     public boolean checkHallInFilmshow(Hall hall) {
         return !filmshowService.getFilmshowByHall(hall).isEmpty();
     }

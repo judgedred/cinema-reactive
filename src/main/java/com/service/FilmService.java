@@ -16,5 +16,7 @@ public interface FilmService {
 
     Optional<Film> getFilmById(BigInteger id);
 
+    Optional<Film> getFilmByName(String filmName);
+
     boolean checkFilmInFilmshow(Film film);
 }

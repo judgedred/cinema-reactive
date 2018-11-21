@@ -1,35 +1,30 @@
 package com.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Reservation")
+@Document
 public class Reservation implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
-    @Column(name = "reservation_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger reservationId;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     @NotNull
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "ticket_id")
     @NotNull
     private Ticket ticket;
+
+    public Reservation() {
+    }
+
+    public Reservation(User user, Ticket ticket) {
+        this.user = user;
+        this.ticket = ticket;
+    }
 
     public BigInteger getReservationId() {
         return reservationId;

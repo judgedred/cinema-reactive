@@ -25,7 +25,7 @@ public class DefaultTicketService implements TicketService {
     }
 
     @Override
-    public Ticket create(Ticket ticket) {
+    public Ticket save(Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -88,22 +86,20 @@ public class MongoUserDaoTest {
     }
 
     @Test
-    public void getUsersByLoginTest() {
+    public void getUserByLoginTest() {
         User user = testDataRepository.createTestUser();
-        List<User> users = userRepository.findAllByLogin(user.getLogin());
-        assertThat(users, is(notNullValue()));
-        assertThat(users.size(), greaterThan(0));
-        users.forEach(u -> assertThat(u.getLogin(), is(user.getLogin())));
-        users.forEach(userRepository::delete);
+        Optional<User> userTest = userRepository.findByLogin(user.getLogin());
+        assertTrue(userTest.isPresent());
+        assertThat(userTest.get().getLogin(), is(user.getLogin()));
+        userRepository.delete(user);
     }
 
     @Test
-    public void getUsersByEmailTest() {
+    public void getUserByEmailTest() {
         User user = testDataRepository.createTestUser();
-        List<User> users = userRepository.findAllByEmail(user.getEmail());
-        assertThat(users, is(notNullValue()));
-        assertThat(users.size(), greaterThan(0));
-        users.forEach(u -> assertThat(u.getEmail(), is(user.getEmail())));
-        users.forEach(userRepository::delete);
+        Optional<User> userTest = userRepository.findByEmail(user.getEmail());
+        assertTrue(userTest.isPresent());
+        assertThat(userTest.get().getEmail(), is(user.getEmail()));
+        userRepository.delete(user);
     }
 }

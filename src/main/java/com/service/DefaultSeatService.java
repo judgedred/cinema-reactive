@@ -25,7 +25,7 @@ public class DefaultSeatService implements SeatService {
     }
 
     @Override
-    public Seat create(Seat seat) {
+    public Seat save(Seat seat) {
         return seatRepository.save(seat);
     }
 

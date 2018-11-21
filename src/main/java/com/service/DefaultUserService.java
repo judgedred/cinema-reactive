@@ -5,7 +5,6 @@ import com.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +41,11 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public Optional<User> getUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    @Override
     public boolean checkUserInReservation(User user) {
         return !reservationService.getReservationAllByUser(user).isEmpty();
     }
@@ -50,30 +54,25 @@ public class DefaultUserService implements UserService {
     public User authenticateAdmin(User user) {
         return Optional.of(user.getLogin())
                 .filter(login -> login.equals("admin"))
-                .map(userRepository::findAllByLogin)
-                .orElse(Collections.emptyList())
-                .stream()
-                .findFirst()
+                .flatMap(userRepository::findByLogin)
                 .filter(adminUser -> adminUser.getPassword().equals(HashGenerator.invoke(user.getPassword())))
                 .orElse(null);
     }
 
     @Override
     public User authenticateUser(User user) {
-        return userRepository.findAllByLogin(user.getLogin())
-                .stream()
-                .findFirst()
+        return userRepository.findByLogin(user.getLogin())
                 .filter(foundUser -> foundUser.getPassword().equals(HashGenerator.invoke(user.getPassword())))
                 .orElse(null);
     }
 
     @Override
     public boolean checkLogin(String login) {
-        return !userRepository.findAllByLogin(login).isEmpty();
+        return userRepository.findByLogin(login).isPresent();
     }
 
     @Override
     public boolean checkEmail(String email) {
-        return !userRepository.findAllByEmail(email).isEmpty();
+        return userRepository.findByEmail(email).isPresent();
     }
 }

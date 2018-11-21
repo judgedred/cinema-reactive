@@ -20,7 +20,7 @@ public class DefaultReservationService implements ReservationService {
     }
 
     @Override
-    public Reservation create(Reservation reservation) {
+    public Reservation save(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
 

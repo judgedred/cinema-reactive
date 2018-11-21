@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface SeatService {
 
-    Seat create(Seat seat);
+    Seat save(Seat seat);
 
     void delete(Seat seat);
 
