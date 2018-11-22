@@ -11,5 +11,5 @@ public interface SeatRepository extends MongoRepository<Seat, BigInteger> {
 
     List<Seat> findAllByHall(Hall hall);
 
-    List<Seat> findByHallAndSeatIdNotIn(Hall hall, List<BigInteger> seatIds);
+    List<Seat> findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(Hall hall, List<BigInteger> seatIds);
 }

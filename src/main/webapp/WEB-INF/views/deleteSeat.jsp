@@ -37,7 +37,7 @@
                 <form:label path="seatId">Место</form:label>
                 <form:select path="seatId">
                     <form:option value="0" label="Выберите место"/>
-                    <form:options items="${seatList}" itemValue="seatId"/>
+                    <form:options items="${seatList}" itemLabel="description" itemValue="seatId"/>
                 </form:select>
             </p>
             <p><input type="submit" value="Удалить"></p>

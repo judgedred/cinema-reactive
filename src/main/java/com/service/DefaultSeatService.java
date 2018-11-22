@@ -56,7 +56,7 @@ public class DefaultSeatService implements SeatService {
                         .map(Ticket::getSeat)
                         .map(Seat::getSeatId)
                         .collect(Collectors.toList()))
-                .map(seatIds -> seatRepository.findByHallAndSeatIdNotIn(filmshow.getHall(), seatIds))
+                .map(seatIds -> seatRepository.findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(filmshow.getHall(), seatIds))
                 .orElse(Collections.emptyList());
     }
 

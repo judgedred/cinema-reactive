@@ -37,7 +37,7 @@
                 <form:label path="userId">Фильм</form:label>
                 <form:select path="userId">
                     <form:option value="0" label="Выберите пользователя"/>
-                    <form:options items="${userList}" itemValue="userId"/>
+                    <form:options items="${userList}" itemLabel="login" itemValue="userId"/>
                 </form:select>
             </p>
             <p><input type="submit" value="Удалить"></p>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,11 @@ public class MongoReservationDaoTest {
 
     @Test
     public void updateTest() {
-        Ticket ticketExpected = testDataRepository.createTestTicket();
-        ticketExpected.setPrice(60F);
+        Ticket ticketExpected = testDataRepository.createTicket(
+                BigInteger.valueOf(556),
+                60F,
+                testDataRepository.createTestFilmshow(),
+                testDataRepository.createTestSeat());
         User userExpected = testDataRepository.createUser("updated", "testUpdated", "testUpdated@gmail.com");
         Reservation reservation = testDataRepository.createTestReservation();
         User userInitial = reservation.getUser();

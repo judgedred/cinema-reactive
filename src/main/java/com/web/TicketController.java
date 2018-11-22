@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,14 +78,15 @@ public class TicketController {
         return mav;
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping("/admin/addTicketAll")
     public ModelAndView addTicketAll(@ModelAttribute Ticket ticket, HttpServletRequest request) {
         List<Seat> filteredSeats = (List<Seat>) request.getSession().getAttribute("filteredSeats");
         if (ticket.getFilmshow() != null && ticket.getPrice() != null && filteredSeats != null) {
-            for (Seat s : filteredSeats) {
-                ticket.setSeat(s);
-                ticketService.save(ticket);
-            }
+            filteredSeats.forEach(seat -> ticketService.save(new Ticket(
+                    ticket.getPrice(),
+                    ticket.getFilmshow(),
+                    seat)));
         }
         return new ModelAndView(new RedirectView("addTicketAllForm"));
     }
@@ -120,7 +122,11 @@ public class TicketController {
                 })
                 .orElse(Collections.emptyList())
                 .stream()
-                .collect(Collectors.toMap(Seat::getSeatId, Seat::toString));
+                .collect(Collectors.toMap(
+                        Seat::getSeatId,
+                        Seat::toString,
+                        (oldValue, newValue) -> newValue,
+                        LinkedHashMap::new));
     }
 
     @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")

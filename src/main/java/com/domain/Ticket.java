@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Document
 public class Ticket implements Serializable {
@@ -67,6 +68,10 @@ public class Ticket implements Serializable {
         return this;
     }
 
+    public String getDescription() {
+        return this.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -101,12 +106,14 @@ public class Ticket implements Serializable {
 
     @Override
     public String toString() {
-        return filmshow.getFilm().getFilmName() + " "
-                + filmshow.getDateTime().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")) + " "
-                + seat.getSeatNumber() + " "
-                + "место" + " "
-                + seat.getRowNumber() + " "
-                + "ряд" + " "
-                + String.format("%d", price.intValue());
+        return new StringJoiner(" ", "", "")
+                .add(filmshow != null ? filmshow.getFilm().getFilmName() : "")
+                .add(filmshow != null ? filmshow.getDateTime().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")) : "")
+                .add(seat != null ? seat.getSeatNumber().toString() : "")
+                .add("место")
+                .add(seat != null ? seat.getRowNumber().toString() : "")
+                .add("ряд")
+                .add(price != null ? String.format("%d", price.intValue()) : "")
+                .toString();
     }
 }

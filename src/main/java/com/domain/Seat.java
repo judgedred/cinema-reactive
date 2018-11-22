@@ -66,6 +66,10 @@ public class Seat implements Serializable {
         return this;
     }
 
+    public String getDescription() {
+        return this.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -37,7 +37,7 @@
                 <form:label path="filmId">Фильм</form:label>
                 <form:select path="filmId">
                     <form:option value="0" label="Выберите фильм"/>
-                    <form:options items="${filmList}" itemValue="filmId"/>
+                    <form:options items="${filmList}" itemLabel="filmName" itemValue="filmId"/>
                 </form:select>
             </p>
             <p><input type="submit" value="Удалить"></p>

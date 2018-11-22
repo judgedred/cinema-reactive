@@ -22,6 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -103,7 +104,11 @@ public class ReservationController {
                 .map(ticketService::getTicketFreeByFilmshow)
                 .orElse(Collections.emptyList())
                 .stream()
-                .collect(Collectors.toMap(Ticket::getTicketId, Ticket::toString));
+                .collect(Collectors.toMap(
+                        Ticket::getTicketId,
+                        Ticket::toString,
+                        (oldValue, newValue) -> newValue,
+                        LinkedHashMap::new));
     }
 
     @InitBinder

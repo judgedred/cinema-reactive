@@ -1,6 +1,7 @@
 package com.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
@@ -13,8 +14,10 @@ public class Reservation implements Serializable {
 
     @Id
     private BigInteger reservationId;
+    @DBRef
     @Valid
     private User user;
+    @DBRef
     @Valid
     private Ticket ticket;
 
@@ -51,6 +54,10 @@ public class Reservation implements Serializable {
     public Reservation setTicket(Ticket ticket) {
         this.ticket = ticket;
         return this;
+    }
+
+    public String getDescription() {
+        return this.toString();
     }
 
     @Override
