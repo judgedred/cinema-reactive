@@ -110,6 +110,7 @@ public class Filmshow implements Serializable {
     @Override
     public String toString() {
         return new StringJoiner(" ", "", "")
+                .add(film != null ? film.getFilmName() : "")
                 .add(hall != null ? hall.getHallName() : "")
                 .add(dateTime != null ? dateTime.format(DateTimeFormatter.ofPattern("MM.dd HH:mm")) : "")
                 .toString();

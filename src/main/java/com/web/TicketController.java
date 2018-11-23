@@ -81,13 +81,13 @@ public class TicketController {
     @SuppressWarnings("unchecked")
     @RequestMapping("/admin/addTicketAll")
     public ModelAndView addTicketAll(@ModelAttribute Ticket ticket, HttpServletRequest request) {
-        List<Seat> filteredSeats = (List<Seat>) request.getSession().getAttribute("filteredSeats");
-        if (ticket.getFilmshow() != null && ticket.getPrice() != null && filteredSeats != null) {
-            filteredSeats.forEach(seat -> ticketService.save(new Ticket(
-                    ticket.getPrice(),
-                    ticket.getFilmshow(),
-                    seat)));
-        }
+        Optional.of(ticket)
+                .filter(t -> t.getFilmshow() != null)
+                .filter(t -> t.getPrice() != null)
+                .map(Ticket::getFilmshow)
+                .map(seatService::getSeatFreeByFilmshow)
+                .orElse(Collections.emptyList())
+                .forEach(seat -> ticketService.save(new Ticket(ticket.getPrice(), ticket.getFilmshow(), seat)));
         return new ModelAndView(new RedirectView("addTicketAllForm"));
     }
 
@@ -116,10 +116,6 @@ public class TicketController {
         return Optional.of(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
                 .map(seatService::getSeatFreeByFilmshow)
-                .map(seats -> {
-                    request.getSession().setAttribute("filteredSeats", seats);
-                    return seats;
-                })
                 .orElse(Collections.emptyList())
                 .stream()
                 .collect(Collectors.toMap(
