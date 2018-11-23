@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Document
 public class Seat implements Serializable {
@@ -104,6 +105,12 @@ public class Seat implements Serializable {
 
     @Override
     public String toString() {
-        return seatNumber + " " + "место" + " " + rowNumber + " " + "ряд" + " " + hall.getHallName();
+        return new StringJoiner(" ", "", "")
+                .add(seatNumber.toString())
+                .add("место")
+                .add(rowNumber.toString())
+                .add("ряд")
+                .add(hall != null ? hall.getHallName() : "")
+                .toString();
     }
 }

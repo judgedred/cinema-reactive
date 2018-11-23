@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Document
 public class Reservation implements Serializable {
@@ -91,6 +92,9 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return user.getLogin() + " " + ticket;
+        return new StringJoiner(" ", "", "")
+                .add(user != null ? user.getLogin() : "")
+                .add(ticket != null ? ticket.toString() : "")
+                .toString();
     }
 }

@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Document
 public class Filmshow implements Serializable {
@@ -108,8 +109,9 @@ public class Filmshow implements Serializable {
 
     @Override
     public String toString() {
-        return film.getFilmName() + " "
-                + hall.getHallName() + " "
-                + dateTime.format(DateTimeFormatter.ofPattern("MM.dd HH:mm"));
+        return new StringJoiner(" ", "", "")
+                .add(hall != null ? hall.getHallName() : "")
+                .add(dateTime != null ? dateTime.format(DateTimeFormatter.ofPattern("MM.dd HH:mm")) : "")
+                .toString();
     }
 }
