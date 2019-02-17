@@ -8,12 +8,12 @@ import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import com.domain.User;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,8 +22,8 @@ import java.util.Comparator;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
+@Disabled
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = CinemaTestConfiguration.class)
 public class DataGenerator {
 

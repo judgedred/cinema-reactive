@@ -4,12 +4,11 @@ import com.CinemaTestConfiguration;
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,14 +17,15 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = CinemaTestConfiguration.class)
 public class MongoFilmshowDaoTest {
 
@@ -76,7 +76,7 @@ public class MongoFilmshowDaoTest {
     public void deleteTest() {
         Filmshow filmshow = testDataRepository.createTestFilmshow();
         testDataRepository.cleanUpFilmshow(filmshow);
-        Assert.assertFalse(filmshowRepository.findById(filmshow.getFilmshowId()).isPresent());
+        assertFalse(filmshowRepository.findById(filmshow.getFilmshowId()).isPresent());
     }
 
     @Test
