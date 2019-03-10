@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Film</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Добавить фильм</div>
+    <form th:action="@{addFilm}" th:object="${film}" method="post">
+        <table>
+            <tr>
+                <td><label th:for="*{filmName}">Название фильма</label></td>
+                <td><input th:field="*{filmName}" type="text"/></td>
+                <td th:if="${#fields.hasErrors('filmName')}" th:errors="*{filmName}"></td>
+            </tr>
+            <tr>
+                <td><label th:for="*{description}">Описание</label></td>
+                <td><textarea th:field="*{description}" type="text" cols="22" rows="4"></textarea></td>
+                <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Добавить"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

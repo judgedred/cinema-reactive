@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AddSeat</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Добавить место</div>
+    <div th:unless="${#lists.isEmpty(hallList)}">
+        <form th:action="@{addSeat}" th:object="${seat}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{hall}">Зал</label>
+                <select th:field="*{hall}">
+                    <option value="0" label="Выберите зал"></option>
+                    <option th:each="hall : ${hallList}"
+                            th:text="${hall.hallName}"
+                            th:value="${hall.hallId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('hall')}" th:errors="*{hall}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;">
+                <label th:for="*{rowNumber}">Введите ряд</label>
+                <input th:field="*{rowNumber}" type="text"/>
+                <div th:if="${#fields.hasErrors('rowNumber')}" th:errors="*{rowNumber}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;">
+                <label th:for="*{seatNumber}">Введите номер</label>
+                <input th:field="*{seatNumber}" type="text"/>
+                <div th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Добавить"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

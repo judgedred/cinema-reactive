@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FilmshowList</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Сеансы</div>
+    <div th:unless="${#lists.isEmpty(filmshowList)}">
+        <table>
+            <tr th:each="filmshow : ${filmshowList}">
+                <td th:text="${filmshow}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

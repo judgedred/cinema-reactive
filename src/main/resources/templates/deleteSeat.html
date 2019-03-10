@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Seat</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#seat").submit(function(event) {
+                $.ajax({
+                    url: "checkSeat/" + $("#seatId").val(),
+                    async: false,
+                    success: function(data) {
+                        if(data !== "") {
+                            alert(data);
+                            event.preventDefault();
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Удалить место</div>
+    <div th:unless="${#lists.isEmpty(seatList)}">
+        <form th:action="@{deleteSeat}" th:object="${seat}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{seatId}">Место</label>
+                <select th:field="*{seatId}">
+                    <option value="0" label="Выберите место"></option>
+                    <option th:each="seat : ${seatList}"
+                            th:text="${seat.description}"
+                            th:value="${seat.seatId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('seatId')}" th:errors="*{seatId}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Удалить"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

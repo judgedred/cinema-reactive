@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SeatList</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Места</div>
+    <div th:unless="${#lists.isEmpty(seatList)}">
+        <table>
+            <tr th:each="seat : ${seatList}">
+                <td th:text="${seat}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

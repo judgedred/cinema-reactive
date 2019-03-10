@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>TicketList</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Билеты</div>
+    <div th:unless="${#lists.isEmpty(filmshowList)}">
+        <form th:action="@{ticketList}" th:object="${ticket}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{filmshow}">Сеанс</label>
+                <select th:field="*{filmshow}">
+                    <option value="0" label="Выберите сеанс"></option>
+                    <option th:each="filmshow : ${filmshowList}"
+                            th:text="${filmshow}"
+                            th:value="${filmshow.filmshowId}">
+                    </option>
+                </select>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Показать"></div>
+        </form>
+    </div>
+    <div th:unless="${#lists.isEmpty(filteredTicketList)}">
+        <table>
+            <tr th:each="ticket : ${filteredTicketList}">
+                <td th:text="${ticket}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

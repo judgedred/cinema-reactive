@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AddTicketAll</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#filmshow").change(function() {
+                $.ajax({
+                    url: "seatsFilter/" + $("#filmshow").val()
+                })
+            });
+            $("#ticket").submit(function(event) {
+                var filmshow = $("#filmshow").val();
+                var price = $("#price").val();
+                if(filmshow == null || filmshow === 0 || price === "") {
+                    alert("Заполните поля");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Выпустить билеты</div>
+    <div th:unless="${#lists.isEmpty(filmshowList)}">
+        <form th:action="@{addTicketAll}" th:object="${ticket}" method="post">
+            <div style="margin: 5px;">
+                <label for="filmshow">Сеанс</label>
+                <select id="filmshow" name="filmshow">
+                    <option value="0" label="Выберите сеанс"></option>
+                    <option th:each="filmshow : ${filmshowList}"
+                            th:text="${filmshow}"
+                            th:value="${filmshow.filmshowId}">
+                    </option>
+                </select>
+            </div>
+            <div style="margin: 5px;">
+                <label th:for="*{price}">Введите цену</label>
+                <input th:field="*{price}" type="text"/>
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Выпустить билеты"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

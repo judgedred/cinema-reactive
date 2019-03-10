@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Main</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/js/auth.js"></script>
+    <script type="text/javascript">
+        function authCheck() {
+            var userValid = true;
+            $.ajax({
+                url: "authCheck", async: false, success: function(data) {
+                    if(data !== "") {
+                        alert(data);
+                        userValid = false;
+                    }
+                }
+            });
+            return userValid;
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="top"></div>
+    <div class="content">
+        <h2>Сегодня в кино</h2>
+        <div th:unless="${#lists.isEmpty(filmshowToday)}">
+            <table>
+                <tr th:each="filmshow : ${filmshowToday}">
+                    <td>
+                        <a th:href="@{reserveTicket(filmshowId=${filmshow.filmshowId})}"
+                           th:text="${filmshow}"
+                           onclick="return authCheck();">
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <h4>Чтобы забронировать билет, нажмите на сеанс.</h4>
+    </div>
+    <div th:insert="footer"></div>
+</div>
+</body>
+</html>

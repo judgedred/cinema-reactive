@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Hall</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#hall").submit(function(event) {
+                $.ajax({
+                    url: "checkHall/" + $("#hallId").val(),
+                    async: false,
+                    success: function(data) {
+                        if(data !== "") {
+                            alert(data);
+                            event.preventDefault();
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Удалить зал</div>
+    <div th:unless="${#lists.isEmpty(hallList)}">
+        <form th:action="@{deleteHall}" th:object="${hall}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{hallId}">Зал</label>
+                <select th:field="*{hallId}">
+                    <option value="0" label="Выберите зал"></option>
+                    <option th:each="hall : ${hallList}"
+                            th:text="${hall.hallName}"
+                            th:value="${hall.hallId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('hallId')}" th:errors="*{hallId}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Удалить"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

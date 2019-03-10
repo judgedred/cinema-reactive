@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AddHall</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Добавить зал</div>
+    <form th:action="@{addHall}" th:object="${hall}" method="post">
+        <table>
+            <tr>
+                <td><label th:for="*{hallNumber}">Введите номер</label></td>
+                <td><input th:field="*{hallNumber}" type="text"/></td>
+                <td th:if="${#fields.hasErrors('hallNumber')}" th:errors="*{hallNumber}"></td>
+            </tr>
+            <tr>
+                <td><label th:for="*{hallName}">Введите название</label></td>
+                <td><input th:field="*{hallName}" type="text"/></td>
+                <td th:if="${#fields.hasErrors('hallName')}" th:errors="*{hallName}"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Добавить"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

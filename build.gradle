@@ -13,12 +13,11 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'war'
 
 group = 'com'
 version = '1.0-SNAPSHOT'
 
-description = """cinema Maven Webapp"""
+description = """cinema Webapp"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -31,11 +30,12 @@ repositories {
 }
 
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+//    compile("org.springframework.boot:spring-boot-starter-webflux")
     compile('javax.servlet:jstl')
-    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-    providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')

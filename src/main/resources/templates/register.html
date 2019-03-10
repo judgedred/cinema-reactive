@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/js/auth.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#login").change(function() {
+                if($("#login").val() === "") {
+                    $("#login-check").empty();
+                }
+                else {
+                    $.ajax({
+                        url: "registerCheck?login=" + $("#login").val(), success: function(data) {
+                            $("#login-check").text(data);
+                            if(data === "Логин занят") {
+                                $("#register-submit").attr("disabled", "disabled");
+                            }
+                            else {
+                                $("#register-submit").removeAttr("disabled");
+
+                            }
+                        }
+                    })
+                }
+            });
+
+            $("#user").submit(function(event) {
+                $.ajax({
+                    url: "registerCheck?email=" + $("#email").val(),
+                    async: false,
+                    success: function(data) {
+                        if(data !== "") {
+                            alert(data);
+                            event.preventDefault();
+                        }
+                    }
+                });
+            });
+
+            if($("#registered").text() !== "") {
+                alert($("#registered").text());
+                location.replace("registerForm");
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="top"></div>
+    <div class="content">
+        <form th:action="@{register}" th:object="${user}" method="post">
+            <table>
+                <tr>
+                    <td><label th:for="*{login}">Введите логин</label></td>
+                    <td><input th:field="*{login}" type="text"/></td>
+                    <td>
+                        <div id="login-check" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label th:for="*{password}">Введите пароль</label></td>
+                    <td><input th:field="*{password}" type="password"/></td>
+                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+                </tr>
+                <tr>
+                    <td><label th:for="*{email}">Введите email</label></td>
+                    <td><input th:field="*{email}" type="text"/></td>
+                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" id="register-submit" value="Зарегистрироваться"></td>
+                </tr>
+            </table>
+        </form>
+        <div id="registered" hidden th:text="${registered}"></div>
+    </div>
+    <div th:insert="footer"></div>
+</div>
+</body>
+</html>

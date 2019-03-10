@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete User</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#user").submit(function(event) {
+                $.ajax({
+                    url: "checkUser/" + $("#userId").val(),
+                    async: false,
+                    success: function(data) {
+                        if(data !== "") {
+                            alert(data);
+                            event.preventDefault();
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Удалить пользователя</div>
+    <div th:unless="${#lists.isEmpty(userList)}">
+        <form th:action="@{deleteUser}" th:object="${user}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{userId}">Пользователь</label>
+                <select th:field="*{userId}">
+                    <option value="0" label="Выберите пользователя"></option>
+                    <option th:each="user : ${userList}"
+                            th:text="${user.login}"
+                            th:value="${user.userId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Удалить"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

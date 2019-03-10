@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Films</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/js/auth.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="top"></div>
+    <div class="content">
+        <div th:unless="${#lists.isEmpty(filmList)}">
+            <table>
+                <tr th:each="film : ${filmList}">
+                    <td th:text="${film}"></td>
+                </tr>
+            </table>
+        </div>
+        <h4>В последующем здесь будут отображаться новинки фильмов и их краткое описание.</h4>
+    </div>
+    <div th:insert="footer"></div>
+</div>
+</body>
+</html>

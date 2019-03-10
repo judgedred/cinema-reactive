@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AddTicket</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#filmshow").change(function() {
+                $.ajax({
+                    url: "seatsFilter/" + $("#filmshow").val(), dataType: "json", success: function(data) {
+                        var options = '<option value="">Выберите место</option>';
+                        $.each(data, function(key, value) {
+                            options += '<option value="' + key + '">' + value + '</option>';
+                        })
+                        $("select#seat").html(options);
+                    }
+                })
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Добавить билет</div>
+    <div th:unless="${#lists.isEmpty(filmshowList)}">
+        <form th:action="@{addTicket}" th:object="${ticket}" method="post">
+            <div style="margin: 5px;">
+                <label for="filmshow">Сеанс</label>
+                <select id="filmshow" name="filmshow">
+                    <option value="0" label="Выберите сеанс"></option>
+                    <option th:each="filmshow : ${filmshowList}"
+                            th:text="${filmshow}"
+                            th:value="${filmshow.filmshowId}">
+                    </option>
+                </select>
+            </div>
+            <div style="margin: 5px;">
+                <label th:for="*{price}">Введите цену</label>
+                <input th:field="*{price}" type="text"/>
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;">
+                <label th:for="*{seat}">Место</label>
+                <select id="seat" th:field="*{seat}">
+                    <option value="0" label="Выберите место"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('seat')}" th:errors="*{seat}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Добавить"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

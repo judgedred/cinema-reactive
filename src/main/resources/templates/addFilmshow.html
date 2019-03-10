@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Filmshow</title>
+    <link rel="stylesheet" href="/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/css/jquery-ui-timepicker-addon.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-1.11.4.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#dateTime").datetimepicker({
+                firstDay: 1,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Добавление сеанса</div>
+    <div th:unless="${#lists.isEmpty(filmList) || #lists.isEmpty(hallList)}">
+        <form th:action="@{addFilmshow}" th:object="${filmshow}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{film}">Фильм</label>
+                <select th:field="*{film}">
+                    <option value="0" label="Выберите фильм"></option>
+                    <option th:each="film : ${filmList}"
+                            th:text="${film.filmName}"
+                            th:value="${film.filmId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('film')}" th:errors="*{film}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><label th:for="*{hall}">Зал</label>
+                <select th:field="*{hall}">
+                    <option value="0" label="Выберите зал"></option>
+                    <option th:each="hall : ${hallList}"
+                            th:text="${hall.hallName}"
+                            th:value="${hall.hallId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('hall')}" th:errors="*{hall}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;">
+                <label th:for="*{dateTime}">Дата</label>
+                <input th:field="*{dateTime}" type="text" size="25"/>
+                <div th:if="${#fields.hasErrors('dateTime')}" th:errors="*{dateTime}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Добавить"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

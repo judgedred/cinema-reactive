@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ReserveTicket</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/js/auth.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="top"></div>
+    <div class="content">
+        <div style="margin: 5px;">Забронировать билет</div>
+        <form th:action="@{reserveTicket(filmshowId=${filmshow.filmshowId})}" th:object="${reservation}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{ticket}">Билет</label>
+                <select id="ticket" th:field="*{ticket}">
+                    <option value="0" label="Выберите билет"></option>
+                    <option th:each="ticket : ${filteredTicketList}"
+                            th:text="${ticket}"
+                            th:value="${ticket.ticketId}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('ticket')}" th:errors="*{ticket}" style="display: inline;"></div>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Зарезервировать билет"></div>
+        </form>
+    </div>
+    <div th:insert="footer"></div>
+</div>
+</body>
+</html>

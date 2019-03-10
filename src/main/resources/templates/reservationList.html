@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ReservationList</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Брони</div>
+    <div th:unless="${#lists.isEmpty(userList)}">
+        <form th:action="@{reservationList}" th:object="${reservation}" method="post">
+            <div style="margin: 5px;">
+                <label th:for="*{user}">Пользователь</label>
+                <select th:field="*{user}">
+                    <option value="0" label="Выберите пользователя"></option>
+                    <option th:each="user : ${userList}"
+                            th:text="${user}"
+                            th:value="${user.userId}">
+                    </option>
+                </select>
+            </div>
+            <div style="margin: 5px;"><input type="submit" value="Показать"></div>
+        </form>
+    </div>
+    <div th:unless="${#lists.isEmpty(filteredReservationList)}">
+        <table>
+            <tr th:each="reservation : ${filteredReservationList}">
+                <td th:text="${reservation}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

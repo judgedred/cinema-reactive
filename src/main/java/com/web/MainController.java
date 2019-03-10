@@ -27,9 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -191,8 +188,8 @@ public class MainController {
     public ModelAndView navigateFilmshow() {
         return Optional.of(filmshowService.getFilmshowWeek()
                 .stream()
-                .collect(
-                        Collectors.groupingBy(filmshow -> toDate(filmshow.getDateTime().toLocalDate()),
+                .collect(Collectors.groupingBy(
+                        filmshow -> filmshow.getDateTime().toLocalDate(),
                         TreeMap::new,
                         Collectors.toList())))
                 .filter(filmshowMap -> !filmshowMap.isEmpty())
@@ -219,9 +216,5 @@ public class MainController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Ticket.class, ticketEditor);
-    }
-
-    private Date toDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

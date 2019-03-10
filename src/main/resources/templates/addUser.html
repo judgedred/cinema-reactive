@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AddUser</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:insert="admin-menu"></div>
+    <div style="margin: 5px;">Добавить пользователя</div>
+    <form th:action="@{addUser}" th:object="${user}" method="post">
+        <table>
+            <tr>
+                <td><label th:for="*{login}">Введите логин</label></td>
+                <td><input th:field="*{login}" type="text"/></td>
+                <td th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></td>
+            </tr>
+            <tr>
+                <td><label th:for="*{password}">Введите пароль</label></td>
+                <td><input th:field="*{password}" type="text"/></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+            </tr>
+            <tr>
+                <td><label th:for="*{email}">Введите email</label></td>
+                <td><input th:field="*{email}" type="text"/></td>
+                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Добавить"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
