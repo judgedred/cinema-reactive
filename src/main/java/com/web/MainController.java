@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.WebSession;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
@@ -55,13 +56,13 @@ public class MainController {
     }
 
     @RequestMapping("/admin/login")
-    public String adminLogin(@ModelAttribute User user, HttpSession httpSession) {
+    public String adminLogin(@ModelAttribute User user, WebSession webSession) {
         if (user.getLogin() != null && user.getPassword() != null && !user.getLogin().isEmpty() && !user
                 .getPassword()
                 .isEmpty()) {
             User adminUser = userService.authenticateAdmin(user);
             if (adminUser != null) {
-                httpSession.setAttribute("adminUser", adminUser);
+                webSession.getAttributes().put("adminUser", adminUser);
                 return "adminMain";
             }
         }
@@ -69,15 +70,15 @@ public class MainController {
     }
 
     @RequestMapping("/admin/logout")
-    public String adminLogout(HttpSession session) {
-        session.invalidate();
+    public String adminLogout(WebSession webSession) {
+        webSession.invalidate().block();    // TODO
         return "redirect:/admin";
     }
 
     @RequestMapping("/reserveTicket")
-    public String reserveTicket(@ModelAttribute Reservation reservation, HttpSession httpSession,
+    public String reserveTicket(@ModelAttribute Reservation reservation, WebSession webSession,
             @RequestParam(required = false) BigInteger filmshowId, Model model) {
-        User user = (User) httpSession.getAttribute("validUser");
+        User user = webSession.getAttribute("validUser");
         Optional.of(reservation)
                 .filter(r -> r.getTicket() != null)
                 .map(r -> r.setUser(user))
@@ -92,8 +93,8 @@ public class MainController {
     }
 
     @RequestMapping("/reservationList")
-    public String listUserReservations(HttpSession httpSession, Model model) {
-        User user = (User) httpSession.getAttribute("validUser");
+    public String listUserReservations(WebSession webSession, Model model) {
+        User user = webSession.getAttribute("validUser");
         if (user != null) {
             List<Reservation> reservationList = reservationService.getReservationAllByUser(user);
             model.addAttribute("filteredReservationList", reservationList);
@@ -103,8 +104,8 @@ public class MainController {
 
     @RequestMapping(value = "/authCheck", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String authCheck(HttpSession httpSession) {
-        User validUser = (User) httpSession.getAttribute("validUser");
+    public String authCheck(WebSession webSession) {
+        User validUser = webSession.getAttribute("validUser");
         if (validUser == null) {
             return "Войдите в систему";
         } else {
@@ -114,18 +115,17 @@ public class MainController {
 
     @RequestMapping(value = "/loginCheck", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkLogin(@RequestBody User user, HttpSession httpSession) {
+    public String checkLogin(@RequestBody User user, WebSession webSession) {
         if (user.getLogin() != null
                 && user.getPassword() != null
                 && !user.getLogin().isEmpty()
                 && !user.getPassword().isEmpty()) {
             User validUser = userService.authenticateUser(user);
             if (validUser != null) {
-//                webSession.getAttributes().put("validUser", validUser);
-                httpSession.setAttribute("validUser", validUser);
+                webSession.getAttributes().put("validUser", validUser);
             }
         }
-        User validUser = (User) httpSession.getAttribute("validUser");
+        User validUser = webSession.getAttribute("validUser");
         if (validUser != null) {
             return validUser.getLogin();
         } else {
@@ -134,8 +134,9 @@ public class MainController {
     }
 
     @RequestMapping("/logout")
-    public void logout(HttpSession httpSession) {
-        httpSession.invalidate();
+    public ServerResponse logout(WebSession webSession) {
+        webSession.invalidate().block();
+        return ServerResponse.ok().build().block();
     }
 
     @RequestMapping("/main")
