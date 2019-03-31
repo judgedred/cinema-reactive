@@ -5,6 +5,7 @@ import com.domain.Seat;
 import com.service.HallService;
 import com.service.SeatService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -34,40 +33,40 @@ public class SeatController {
     }
 
     @RequestMapping("/admin/addSeatForm")
-    public ModelAndView addSeatForm() {
+    public String addSeatForm(Model model) {
         List<Hall> hallList = hallService.getHallAll();
-        ModelAndView mav = new ModelAndView("addSeat");
-        mav.addObject("hallList", hallList);
-        mav.addObject("seat", new Seat());
-        return mav;
+        model.addAttribute("hallList", hallList);
+        model.addAttribute("seat", new Seat());
+        return "addSeat";
     }
 
     @RequestMapping("/admin/addSeat")
-    public ModelAndView addSeat(@Valid Seat seat, BindingResult result) {
+    public String addSeat(@Valid Seat seat, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<Hall> hallList = hallService.getHallAll();
-            ModelAndView mav = new ModelAndView("addSeat");
-            mav.addObject("hallList", hallList);
-            mav.addObject("seat", seat);
-            return mav;
+            model.addAttribute("hallList", hallList);
+            model.addAttribute("seat", seat);
+            return "addSeat";
         }
         seatService.save(seat);
-        return new ModelAndView(new RedirectView("addSeatForm"));
+        return "redirect:addSeatForm";
     }
 
     @RequestMapping("/admin/deleteSeat")
-    public ModelAndView deleteSeat(@ModelAttribute Seat seat) {
+    public String deleteSeat(@ModelAttribute Seat seat, Model model) {
         if (seat.getSeatId() != null && !seat.getSeatId().equals(BigInteger.ZERO)) {
             seatService.getSeatById(seat.getSeatId()).ifPresent(seatService::delete);
         }
         List<Seat> seatList = seatService.getSeatAll();
-        return new ModelAndView("deleteSeat", "seatList", seatList);
+        model.addAttribute("seatList", seatList);
+        return "deleteSeat";
     }
 
     @RequestMapping("/admin/seatList")
-    public ModelAndView listSeats() {
+    public String listSeats(Model model) {
         List<Seat> seatList = seatService.getSeatAll();
-        return new ModelAndView("seatList", "seatList", seatList);
+        model.addAttribute("seatList", seatList);
+        return "seatList";
     }
 
     @RequestMapping(value = "/admin/checkSeat/{seatId}", produces = "text/html; charset=UTF-8")

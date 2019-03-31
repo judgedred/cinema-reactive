@@ -7,6 +7,7 @@ import com.service.FilmshowService;
 import com.service.SeatService;
 import com.service.TicketService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Collections;
@@ -48,39 +46,36 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/addTicketForm")
-    public ModelAndView addTicketForm() {
+    public String addTicketForm(Model model) {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        ModelAndView mav = new ModelAndView("addTicket");
-        mav.addObject("filmshowList", filmshowList);
-        mav.addObject("ticket", new Ticket());
-        return mav;
+        model.addAttribute("filmshowList", filmshowList);
+        model.addAttribute("ticket", new Ticket());
+        return "addTicket";
     }
 
     @RequestMapping("/admin/addTicket")
-    public ModelAndView addTicket(@Valid Ticket ticket, BindingResult result) {
+    public String addTicket(@Valid Ticket ticket, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-            ModelAndView mav = new ModelAndView("addTicket");
-            mav.addObject("filmshowList", filmshowList);
-            mav.addObject("ticket", ticket);
-            return mav;
+            model.addAttribute("filmshowList", filmshowList);
+            model.addAttribute("ticket", ticket);
+            return "addTicket";
         }
         ticketService.save(ticket);
-        return new ModelAndView(new RedirectView("addTicketForm"));
+        return "redirect:addTicketForm";
     }
 
     @RequestMapping("/admin/addTicketAllForm")
-    public ModelAndView addTicketAllForm() {
+    public String addTicketAllForm(Model model) {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        ModelAndView mav = new ModelAndView("addTicketAll");
-        mav.addObject("filmshowList", filmshowList);
-        mav.addObject("ticket", new Ticket());
-        return mav;
+        model.addAttribute("filmshowList", filmshowList);
+        model.addAttribute("ticket", new Ticket());
+        return "addTicketAll";
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping("/admin/addTicketAll")
-    public ModelAndView addTicketAll(@ModelAttribute Ticket ticket, HttpServletRequest request) {
+    public String addTicketAll(@ModelAttribute Ticket ticket) {
         Optional.of(ticket)
                 .filter(t -> t.getFilmshow() != null)
                 .filter(t -> t.getPrice() != null)
@@ -88,31 +83,31 @@ public class TicketController {
                 .map(seatService::getSeatFreeByFilmshow)
                 .orElse(Collections.emptyList())
                 .forEach(seat -> ticketService.save(new Ticket(ticket.getPrice(), ticket.getFilmshow(), seat)));
-        return new ModelAndView(new RedirectView("addTicketAllForm"));
+        return "redirect:addTicketAllForm";
     }
 
     @RequestMapping("/admin/deleteTicket")
-    public ModelAndView deleteTicket(@ModelAttribute Ticket ticket) {
+    public String deleteTicket(@ModelAttribute Ticket ticket, Model model) {
         if (ticket.getTicketId() != null && !ticket.getTicketId().equals(BigInteger.ZERO)) {
             ticketService.getTicketById(ticket.getTicketId()).ifPresent(ticketService::delete);
         }
         List<Ticket> ticketList = ticketService.getTicketAll();
-        return new ModelAndView("deleteTicket", "ticketList", ticketList);
+        model.addAttribute("ticketList", ticketList);
+        return "deleteTicket";
     }
 
     @RequestMapping("/admin/ticketList")
-    public ModelAndView listTickets(@ModelAttribute Ticket ticket) {
+    public String listTickets(@ModelAttribute Ticket ticket, Model model) {
         List<Ticket> ticketList = ticketService.getTicketAllByFilmshow(ticket.getFilmshow());
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        ModelAndView mav = new ModelAndView("ticketList");
-        mav.addObject("filmshowList", filmshowList);
-        mav.addObject("filteredTicketList", ticketList);
-        return mav;
+        model.addAttribute("filmshowList", filmshowList);
+        model.addAttribute("filteredTicketList", ticketList);
+        return "ticketList";
     }
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     @ResponseBody
-    public Map<BigInteger, String> filterSeats(@PathVariable BigInteger filmshowId, HttpServletRequest request) {
+    public Map<BigInteger, String> filterSeats(@PathVariable BigInteger filmshowId) {
         return Optional.of(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
                 .map(seatService::getSeatFreeByFilmshow)

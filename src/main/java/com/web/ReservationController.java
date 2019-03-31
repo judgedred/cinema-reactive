@@ -9,6 +9,7 @@ import com.service.ReservationService;
 import com.service.TicketService;
 import com.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -52,48 +51,46 @@ public class ReservationController {
     }
 
     @RequestMapping("/admin/addReservationForm")
-    public ModelAndView addReservationForm() {
+    public String addReservationForm(Model model) {
         List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
         List<User> userList = userService.getUserAll();
-        ModelAndView mav = new ModelAndView("addReservation");
-        mav.addObject("filmshowList", filmshowList);
-        mav.addObject("userList", userList);
-        mav.addObject("reservation", new Reservation());
-        return mav;
+        model.addAttribute("filmshowList", filmshowList);
+        model.addAttribute("userList", userList);
+        model.addAttribute("reservation", new Reservation());
+        return "addReservation";
     }
 
     @RequestMapping("/admin/addReservation")
-    public ModelAndView addReservation(@Valid Reservation reservation, BindingResult result) {
+    public String addReservation(@Valid Reservation reservation, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
             List<User> userList = userService.getUserAll();
-            ModelAndView mav = new ModelAndView("addReservation");
-            mav.addObject("filmshowList", filmshowList);
-            mav.addObject("userList", userList);
-            mav.addObject("reservation", reservation);
-            return mav;
+            model.addAttribute("filmshowList", filmshowList);
+            model.addAttribute("userList", userList);
+            model.addAttribute("reservation", reservation);
+            return "addReservation";
         }
         reservationService.save(reservation);
-        return new ModelAndView(new RedirectView("addReservationForm"));
+        return "redirect:addReservationForm";
     }
 
     @RequestMapping("/admin/deleteReservation")
-    public ModelAndView deleteReservation(@ModelAttribute Reservation reservation) {
+    public String deleteReservation(@ModelAttribute Reservation reservation, Model model) {
         if (reservation.getReservationId() != null && !reservation.getReservationId().equals(BigInteger.ZERO)) {
             reservationService.getReservationById(reservation.getReservationId()).ifPresent(reservationService::delete);
         }
         List<Reservation> reservationList = reservationService.getReservationAll();
-        return new ModelAndView("deleteReservation", "reservationList", reservationList);
+        model.addAttribute("reservationList", reservationList);
+        return "deleteReservation";
     }
 
     @RequestMapping("/admin/reservationList")
-    public ModelAndView listReservations(@ModelAttribute Reservation reservation) {
+    public String listReservations(@ModelAttribute Reservation reservation, Model model) {
         List<Reservation> reservationList = reservationService.getReservationAllByUser(reservation.getUser());
         List<User> userList = userService.getUserAll();
-        ModelAndView mav = new ModelAndView("reservationList");
-        mav.addObject("userList", userList);
-        mav.addObject("filteredReservationList", reservationList);
-        return mav;
+        model.addAttribute("userList", userList);
+        model.addAttribute("filteredReservationList", reservationList);
+        return "reservationList";
     }
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")

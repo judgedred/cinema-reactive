@@ -3,12 +3,12 @@ package com.web;
 import com.domain.Film;
 import com.service.FilmService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -25,32 +25,37 @@ public class FilmController {
     }
 
     @RequestMapping("/admin/addFilmForm")
-    public ModelAndView addFilmForm() {
-        return new ModelAndView("addFilm", "film", new Film());
+    public String addFilmForm(Model model) {
+        model.addAttribute("film", new Film());
+        return "addFilm";
     }
 
     @RequestMapping("/admin/addFilm")
-    public ModelAndView addFilm(@Valid Film film, BindingResult result) {
+    public String addFilm(@Valid Film film, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return new ModelAndView("addFilm", "film", film);
+            model.addAttribute("film", film);
+        } else {
+            filmService.save(film);
+            model.addAttribute("film", new Film());
         }
-        filmService.save(film);
-        return new ModelAndView("addFilm", "film", new Film());
+        return "addFilm";
     }
 
     @RequestMapping("/admin/deleteFilm")
-    public ModelAndView deleteFilm(@ModelAttribute Film film) {
+    public String deleteFilm(@ModelAttribute Film film, Model model) {
         if (film.getFilmId() != null && !film.getFilmId().equals(BigInteger.ZERO)) {
             filmService.getFilmById(film.getFilmId()).ifPresent(filmService::delete);
         }
         List<Film> filmList = filmService.getFilmAll();
-        return new ModelAndView("deleteFilm", "filmList", filmList);
+        model.addAttribute("filmList", filmList);
+        return "deleteFilm";
     }
 
     @RequestMapping("/admin/filmList")
-    public ModelAndView listFilms() {
+    public String listFilms(Model model) {
         List<Film> filmList = filmService.getFilmAll();
-        return new ModelAndView("filmList", "filmList", filmList);
+        model.addAttribute("filmList", filmList);
+        return "filmList";
     }
 
     @RequestMapping(value = "/admin/checkFilm/{filmId}", produces = "text/html; charset=UTF-8")

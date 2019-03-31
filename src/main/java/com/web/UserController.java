@@ -3,12 +3,12 @@ package com.web;
 import com.domain.User;
 import com.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -25,32 +25,37 @@ public class UserController {
     }
 
     @RequestMapping("/admin/addUserForm")
-    public ModelAndView addUserForm() {
-        return new ModelAndView("addUser", "user", new User());
+    public String addUserForm(Model model) {
+        model.addAttribute("user", new User());
+        return "addUser";
     }
 
     @RequestMapping("/admin/addUser")
-    public ModelAndView addUser(@Valid User user, BindingResult result) {
+    public String addUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return new ModelAndView("addUser", "user", user);
+            model.addAttribute("user", user);
+        } else {
+            userService.save(user);
+            model.addAttribute("user", new User());
         }
-        userService.save(user);
-        return new ModelAndView("addUser", "user", new User());
+        return "addUser";
     }
 
     @RequestMapping("/admin/deleteUser")
-    public ModelAndView deleteUser(@ModelAttribute User user) {
+    public String deleteUser(@ModelAttribute User user, Model model) {
         if (user.getUserId() != null && !user.getUserId().equals(BigInteger.ZERO)) {
             userService.getUserById(user.getUserId()).ifPresent(userService::delete);
         }
         List<User> userList = userService.getUserAll();
-        return new ModelAndView("deleteUser", "userList", userList);
+        model.addAttribute("userList", userList);
+        return "deleteUser";
     }
 
     @RequestMapping("/admin/userList")
-    public ModelAndView listUsers() {
+    public String listUsers(Model model) {
         List<User> userList = userService.getUserAll();
-        return new ModelAndView("userList", "userList", userList);
+        model.addAttribute("userList", userList);
+        return "userList";
     }
 
     @RequestMapping(value = "/admin/checkUser/{userId}", produces = "text/html; charset=UTF-8")
