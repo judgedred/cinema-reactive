@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootApplication
 @EnableSpringWebSession
-//@EnableWebFlux
 public class CinemaApplication {
 
     @Bean
