@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.result.view.Rendering;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -40,44 +40,40 @@ public class FilmshowController {
     }
 
     @RequestMapping("/admin/addFilmshowForm")
-    public String addFilmshowForm(Model model) {
-        List<Film> filmList = filmService.getFilmAll();
-        List<Hall> hallList = hallService.getHallAll();
-        model.addAttribute("filmList", filmList);
-        model.addAttribute("hallList", hallList);
-        model.addAttribute("filmshow", new Filmshow());
-        return "addFilmshow";
+    public Rendering addFilmshowForm() {
+        return Rendering.view("addFilmshow")
+                .modelAttribute("filmList", filmService.getFilmAll())
+                .modelAttribute("hallList", hallService.getHallAll())
+                .modelAttribute("filmshow", new Filmshow())
+                .build();
     }
 
     @RequestMapping("/admin/addFilmshow")
-    public String addFilmshow(@Valid Filmshow filmshow, BindingResult result, Model model) {
+    public Rendering addFilmshow(@Valid Filmshow filmshow, BindingResult result) {
         if (result.hasErrors()) {
-            List<Film> filmList = filmService.getFilmAll();
-            List<Hall> hallList = hallService.getHallAll();
-            model.addAttribute("filmList", filmList);
-            model.addAttribute("hallList", hallList);
-            model.addAttribute("filmshow", filmshow);
-            return "addFilmshow";
+            return Rendering.view("addFilmshow")
+                    .modelAttribute("filmList", filmService.getFilmAll())
+                    .modelAttribute("hallList", hallService.getHallAll())
+                    .modelAttribute("filmshow", filmshow)
+                    .build();
         }
         filmshowService.save(filmshow);
-        return "redirect:addFilmshowForm";
+        return Rendering.redirectTo("addFilmshowForm").build();
     }
 
     @RequestMapping("/admin/deleteFilmshow")
-    public String deleteFilmshow(@ModelAttribute Filmshow filmshow, Model model) {
+    public Rendering deleteFilmshow(@ModelAttribute Filmshow filmshow) {
         if (filmshow.getFilmshowId() != null && !filmshow.getFilmshowId().equals(BigInteger.ZERO)) {
             filmshowService.getFilmshowById(filmshow.getFilmshowId()).ifPresent(filmshowService::delete);
         }
-        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        model.addAttribute("filmshowList", filmshowList);
-        return "deleteFilmshow";
+        return Rendering.view("deleteFilmshow")
+                .modelAttribute("filmshowList", filmshowService.getFilmshowAll())
+                .build();
     }
 
     @RequestMapping("/admin/filmshowList")
-    public String listFilmshows(Model model) {
-        List<Filmshow> filmshowList = filmshowService.getFilmshowAll();
-        model.addAttribute("filmshowList", filmshowList);
-        return "filmshowList";
+    public Rendering listFilmshows(Model model) {
+        return Rendering.view("filmshowList").modelAttribute("filmshowList", filmshowService.getFilmshowAll()).build();
     }
 
     @RequestMapping(value = "/admin/checkFilmshow/{filmshowId}", produces = "text/html; charset=UTF-8")

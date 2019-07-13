@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.result.view.Rendering;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,40 +33,36 @@ public class SeatController {
     }
 
     @RequestMapping("/admin/addSeatForm")
-    public String addSeatForm(Model model) {
-        List<Hall> hallList = hallService.getHallAll();
-        model.addAttribute("hallList", hallList);
-        model.addAttribute("seat", new Seat());
-        return "addSeat";
+    public Rendering addSeatForm() {
+        return Rendering.view("addSeat")
+                .modelAttribute("hallList", hallService.getHallAll())
+                .modelAttribute("seat", new Seat())
+                .build();
     }
 
     @RequestMapping("/admin/addSeat")
-    public String addSeat(@Valid Seat seat, BindingResult result, Model model) {
+    public Rendering addSeat(@Valid Seat seat, BindingResult result) {
         if (result.hasErrors()) {
-            List<Hall> hallList = hallService.getHallAll();
-            model.addAttribute("hallList", hallList);
-            model.addAttribute("seat", seat);
-            return "addSeat";
+            return Rendering.view("addSeat")
+                    .modelAttribute("hallList", hallService.getHallAll())
+                    .modelAttribute("seat", seat)
+                    .build();
         }
         seatService.save(seat);
-        return "redirect:addSeatForm";
+        return Rendering.redirectTo("addSeatForm").build();
     }
 
     @RequestMapping("/admin/deleteSeat")
-    public String deleteSeat(@ModelAttribute Seat seat, Model model) {
+    public Rendering deleteSeat(@ModelAttribute Seat seat) {
         if (seat.getSeatId() != null && !seat.getSeatId().equals(BigInteger.ZERO)) {
             seatService.getSeatById(seat.getSeatId()).ifPresent(seatService::delete);
         }
-        List<Seat> seatList = seatService.getSeatAll();
-        model.addAttribute("seatList", seatList);
-        return "deleteSeat";
+        return Rendering.view("deleteSeat").modelAttribute("seatList", seatService.getSeatAll()).build();
     }
 
     @RequestMapping("/admin/seatList")
-    public String listSeats(Model model) {
-        List<Seat> seatList = seatService.getSeatAll();
-        model.addAttribute("seatList", seatList);
-        return "seatList";
+    public Rendering listSeats(Model model) {
+        return Rendering.view("seatList").modelAttribute("seatList", seatService.getSeatAll()).build();
     }
 
     @RequestMapping(value = "/admin/checkSeat/{seatId}", produces = "text/html; charset=UTF-8")

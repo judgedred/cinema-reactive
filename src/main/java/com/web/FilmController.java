@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.result.view.Rendering;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,37 +25,32 @@ public class FilmController {
     }
 
     @RequestMapping("/admin/addFilmForm")
-    public String addFilmForm(Model model) {
-        model.addAttribute("film", new Film());
-        return "addFilm";
+    public Rendering addFilmForm() {
+        return Rendering.view("addFilm").modelAttribute("film", new Film()).build();
     }
 
     @RequestMapping("/admin/addFilm")
-    public String addFilm(@Valid Film film, BindingResult result, Model model) {
+    public Rendering addFilm(@Valid Film film, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("film", film);
         } else {
             filmService.save(film);
             model.addAttribute("film", new Film());
         }
-        return "addFilm";
+        return Rendering.view("addFilm").build();
     }
 
     @RequestMapping("/admin/deleteFilm")
-    public String deleteFilm(@ModelAttribute Film film, Model model) {
+    public Rendering deleteFilm(@ModelAttribute Film film) {
         if (film.getFilmId() != null && !film.getFilmId().equals(BigInteger.ZERO)) {
             filmService.getFilmById(film.getFilmId()).ifPresent(filmService::delete);
         }
-        List<Film> filmList = filmService.getFilmAll();
-        model.addAttribute("filmList", filmList);
-        return "deleteFilm";
+        return Rendering.view("deleteFilm").modelAttribute("filmList", filmService.getFilmAll()).build();
     }
 
     @RequestMapping("/admin/filmList")
-    public String listFilms(Model model) {
-        List<Film> filmList = filmService.getFilmAll();
-        model.addAttribute("filmList", filmList);
-        return "filmList";
+    public Rendering listFilms() {
+        return Rendering.view("filmList").modelAttribute("filmList", filmService.getFilmAll()).build();
     }
 
     @RequestMapping(value = "/admin/checkFilm/{filmId}", produces = "text/html; charset=UTF-8")

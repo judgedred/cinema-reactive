@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.result.view.Rendering;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,37 +25,32 @@ public class HallController {
     }
 
     @RequestMapping("/admin/addHallForm")
-    public String addHallForm(Model model) {
-        model.addAttribute("hall", new Hall());
-        return "addHall";
+    public Rendering addHallForm() {
+        return Rendering.view("addHall").modelAttribute("hall", new Hall()).build();
     }
 
     @RequestMapping("/admin/addHall")
-    public String addHall(@Valid Hall hall, BindingResult result, Model model) {
+    public Rendering addHall(@Valid Hall hall, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("hall", hall);
         } else {
             hallService.save(hall);
             model.addAttribute("hall", new Hall());
         }
-        return "addHall";
+        return Rendering.view("addHall").build();
     }
 
     @RequestMapping("/admin/deleteHall")
-    public String deleteHall(@ModelAttribute Hall hall, Model model) {
+    public Rendering deleteHall(@ModelAttribute Hall hall, Model model) {
         if (hall.getHallId() != null && !hall.getHallId().equals(BigInteger.ZERO)) {
             hallService.getHallById(hall.getHallId()).ifPresent(hallService::delete);
         }
-        List<Hall> hallList = hallService.getHallAll();
-        model.addAttribute("hallList", hallList);
-        return "deleteHall";
+        return Rendering.view("deleteHall").modelAttribute("hallList", hallService.getHallAll()).build();
     }
 
     @RequestMapping("/admin/hallList")
-    public String listHalls(Model model) {
-        List<Hall> hallList = hallService.getHallAll();
-        model.addAttribute("hallList", hallList);
-        return "hallList";
+    public Rendering listHalls(Model model) {
+        return Rendering.view("hallList").modelAttribute("hallList", hallService.getHallAll()).build();
     }
 
     @RequestMapping(value = "/admin/checkHall/{hallId}", produces = "text/html; charset=UTF-8")

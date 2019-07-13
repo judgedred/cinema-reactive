@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.result.view.Rendering;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,37 +25,32 @@ public class UserController {
     }
 
     @RequestMapping("/admin/addUserForm")
-    public String addUserForm(Model model) {
-        model.addAttribute("user", new User());
-        return "addUser";
+    public Rendering addUserForm() {
+        return Rendering.view("addUser").modelAttribute("user", new User()).build();
     }
 
     @RequestMapping("/admin/addUser")
-    public String addUser(@Valid User user, BindingResult result, Model model) {
+    public Rendering addUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("user", user);
         } else {
             userService.save(user);
             model.addAttribute("user", new User());
         }
-        return "addUser";
+        return Rendering.view("addUser").build();
     }
 
     @RequestMapping("/admin/deleteUser")
-    public String deleteUser(@ModelAttribute User user, Model model) {
+    public Rendering deleteUser(@ModelAttribute User user) {
         if (user.getUserId() != null && !user.getUserId().equals(BigInteger.ZERO)) {
             userService.getUserById(user.getUserId()).ifPresent(userService::delete);
         }
-        List<User> userList = userService.getUserAll();
-        model.addAttribute("userList", userList);
-        return "deleteUser";
+        return Rendering.view("deleteUser").modelAttribute("userList", userService.getUserAll()).build();
     }
 
     @RequestMapping("/admin/userList")
-    public String listUsers(Model model) {
-        List<User> userList = userService.getUserAll();
-        model.addAttribute("userList", userList);
-        return "userList";
+    public Rendering listUsers() {
+        return Rendering.view("userList").modelAttribute("userList", userService.getUserAll()).build();
     }
 
     @RequestMapping(value = "/admin/checkUser/{userId}", produces = "text/html; charset=UTF-8")

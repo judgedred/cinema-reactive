@@ -1,7 +1,5 @@
 package com.web;
 
-import com.domain.Film;
-import com.domain.Filmshow;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
@@ -20,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.server.WebSession;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController {
 
+    private static final String SESSION_VALID_USER = "validUser";
     private final UserService userService;
     private final ReservationService reservationService;
     private final TicketService ticketService;
@@ -51,34 +51,32 @@ public class MainController {
     }
 
     @RequestMapping("/admin")
-    public String adminView() {
-        return "admin";
+    public Rendering adminView() {
+        return Rendering.view("admin").build();
     }
 
     @RequestMapping("/admin/login")
-    public String adminLogin(@ModelAttribute User user, WebSession webSession) {
-        if (user.getLogin() != null && user.getPassword() != null && !user.getLogin().isEmpty() && !user
-                .getPassword()
-                .isEmpty()) {
+    public Rendering adminLogin(@ModelAttribute User user, WebSession webSession) {
+        if (isLoginAndPasswordPresent(user)) {
             User adminUser = userService.authenticateAdmin(user);
             if (adminUser != null) {
                 webSession.getAttributes().put("adminUser", adminUser);
-                return "adminMain";
+                return Rendering.view("adminMain").build();
             }
         }
-        return "redirect:/admin";
+        return Rendering.redirectTo("/admin").build();
     }
 
     @RequestMapping("/admin/logout")
-    public String adminLogout(WebSession webSession) {
-        webSession.invalidate().block();    // TODO
-        return "redirect:/admin";
+    public Mono<Rendering> adminLogout(WebSession webSession) {
+        return webSession.invalidate()
+                .thenReturn(Rendering.redirectTo("/admin").build());
     }
 
     @RequestMapping("/reserveTicket")
-    public String reserveTicket(@ModelAttribute Reservation reservation, WebSession webSession,
+    public Rendering reserveTicket(@ModelAttribute Reservation reservation, WebSession webSession,
             @RequestParam(required = false) BigInteger filmshowId, Model model) {
-        User user = webSession.getAttribute("validUser");
+        User user = webSession.getAttribute(SESSION_VALID_USER);
         Optional.of(reservation)
                 .filter(r -> r.getTicket() != null)
                 .map(r -> r.setUser(user))
@@ -89,23 +87,23 @@ public class MainController {
                     model.addAttribute("filteredTicketList", ticketService.getTicketFreeByFilmshow(filmshow));
                     model.addAttribute("filmshow", filmshow);
                 });
-        return "reserveTicket";
+        return Rendering.view("reserveTicket").build();
     }
 
     @RequestMapping("/reservationList")
-    public String listUserReservations(WebSession webSession, Model model) {
-        User user = webSession.getAttribute("validUser");
-        if (user != null) {
-            List<Reservation> reservationList = reservationService.getReservationAllByUser(user);
-            model.addAttribute("filteredReservationList", reservationList);
-        }
-        return "userReservationList";
+    public Mono<Rendering> listUserReservations(WebSession webSession) {
+        return Mono.justOrEmpty(webSession.<User>getAttribute(SESSION_VALID_USER))
+                .map(reservationService::getReservationAllByUser)
+                .switchIfEmpty(Mono.just(Collections.emptyList()))
+                .map(reservations -> Rendering.view("userReservationList")
+                        .modelAttribute("filteredReservationList", reservations)
+                        .build());
     }
 
     @RequestMapping(value = "/authCheck", produces = "text/html; charset=UTF-8")
     @ResponseBody
     public String authCheck(WebSession webSession) {
-        User validUser = webSession.getAttribute("validUser");
+        User validUser = webSession.getAttribute(SESSION_VALID_USER);
         if (validUser == null) {
             return "Войдите в систему";
         } else {
@@ -116,16 +114,13 @@ public class MainController {
     @RequestMapping(value = "/loginCheck", produces = "text/html; charset=UTF-8")
     @ResponseBody
     public String checkLogin(@RequestBody User user, WebSession webSession) {
-        if (user.getLogin() != null
-                && user.getPassword() != null
-                && !user.getLogin().isEmpty()
-                && !user.getPassword().isEmpty()) {
+        if (isLoginAndPasswordPresent(user)) {
             User validUser = userService.authenticateUser(user);
             if (validUser != null) {
-                webSession.getAttributes().put("validUser", validUser);
+                webSession.getAttributes().put(SESSION_VALID_USER, validUser);
             }
         }
-        User validUser = webSession.getAttribute("validUser");
+        User validUser = webSession.getAttribute(SESSION_VALID_USER);
         if (validUser != null) {
             return validUser.getLogin();
         } else {
@@ -133,35 +128,38 @@ public class MainController {
         }
     }
 
-    @RequestMapping("/logout")
-    public ServerResponse logout(WebSession webSession) {
-        webSession.invalidate().block();
-        return ServerResponse.ok().build().block();
+    @RequestMapping(value = "/logout")
+    @ResponseBody
+    public Mono<Void> logout(WebSession webSession) {
+        return webSession.invalidate();
     }
 
     @RequestMapping("/main")
-    public String navigateMain(Model model) {
-        List<Filmshow> filmshowList = filmshowService.getFilmshowToday();
-        model.addAttribute("filmshowToday", filmshowList);
-        return "main";
+    public Rendering navigateMain() {
+        return Rendering.view("main")
+                .modelAttribute("filmshowToday", filmshowService.getFilmshowToday())
+                .build();
     }
 
     @RequestMapping("/registerForm")
-    public String registerUserForm(Model model) {
-        model.addAttribute("user", new User());
-        return "register";
+    public Rendering registerUserForm() {
+        return Rendering.view("register")
+                .modelAttribute("user", new User())
+                .build();
     }
 
     @RequestMapping("/register")
-    public String registerUser(@Valid User user, BindingResult result, Model model) {
+    public Rendering registerUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            return "register";
+            return Rendering.view("register")
+                    .modelAttribute("user", user)
+                    .build();
         }
         userService.save(user);
-        model.addAttribute("registered", "Вы зарегистрированы");
-        model.addAttribute("user", new User());
-        return "register";
+        return Rendering.view("register")
+                .modelAttribute("registered", "Вы зарегистрированы")
+                .modelAttribute("user", new User())
+                .build();
     }
 
     @RequestMapping(value = "/registerCheck", produces = "text/html; charset=UTF-8")
@@ -183,7 +181,7 @@ public class MainController {
     }
 
     @RequestMapping("filmshow")
-    public String navigateFilmshow(Model model) {
+    public Rendering navigateFilmshow(Model model) {
         return Optional.of(filmshowService.getFilmshowWeek()
                 .stream()
                 .collect(Collectors.groupingBy(
@@ -191,32 +189,36 @@ public class MainController {
                         TreeMap::new,
                         Collectors.toList())))
                 .filter(filmshowMap -> !filmshowMap.isEmpty())
-                .map(filmshowMap -> {
-                    model.addAttribute("filmshowMap", filmshowMap);
-                    return "filmshow";
-                })
-                .orElse("filmshow");
+                .map(filmshowMap -> Rendering.view("filmshow").modelAttribute("filmshowMap", filmshowMap).build())
+                .orElse(Rendering.view("filmshow").build());
     }
 
     @RequestMapping("film")
-    public String navigateFilm(Model model) {
-        List<Film> filmList = filmService.getFilmAll();
-        model.addAttribute("filmList", filmList);
-        return "film";
+    public Rendering navigateFilm(Model model) {
+        return Rendering.view("film")
+                .modelAttribute("filmList", filmService.getFilmAll())
+                .build();
     }
 
     @RequestMapping("news")
-    public String navigateNews() {
-        return "news";
+    public Rendering navigateNews() {
+        return Rendering.view("news").build();
     }
 
     @RequestMapping("about")
-    public String navigateAbout() {
-        return "about";
+    public Rendering navigateAbout() {
+        return Rendering.view("about").build();
     }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Ticket.class, ticketEditor);
+    }
+
+    private boolean isLoginAndPasswordPresent(User user) {
+        return user.getLogin() != null
+                && user.getPassword() != null
+                && !user.getLogin().isEmpty()
+                && !user.getPassword().isEmpty();
     }
 }
