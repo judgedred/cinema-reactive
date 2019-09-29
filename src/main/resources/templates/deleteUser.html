@@ -27,7 +27,7 @@
     <div th:insert="admin-menu"></div>
     <div style="margin: 5px;">Удалить пользователя</div>
     <div th:unless="${#lists.isEmpty(userList)}">
-        <form th:action="@{deleteUser}" th:object="${user}" method="post">
+        <form th:action="@{deleteUser}" th:object="${user}" id="user" method="post">
             <div style="margin: 5px;">
                 <label th:for="*{userId}">Пользователь</label>
                 <select th:field="*{userId}">

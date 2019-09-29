@@ -35,15 +35,15 @@ public class MongoFilmDaoTest {
         assertNotNull(film);
         assertThat(film.getFilmName(), is(filmNameExpected));
         assertThat(film.getDescription(), is(descriptionExpected));
-        filmRepository.delete(film);
+        filmRepository.delete(film).block();
     }
 
     @Test
     public void getByIdTest() {
         Film film = testDataRepository.createTestFilm();
-        Optional<Film> filmTest = filmRepository.findById(film.getFilmId());
+        Optional<Film> filmTest = filmRepository.findById(film.getFilmId()).blockOptional();
         assertTrue(filmTest.isPresent());
-        filmRepository.delete(film);
+        filmRepository.delete(film).block();
     }
 
     @Test
@@ -53,29 +53,29 @@ public class MongoFilmDaoTest {
         String descriptionExpected = "updatedFilmDescription";
         film.setFilmName(filmNameExpected);
         film.setDescription(descriptionExpected);
-        filmRepository.save(film);
-        Optional<Film> filmOptional = filmRepository.findById(film.getFilmId());
+        filmRepository.save(film).block();
+        Optional<Film> filmOptional = filmRepository.findById(film.getFilmId()).blockOptional();
         assertTrue(filmOptional.isPresent());
         Film filmUpdated = filmOptional.get();
         assertThat(filmUpdated.getFilmName(), is(filmNameExpected));
         assertThat(filmUpdated.getDescription(), is(descriptionExpected));
-        filmRepository.delete(film);
+        filmRepository.delete(film).block();
     }
 
     @Test
     public void deleteTest() {
         Film film = testDataRepository.createTestFilm();
-        filmRepository.delete(film);
-        assertFalse(filmRepository.findById(film.getFilmId()).isPresent());
+        filmRepository.delete(film).block();
+        assertFalse(filmRepository.findById(film.getFilmId()).blockOptional().isPresent());
     }
 
     @Test
     public void getAllFilmsTest() {
         Film film = testDataRepository.createTestFilm();
-        List<Film> films = filmRepository.findAll();
+        List<Film> films = filmRepository.findAll().collectList().block();
         assertNotNull(films);
         assertTrue(films.size() > 0);
-        filmRepository.delete(film);
+        filmRepository.delete(film).block();
     }
 
 }

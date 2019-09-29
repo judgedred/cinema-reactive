@@ -38,7 +38,7 @@ public class TestDataRepository {
                 .setFilmId(filmId)
                 .setFilmName(filmName)
                 .setDescription(description);
-        return filmRepository.save(film);
+        return filmRepository.save(film).block();
     }
 
     Film createTestFilm() {

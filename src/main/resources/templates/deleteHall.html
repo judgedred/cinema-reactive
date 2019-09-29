@@ -27,7 +27,7 @@
     <div th:insert="admin-menu"></div>
     <div style="margin: 5px;">Удалить зал</div>
     <div th:unless="${#lists.isEmpty(hallList)}">
-        <form th:action="@{deleteHall}" th:object="${hall}" method="post">
+        <form th:action="@{deleteHall}" th:object="${hall}" id="hall" method="post">
             <div style="margin: 5px;">
                 <label th:for="*{hallId}">Зал</label>
                 <select th:field="*{hallId}">

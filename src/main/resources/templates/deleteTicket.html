@@ -27,7 +27,7 @@
     <div th:insert="admin-menu"></div>
     <div style="margin: 5px;">Удалить билет</div>
     <div th:unless="${#lists.isEmpty(ticketList)}">
-        <form th:action="@{deleteTicket}" th:object="${ticket}" method="post">
+        <form th:action="@{deleteTicket}" th:object="${ticket}" id="ticket" method="post">
             <div style="margin: 5px;">
                 <label th:for="*{ticketId}">Тикет</label>
                 <select th:field="*{ticketId}">

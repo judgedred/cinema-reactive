@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.Optional;
 
 @Controller
 public class FilmController {
@@ -30,22 +30,24 @@ public class FilmController {
     }
 
     @RequestMapping("/admin/addFilm")
-    public Rendering addFilm(@Valid Film film, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("film", film);
-        } else {
-            filmService.save(film);
-            model.addAttribute("film", new Film());
-        }
-        return Rendering.view("addFilm").build();
+    public Mono<Rendering> addFilm(@Valid Film film, BindingResult result, Model model) {
+        return Mono.just(film)
+                .filter(f -> !result.hasErrors())
+                .flatMap(filmService::save)
+                .map(f -> new Film())
+                .switchIfEmpty(Mono.just(film))
+                .map(f -> Rendering.view("addFilm").modelAttribute("film", f).build());
     }
 
     @RequestMapping("/admin/deleteFilm")
-    public Rendering deleteFilm(@ModelAttribute Film film) {
-        if (film.getFilmId() != null && !film.getFilmId().equals(BigInteger.ZERO)) {
-            filmService.getFilmById(film.getFilmId()).ifPresent(filmService::delete);
-        }
-        return Rendering.view("deleteFilm").modelAttribute("filmList", filmService.getFilmAll()).build();
+    public Mono<Rendering> deleteFilm(@ModelAttribute Film film) {
+        return Mono.justOrEmpty(film.getFilmId())
+                .filter(filmId -> !film.getFilmId().equals(BigInteger.ZERO))
+                .flatMap(filmService::getFilmById)
+                .flatMap(filmService::delete)
+                .thenMany(filmService.getFilmAll())
+                .collectList()
+                .map(filmList -> Rendering.view("deleteFilm").modelAttribute("filmList", filmList).build());
     }
 
     @RequestMapping("/admin/filmList")
@@ -55,11 +57,10 @@ public class FilmController {
 
     @RequestMapping(value = "/admin/checkFilm/{filmId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkFilm(@PathVariable BigInteger filmId) {
-        return Optional.ofNullable(filmId)
+    public Mono<String> checkFilm(@PathVariable BigInteger filmId) {
+        return Mono.justOrEmpty(filmId)
                 .flatMap(filmService::getFilmById)
                 .filter(filmService::checkFilmInFilmshow)
-                .map(film -> "На фильм созданы сеансы. Сначала удалите сеансы.")
-                .orElse(null);
+                .map(film -> "На фильм созданы сеансы. Сначала удалите сеансы.");
     }
 }

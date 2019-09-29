@@ -27,7 +27,7 @@
     <div th:insert="admin-menu"></div>
     <div style="margin: 5px;">Удалить фильм</div>
     <div th:unless="${#lists.isEmpty(filmList)}">
-        <form th:action="@{deleteFilm}" th:object="${film}" method="post">
+        <form th:action="@{deleteFilm}" th:object="${film}" id="film" method="post">
             <div style="margin: 5px;">
                 <label th:for="*{filmId}">Фильм</label>
                 <select th:field="*{filmId}">

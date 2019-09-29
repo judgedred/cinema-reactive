@@ -85,14 +85,15 @@ public class DataGenerator {
     }
 
     private void createFilms() {
-        filmService.save(new Film("Мстители", "Супергерои против злодея Артрона."));
-        filmService.save(new Film("Восхождение Юпитер", "Фантастика"));
-        filmService.save(new Film("Аватар", "Фантастика"));
-        filmService.save(new Film("Матрица", "Фантастика"));
+        filmService.save(new Film("Мстители", "Супергерои против злодея Артрона.")).block();
+        filmService.save(new Film("Восхождение Юпитер", "Фантастика")).block();
+        filmService.save(new Film("Аватар", "Фантастика")).block();
+        filmService.save(new Film("Матрица", "Фантастика")).block();
     }
 
     private void createFilmshows() {
         Film film = filmService.getFilmByName("Матрица")
+                .blockOptional()
                 .orElseThrow(() -> new IllegalStateException("Film must be created."));
         LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
         LongStream.range(0, 8)
