@@ -3,18 +3,18 @@ package com.dao;
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public interface FilmshowRepository extends MongoRepository<Filmshow, BigInteger> {
+public interface FilmshowRepository extends ReactiveMongoRepository<Filmshow, BigInteger> {
 
-    List<Filmshow> findAllByFilm(Film film);
+    Flux<Filmshow> findAllByFilm(Film film);
 
-    List<Filmshow> findAllByHall(Hall hall);
+    Flux<Filmshow> findAllByHall(Hall hall);
 
-    List<Filmshow> findByDateTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
+    Flux<Filmshow> findByDateTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 
 }

@@ -18,7 +18,5 @@ public interface HallService {
 
     Optional<Hall> getHallByNumber(Integer hallNumber);
 
-    boolean checkHallInFilmshow(Hall hall);
-
     boolean checkHallInSeat(Hall hall);
 }

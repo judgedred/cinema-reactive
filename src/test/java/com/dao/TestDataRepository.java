@@ -64,13 +64,13 @@ public class TestDataRepository {
                 .setFilm(film)
                 .setHall(hall)
                 .setDateTime(LocalDateTime.now());
-        return filmshowRepository.save(filmshow);
+        return filmshowRepository.save(filmshow).block();
     }
 
     void cleanUpFilmshow(Filmshow filmshow) {
-        filmRepository.delete(filmshow.getFilm());
+        filmRepository.delete(filmshow.getFilm()).block();
         hallRepository.delete(filmshow.getHall());
-        filmshowRepository.delete(filmshow);
+        filmshowRepository.delete(filmshow).block();
     }
 
     Seat createSeat(BigInteger id, int rowNumber, int seatNumber, Hall hall) {

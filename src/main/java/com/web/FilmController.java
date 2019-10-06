@@ -2,6 +2,7 @@ package com.web;
 
 import com.domain.Film;
 import com.service.FilmService;
+import com.service.FilmshowService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,9 +20,11 @@ import java.math.BigInteger;
 public class FilmController {
 
     private final FilmService filmService;
+    private final FilmshowService filmshowService;
 
-    public FilmController(FilmService filmService) {
+    public FilmController(FilmService filmService, FilmshowService filmshowService) {
         this.filmService = filmService;
+        this.filmshowService = filmshowService;
     }
 
     @RequestMapping("/admin/addFilmForm")
@@ -35,14 +38,14 @@ public class FilmController {
                 .filter(f -> !result.hasErrors())
                 .flatMap(filmService::save)
                 .map(f -> new Film())
-                .switchIfEmpty(Mono.just(film))
+                .defaultIfEmpty(film)
                 .map(f -> Rendering.view("addFilm").modelAttribute("film", f).build());
     }
 
     @RequestMapping("/admin/deleteFilm")
     public Mono<Rendering> deleteFilm(@ModelAttribute Film film) {
         return Mono.justOrEmpty(film.getFilmId())
-                .filter(filmId -> !film.getFilmId().equals(BigInteger.ZERO))
+                .filter(filmId -> !filmId.equals(BigInteger.ZERO))
                 .flatMap(filmService::getFilmById)
                 .flatMap(filmService::delete)
                 .thenMany(filmService.getFilmAll())
@@ -60,7 +63,8 @@ public class FilmController {
     public Mono<String> checkFilm(@PathVariable BigInteger filmId) {
         return Mono.justOrEmpty(filmId)
                 .flatMap(filmService::getFilmById)
-                .filter(filmService::checkFilmInFilmshow)
-                .map(film -> "На фильм созданы сеансы. Сначала удалите сеансы.");
+                .flatMapMany(filmshowService::getFilmshowByFilm)
+                .collectList()
+                .map(filmshows -> "На фильм созданы сеансы. Сначала удалите сеансы.");
     }
 }

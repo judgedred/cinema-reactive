@@ -1,6 +1,7 @@
 package com.web;
 
 import com.domain.Hall;
+import com.service.FilmshowService;
 import com.service.HallService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,18 +11,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.Optional;
 
 @Controller
 public class HallController {
 
     private final HallService hallService;
+    private final FilmshowService filmshowService;
 
-    public HallController(HallService hallService) {
+    public HallController(HallService hallService, FilmshowService filmshowService) {
         this.hallService = hallService;
+        this.filmshowService = filmshowService;
     }
 
     @RequestMapping("/admin/addHallForm")
@@ -55,20 +58,18 @@ public class HallController {
 
     @RequestMapping(value = "/admin/checkHall/{hallId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkHall(@PathVariable BigInteger hallId) {
-        return Optional.ofNullable(hallId)
-                .flatMap(hallService::getHallById)
-                .flatMap(this::checkHallConstraints)
-                .orElse(null);
+    public Mono<String> checkHall(@PathVariable BigInteger hallId) {
+        return Mono.justOrEmpty(hallId)
+                .flatMap(id -> Mono.justOrEmpty(hallService.getHallById(id)))
+                .flatMap(this::checkHallConstraints);
     }
 
-    private Optional<String> checkHallConstraints(Hall hall) {
-        if (hallService.checkHallInFilmshow(hall)) {
-            return Optional.of("В зале имеются сеансы. Сначала удалите сеансы.");
-        }
-        if (hallService.checkHallInSeat(hall)) {
-            return Optional.of("В зале имеются места. Сначала удалите места.");
-        }
-        return Optional.empty();
+    private Mono<String> checkHallConstraints(Hall hall) {
+        return filmshowService.getFilmshowByHall(hall)
+                .collectList()
+                .map(filmshows -> "В зале имеются сеансы. Сначала удалите сеансы.")
+                .switchIfEmpty(Mono.fromCallable(() -> hallService.checkHallInSeat(hall))
+                        .map(found -> "В зале имеются места. Сначала удалите места."));
+
     }
 }

@@ -6,6 +6,7 @@ import com.domain.Hall;
 import com.service.FilmService;
 import com.service.FilmshowService;
 import com.service.HallService;
+import com.service.TicketService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.Optional;
 
 @Controller
 public class FilmshowController {
@@ -27,14 +29,16 @@ public class FilmshowController {
     private final FilmshowService filmshowService;
     private final HallService hallService;
     private final FilmService filmService;
+    private final TicketService ticketService;
     private final FilmEditor filmEditor;
     private final HallEditor hallEditor;
 
     public FilmshowController(FilmshowService filmshowService, HallService hallService, FilmService filmService,
-            FilmEditor filmEditor, HallEditor hallEditor) {
+            TicketService ticketService, FilmEditor filmEditor, HallEditor hallEditor) {
         this.filmshowService = filmshowService;
         this.hallService = hallService;
         this.filmService = filmService;
+        this.ticketService = ticketService;
         this.filmEditor = filmEditor;
         this.hallEditor = hallEditor;
     }
@@ -49,26 +53,29 @@ public class FilmshowController {
     }
 
     @RequestMapping("/admin/addFilmshow")
-    public Rendering addFilmshow(@Valid Filmshow filmshow, BindingResult result) {
-        if (result.hasErrors()) {
-            return Rendering.view("addFilmshow")
-                    .modelAttribute("filmList", filmService.getFilmAll())
-                    .modelAttribute("hallList", hallService.getHallAll())
-                    .modelAttribute("filmshow", filmshow)
-                    .build();
-        }
-        filmshowService.save(filmshow);
-        return Rendering.redirectTo("addFilmshowForm").build();
+    public Mono<Rendering> addFilmshow(@Valid Filmshow filmshow, BindingResult result) {
+        return Mono.just(filmshow)
+                .filter(show -> !result.hasErrors())
+                .flatMap(filmshowService::save)
+                .thenReturn(Rendering.redirectTo("addFilmshowForm").build())
+                .defaultIfEmpty(Rendering.view("addFilmshow")
+                        .modelAttribute("filmList", filmService.getFilmAll())
+                        .modelAttribute("hallList", hallService.getHallAll())
+                        .modelAttribute("filmshow", filmshow)
+                        .build());
     }
 
     @RequestMapping("/admin/deleteFilmshow")
-    public Rendering deleteFilmshow(@ModelAttribute Filmshow filmshow) {
-        if (filmshow.getFilmshowId() != null && !filmshow.getFilmshowId().equals(BigInteger.ZERO)) {
-            filmshowService.getFilmshowById(filmshow.getFilmshowId()).ifPresent(filmshowService::delete);
-        }
-        return Rendering.view("deleteFilmshow")
-                .modelAttribute("filmshowList", filmshowService.getFilmshowAll())
-                .build();
+    public Mono<Rendering> deleteFilmshow(@ModelAttribute Filmshow filmshow) {
+        return Mono.justOrEmpty(filmshow.getFilmshowId())
+                .filter(filmshowId -> !filmshowId.equals(BigInteger.ZERO))
+                .flatMap(filmshowService::getFilmshowById)
+                .flatMap(filmshowService::delete)
+                .thenMany(filmshowService.getFilmshowAll())
+                .collectList()
+                .map(filmshowList -> Rendering.view("deleteFilmshow")
+                        .modelAttribute("filmshowList", filmshowList)
+                        .build());
     }
 
     @RequestMapping("/admin/filmshowList")
@@ -78,12 +85,12 @@ public class FilmshowController {
 
     @RequestMapping(value = "/admin/checkFilmshow/{filmshowId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkFilmshow(@PathVariable BigInteger filmshowId) {
-        return Optional.ofNullable(filmshowId)
+    public Mono<String> checkFilmshow(@PathVariable BigInteger filmshowId) {
+        return Mono.justOrEmpty(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
-                .filter(filmshowService::checkFilmshowInTicket)
-                .map(filmshow -> "На сеанс имеются билеты. Сначала удалите билеты.")
-                .orElse(null);
+                .flatMapMany(filmshow -> Flux.fromIterable(ticketService.getTicketAllByFilmshow(filmshow)))
+                .collectList()
+                .map(filmshows -> "На сеанс имеются билеты. Сначала удалите билеты.");
     }
 
     @InitBinder

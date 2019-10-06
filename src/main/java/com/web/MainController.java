@@ -1,5 +1,6 @@
 package com.web;
 
+import com.domain.Filmshow;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
@@ -74,27 +75,27 @@ public class MainController {
     }
 
     @RequestMapping("/reserveTicket")
-    public Rendering reserveTicket(@ModelAttribute Reservation reservation, WebSession webSession,
+    public Mono<Rendering> reserveTicket(@ModelAttribute Reservation reservation, WebSession webSession,
             @RequestParam(required = false) BigInteger filmshowId, Model model) {
         User user = webSession.getAttribute(SESSION_VALID_USER);
         Optional.of(reservation)
                 .filter(r -> r.getTicket() != null)
                 .map(r -> r.setUser(user))
                 .ifPresent(reservationService::save);
-        Optional.ofNullable(filmshowId)
+        return Mono.justOrEmpty(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
-                .ifPresent(filmshow -> {
+                .doOnNext(filmshow -> {
                     model.addAttribute("filteredTicketList", ticketService.getTicketFreeByFilmshow(filmshow));
                     model.addAttribute("filmshow", filmshow);
-                });
-        return Rendering.view("reserveTicket").build();
+                })
+                .thenReturn(Rendering.view("reserveTicket").build());
     }
 
     @RequestMapping("/reservationList")
     public Mono<Rendering> listUserReservations(WebSession webSession) {
         return Mono.justOrEmpty(webSession.<User>getAttribute(SESSION_VALID_USER))
                 .map(reservationService::getReservationAllByUser)
-                .switchIfEmpty(Mono.just(Collections.emptyList()))
+                .defaultIfEmpty(Collections.emptyList())
                 .map(reservations -> Rendering.view("userReservationList")
                         .modelAttribute("filteredReservationList", reservations)
                         .build());
@@ -181,16 +182,15 @@ public class MainController {
     }
 
     @RequestMapping("filmshow")
-    public Rendering navigateFilmshow(Model model) {
-        return Optional.of(filmshowService.getFilmshowWeek()
-                .stream()
+    public Mono<Rendering> navigateFilmshow(Model model) {
+        return filmshowService.getFilmshowWeek()
                 .collect(Collectors.groupingBy(
-                        filmshow -> filmshow.getDateTime().toLocalDate(),
+                        (Filmshow filmshow) -> filmshow.getDateTime().toLocalDate(),
                         TreeMap::new,
-                        Collectors.toList())))
+                        Collectors.toList()))
                 .filter(filmshowMap -> !filmshowMap.isEmpty())
                 .map(filmshowMap -> Rendering.view("filmshow").modelAttribute("filmshowMap", filmshowMap).build())
-                .orElse(Rendering.view("filmshow").build());
+                .defaultIfEmpty(Rendering.view("filmshow").build());
     }
 
     @RequestMapping("film")

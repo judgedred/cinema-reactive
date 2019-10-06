@@ -12,12 +12,10 @@ import java.util.Optional;
 public class DefaultHallService implements HallService {
 
     private final HallRepository hallRepository;
-    private final FilmshowService filmshowService;
     private final SeatService seatService;
 
-    public DefaultHallService(HallRepository hallRepository, FilmshowService filmshowService, SeatService seatService) {
+    public DefaultHallService(HallRepository hallRepository, SeatService seatService) {
         this.hallRepository = hallRepository;
-        this.filmshowService = filmshowService;
         this.seatService = seatService;
     }
 
@@ -44,11 +42,6 @@ public class DefaultHallService implements HallService {
     @Override
     public Optional<Hall> getHallByNumber(Integer hallNumber) {
         return hallRepository.findByHallNumber(hallNumber);
-    }
-
-    @Override
-    public boolean checkHallInFilmshow(Hall hall) {
-        return !filmshowService.getFilmshowByHall(hall).isEmpty();
     }
 
     @Override

@@ -12,11 +12,9 @@ import java.math.BigInteger;
 public class DefaultFilmService implements FilmService {
 
     private final FilmRepository filmRepository;
-    private final FilmshowService filmshowService;
 
-    public DefaultFilmService(FilmRepository filmRepository, FilmshowService filmshowService) {
+    public DefaultFilmService(FilmRepository filmRepository) {
         this.filmRepository = filmRepository;
-        this.filmshowService = filmshowService;
     }
 
     @Override
@@ -44,8 +42,4 @@ public class DefaultFilmService implements FilmService {
         return filmRepository.findByFilmName(filmName);
     }
 
-    @Override
-    public boolean checkFilmInFilmshow(Film film) {
-        return !filmshowService.getFilmshowByFilm(film).isEmpty();
-    }
 }

@@ -3,28 +3,26 @@ package com.service;
 import com.domain.Film;
 import com.domain.Filmshow;
 import com.domain.Hall;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 public interface FilmshowService {
 
-    Filmshow save(Filmshow filmshow);
+    Mono<Filmshow> save(Filmshow filmshow);
 
-    void delete(Filmshow filmshow);
+    Mono<Void> delete(Filmshow filmshow);
 
-    List<Filmshow> getFilmshowAll();
+    Flux<Filmshow> getFilmshowAll();
 
-    Optional<Filmshow> getFilmshowById(BigInteger id);
+    Mono<Filmshow> getFilmshowById(BigInteger id);
 
-    boolean checkFilmshowInTicket(Filmshow filmshow);
+    Flux<Filmshow> getFilmshowToday();
 
-    List<Filmshow> getFilmshowToday();
+    Flux<Filmshow> getFilmshowWeek();
 
-    List<Filmshow> getFilmshowWeek();
+    Flux<Filmshow> getFilmshowByFilm(Film film);
 
-    List<Filmshow> getFilmshowByFilm(Film film);
-
-    List<Filmshow> getFilmshowByHall(Hall hall);
+    Flux<Filmshow> getFilmshowByHall(Hall hall);
 }

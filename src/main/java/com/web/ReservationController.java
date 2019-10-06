@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -93,12 +94,12 @@ public class ReservationController {
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")
     @ResponseBody
-    public Map<BigInteger, String> filterTickets(@PathVariable BigInteger filmshowId) {
-        return Optional.ofNullable(filmshowId)
+    public Mono<Map<BigInteger, String>> filterTickets(@PathVariable BigInteger filmshowId) {
+        return Mono.justOrEmpty(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
-                .map(ticketService::getTicketFreeByFilmshow)
-                .orElse(Collections.emptyList())
-                .stream()
+                .flatMap(filmshow -> Mono.fromCallable(() -> ticketService.getTicketFreeByFilmshow(filmshow)))
+                .defaultIfEmpty(Collections.emptyList())
+                .flatMapMany(Flux::fromIterable)
                 .collect(Collectors.toMap(
                         Ticket::getTicketId,
                         Ticket::toString,

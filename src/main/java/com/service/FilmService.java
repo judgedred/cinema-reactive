@@ -18,5 +18,4 @@ public interface FilmService {
 
     Mono<Film> getFilmByName(String filmName);
 
-    boolean checkFilmInFilmshow(Film film);
 }

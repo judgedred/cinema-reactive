@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -102,12 +103,10 @@ public class TicketController {
 
     @RequestMapping("/admin/seatsFilter/{filmshowId}")
     @ResponseBody
-    public Map<BigInteger, String> filterSeats(@PathVariable BigInteger filmshowId) {
-        return Optional.of(filmshowId)
+    public Mono<Map<BigInteger, String>> filterSeats(@PathVariable BigInteger filmshowId) {
+        return Mono.justOrEmpty(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
-                .map(seatService::getSeatFreeByFilmshow)
-                .orElse(Collections.emptyList())
-                .stream()
+                .flatMapIterable(seatService::getSeatFreeByFilmshow)
                 .collect(Collectors.toMap(
                         Seat::getSeatId,
                         Seat::toString,
