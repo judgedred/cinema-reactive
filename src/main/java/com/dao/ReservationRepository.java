@@ -3,15 +3,15 @@ package com.dao;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 
 import java.math.BigInteger;
-import java.util.List;
 
-public interface ReservationRepository extends MongoRepository<Reservation, BigInteger> {
+public interface ReservationRepository extends ReactiveMongoRepository<Reservation, BigInteger> {
 
-    List<Reservation> findAllByUser(User user);
+    Flux<Reservation> findAllByUser(User user);
 
-    List<Reservation> findAllByTicket(Ticket ticket);
+    Flux<Reservation> findAllByTicket(Ticket ticket);
 
 }

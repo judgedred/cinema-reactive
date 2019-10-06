@@ -18,8 +18,6 @@ public interface UserService {
 
     Optional<User> getUserByLogin(String login);
 
-    boolean checkUserInReservation(User user);
-
     User authenticateAdmin(User user);
 
     User authenticateUser(User user);

@@ -6,9 +6,9 @@ import com.domain.Reservation;
 import com.domain.Seat;
 import com.domain.Ticket;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,18 +55,11 @@ public class DefaultTicketService implements TicketService {
     }
 
     @Override
-    public boolean checkTicketInReservation(Ticket ticket) {
-        return !reservationService.getReservationAllByTicket(ticket).isEmpty();
-    }
-
-    @Override
-    public List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) {
-        return Optional.of(reservationService.getReservationAll())
-                .map(reservations -> reservations.stream()
-                        .map(Reservation::getTicket)
-                        .map(Ticket::getTicketId)
-                        .collect(Collectors.toList()))
-                .map(ticketIds -> ticketRepository.findByFilmshowAndTicketIdNotIn(filmshow, ticketIds))
-                .orElse(Collections.emptyList());
+    public Flux<Ticket> getTicketFreeByFilmshow(Filmshow filmshow) {
+        return reservationService.getReservationAll()
+                .map(Reservation::getTicket)
+                .map(Ticket::getTicketId)
+                .collect(Collectors.toList())
+                .flatMapIterable(ticketIds -> ticketRepository.findByFilmshowAndTicketIdNotIn(filmshow, ticketIds));
     }
 }

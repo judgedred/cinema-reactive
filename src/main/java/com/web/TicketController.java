@@ -4,6 +4,7 @@ import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
 import com.service.FilmshowService;
+import com.service.ReservationService;
 import com.service.SeatService;
 import com.service.TicketService;
 import org.springframework.stereotype.Controller;
@@ -31,15 +32,17 @@ public class TicketController {
     private final TicketService ticketService;
     private final FilmshowService filmshowService;
     private final SeatService seatService;
+    private final ReservationService reservationService;
     private final TicketEditor ticketEditor;
     private final FilmshowEditor filmshowEditor;
     private final SeatEditor seatEditor;
 
     public TicketController(TicketService ticketService, FilmshowService filmshowService, SeatService seatService,
-            TicketEditor ticketEditor, FilmshowEditor filmshowEditor, SeatEditor seatEditor) {
+            ReservationService reservationService, TicketEditor ticketEditor, FilmshowEditor filmshowEditor, SeatEditor seatEditor) {
         this.ticketService = ticketService;
         this.filmshowService = filmshowService;
         this.seatService = seatService;
+        this.reservationService = reservationService;
         this.ticketEditor = ticketEditor;
         this.filmshowEditor = filmshowEditor;
         this.seatEditor = seatEditor;
@@ -114,14 +117,28 @@ public class TicketController {
                         LinkedHashMap::new));
     }
 
+    @RequestMapping("/admin/ticketsFilter/{filmshowId}")
+    @ResponseBody
+    public Mono<Map<BigInteger, String>> filterTickets(@PathVariable BigInteger filmshowId) {
+        return Mono.justOrEmpty(filmshowId)
+                .flatMap(filmshowService::getFilmshowById)
+                .flatMapMany(ticketService::getTicketFreeByFilmshow)
+                .collect(Collectors.toMap(
+                        Ticket::getTicketId,
+                        Ticket::toString,
+                        (oldValue, newValue) -> newValue,
+                        LinkedHashMap::new));
+    }
+
     @RequestMapping(value = "/admin/checkTicket/{ticketId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkTicket(@PathVariable BigInteger ticketId) {
-        return Optional.ofNullable(ticketId)
-                .flatMap(ticketService::getTicketById)
-                .filter(ticketService::checkTicketInReservation)
-                .map(ticket -> "Билет зарезервирован. Сначала удалите бронь.")
-                .orElse(null);
+    public Mono<String> checkTicket(@PathVariable BigInteger ticketId) {
+        return Mono.justOrEmpty(ticketId)
+                .flatMap(id -> Mono.justOrEmpty(ticketService.getTicketById(id)))
+                .flatMapMany(reservationService::getReservationAllByTicket)
+                .collectList()
+                .filter(reservations -> !reservations.isEmpty())
+                .map(reservations -> "Билет зарезервирован. Сначала удалите бронь.");
     }
 
     @InitBinder

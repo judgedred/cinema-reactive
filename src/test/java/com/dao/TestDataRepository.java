@@ -130,7 +130,7 @@ public class TestDataRepository {
         Reservation reservation = new Reservation()
                 .setTicket(ticket)
                 .setUser(user);
-        return reservationRepository.save(reservation);
+        return reservationRepository.save(reservation).block();
     }
 
     Reservation createTestReservation() {
@@ -140,7 +140,7 @@ public class TestDataRepository {
     void cleanUpReservation(Reservation reservation) {
         cleanUpTicket(reservation.getTicket());
         userRepository.delete(reservation.getUser());
-        reservationRepository.delete(reservation);
+        reservationRepository.delete(reservation).block();
     }
 
 }

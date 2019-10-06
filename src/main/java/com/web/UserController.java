@@ -1,6 +1,7 @@
 package com.web;
 
 import com.domain.User;
+import com.service.ReservationService;
 import com.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,18 +11,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.Optional;
 
 @Controller
 public class UserController {
 
     private final UserService userService;
+    private final ReservationService reservationService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ReservationService reservationService) {
         this.userService = userService;
+        this.reservationService = reservationService;
     }
 
     @RequestMapping("/admin/addUserForm")
@@ -55,12 +58,12 @@ public class UserController {
 
     @RequestMapping(value = "/admin/checkUser/{userId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkUser(@PathVariable BigInteger userId) {
-        return Optional
-                .ofNullable(userId)
-                .flatMap(userService::getUserById)
-                .filter(userService::checkUserInReservation)
-                .map(user -> "У пользователя есть брони. Сначала удалите бронь.")
-                .orElse(null);
+    public Mono<String> checkUser(@PathVariable BigInteger userId) {
+        return Mono.justOrEmpty(userId)
+                .flatMap(id -> Mono.justOrEmpty(userService.getUserById(id)))
+                .flatMapMany(reservationService::getReservationAllByUser)
+                .collectList()
+                .filter(reservations -> !reservations.isEmpty())
+                .map(reservations -> "У пользователя есть брони. Сначала удалите бронь.");
     }
 }

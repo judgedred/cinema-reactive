@@ -25,8 +25,6 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.Collections;
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -77,12 +75,11 @@ public class MainController {
     @RequestMapping("/reserveTicket")
     public Mono<Rendering> reserveTicket(@ModelAttribute Reservation reservation, WebSession webSession,
             @RequestParam(required = false) BigInteger filmshowId, Model model) {
-        User user = webSession.getAttribute(SESSION_VALID_USER);
-        Optional.of(reservation)
+        return Mono.just(reservation)
                 .filter(r -> r.getTicket() != null)
-                .map(r -> r.setUser(user))
-                .ifPresent(reservationService::save);
-        return Mono.justOrEmpty(filmshowId)
+                .map(r -> r.setUser(webSession.getAttribute(SESSION_VALID_USER)))
+                .flatMap(reservationService::save)
+                .then(Mono.justOrEmpty(filmshowId))
                 .flatMap(filmshowService::getFilmshowById)
                 .doOnNext(filmshow -> {
                     model.addAttribute("filteredTicketList", ticketService.getTicketFreeByFilmshow(filmshow));
@@ -94,8 +91,8 @@ public class MainController {
     @RequestMapping("/reservationList")
     public Mono<Rendering> listUserReservations(WebSession webSession) {
         return Mono.justOrEmpty(webSession.<User>getAttribute(SESSION_VALID_USER))
-                .map(reservationService::getReservationAllByUser)
-                .defaultIfEmpty(Collections.emptyList())
+                .flatMapMany(reservationService::getReservationAllByUser)
+                .collectList()
                 .map(reservations -> Rendering.view("userReservationList")
                         .modelAttribute("filteredReservationList", reservations)
                         .build());

@@ -5,10 +5,10 @@ import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DefaultReservationService implements ReservationService {
@@ -20,32 +20,32 @@ public class DefaultReservationService implements ReservationService {
     }
 
     @Override
-    public Reservation save(Reservation reservation) {
+    public Mono<Reservation> save(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
 
     @Override
-    public void delete(Reservation reservation) {
-        reservationRepository.delete(reservation);
+    public Mono<Void> delete(Reservation reservation) {
+        return reservationRepository.delete(reservation);
     }
 
     @Override
-    public List<Reservation> getReservationAll() {
+    public Flux<Reservation> getReservationAll() {
         return reservationRepository.findAll();
     }
 
     @Override
-    public Optional<Reservation> getReservationById(BigInteger id) {
+    public Mono<Reservation> getReservationById(BigInteger id) {
         return reservationRepository.findById(id);
     }
 
     @Override
-    public List<Reservation> getReservationAllByUser(User user) {
+    public Flux<Reservation> getReservationAllByUser(User user) {
         return reservationRepository.findAllByUser(user);
     }
 
     @Override
-    public List<Reservation> getReservationAllByTicket(Ticket ticket) {
+    public Flux<Reservation> getReservationAllByTicket(Ticket ticket) {
         return reservationRepository.findAllByTicket(ticket);
     }
 

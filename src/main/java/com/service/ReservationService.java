@@ -3,22 +3,22 @@ package com.service;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.domain.User;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 public interface ReservationService {
 
-    Reservation save(Reservation reservation);
+    Mono<Reservation> save(Reservation reservation);
 
-    void delete(Reservation reservation);
+    Mono<Void> delete(Reservation reservation);
 
-    List<Reservation> getReservationAll();
+    Flux<Reservation> getReservationAll();
 
-    Optional<Reservation> getReservationById(BigInteger id);
+    Mono<Reservation> getReservationById(BigInteger id);
 
-    List<Reservation> getReservationAllByUser(User user);
+    Flux<Reservation> getReservationAllByUser(User user);
 
-    List<Reservation> getReservationAllByTicket(Ticket ticket);
+    Flux<Reservation> getReservationAllByTicket(Ticket ticket);
 }

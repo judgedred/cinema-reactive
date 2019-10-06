@@ -12,11 +12,9 @@ import java.util.Optional;
 public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
-    private final ReservationService reservationService;
 
-    public DefaultUserService(UserRepository userRepository, ReservationService reservationService) {
+    public DefaultUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.reservationService = reservationService;
     }
 
     @Override
@@ -43,11 +41,6 @@ public class DefaultUserService implements UserService {
     @Override
     public Optional<User> getUserByLogin(String login) {
         return userRepository.findByLogin(login);
-    }
-
-    @Override
-    public boolean checkUserInReservation(User user) {
-        return !reservationService.getReservationAllByUser(user).isEmpty();
     }
 
     @Override

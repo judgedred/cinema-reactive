@@ -46,7 +46,8 @@ public class MongoReservationDaoTest {
     @Test
     public void getByIdTest() {
         Reservation reservation = testDataRepository.createTestReservation();
-        Optional<Reservation> reservationTest = reservationRepository.findById(reservation.getReservationId());
+        Optional<Reservation> reservationTest = reservationRepository.findById(reservation.getReservationId())
+                .blockOptional();
         assertTrue(reservationTest.isPresent());
         testDataRepository.cleanUpReservation(reservation);
     }
@@ -64,8 +65,9 @@ public class MongoReservationDaoTest {
         Ticket ticketInitial = reservation.getTicket();
         reservation.setTicket(ticketExpected);
         reservation.setUser(userExpected);
-        reservationRepository.save(reservation);
-        Optional<Reservation> reservationOptional = reservationRepository.findById(reservation.getReservationId());
+        reservationRepository.save(reservation).block();
+        Optional<Reservation> reservationOptional = reservationRepository.findById(reservation.getReservationId())
+                .blockOptional();
         assertTrue(reservationOptional.isPresent());
         Reservation reservationUpdated = reservationOptional.get();
         assertThat(reservationUpdated.getTicket(), is(ticketExpected));
@@ -78,15 +80,15 @@ public class MongoReservationDaoTest {
     @Test
     public void deleteTest() {
         Reservation reservation = testDataRepository.createTestReservation();
-        reservationRepository.delete(reservation);
-        assertFalse(reservationRepository.findById(reservation.getReservationId()).isPresent());
+        reservationRepository.delete(reservation).block();
+        assertFalse(reservationRepository.findById(reservation.getReservationId()).blockOptional().isPresent());
         testDataRepository.cleanUpReservation(reservation);
     }
 
     @Test
     public void getAllTest() {
         Reservation reservation = testDataRepository.createTestReservation();
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAll().collectList().block();
         assertNotNull(reservations);
         assertTrue(reservations.size() > 0);
         testDataRepository.cleanUpReservation(reservation);
@@ -95,7 +97,9 @@ public class MongoReservationDaoTest {
     @Test
     public void getAllByUserTest() {
         Reservation reservation = testDataRepository.createTestReservation();
-        List<Reservation> reservations = reservationRepository.findAllByUser(reservation.getUser());
+        List<Reservation> reservations = reservationRepository.findAllByUser(reservation.getUser())
+                .collectList()
+                .block();
         assertThat(reservations, is(notNullValue()));
         assertThat(reservations.size(), greaterThan(0));
         reservations.forEach(r -> assertThat(r.getUser(), is(reservation.getUser())));
@@ -105,7 +109,9 @@ public class MongoReservationDaoTest {
     @Test
     public void getAllByTicketTest() {
         Reservation reservation = testDataRepository.createTestReservation();
-        List<Reservation> reservations = reservationRepository.findAllByTicket(reservation.getTicket());
+        List<Reservation> reservations = reservationRepository.findAllByTicket(reservation.getTicket())
+                .collectList()
+                .block();
         assertThat(reservations, is(notNullValue()));
         assertThat(reservations.size(), greaterThan(0));
         reservations.forEach(r -> assertThat(r.getTicket(), is(reservation.getTicket())));

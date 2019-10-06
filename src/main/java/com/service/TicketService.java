@@ -3,6 +3,7 @@ package com.service;
 import com.domain.Filmshow;
 import com.domain.Seat;
 import com.domain.Ticket;
+import reactor.core.publisher.Flux;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -18,12 +19,10 @@ public interface TicketService {
 
     Optional<Ticket> getTicketById(BigInteger id);
 
-    List<Ticket> getTicketFreeByFilmshow(Filmshow filmshow);
+    Flux<Ticket> getTicketFreeByFilmshow(Filmshow filmshow);
 
     List<Ticket> getTicketAllByFilmshow(Filmshow filmshow);
 
     List<Ticket> getTicketAllBySeat(Seat seat);
-
-    boolean checkTicketInReservation(Ticket ticket);
 
 }
