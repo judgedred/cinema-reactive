@@ -1,22 +1,21 @@
 package com.service;
 
 import com.domain.Hall;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 public interface HallService {
 
-    Hall save(Hall hall);
+    Mono<Hall> save(Hall hall);
 
-    void delete(Hall hall);
+    Mono<Void> delete(Hall hall);
 
-    List<Hall> getHallAll();
+    Flux<Hall> getHallAll();
 
-    Optional<Hall> getHallById(BigInteger id);
+    Mono<Hall> getHallById(BigInteger id);
 
-    Optional<Hall> getHallByNumber(Integer hallNumber);
+    Mono<Hall> getHallByNumber(Integer hallNumber);
 
-    boolean checkHallInSeat(Hall hall);
 }

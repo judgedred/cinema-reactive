@@ -90,7 +90,8 @@ public class FilmshowController {
                 .flatMap(filmshowService::getFilmshowById)
                 .flatMapMany(filmshow -> Flux.fromIterable(ticketService.getTicketAllByFilmshow(filmshow)))
                 .collectList()
-                .map(filmshows -> "На сеанс имеются билеты. Сначала удалите билеты.");
+                .filter(tickets -> !tickets.isEmpty())
+                .map(tickets -> "На сеанс имеются билеты. Сначала удалите билеты.");
     }
 
     @InitBinder

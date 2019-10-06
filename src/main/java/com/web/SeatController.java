@@ -67,9 +67,8 @@ public class SeatController {
 
     @RequestMapping(value = "/admin/checkSeat/{seatId}", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkSeat(@PathVariable Integer seatId) {
+    public String checkSeat(@PathVariable BigInteger seatId) {
         return Optional.ofNullable(seatId)
-                .map(BigInteger::valueOf)
                 .flatMap(seatService::getSeatById)
                 .filter(seatService::checkSeatInTicket)
                 .map(seat -> "На место выпущены билеты. Сначала удалите билеты.")

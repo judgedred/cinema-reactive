@@ -65,6 +65,7 @@ public class FilmController {
                 .flatMap(filmService::getFilmById)
                 .flatMapMany(filmshowService::getFilmshowByFilm)
                 .collectList()
+                .filter(filmshows -> !filmshows.isEmpty())
                 .map(filmshows -> "На фильм созданы сеансы. Сначала удалите сеансы.");
     }
 }

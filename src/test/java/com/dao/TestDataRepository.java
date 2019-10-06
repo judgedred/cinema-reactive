@@ -50,7 +50,7 @@ public class TestDataRepository {
                 .setHallId(id)
                 .setHallName(name)
                 .setHallNumber(number);
-        return hallRepository.save(hall);
+        return hallRepository.save(hall).block();
     }
 
     Hall createTestHall() {
@@ -69,7 +69,7 @@ public class TestDataRepository {
 
     void cleanUpFilmshow(Filmshow filmshow) {
         filmRepository.delete(filmshow.getFilm()).block();
-        hallRepository.delete(filmshow.getHall());
+        hallRepository.delete(filmshow.getHall()).block();
         filmshowRepository.delete(filmshow).block();
     }
 
@@ -87,7 +87,7 @@ public class TestDataRepository {
     }
 
     void cleanUpSeat(Seat seat) {
-        hallRepository.delete(seat.getHall());
+        hallRepository.delete(seat.getHall()).block();
         seatRepository.delete(seat);
     }
 

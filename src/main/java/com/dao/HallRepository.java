@@ -1,13 +1,13 @@
 package com.dao;
 
 import com.domain.Hall;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.Optional;
 
-public interface HallRepository extends MongoRepository<Hall, BigInteger> {
+public interface HallRepository extends ReactiveMongoRepository<Hall, BigInteger> {
 
-    Optional<Hall> findByHallNumber(Integer hallNumber);
+    Mono<Hall> findByHallNumber(Integer hallNumber);
 
 }

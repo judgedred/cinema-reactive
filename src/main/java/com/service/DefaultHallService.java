@@ -3,49 +3,43 @@ package com.service;
 import com.dao.HallRepository;
 import com.domain.Hall;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DefaultHallService implements HallService {
 
     private final HallRepository hallRepository;
-    private final SeatService seatService;
 
-    public DefaultHallService(HallRepository hallRepository, SeatService seatService) {
+    public DefaultHallService(HallRepository hallRepository) {
         this.hallRepository = hallRepository;
-        this.seatService = seatService;
     }
 
     @Override
-    public Hall save(Hall hall) {
+    public Mono<Hall> save(Hall hall) {
         return hallRepository.save(hall);
     }
 
     @Override
-    public void delete(Hall hall) {
-        hallRepository.delete(hall);
+    public Mono<Void> delete(Hall hall) {
+        return hallRepository.delete(hall);
     }
 
     @Override
-    public List<Hall> getHallAll() {
+    public Flux<Hall> getHallAll() {
         return hallRepository.findAll();
     }
 
     @Override
-    public Optional<Hall> getHallById(BigInteger id) {
+    public Mono<Hall> getHallById(BigInteger id) {
         return hallRepository.findById(id);
     }
 
     @Override
-    public Optional<Hall> getHallByNumber(Integer hallNumber) {
+    public Mono<Hall> getHallByNumber(Integer hallNumber) {
         return hallRepository.findByHallNumber(hallNumber);
     }
 
-    @Override
-    public boolean checkHallInSeat(Hall hall) {
-        return !seatService.getSeatAllByHall(hall).isEmpty();
-    }
 }

@@ -1,7 +1,7 @@
 package com.web;
 
+import com.dao.HallBlockingRepository;
 import com.domain.Hall;
-import com.service.HallService;
 import org.springframework.stereotype.Component;
 
 import java.beans.PropertyEditorSupport;
@@ -10,17 +10,17 @@ import java.math.BigInteger;
 @Component
 public class HallEditor extends PropertyEditorSupport {
 
-    private final HallService hallService;
+    private final HallBlockingRepository hallRepository;
 
-    public HallEditor(HallService hallService) {
-        this.hallService = hallService;
+    public HallEditor(HallBlockingRepository hallRepository) {
+        this.hallRepository = hallRepository;
     }
 
     @Override
     public void setAsText(String text) {
         try {
             BigInteger id = new BigInteger(text);
-            Hall hall = hallService.getHallById(id).orElse(null);
+            Hall hall = hallRepository.findById(id).orElse(null);
             this.setValue(hall);
         } catch (Exception e) {
             e.printStackTrace();

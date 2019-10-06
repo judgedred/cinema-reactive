@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -66,8 +67,8 @@ public class DataGenerator {
     }
 
     private void createHalls() {
-        hallService.save(new Hall(1, "Большой зал"));
-        hallService.save(new Hall(2, "Зал повышенной комфортности"));
+        hallService.save(new Hall(1, "Большой зал")).block();
+        hallService.save(new Hall(2, "Зал повышенной комфортности")).block();
     }
 
     private void createSeats() {
@@ -81,7 +82,9 @@ public class DataGenerator {
     }
 
     private Hall getHall(Integer hallId) {
-        return hallService.getHallByNumber(hallId).orElseThrow(() -> new IllegalStateException("Hall must be created."));
+        return hallService.getHallByNumber(hallId)
+                .blockOptional()
+                .orElseThrow(() -> new IllegalStateException("Hall must be created."));
     }
 
     private void createFilms() {
@@ -97,14 +100,17 @@ public class DataGenerator {
                 .orElseThrow(() -> new IllegalStateException("Film must be created."));
         LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
         LongStream.range(0, 8)
-                .forEach(index -> filmshowService.save(new Filmshow(dateTime.plusDays(index), film, getHall(1))));
+                .forEach(index -> filmshowService.save(new Filmshow(dateTime.plusDays(index), film, getHall(1))).block());
     }
 
     private void createTickets() {
         Filmshow filmshow = filmshowService.getFilmshowAll()
-                .stream()
-                .max(Comparator.comparing(Filmshow::getFilmshowId))
-                .orElseThrow(() -> new IllegalStateException("Filmshows must be created"));
+                .collectList()
+                .filter(filmshows -> !filmshows.isEmpty())
+                .flatMap(filmshows -> Mono.justOrEmpty(filmshows.stream()
+                        .max(Comparator.comparing(Filmshow::getFilmshowId))))
+                .switchIfEmpty(Mono.error(new IllegalStateException("Filmshows must be created")))
+                .block();
         seatService.getSeatFreeByFilmshow(filmshow)
                 .stream()
                 .limit(5)

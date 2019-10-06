@@ -35,15 +35,15 @@ public class MongoHallDaoTest {
         assertNotNull(hall);
         assertThat(hall.getHallName(), is(hallNameExpected));
         assertThat(hall.getHallNumber(), is(numberExpected));
-        hallRepository.delete(hall);
+        hallRepository.delete(hall).block();
     }
 
     @Test
     public void getByIdTest() {
         Hall hall = testDataRepository.createTestHall();
-        Optional<Hall> hallTest = hallRepository.findById(hall.getHallId());
+        Optional<Hall> hallTest = hallRepository.findById(hall.getHallId()).blockOptional();
         assertTrue(hallTest.isPresent());
-        hallRepository.delete(hall);
+        hallRepository.delete(hall).block();
     }
 
     @Test
@@ -53,29 +53,29 @@ public class MongoHallDaoTest {
         Integer numberExpected = 777;
         hall.setHallName(hallNameExpected);
         hall.setHallNumber(numberExpected);
-        hallRepository.save(hall);
-        Optional<Hall> hallOptional = hallRepository.findById(hall.getHallId());
+        hallRepository.save(hall).block();
+        Optional<Hall> hallOptional = hallRepository.findById(hall.getHallId()).blockOptional();
         assertTrue(hallOptional.isPresent());
         Hall hallUpdated = hallOptional.get();
         assertThat(hallUpdated.getHallName(), is(hallNameExpected));
         assertThat(hallUpdated.getHallNumber(), is(numberExpected));
-        hallRepository.delete(hall);
+        hallRepository.delete(hall).block();
     }
 
     @Test
     public void deleteTest() {
         Hall hall = testDataRepository.createTestHall();
-        hallRepository.delete(hall);
-        assertFalse(hallRepository.findById(hall.getHallId()).isPresent());
+        hallRepository.delete(hall).block();
+        assertFalse(hallRepository.findById(hall.getHallId()).blockOptional().isPresent());
     }
 
     @Test
     public void getAllHallsTest() {
         Hall hall = testDataRepository.createTestHall();
-        List<Hall> halls = hallRepository.findAll();
+        List<Hall> halls = hallRepository.findAll().collectList().block();
         assertNotNull(halls);
         assertTrue(halls.size() > 0);
-        hallRepository.delete(hall);
+        hallRepository.delete(hall).block();
     }
 
 }

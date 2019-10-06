@@ -3,6 +3,7 @@ package com.web;
 import com.domain.Hall;
 import com.service.FilmshowService;
 import com.service.HallService;
+import com.service.SeatService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -21,10 +23,12 @@ public class HallController {
 
     private final HallService hallService;
     private final FilmshowService filmshowService;
+    private final SeatService seatService;
 
-    public HallController(HallService hallService, FilmshowService filmshowService) {
+    public HallController(HallService hallService, FilmshowService filmshowService, SeatService seatService) {
         this.hallService = hallService;
         this.filmshowService = filmshowService;
+        this.seatService = seatService;
     }
 
     @RequestMapping("/admin/addHallForm")
@@ -33,22 +37,24 @@ public class HallController {
     }
 
     @RequestMapping("/admin/addHall")
-    public Rendering addHall(@Valid Hall hall, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("hall", hall);
-        } else {
-            hallService.save(hall);
-            model.addAttribute("hall", new Hall());
-        }
-        return Rendering.view("addHall").build();
+    public Mono<Rendering> addHall(@Valid Hall hall, BindingResult result) {
+        return Mono.just(hall)
+                .filter(h -> !result.hasErrors())
+                .flatMap(hallService::save)
+                .map(h -> new Hall())
+                .defaultIfEmpty(hall)
+                .map(h -> Rendering.view("addHall").modelAttribute("hall", h).build());
     }
 
     @RequestMapping("/admin/deleteHall")
-    public Rendering deleteHall(@ModelAttribute Hall hall, Model model) {
-        if (hall.getHallId() != null && !hall.getHallId().equals(BigInteger.ZERO)) {
-            hallService.getHallById(hall.getHallId()).ifPresent(hallService::delete);
-        }
-        return Rendering.view("deleteHall").modelAttribute("hallList", hallService.getHallAll()).build();
+    public Mono<Rendering> deleteHall(@ModelAttribute Hall hall) {
+        return Mono.justOrEmpty(hall.getHallId())
+                .filter(hallId -> !hallId.equals(BigInteger.ZERO))
+                .flatMap(hallService::getHallById)
+                .flatMap(hallService::delete)
+                .thenMany(hallService.getHallAll())
+                .collectList()
+                .map(hallList -> Rendering.view("deleteHall").modelAttribute("hallList", hallList).build());
     }
 
     @RequestMapping("/admin/hallList")
@@ -60,16 +66,26 @@ public class HallController {
     @ResponseBody
     public Mono<String> checkHall(@PathVariable BigInteger hallId) {
         return Mono.justOrEmpty(hallId)
-                .flatMap(id -> Mono.justOrEmpty(hallService.getHallById(id)))
+                .flatMap(hallService::getHallById)
                 .flatMap(this::checkHallConstraints);
     }
 
     private Mono<String> checkHallConstraints(Hall hall) {
+        return checkFilmshows(hall)
+                .switchIfEmpty(checkSeats(hall));
+    }
+
+    private Mono<String> checkFilmshows(Hall hall) {
         return filmshowService.getFilmshowByHall(hall)
                 .collectList()
-                .map(filmshows -> "В зале имеются сеансы. Сначала удалите сеансы.")
-                .switchIfEmpty(Mono.fromCallable(() -> hallService.checkHallInSeat(hall))
-                        .map(found -> "В зале имеются места. Сначала удалите места."));
+                .filter(filmshows -> !filmshows.isEmpty())
+                .map(filmshows -> "В зале имеются сеансы. Сначала удалите сеансы.");
+    }
 
+    private Mono<String> checkSeats(Hall hall) {
+        return Flux.fromIterable(seatService.getSeatAllByHall(hall))
+                .collectList()
+                .filter(seats -> !seats.isEmpty())
+                .map(seats -> "В зале имеются места. Сначала удалите места.");
     }
 }
