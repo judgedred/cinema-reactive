@@ -85,7 +85,7 @@ public class SeatController {
     public Mono<String> checkSeat(@PathVariable BigInteger seatId) {
         return Mono.justOrEmpty(seatId)
                 .flatMap(seatService::getSeatById)
-                .flatMapIterable(ticketService::getTicketAllBySeat)
+                .flatMapMany(ticketService::getTicketAllBySeat)
                 .collectList()
                 .filter(tickets -> !tickets.isEmpty())
                 .map(tickets -> "На место выпущены билеты. Сначала удалите билеты.");

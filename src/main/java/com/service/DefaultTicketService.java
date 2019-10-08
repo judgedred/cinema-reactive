@@ -7,10 +7,9 @@ import com.domain.Seat;
 import com.domain.Ticket;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,32 +24,32 @@ public class DefaultTicketService implements TicketService {
     }
 
     @Override
-    public Ticket save(Ticket ticket) {
+    public Mono<Ticket> save(Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 
     @Override
-    public void delete(Ticket ticket) {
-        ticketRepository.delete(ticket);
+    public Mono<Void> delete(Ticket ticket) {
+        return ticketRepository.delete(ticket);
     }
 
     @Override
-    public List<Ticket> getTicketAll() {
+    public Flux<Ticket> getTicketAll() {
         return ticketRepository.findAll();
     }
 
     @Override
-    public Optional<Ticket> getTicketById(BigInteger id) {
+    public Mono<Ticket> getTicketById(BigInteger id) {
         return ticketRepository.findById(id);
     }
 
     @Override
-    public List<Ticket> getTicketAllByFilmshow(Filmshow filmshow) {
+    public Flux<Ticket> getTicketAllByFilmshow(Filmshow filmshow) {
         return ticketRepository.findAllByFilmshow(filmshow);
     }
 
     @Override
-    public List<Ticket> getTicketAllBySeat(Seat seat) {
+    public Flux<Ticket> getTicketAllBySeat(Seat seat) {
         return ticketRepository.findAllBySeat(seat);
     }
 
@@ -60,6 +59,6 @@ public class DefaultTicketService implements TicketService {
                 .map(Reservation::getTicket)
                 .map(Ticket::getTicketId)
                 .collect(Collectors.toList())
-                .flatMapIterable(ticketIds -> ticketRepository.findByFilmshowAndTicketIdNotIn(filmshow, ticketIds));
+                .flatMapMany(ticketIds -> ticketRepository.findByFilmshowAndTicketIdNotIn(filmshow, ticketIds));
     }
 }

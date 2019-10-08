@@ -45,7 +45,7 @@ public class DefaultSeatService implements SeatService {
 
     @Override
     public Flux<Seat> getSeatFreeByFilmshow(Filmshow filmshow) {
-        return Flux.fromIterable(ticketService.getTicketAllByFilmshow(filmshow))
+        return ticketService.getTicketAllByFilmshow(filmshow)
                 .map(Ticket::getSeat)
                 .map(Seat::getSeatId)
                 .collect(Collectors.toList())

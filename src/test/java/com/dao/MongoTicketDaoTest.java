@@ -47,7 +47,7 @@ public class MongoTicketDaoTest {
     @Test
     public void getByIdTest() {
         Ticket ticket = testDataRepository.createTestTicket();
-        Optional<Ticket> ticketTest = ticketRepository.findById(ticket.getTicketId());
+        Optional<Ticket> ticketTest = ticketRepository.findById(ticket.getTicketId()).blockOptional();
         assertTrue(ticketTest.isPresent());
         testDataRepository.cleanUpTicket(ticket);
     }
@@ -57,8 +57,8 @@ public class MongoTicketDaoTest {
         float priceExpected = 6;
         Ticket ticket = testDataRepository.createTestTicket();
         ticket.setPrice(priceExpected);
-        ticketRepository.save(ticket);
-        Optional<Ticket> ticketOptional = ticketRepository.findById(ticket.getTicketId());
+        ticketRepository.save(ticket).block();
+        Optional<Ticket> ticketOptional = ticketRepository.findById(ticket.getTicketId()).blockOptional();
         assertTrue(ticketOptional.isPresent());
         Ticket ticketUpdated = ticketOptional.get();
         assertThat(ticketUpdated.getPrice(), is(priceExpected));
@@ -68,15 +68,15 @@ public class MongoTicketDaoTest {
     @Test
     public void deleteTest() {
         Ticket ticket = testDataRepository.createTestTicket();
-        ticketRepository.delete(ticket);
-        assertFalse(ticketRepository.findById(ticket.getTicketId()).isPresent());
+        ticketRepository.delete(ticket).block();
+        assertFalse(ticketRepository.findById(ticket.getTicketId()).blockOptional().isPresent());
         testDataRepository.cleanUpTicket(ticket);
     }
 
     @Test
     public void getAllTest() {
         Ticket ticket = testDataRepository.createTestTicket();
-        List<Ticket> tickets = ticketRepository.findAll();
+        List<Ticket> tickets = ticketRepository.findAll().collectList().block();
         assertNotNull(tickets);
         assertTrue(tickets.size() > 0);
         testDataRepository.cleanUpTicket(ticket);
@@ -85,7 +85,7 @@ public class MongoTicketDaoTest {
     @Test
     public void getTicketsByFilmshowTest() {
         Ticket ticket = testDataRepository.createTestTicket();
-        List<Ticket> tickets = ticketRepository.findAllByFilmshow(ticket.getFilmshow());
+        List<Ticket> tickets = ticketRepository.findAllByFilmshow(ticket.getFilmshow()).collectList().block();
         assertThat(tickets, is(notNullValue()));
         assertThat(tickets.size(), greaterThan(0));
         tickets.forEach(t -> assertThat(t.getFilmshow(), is(ticket.getFilmshow())));
@@ -95,7 +95,7 @@ public class MongoTicketDaoTest {
     @Test
     public void getTicketsBySeatTest() {
         Ticket ticket = testDataRepository.createTestTicket();
-        List<Ticket> tickets = ticketRepository.findAllBySeat(ticket.getSeat());
+        List<Ticket> tickets = ticketRepository.findAllBySeat(ticket.getSeat()).collectList().block();
         assertThat(tickets, is(notNullValue()));
         assertThat(tickets.size(), greaterThan(0));
         tickets.forEach(t -> assertThat(t.getSeat(), is(ticket.getSeat())));
@@ -108,7 +108,9 @@ public class MongoTicketDaoTest {
         Ticket ticket2 = testDataRepository.createTicket(BigInteger.ONE, 1F, ticket.getFilmshow(), ticket.getSeat());
         List<Ticket> tickets = ticketRepository.findByFilmshowAndTicketIdNotIn(
                 ticket.getFilmshow(),
-                Collections.singletonList(ticket2.getTicketId()));
+                Collections.singletonList(ticket2.getTicketId()))
+                .collectList()
+                .block();
         assertThat(tickets, is(notNullValue()));
         assertThat(tickets.size(), is(1));
         assertThat(tickets.get(0).getTicketId(), is(ticket.getTicketId()));

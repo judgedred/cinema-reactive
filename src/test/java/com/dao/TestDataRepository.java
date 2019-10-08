@@ -97,7 +97,7 @@ public class TestDataRepository {
                 .setPrice(price)
                 .setFilmshow(filmshow)
                 .setSeat(seat);
-        return ticketRepository.save(ticket);
+        return ticketRepository.save(ticket).block();
     }
 
     Ticket createTestTicket() {
@@ -107,7 +107,7 @@ public class TestDataRepository {
     void cleanUpTicket(Ticket ticket) {
         cleanUpFilmshow(ticket.getFilmshow());
         cleanUpSeat(ticket.getSeat());
-        ticketRepository.delete(ticket);
+        ticketRepository.delete(ticket).block();
     }
 
     User createUser(String login, String password, String email) {

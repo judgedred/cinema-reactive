@@ -113,7 +113,7 @@ public class DataGenerator {
                 .block();
         seatService.getSeatFreeByFilmshow(filmshow)
                 .take(5L)
-                .doOnNext(seat -> ticketService.save(new Ticket(7F, filmshow, seat)))
+                .flatMap(seat -> ticketService.save(new Ticket(7F, filmshow, seat)))
                 .collectList()
                 .block();
     }
@@ -122,9 +122,9 @@ public class DataGenerator {
         User user = userService.getUserByLogin("user")
                 .orElseThrow(() -> new IllegalStateException("User must be created."));
         Ticket ticket = ticketService.getTicketAll()
-                .stream()
-                .findFirst()
+                .next()
+                .blockOptional()
                 .orElseThrow(() -> new IllegalStateException("Ticket must be created."));
-        reservationService.save(new Reservation(user, ticket));
+        reservationService.save(new Reservation(user, ticket)).block();
     }
 }

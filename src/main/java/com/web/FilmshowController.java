@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -88,7 +87,7 @@ public class FilmshowController {
     public Mono<String> checkFilmshow(@PathVariable BigInteger filmshowId) {
         return Mono.justOrEmpty(filmshowId)
                 .flatMap(filmshowService::getFilmshowById)
-                .flatMapMany(filmshow -> Flux.fromIterable(ticketService.getTicketAllByFilmshow(filmshow)))
+                .flatMapMany(ticketService::getTicketAllByFilmshow)
                 .collectList()
                 .filter(tickets -> !tickets.isEmpty())
                 .map(tickets -> "На сеанс имеются билеты. Сначала удалите билеты.");

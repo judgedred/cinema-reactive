@@ -55,15 +55,16 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/addTicket")
-    public Rendering addTicket(@Valid Ticket ticket, BindingResult result) {
-        if (result.hasErrors()) {
-            return Rendering.view("addTicket")
-                    .modelAttribute("filmshowList", filmshowService.getFilmshowAll())
-                    .modelAttribute("ticket", ticket)
-                    .build();
-        }
-        ticketService.save(ticket);
-        return Rendering.redirectTo("addTicketForm").build();
+    public Mono<Rendering> addTicket(@Valid Ticket ticket, BindingResult result) {
+        return Mono.just(ticket)
+                .filter(t -> !result.hasErrors())
+                .flatMap(ticketService::save)
+                .map(t -> new Ticket())
+                .defaultIfEmpty(ticket)
+                .map(t -> Rendering.view("addTicket")
+                        .modelAttribute("filmshowList", filmshowService.getFilmshowAll())
+                        .modelAttribute("ticket", t)
+                        .build());
     }
 
     @RequestMapping("/admin/addTicketAllForm")
@@ -81,16 +82,19 @@ public class TicketController {
                 .filter(t -> t.getPrice() != null)
                 .map(Ticket::getFilmshow)
                 .flatMapMany(seatService::getSeatFreeByFilmshow)
-                .doOnNext(seat -> ticketService.save(new Ticket(ticket.getPrice(), ticket.getFilmshow(), seat)))
+                .flatMap(seat -> ticketService.save(new Ticket(ticket.getPrice(), ticket.getFilmshow(), seat)))
                 .then(Mono.just(Rendering.redirectTo("addTicketAllForm").build()));
     }
 
     @RequestMapping("/admin/deleteTicket")
-    public Rendering deleteTicket(@ModelAttribute Ticket ticket) {
-        if (ticket.getTicketId() != null && !ticket.getTicketId().equals(BigInteger.ZERO)) {
-            ticketService.getTicketById(ticket.getTicketId()).ifPresent(ticketService::delete);
-        }
-        return Rendering.view("deleteTicket").modelAttribute("ticketList", ticketService.getTicketAll()).build();
+    public Mono<Rendering> deleteTicket(@ModelAttribute Ticket ticket) {
+        return Mono.justOrEmpty(ticket.getTicketId())
+                .filter(ticketId -> !ticketId.equals(BigInteger.ZERO))
+                .flatMap(ticketService::getTicketById)
+                .flatMap(ticketService::delete)
+                .thenMany(ticketService.getTicketAll())
+                .collectList()
+                .map(tickets -> Rendering.view("deleteTicket").modelAttribute("ticketList", tickets).build());
     }
 
     @RequestMapping("/admin/ticketList")
@@ -118,7 +122,7 @@ public class TicketController {
     @ResponseBody
     public Mono<String> checkTicket(@PathVariable BigInteger ticketId) {
         return Mono.justOrEmpty(ticketId)
-                .flatMap(id -> Mono.justOrEmpty(ticketService.getTicketById(id)))
+                .flatMap(ticketService::getTicketById)
                 .flatMapMany(reservationService::getReservationAllByTicket)
                 .collectList()
                 .filter(reservations -> !reservations.isEmpty())
