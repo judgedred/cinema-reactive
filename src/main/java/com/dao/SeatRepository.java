@@ -2,14 +2,15 @@ package com.dao;
 
 import com.domain.Hall;
 import com.domain.Seat;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 
 import java.math.BigInteger;
 import java.util.List;
 
-public interface SeatRepository extends MongoRepository<Seat, BigInteger> {
+public interface SeatRepository extends ReactiveMongoRepository<Seat, BigInteger> {
 
-    List<Seat> findAllByHall(Hall hall);
+    Flux<Seat> findAllByHall(Hall hall);
 
-    List<Seat> findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(Hall hall, List<BigInteger> seatIds);
+    Flux<Seat> findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(Hall hall, List<BigInteger> seatIds);
 }

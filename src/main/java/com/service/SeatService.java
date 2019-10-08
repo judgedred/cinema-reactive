@@ -3,24 +3,22 @@ package com.service;
 import com.domain.Filmshow;
 import com.domain.Hall;
 import com.domain.Seat;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 public interface SeatService {
 
-    Seat save(Seat seat);
+    Mono<Seat> save(Seat seat);
 
-    void delete(Seat seat);
+    Mono<Void> delete(Seat seat);
 
-    List<Seat> getSeatAll();
+    Flux<Seat> getSeatAll();
 
-    Optional<Seat> getSeatById(BigInteger id);
+    Mono<Seat> getSeatById(BigInteger id);
 
-    boolean checkSeatInTicket(Seat seat);
+    Flux<Seat> getSeatFreeByFilmshow(Filmshow filmshow);
 
-    List<Seat> getSeatFreeByFilmshow(Filmshow filmshow);
-
-    List<Seat> getSeatAllByHall(Hall hall);
+    Flux<Seat> getSeatAllByHall(Hall hall);
 }

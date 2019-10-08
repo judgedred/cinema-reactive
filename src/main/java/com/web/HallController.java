@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -83,7 +82,7 @@ public class HallController {
     }
 
     private Mono<String> checkSeats(Hall hall) {
-        return Flux.fromIterable(seatService.getSeatAllByHall(hall))
+        return seatService.getSeatAllByHall(hall)
                 .collectList()
                 .filter(seats -> !seats.isEmpty())
                 .map(seats -> "В зале имеются места. Сначала удалите места.");

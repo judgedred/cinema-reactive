@@ -46,7 +46,7 @@ public class MongoSeatDaoTest {
     @Test
     public void getByIdTest() {
         Seat seat = testDataRepository.createTestSeat();
-        Optional<Seat> seatTest = seatRepository.findById(seat.getSeatId());
+        Optional<Seat> seatTest = seatRepository.findById(seat.getSeatId()).blockOptional();
         assertTrue(seatTest.isPresent());
         testDataRepository.cleanUpSeat(seat);
     }
@@ -58,8 +58,8 @@ public class MongoSeatDaoTest {
         Seat seat = testDataRepository.createTestSeat();
         seat.setRowNumber(rowNumberExpected);
         seat.setSeatNumber(seatNumberExpected);
-        seatRepository.save(seat);
-        Optional<Seat> seatOptional = seatRepository.findById(seat.getSeatId());
+        seatRepository.save(seat).block();
+        Optional<Seat> seatOptional = seatRepository.findById(seat.getSeatId()).blockOptional();
         assertTrue(seatOptional.isPresent());
         Seat seatUpdated = seatOptional.get();
         assertThat(seatUpdated.getRowNumber(), is(rowNumberExpected));
@@ -70,15 +70,15 @@ public class MongoSeatDaoTest {
     @Test
     public void deleteTest() {
         Seat seat = testDataRepository.createTestSeat();
-        seatRepository.delete(seat);
-        assertFalse(seatRepository.findById(seat.getSeatId()).isPresent());
+        seatRepository.delete(seat).block();
+        assertFalse(seatRepository.findById(seat.getSeatId()).blockOptional().isPresent());
         testDataRepository.cleanUpSeat(seat);
     }
 
     @Test
     public void getAllTest() {
         Seat seat = testDataRepository.createTestSeat();
-        List<Seat> seats = seatRepository.findAll();
+        List<Seat> seats = seatRepository.findAll().collectList().block();
         assertNotNull(seats);
         assertTrue(seats.size() > 0);
         testDataRepository.cleanUpSeat(seat);
@@ -87,7 +87,7 @@ public class MongoSeatDaoTest {
     @Test
     public void getSeatsByHallTest() {
         Seat seat = testDataRepository.createTestSeat();
-        List<Seat> seats = seatRepository.findAllByHall(seat.getHall());
+        List<Seat> seats = seatRepository.findAllByHall(seat.getHall()).collectList().block();
         assertThat(seats, is(notNullValue()));
         assertThat(seats.size(), greaterThan(0));
         seats.forEach(s -> assertThat(s.getHall(), is(seat.getHall())));
@@ -100,7 +100,9 @@ public class MongoSeatDaoTest {
         Seat seat2 = testDataRepository.createSeat(BigInteger.ONE, 1, 1, seat.getHall());
         List<Seat> seats = seatRepository.findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(
                 seat.getHall(),
-                Collections.singletonList(seat2.getSeatId()));
+                Collections.singletonList(seat2.getSeatId()))
+                .collectList()
+                .block();
         assertThat(seats, is(notNullValue()));
         assertThat(seats.size(), is(1));
         assertThat(seats.get(0).getSeatId(), is(seat.getSeatId()));

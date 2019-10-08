@@ -79,7 +79,7 @@ public class TestDataRepository {
                 .setRowNumber(rowNumber)
                 .setSeatNumber(seatNumber)
                 .setHall(hall);
-        return seatRepository.save(seat);
+        return seatRepository.save(seat).block();
     }
 
     Seat createTestSeat() {
@@ -88,7 +88,7 @@ public class TestDataRepository {
 
     void cleanUpSeat(Seat seat) {
         hallRepository.delete(seat.getHall()).block();
-        seatRepository.delete(seat);
+        seatRepository.delete(seat).block();
     }
 
     Ticket createTicket(BigInteger id, Float price, Filmshow filmshow, Seat seat) {

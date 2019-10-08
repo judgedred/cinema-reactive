@@ -20,10 +20,8 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -77,15 +75,14 @@ public class TicketController {
     }
 
     @RequestMapping("/admin/addTicketAll")
-    public Rendering addTicketAll(@ModelAttribute Ticket ticket) {
-        Optional.of(ticket)
+    public Mono<Rendering> addTicketAll(@ModelAttribute Ticket ticket) {
+        return Mono.just(ticket)
                 .filter(t -> t.getFilmshow() != null)
                 .filter(t -> t.getPrice() != null)
                 .map(Ticket::getFilmshow)
-                .map(seatService::getSeatFreeByFilmshow)
-                .orElse(Collections.emptyList())
-                .forEach(seat -> ticketService.save(new Ticket(ticket.getPrice(), ticket.getFilmshow(), seat)));
-        return Rendering.redirectTo("addTicketAllForm").build();
+                .flatMapMany(seatService::getSeatFreeByFilmshow)
+                .doOnNext(seat -> ticketService.save(new Ticket(ticket.getPrice(), ticket.getFilmshow(), seat)))
+                .then(Mono.just(Rendering.redirectTo("addTicketAllForm").build()));
     }
 
     @RequestMapping("/admin/deleteTicket")
@@ -102,19 +99,6 @@ public class TicketController {
                 .modelAttribute("filmshowList", filmshowService.getFilmshowAll())
                 .modelAttribute("filteredTicketList", ticketService.getTicketAllByFilmshow(ticket.getFilmshow()))
                 .build();
-    }
-
-    @RequestMapping("/admin/seatsFilter/{filmshowId}")
-    @ResponseBody
-    public Mono<Map<BigInteger, String>> filterSeats(@PathVariable BigInteger filmshowId) {
-        return Mono.justOrEmpty(filmshowId)
-                .flatMap(filmshowService::getFilmshowById)
-                .flatMapIterable(seatService::getSeatFreeByFilmshow)
-                .collect(Collectors.toMap(
-                        Seat::getSeatId,
-                        Seat::toString,
-                        (oldValue, newValue) -> newValue,
-                        LinkedHashMap::new));
     }
 
     @RequestMapping("/admin/ticketsFilter/{filmshowId}")

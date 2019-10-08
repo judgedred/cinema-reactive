@@ -78,7 +78,7 @@ public class DataGenerator {
 
     private void createSeats(int quantity, int rowNumber, Integer hallId) {
         IntStream.range(1, quantity + 1)
-                .forEach(index -> seatService.save(new Seat(index, rowNumber, getHall(hallId))));
+                .forEach(index -> seatService.save(new Seat(index, rowNumber, getHall(hallId))).block());
     }
 
     private Hall getHall(Integer hallId) {
@@ -112,9 +112,10 @@ public class DataGenerator {
                 .switchIfEmpty(Mono.error(new IllegalStateException("Filmshows must be created")))
                 .block();
         seatService.getSeatFreeByFilmshow(filmshow)
-                .stream()
-                .limit(5)
-                .forEach(seat -> ticketService.save(new Ticket(7F, filmshow, seat)));
+                .take(5L)
+                .doOnNext(seat -> ticketService.save(new Ticket(7F, filmshow, seat)))
+                .collectList()
+                .block();
     }
 
     private void createReservations() {

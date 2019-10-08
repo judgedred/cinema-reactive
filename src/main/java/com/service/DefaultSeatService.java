@@ -6,11 +6,10 @@ import com.domain.Hall;
 import com.domain.Seat;
 import com.domain.Ticket;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,43 +24,37 @@ public class DefaultSeatService implements SeatService {
     }
 
     @Override
-    public Seat save(Seat seat) {
+    public Mono<Seat> save(Seat seat) {
         return seatRepository.save(seat);
     }
 
     @Override
-    public void delete(Seat seat) {
-        seatRepository.delete(seat);
+    public Mono<Void> delete(Seat seat) {
+        return seatRepository.delete(seat);
     }
 
     @Override
-    public List<Seat> getSeatAll() {
+    public Flux<Seat> getSeatAll() {
         return seatRepository.findAll();
     }
 
     @Override
-    public Optional<Seat> getSeatById(BigInteger id) {
+    public Mono<Seat> getSeatById(BigInteger id) {
         return seatRepository.findById(id);
     }
 
     @Override
-    public boolean checkSeatInTicket(Seat seat) {
-        return !ticketService.getTicketAllBySeat(seat).isEmpty();
+    public Flux<Seat> getSeatFreeByFilmshow(Filmshow filmshow) {
+        return Flux.fromIterable(ticketService.getTicketAllByFilmshow(filmshow))
+                .map(Ticket::getSeat)
+                .map(Seat::getSeatId)
+                .collect(Collectors.toList())
+                .flatMapMany(seatIds -> seatRepository.findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(
+                        filmshow.getHall(), seatIds));
     }
 
     @Override
-    public List<Seat> getSeatFreeByFilmshow(Filmshow filmshow) {
-        return Optional.of(ticketService.getTicketAllByFilmshow(filmshow))
-                .map(tickets -> tickets.stream()
-                        .map(Ticket::getSeat)
-                        .map(Seat::getSeatId)
-                        .collect(Collectors.toList()))
-                .map(seatIds -> seatRepository.findByHallAndSeatIdNotInOrderBySeatNumberAscRowNumberAsc(filmshow.getHall(), seatIds))
-                .orElse(Collections.emptyList());
-    }
-
-    @Override
-    public List<Seat> getSeatAllByHall(Hall hall) {
+    public Flux<Seat> getSeatAllByHall(Hall hall) {
         return seatRepository.findAllByHall(hall);
     }
 }
