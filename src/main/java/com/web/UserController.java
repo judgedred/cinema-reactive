@@ -33,22 +33,25 @@ public class UserController {
     }
 
     @RequestMapping("/admin/addUser")
-    public Rendering addUser(@Valid User user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("user", user);
-        } else {
-            userService.save(user);
-            model.addAttribute("user", new User());
-        }
-        return Rendering.view("addUser").build();
+    public Mono<Rendering> addUser(@Valid User user, BindingResult result, Model model) {
+        return Mono.just(user)
+                .filter(f -> !result.hasErrors())
+                .flatMap(userService::save)
+                .map(u -> new User())
+                .defaultIfEmpty(user)
+                .map(u -> Rendering.view("addUser").modelAttribute("user", u).build());
     }
 
     @RequestMapping("/admin/deleteUser")
-    public Rendering deleteUser(@ModelAttribute User user) {
-        if (user.getUserId() != null && !user.getUserId().equals(BigInteger.ZERO)) {
-            userService.getUserById(user.getUserId()).ifPresent(userService::delete);
-        }
-        return Rendering.view("deleteUser").modelAttribute("userList", userService.getUserAll()).build();
+    public Mono<Rendering> deleteUser(@ModelAttribute User user) {
+        return Mono.justOrEmpty(user.getUserId())
+                .filter(userId -> !userId.equals(BigInteger.ZERO))
+                .flatMap(userService::getUserById)
+                .flatMap(userService::delete)
+                .thenMany(userService.getUserAll())
+                .collectList()
+                .map(users -> Rendering.view("deleteUser").modelAttribute("userList", users).build());
+
     }
 
     @RequestMapping("/admin/userList")
@@ -60,7 +63,7 @@ public class UserController {
     @ResponseBody
     public Mono<String> checkUser(@PathVariable BigInteger userId) {
         return Mono.justOrEmpty(userId)
-                .flatMap(id -> Mono.justOrEmpty(userService.getUserById(id)))
+                .flatMap(userService::getUserById)
                 .flatMapMany(reservationService::getReservationAllByUser)
                 .collectList()
                 .filter(reservations -> !reservations.isEmpty())

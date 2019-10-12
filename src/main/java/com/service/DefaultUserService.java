@@ -3,10 +3,10 @@ package com.service;
 import com.dao.UserRepository;
 import com.domain.User;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DefaultUserService implements UserService {
@@ -18,54 +18,49 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        user.setPassword(HashGenerator.invoke(user.getPassword()));
-        return userRepository.save(user);
+    public Mono<User> save(User user) {
+        return Mono.just(user)
+                .map(u -> u.setPassword(HashGenerator.invoke(u.getPassword())))
+                .flatMap(userRepository::save);
     }
 
     @Override
-    public void delete(User user) {
-        userRepository.delete(user);
+    public Mono<Void> delete(User user) {
+        return userRepository.delete(user);
     }
 
     @Override
-    public List<User> getUserAll() {
+    public Flux<User> getUserAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> getUserById(BigInteger id) {
+    public Mono<User> getUserById(BigInteger id) {
         return userRepository.findById(id);
     }
 
     @Override
-    public Optional<User> getUserByLogin(String login) {
+    public Mono<User> getUserByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
     @Override
-    public User authenticateAdmin(User user) {
-        return Optional.of(user.getLogin())
+    public Mono<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Mono<User> authenticateAdmin(User user) {
+        return Mono.just(user.getLogin())
                 .filter(login -> login.equals("admin"))
                 .flatMap(userRepository::findByLogin)
-                .filter(adminUser -> adminUser.getPassword().equals(HashGenerator.invoke(user.getPassword())))
-                .orElse(null);
+                .filter(adminUser -> adminUser.getPassword().equals(HashGenerator.invoke(user.getPassword())));
     }
 
     @Override
-    public User authenticateUser(User user) {
+    public Mono<User> authenticateUser(User user) {
         return userRepository.findByLogin(user.getLogin())
-                .filter(foundUser -> foundUser.getPassword().equals(HashGenerator.invoke(user.getPassword())))
-                .orElse(null);
+                .filter(foundUser -> foundUser.getPassword().equals(HashGenerator.invoke(user.getPassword())));
     }
 
-    @Override
-    public boolean checkLogin(String login) {
-        return userRepository.findByLogin(login).isPresent();
-    }
-
-    @Override
-    public boolean checkEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
 }

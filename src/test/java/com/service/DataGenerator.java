@@ -62,8 +62,8 @@ public class DataGenerator {
 
 
     private void createUsers() {
-        userService.save(new User("admin", "admin", "admin@gmail.com"));
-        userService.save(new User("user", "user", "user@gmail.com"));
+        userService.save(new User("admin", "admin", "admin@gmail.com")).block();
+        userService.save(new User("user", "user", "user@gmail.com")).block();
     }
 
     private void createHalls() {
@@ -120,6 +120,7 @@ public class DataGenerator {
 
     private void createReservations() {
         User user = userService.getUserByLogin("user")
+                .blockOptional()
                 .orElseThrow(() -> new IllegalStateException("User must be created."));
         Ticket ticket = ticketService.getTicketAll()
                 .next()

@@ -1,28 +1,27 @@
 package com.service;
 
 import com.domain.User;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
-    User save(User user);
+    Mono<User> save(User user);
 
-    void delete(User user);
+    Mono<Void> delete(User user);
 
-    List<User> getUserAll();
+    Flux<User> getUserAll();
 
-    Optional<User> getUserById(BigInteger id);
+    Mono<User> getUserById(BigInteger id);
 
-    Optional<User> getUserByLogin(String login);
+    Mono<User> getUserByLogin(String login);
 
-    User authenticateAdmin(User user);
+    Mono<User> getUserByEmail(String email);
 
-    User authenticateUser(User user);
+    Mono<User> authenticateAdmin(User user);
 
-    boolean checkLogin(String login);
+    Mono<User> authenticateUser(User user);
 
-    boolean checkEmail(String email);
 }

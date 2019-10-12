@@ -55,15 +55,13 @@ public class MainController {
     }
 
     @RequestMapping("/admin/login")
-    public Rendering adminLogin(@ModelAttribute User user, WebSession webSession) {
-        if (isLoginAndPasswordPresent(user)) {
-            User adminUser = userService.authenticateAdmin(user);
-            if (adminUser != null) {
-                webSession.getAttributes().put("adminUser", adminUser);
-                return Rendering.view("adminMain").build();
-            }
-        }
-        return Rendering.redirectTo("/admin").build();
+    public Mono<Rendering> adminLogin(@ModelAttribute User user, WebSession webSession) {
+        return Mono.just(user)
+                .filter(this::isLoginAndPasswordPresent)
+                .flatMap(userService::authenticateAdmin)
+                .doOnNext(adminUser -> webSession.getAttributes().put("adminUser", adminUser))
+                .map(adminUser -> Rendering.view("adminMain").build())
+                .defaultIfEmpty(Rendering.redirectTo("/admin").build());
     }
 
     @RequestMapping("/admin/logout")
@@ -111,19 +109,14 @@ public class MainController {
 
     @RequestMapping(value = "/loginCheck", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String checkLogin(@RequestBody User user, WebSession webSession) {
-        if (isLoginAndPasswordPresent(user)) {
-            User validUser = userService.authenticateUser(user);
-            if (validUser != null) {
-                webSession.getAttributes().put(SESSION_VALID_USER, validUser);
-            }
-        }
-        User validUser = webSession.getAttribute(SESSION_VALID_USER);
-        if (validUser != null) {
-            return validUser.getLogin();
-        } else {
-            return null;
-        }
+    public Mono<String> checkLogin(@RequestBody User user, WebSession webSession) {
+        return Mono.just(user)
+                .filter(this::isLoginAndPasswordPresent)
+                .flatMap(userService::authenticateUser)
+                .doOnNext(validUser -> webSession.getAttributes().put(SESSION_VALID_USER, validUser))
+                .then(Mono.fromCallable(() -> webSession.<User>getAttribute(SESSION_VALID_USER)))
+                .map(User::getLogin);
+
     }
 
     @RequestMapping(value = "/logout")
@@ -147,39 +140,33 @@ public class MainController {
     }
 
     @RequestMapping("/register")
-    public Rendering registerUser(@Valid User user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return Rendering.view("register")
-                    .modelAttribute("user", user)
-                    .build();
-        }
-        userService.save(user);
-        return Rendering.view("register")
-                .modelAttribute("registered", "Вы зарегистрированы")
-                .modelAttribute("user", new User())
-                .build();
+    public Mono<Rendering> registerUser(@Valid User user, BindingResult result) {
+        return Mono.just(user)
+                .filter(u -> !result.hasErrors())
+                .flatMap(userService::save)
+                .map(u -> Rendering.view("register")
+                        .modelAttribute("registered", "Вы зарегистрированы")
+                        .modelAttribute("user", new User())
+                        .build())
+                .defaultIfEmpty(Rendering.view("register").modelAttribute("user", user).build());
     }
 
     @RequestMapping(value = "/registerCheck", produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) {
-        if (login != null && !login.isEmpty()) {
-            if (!userService.checkLogin(login)) {
-                return "Логин свободен";
-            } else {
-                return "Логин занят";
-            }
-        }
-        if (email != null && !email.isEmpty()) {
-            if (userService.checkEmail(email)) {
-                return "Логин с таким email уже есть";
-            }
-        }
-        return null;
+    public Mono<String> registerCheck(@RequestParam(required = false) String login, @RequestParam(required = false) String email) {
+        return Mono.justOrEmpty(login)
+                .filter(l -> !l.isEmpty())
+                .flatMap(l -> userService.getUserByLogin(l)
+                        .map(found -> "Логин занят")
+                        .defaultIfEmpty("Логин свободен"))
+                .switchIfEmpty(Mono.justOrEmpty(email)
+                        .filter(e -> !e.isEmpty())
+                        .flatMap(userService::getUserByEmail)
+                        .map(found -> "Логин с таким email уже есть"));
     }
 
     @RequestMapping("filmshow")
-    public Mono<Rendering> navigateFilmshow(Model model) {
+    public Mono<Rendering> navigateFilmshow() {
         return filmshowService.getFilmshowWeek()
                 .collect(Collectors.groupingBy(
                         (Filmshow filmshow) -> filmshow.getDateTime().toLocalDate(),
@@ -191,7 +178,7 @@ public class MainController {
     }
 
     @RequestMapping("film")
-    public Rendering navigateFilm(Model model) {
+    public Rendering navigateFilm() {
         return Rendering.view("film")
                 .modelAttribute("filmList", filmService.getFilmAll())
                 .build();

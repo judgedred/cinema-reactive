@@ -58,7 +58,8 @@
                     <td><label th:for="*{login}">Введите логин</label></td>
                     <td><input th:field="*{login}" type="text"/></td>
                     <td>
-                        <div id="login-check" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
+                        <div id="login-errors" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
+                        <div id="login-check"></div>
                     </td>
                 </tr>
                 <tr>

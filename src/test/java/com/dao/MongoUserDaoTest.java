@@ -37,15 +37,15 @@ public class MongoUserDaoTest {
         assertThat(user.getLogin(), is(loginExpected));
         assertThat(user.getPassword(), is(passwordExpected));
         assertThat(user.getEmail(), is(emailExpected));
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 
     @Test
     public void getByIdTest() {
         User user = testDataRepository.createTestUser();
-        Optional<User> userTest = userRepository.findById(user.getUserId());
+        Optional<User> userTest = userRepository.findById(user.getUserId()).blockOptional();
         assertTrue(userTest.isPresent());
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 
     @Test
@@ -57,48 +57,48 @@ public class MongoUserDaoTest {
         user.setLogin(loginExpected);
         user.setPassword(passwordExpected);
         user.setEmail(emailExpected);
-        userRepository.save(user);
-        Optional<User> userOptional = userRepository.findById(user.getUserId());
+        userRepository.save(user).block();
+        Optional<User> userOptional = userRepository.findById(user.getUserId()).blockOptional();
         assertTrue(userOptional.isPresent());
         User userUpdated = userOptional.get();
         assertThat(userUpdated.getLogin(), is(loginExpected));
         assertThat(userUpdated.getPassword(), is(passwordExpected));
         assertThat(userUpdated.getEmail(), is(emailExpected));
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 
     @Test
     public void deleteTest() {
         User user = testDataRepository.createTestUser();
-        userRepository.delete(user);
-        assertFalse(userRepository.findById(user.getUserId()).isPresent());
+        userRepository.delete(user).block();
+        assertFalse(userRepository.findById(user.getUserId()).blockOptional().isPresent());
     }
 
 
     @Test
     public void getAllTest() {
         User user = testDataRepository.createTestUser();
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAll().collectList().block();
         assertNotNull(users);
         assertTrue(users.size() > 0);
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 
     @Test
     public void getUserByLoginTest() {
         User user = testDataRepository.createTestUser();
-        Optional<User> userTest = userRepository.findByLogin(user.getLogin());
+        Optional<User> userTest = userRepository.findByLogin(user.getLogin()).blockOptional();
         assertTrue(userTest.isPresent());
         assertThat(userTest.get().getLogin(), is(user.getLogin()));
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 
     @Test
     public void getUserByEmailTest() {
         User user = testDataRepository.createTestUser();
-        Optional<User> userTest = userRepository.findByEmail(user.getEmail());
+        Optional<User> userTest = userRepository.findByEmail(user.getEmail()).blockOptional();
         assertTrue(userTest.isPresent());
         assertThat(userTest.get().getEmail(), is(user.getEmail()));
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 }

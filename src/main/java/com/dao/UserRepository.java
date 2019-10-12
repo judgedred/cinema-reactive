@@ -1,15 +1,15 @@
 package com.dao;
 
 import com.domain.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
-import java.util.Optional;
 
-public interface UserRepository extends MongoRepository<User, BigInteger> {
+public interface UserRepository extends ReactiveMongoRepository<User, BigInteger> {
 
-    Optional<User> findByLogin(String login);
+    Mono<User> findByLogin(String login);
 
-    Optional<User> findByEmail(String email);
+    Mono<User> findByEmail(String email);
 
 }

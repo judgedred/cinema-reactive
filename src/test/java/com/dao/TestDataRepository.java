@@ -115,7 +115,7 @@ public class TestDataRepository {
                 .setLogin(login)
                 .setPassword(password)
                 .setEmail(email);
-        return userRepository.save(user);
+        return userRepository.save(user).block();
     }
 
     User createTestUser() {
@@ -123,7 +123,7 @@ public class TestDataRepository {
     }
 
     void cleanUpUser(User user) {
-        userRepository.delete(user);
+        userRepository.delete(user).block();
     }
 
     Reservation createReservation(Ticket ticket, User user) {
@@ -139,7 +139,7 @@ public class TestDataRepository {
 
     void cleanUpReservation(Reservation reservation) {
         cleanUpTicket(reservation.getTicket());
-        userRepository.delete(reservation.getUser());
+        userRepository.delete(reservation.getUser()).block();
         reservationRepository.delete(reservation).block();
     }
 
