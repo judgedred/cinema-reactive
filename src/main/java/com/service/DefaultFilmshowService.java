@@ -1,8 +1,10 @@
 package com.service;
 
 import com.dao.FilmshowRepository;
+import com.dao.FilmshowTodayRepository;
 import com.domain.Film;
 import com.domain.Filmshow;
+import com.domain.FilmshowToday;
 import com.domain.Hall;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -16,14 +18,30 @@ import java.time.LocalTime;
 public class DefaultFilmshowService implements FilmshowService {
 
     private final FilmshowRepository filmshowRepository;
+    private final FilmshowTodayRepository filmshowTodayRepository;
 
-    public DefaultFilmshowService(FilmshowRepository filmshowRepository) {
+    public DefaultFilmshowService(FilmshowRepository filmshowRepository, FilmshowTodayRepository filmshowTodayRepository) {
         this.filmshowRepository = filmshowRepository;
+        this.filmshowTodayRepository = filmshowTodayRepository;
     }
 
     @Override
     public Mono<Filmshow> save(Filmshow filmshow) {
         return filmshowRepository.save(filmshow);
+    }
+
+    @Override
+    public Mono<Void> refreshFilmshowToday(FilmshowToday filmshowToday) {
+        return filmshowTodayRepository.insert(filmshowToday)
+                .then();
+    }
+
+    @Override
+    public Mono<Void> refreshFilmshowToday() {
+        return getFilmshowToday()
+                .collectList()
+                .map(FilmshowToday::new)
+                .flatMap(this::refreshFilmshowToday);
     }
 
     @Override
@@ -46,6 +64,11 @@ public class DefaultFilmshowService implements FilmshowService {
         LocalDateTime startDate = LocalDateTime.now().plusMinutes(30);
         LocalDateTime endDate = LocalDateTime.of(startDate.toLocalDate(), LocalTime.of(23, 59));
         return filmshowRepository.findByDateTimeBetween(startDate, endDate);
+    }
+
+    @Override
+    public Flux<FilmshowToday> getFilmshowTodayLive() {
+        return filmshowTodayRepository.findFilmshowTodayBy();
     }
 
     @Override

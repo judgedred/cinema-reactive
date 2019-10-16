@@ -20,6 +20,12 @@
             });
             return userValid;
         }
+        window.addEventListener('load', function() {
+            var eventSource = new EventSource('filmshowToday')
+            eventSource.addEventListener('message', function(event) {
+                $("#filmshowToday").html(event.data)
+            })
+        })
     </script>
 </head>
 <body>
@@ -27,9 +33,9 @@
     <div th:insert="top"></div>
     <div class="content">
         <h2>Сегодня в кино</h2>
-        <div th:unless="${#lists.isEmpty(filmshowToday)}">
-            <table>
-                <tr th:each="filmshow : ${filmshowToday}">
+        <div id="filmshowToday">
+            <table th:each="filmshowToday : ${filmshowToday}">
+                <tr th:each="filmshow : ${filmshowToday.filmshows}">
                     <td>
                         <a th:href="@{reserveTicket(filmshowId=${filmshow.filmshowId})}"
                            th:text="${filmshow}"

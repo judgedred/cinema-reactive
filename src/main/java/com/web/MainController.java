@@ -9,6 +9,7 @@ import com.service.FilmshowService;
 import com.service.ReservationService;
 import com.service.TicketService;
 import com.service.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.server.WebSession;
+import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -127,8 +129,14 @@ public class MainController {
 
     @RequestMapping("/main")
     public Rendering navigateMain() {
-        return Rendering.view("main")
-                .modelAttribute("filmshowToday", filmshowService.getFilmshowToday())
+        return Rendering.view("main").build();
+    }
+
+    @RequestMapping(value = "/filmshowToday", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Rendering getFilmshowToday() {
+        return Rendering.view("main :: #filmshowToday")
+                .modelAttribute("filmshowToday",
+                        new ReactiveDataDriverContextVariable(filmshowService.getFilmshowTodayLive(), 1))
                 .build();
     }
 
@@ -205,4 +213,4 @@ public class MainController {
                 && !user.getLogin().isEmpty()
                 && !user.getPassword().isEmpty();
     }
-}
+        }

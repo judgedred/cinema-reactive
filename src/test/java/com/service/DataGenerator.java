@@ -3,6 +3,7 @@ package com.service;
 import com.CinemaTestConfiguration;
 import com.domain.Film;
 import com.domain.Filmshow;
+import com.domain.FilmshowToday;
 import com.domain.Hall;
 import com.domain.Reservation;
 import com.domain.Seat;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.CollectionOptions;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 
@@ -20,6 +23,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -49,6 +54,9 @@ public class DataGenerator {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private MongoOperations mongoOperations;
+
     @Test
     public void generateData() {
         createUsers();
@@ -56,6 +64,7 @@ public class DataGenerator {
         createSeats();
         createFilms();
         createFilmshows();
+        createFilmshowsToday();
         createTickets();
         createReservations();
     }
@@ -101,6 +110,21 @@ public class DataGenerator {
         LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
         LongStream.range(0, 8)
                 .forEach(index -> filmshowService.save(new Filmshow(dateTime.plusDays(index), film, getHall(1))).block());
+    }
+
+    private void createFilmshowsToday() {
+        mongoOperations.dropCollection(FilmshowToday.class);
+        mongoOperations.createCollection(
+                FilmshowToday.class,
+                CollectionOptions.empty().size(10000000).maxDocuments(10L).capped());
+        Film film = filmService.getFilmByName("Матрица")
+                .blockOptional()
+                .orElseThrow(() -> new IllegalStateException("Film must be created."));
+        LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.now());
+        List<Filmshow> filmshows = LongStream.range(1, 4)
+                .mapToObj(index -> new Filmshow(dateTime.plusHours(index), film, getHall(1)))
+                .collect(Collectors.toList());
+        filmshowService.refreshFilmshowToday(new FilmshowToday(filmshows)).block();
     }
 
     private void createTickets() {

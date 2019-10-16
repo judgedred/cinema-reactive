@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.ReactiveMapSessionRepository;
 import org.springframework.session.ReactiveSessionRepository;
 import org.springframework.session.config.annotation.web.server.EnableSpringWebSession;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootApplication
 @EnableSpringWebSession
+@EnableScheduling
 public class CinemaApplication {
 
     @Bean
