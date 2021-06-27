@@ -518,6 +518,7 @@ public class TreesAndGraphs {
         graph4.addPair(2, 4);
         graph4.addPair(1, 3);
         graph4.addPair(1, 2);
+        graph4.addPair(4, 7);
         graph4.addPair(4, 5);
         graph4.addPair(5, 3);
         graph4.addPair(3, 4);
@@ -1001,8 +1002,7 @@ public class TreesAndGraphs {
         }
 
         void build() {
-            allNodes.values()
-                    .forEach(node -> validate(node, new HashSet<>()));
+            allNodes.values().forEach(this::validate);
             for (Node node : allNodes.values()) {
                 if (node.parents == null) {
                     nodes = addToArray(nodes, node);
@@ -1010,18 +1010,17 @@ public class TreesAndGraphs {
             }
         }
 
-        private void validate(Node current, Set<Node> visited) {
-            if (visited.contains(current)) {
+        private void validate(Node current) {
+            if (current.status == Node.Status.VISITING) {
                 throw new IllegalStateException("Cycling graph not supported. current: " + current);
             }
-            visited.add(current);
+            current.status = Node.Status.VISITING;
             if (current.children != null) {
                 for (Node child : current.children) {
-                    validate(child, visited);
+                    validate(child);
                 }
-            } else {
-                visited.clear();
             }
+            current.status = Node.Status.VISITED;
         }
 
         private Node[] addToArray(Node[] array, Node childNode) {
@@ -1040,6 +1039,7 @@ public class TreesAndGraphs {
         int value;
         Node[] children;
         Node[] parents;
+        Status status = Status.NEW;
 
         Node(int value) {
             this.value = value;
@@ -1067,6 +1067,10 @@ public class TreesAndGraphs {
                     .add("children=" + Arrays.toString(children))
                     .toString();
         }*/
+
+        private enum Status {
+            NEW, VISITING, VISITED;
+        }
     }
 
     private static class BinaryNode {
